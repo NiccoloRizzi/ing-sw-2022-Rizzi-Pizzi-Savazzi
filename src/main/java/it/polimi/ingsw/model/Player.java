@@ -77,7 +77,7 @@ public class Player {
     }
 
     // Utile on no??? Va tolto dal costruttore???
-    public setNickname(String nickname){
+    public void setNickname(String nickname){
         this.nickname = nickname;
     }
 

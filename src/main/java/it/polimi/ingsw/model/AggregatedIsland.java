@@ -1,5 +1,10 @@
 package it.polimi.ingsw.model;
 
+import java.util.ArrayList;
+
+/*UML Changes
+ * 1) Added function overload*/
+
 public class AggregatedIsland extends Isle {
     private int size;
     private ArrayList<Isle> joinedIsle;
@@ -17,25 +22,23 @@ public class AggregatedIsland extends Isle {
     }
 
     public int getSize() {return size;}
-    @override
+
     public int getInfluence(Player p) {
         int influence = 0;
         boolean[] temp = p.getBoard().getProfessors();
         for(Student s: students)
-            if(temp[s.getType.ordinal()])
+            if(temp[s.getType().ordinal()])
                 influence++;
-        if(p.getBoard().getFaction())
+        if(p.getBoard().getFaction() == torre)
             influence += size;
         return influence;
     }
-    @override
     public int getInfluence(Team t){
         int influence = 0;
         influence += getInfluence(t.getLeader())+ getInfluence(t.getMember())-size;
         return 0;
     }
 
-    @override
     public AggregatedIsland join (Isle isle)
     {
         size++;
@@ -43,8 +46,7 @@ public class AggregatedIsland extends Isle {
         return this;
     }
 
-    @override
-    public AggregatedIsland join (AggregatedIsle isle)
+    public AggregatedIsland join (AggregatedIsland isle)
     {
         size+=isle.getSize();
         joinedIsle.addAll(isle.joinedIsle);
