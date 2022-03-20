@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import java.util.ArrayList;
+
 public class Cloud extends Tile {
 
         /**
@@ -11,8 +13,8 @@ public class Cloud extends Tile {
         /**
          * @return
          */
-        public List<Students> empty() {
-            List<Students> temp = new List<Students>(students);
+        public ArrayList<Student> empty() {
+            ArrayList<Student> temp = new ArrayList<Student>(students);
             students.clear();
             return students;
         }
