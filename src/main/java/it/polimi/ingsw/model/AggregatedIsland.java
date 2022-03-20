@@ -36,7 +36,7 @@ public class AggregatedIsland extends Isle {
     }
 
     @override
-    public AggregateIsland join (Isle isle)
+    public AggregatedIsland join (Isle isle)
     {
         size++;
         joinedIsle.add(isle);
@@ -44,7 +44,7 @@ public class AggregatedIsland extends Isle {
     }
 
     @override
-    public AggregateIsland join (AggregatedIsle isle)
+    public AggregatedIsland join (AggregatedIsle isle)
     {
         size+=isle.getSize();
         joinedIsle.addAll(isle.joinedIsle);

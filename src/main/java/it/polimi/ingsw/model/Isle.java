@@ -55,12 +55,12 @@ public class Isle extends Tile {
         return temp;
     }
 
-    public AggregateIsland join (Isle isle)
+    public AggregatedIsland join (Isle isle)
     {
         return new AggregatedIsland(this ,isle);
     }
     @overload
-    public AggregateIsland join (AggregatedIsle isle)
+    public AggregatedIsland join (AggregatedIsle isle)
     {
         return isle.Join(this);
     }
