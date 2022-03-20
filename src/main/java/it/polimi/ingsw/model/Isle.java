@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+
 public class Isle extends Tile {
 
     private Faction torre;
