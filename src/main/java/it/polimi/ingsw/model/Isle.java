@@ -3,7 +3,7 @@ package it.polimi.ingsw.model;
 public class Isle extends Tile {
 
     private Faction torre;
-    private  boolean prohibited
+    private  boolean prohibited;
 
     /**
      * Default constructor
