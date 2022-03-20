@@ -21,6 +21,7 @@ public class Player {
     private ArrayList<Assistant> deck;
     private ArrayList<Assistant> usedCards;
 
+    // Param nickname??? see setNickname() comment
     public Player(int ID, String nickname, int nTowers){
         this.ID = ID;
         this.nickname = nickname;
