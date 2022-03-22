@@ -1,11 +1,5 @@
 package it.polimi.ingsw.model;
 
-/*UML Changes
- * 1) Removed size and influence
- * 2) Attributed changed to protected
- * 3) Added setFaction()
- * 4) Added getFaction()*/
-
 public class Isle extends Tile {
 
     protected Faction tower;

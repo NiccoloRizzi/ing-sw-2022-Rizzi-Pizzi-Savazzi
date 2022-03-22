@@ -3,9 +3,6 @@ package it.polimi.ingsw.model;
 import java.util.ArrayList;
 import java.util.Random;
 
-/*UML Changes
- * 1) Removed MoveMn() and checkJoin()*/
-
 public class GameModel {
     private int unusedCoins;
     private int motherNature;
@@ -38,7 +35,10 @@ public class GameModel {
         }
         return null;
     }
-
+    public void moveMN(int moves)
+    {
+        motherNature = (motherNature+moves)%12;
+    }
     public Player getPlayer(int playerID) {
         for(Player p : players){
             if(p.getID() == playerID){
@@ -92,5 +92,4 @@ public class GameModel {
     public void addStudent(ArrayList<Student> students){
         bag.addAll(students);
     }
-
 }
