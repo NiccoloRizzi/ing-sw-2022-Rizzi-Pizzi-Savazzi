@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 public class Character {
-
     private int price;
     private final int id;
     private boolean used = false;
