@@ -10,6 +10,7 @@ public class Isle extends Tile {
 
     protected Faction tower;
     protected boolean prohibited;
+    protected influenceStrategy   infStrategy;
 
     /**
      * Default constructor
@@ -24,20 +25,11 @@ public class Isle extends Tile {
     }
 
     public int getInfluence(Player p) {
-        int influence = 0;
-        boolean[] temp = p.getBoard().getProfessors();
-        for(Student s: students)
-            if(temp[s.getType().ordinal()])
-                influence++;
-        if(p.getBoard().getFaction() == tower) // CORRECT???
-            influence ++;
-        return influence;
+        return infStrategy.getInfluence(p,students,1,tower);
     }
 
     public int getInfluence(Team t){
-        int influence = 0;
-        influence += getInfluence(t.getLeader())+ getInfluence(t.getMember())-1;
-        return influence;
+        return infStrategy.getInfluence(t,students,1,tower);
     }
 
     public void setProhibited(){ prohibited = true;}

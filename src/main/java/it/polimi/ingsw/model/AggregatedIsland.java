@@ -23,20 +23,13 @@ public class AggregatedIsland extends Isle {
 
     public int getSize() {return size;}
 
+    @Override
     public int getInfluence(Player p) {
-        int influence = 0;
-        boolean[] temp = p.getBoard().getProfessors();
-        for(Student s: students)
-            if(temp[s.getType().ordinal()])
-                influence++;
-        if(p.getBoard().getFaction() == tower)
-            influence += size;
-        return influence;
+            return infStrategy.getInfluence(p,students,size,tower);
     }
+    @Override
     public int getInfluence(Team t){
-        int influence = 0;
-        influence += getInfluence(t.getLeader())+ getInfluence(t.getMember())-size;
-        return influence;
+        return infStrategy.getInfluence(t,students,size,tower);
     }
 
     public AggregatedIsland join (Isle isle)
