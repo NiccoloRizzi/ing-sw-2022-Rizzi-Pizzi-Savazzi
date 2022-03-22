@@ -18,7 +18,7 @@ public class AggregatedIsland extends Isle {
         joinedIsle.add(i2);
         this.addStudents(i1.students);
         this.addStudents(i2.students);
-        this.setFaction(i1.getFaction());
+        this.setTower(i1.getTower());
     }
 
     public int getSize() {return size;}
@@ -29,14 +29,14 @@ public class AggregatedIsland extends Isle {
         for(Student s: students)
             if(temp[s.getType().ordinal()])
                 influence++;
-        if(p.getBoard().getFaction() == torre)
+        if(p.getBoard().getFaction() == tower)
             influence += size;
         return influence;
     }
     public int getInfluence(Team t){
         int influence = 0;
         influence += getInfluence(t.getLeader())+ getInfluence(t.getMember())-size;
-        return 0;
+        return influence;
     }
 
     public AggregatedIsland join (Isle isle)

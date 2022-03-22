@@ -8,7 +8,7 @@ package it.polimi.ingsw.model;
 
 public class Isle extends Tile {
 
-    protected Faction torre;
+    protected Faction tower;
     protected boolean prohibited;
 
     /**
@@ -16,11 +16,11 @@ public class Isle extends Tile {
      */
     public Isle() {
         super();
-        torre = Faction.Empty;
+        tower = Faction.Empty;
     }
 
-    public void setTorre(Faction f) {
-        this.torre = f;
+    public void setTower(Faction f) {
+        this.tower = f;
     }
 
     public int getInfluence(Player p) {
@@ -29,7 +29,7 @@ public class Isle extends Tile {
         for(Student s: students)
             if(temp[s.getType().ordinal()])
                 influence++;
-        if(p.getBoard().getFaction() == torre) // CORRECT???
+        if(p.getBoard().getFaction() == tower) // CORRECT???
             influence ++;
         return influence;
     }
@@ -37,7 +37,7 @@ public class Isle extends Tile {
     public int getInfluence(Team t){
         int influence = 0;
         influence += getInfluence(t.getLeader())+ getInfluence(t.getMember())-1;
-        return 0;
+        return influence;
     }
 
     public void setProhibited(){ prohibited = true;}
@@ -49,12 +49,8 @@ public class Isle extends Tile {
         return temp;
     }
 
-    public Faction getFaction(){
-        return this.torre;
-    }
-
-    public void setFaction(Faction faction){
-        this.torre = faction;
+    public Faction getTower(){
+        return this.tower;
     }
 
     public AggregatedIsland join (Isle isle)

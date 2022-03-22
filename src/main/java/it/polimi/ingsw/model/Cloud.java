@@ -4,10 +4,14 @@ import java.util.ArrayList;
 
 public class Cloud extends Tile {
 
-    public Cloud() {}
+    public Cloud() {
+        super();
+    }
+
     public ArrayList<Student> empty() {
         ArrayList<Student> temp = new ArrayList<Student>(students);
         students.clear();
-        return students;
+        return temp;
     }
+
 }
