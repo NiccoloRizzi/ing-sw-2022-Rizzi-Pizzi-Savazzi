@@ -4,7 +4,8 @@ package it.polimi.ingsw.model;
 * 1) Add Faction attribute
 * 2) Add N_ASSISTANT attribute
 * 3) setChoosenAssistant to add out_of_range_exception
-* 4) */
+* 4) Add createBoard()
+* 5) Add getID()*/
 
 import java.util.ArrayList;
 
@@ -15,20 +16,17 @@ public class Player {
     private int ID;
     private String nickname;
     private Faction faction;
-    private int points;
     private int coins;
     private Board school;
-    private ArrayList<Assistant> deck;
-    private ArrayList<Assistant> usedCards;
+    private final ArrayList<Assistant> deck;
+    private final ArrayList<Assistant> usedCards;
 
     // Param nickname??? see setNickname() comment
-    public Player(int ID, String nickname, int nTowers){
+    public Player(int ID, String nickname){
         this.ID = ID;
         this.nickname = nickname;
         this.faction = Faction.Empty;
-        points = 0;
         coins = 0;
-        school = new Board(this.faction, nTowers);
         deck = new ArrayList<>();
         for(int i = 0; i < N_ASSISTANT; i++){
             deck.add(new Assistant(i + 1, (i+2)/2));
@@ -46,7 +44,7 @@ public class Player {
 
     // Clone or not clone???
     public ArrayList<Assistant> getDeck(){
-        return (ArrayList<Assistant>) deck.clone();
+        return deck;
     }
 
     public void setChoosenAssistant(int i){
@@ -56,7 +54,6 @@ public class Player {
             System.out.println("Player.setChoosenAssistant(int i), i out of range");
         }
     }
-
 
     public Board getBoard(){
         return school;
@@ -73,7 +70,7 @@ public class Player {
 
     // Clone or not clone???
     public ArrayList<Assistant> getUsedCards(){
-        return (ArrayList<Assistant>) usedCards.clone();
+        return usedCards;
     }
 
     // Utile on no??? Va tolto dal costruttore???
@@ -83,5 +80,13 @@ public class Player {
 
     public String getNickname() {
         return nickname;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void createBoard(int nTowers){
+        school = new Board(this.faction, nTowers);
     }
 }
