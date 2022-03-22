@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class DefaultInfStrategy implements influenceStrategy{
     public int getInfluence(Player p, ArrayList<Student> students, int size, Faction tower){
         int influence = 0;
-        boolean[] temp = p.getBoard().getProfessors();
 
         influence+= students.stream()
                             .filter(student -> p.getBoard().getProfessors()[student.getType().ordinal()])

@@ -35,8 +35,6 @@ public class AggregatedIsland extends Isle {
     public int getInfluenceNoColour(Player p, Colour c)
     {
         int influence = 0;
-        boolean[] temp = p.getBoard().getProfessors();
-
         influence+= students.stream()
                 .filter(student -> p.getBoard().getProfessors()[student.getType().ordinal()]&& c!=(student.getType()))
                 .count();
