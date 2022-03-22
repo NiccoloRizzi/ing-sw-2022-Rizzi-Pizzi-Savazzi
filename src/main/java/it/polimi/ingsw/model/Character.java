@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-public abstract class Character {
+public class Character {
 
     private int price;
     private final int id;
@@ -19,7 +19,7 @@ public abstract class Character {
     public int getId(){
         return id;
     }
-    
+
     public void use(){
         if(!used){
             price++;
