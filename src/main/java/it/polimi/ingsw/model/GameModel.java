@@ -28,11 +28,15 @@ public class GameModel {
     public ArrayList<Student> extractStudents(int num){
         ArrayList<Student> extractedStud = new ArrayList<>();
         Random rand = new Random();
-        for(int i = 0; i < num; i++){
-            int randomPos = rand.nextInt(bag.size());
-            extractedStud.add(bag.remove(randomPos));
+        // EXCEPTION
+        if(num >= 0 && num < bag.size()){
+            for(int i = 0; i < num; i++){
+                int randomPos = rand.nextInt(bag.size());
+                extractedStud.add(bag.remove(randomPos));
+            }
+            return extractedStud;
         }
-        return extractedStud;
+        return null;
     }
 
     public Player getPlayer(int playerID) {
