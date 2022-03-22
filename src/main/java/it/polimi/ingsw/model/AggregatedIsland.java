@@ -31,6 +31,25 @@ public class AggregatedIsland extends Isle {
     public int getInfluence(Team t){
         return infStrategy.getInfluence(t,students,size,tower);
     }
+    @Override
+    public int getInfluenceNoColour(Player p, Colour c)
+    {
+        int influence = 0;
+        boolean[] temp = p.getBoard().getProfessors();
+
+        influence+= students.stream()
+                .filter(student -> p.getBoard().getProfessors()[student.getType().ordinal()]&& c!=(student.getType()))
+                .count();
+
+        if(p.getBoard().getFaction() == tower)
+            influence += size;
+        return influence;
+    }
+    @Override
+    public int getInfluenceNoColour(Team t, Colour c)
+    {
+        return getInfluenceNoColour(t.getLeader(),c)+ getInfluenceNoColour(t.getMember(),c)-size;
+    }
 
     public AggregatedIsland join (Isle isle)
     {
