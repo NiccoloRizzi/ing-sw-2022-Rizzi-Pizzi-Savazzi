@@ -3,24 +3,29 @@ package it.polimi.ingsw.model;
 public abstract class Character {
 
     private int price;
+    private final int id;
     private boolean used = false;
 
-    public Character(int price){
+    public Character(int id, int price)
+    {
+        this.id = id;
         this.price = price;
     }
 
     public int getPrice(){
-        if(used)
-            return price+1;
         return price;
     }
 
+    public int getId(){
+        return id;
+    }
+    
     public void use(){
-        used=true;
+        if(!used){
+            price++;
+            used=true;
+        }
     }
 
-    public void addPrice(){
-        price++;
-    }
 
 }
