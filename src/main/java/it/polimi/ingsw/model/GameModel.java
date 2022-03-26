@@ -1,13 +1,15 @@
 package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class GameModel {
     private int unusedCoins;
     private int motherNature;
     private ArrayList<Student> bag;
-    private ArrayList<Player> players; // ISTANCED EVEN WITH TEAMS
+    private ArrayList<Player> players;
+    protected HashMap<Colour,Player> professors;
     private ArrayList<Isle> isles;
     private ArrayList<Cloud> clouds;
     private ArrayList<Character> characters;
@@ -91,5 +93,14 @@ public class GameModel {
 
     public void addStudent(ArrayList<Student> students){
         bag.addAll(students);
+    }
+
+    public Player getProfessor (Colour c)
+    {
+        return professors.get(c);
+    }
+    public void setProfessor(Colour c, Player p)
+    {
+        professors.replace(c,p);
     }
 }

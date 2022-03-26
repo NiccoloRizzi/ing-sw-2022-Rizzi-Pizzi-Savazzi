@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import java.util.HashMap;
+
 public class Isle extends Tile {
 
     protected Faction tower;
@@ -18,12 +20,12 @@ public class Isle extends Tile {
         this.tower = f;
     }
 
-    public int getInfluence(Player p) {
-        return infStrategy.getInfluence(p,students,1,tower);
+    public int getInfluence(Player p, HashMap<Colour,Player> professors) {
+        return infStrategy.getInfluence(p,students,1,tower, professors);
     }
 
-    public int getInfluence(Team t){
-        return infStrategy.getInfluence(t,students,1,tower);
+    public int getInfluence(Team t,HashMap<Colour,Player> professors){
+        return infStrategy.getInfluence(t,students,1,tower, professors);
     }
 
     public int getInfluenceNoColour(Player p, Colour c)
