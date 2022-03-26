@@ -17,7 +17,32 @@ public class GameModel {
     private ArrayList<Character> activeCharacters;
 
     public GameModel(){
+        unusedCoins = 20;
+        motherNature = (new Random()).nextInt(12);
+        bag = new ArrayList<Student>();
+        generateBag();
+        players = new ArrayList<Player>();
+        isles = new ArrayList<Isle>();
+        generateIsle();
+        clouds = new ArrayList<Cloud>();
+        characters = new ArrayList<Character>();
+        activeCharacters= new ArrayList<Character>();
+        professors = new HashMap<Colour,Player>();
+    }
 
+    private void generateBag()
+    {
+        for(Colour c: Colour.values())
+        {
+            for(int i = 0; i<26; i++)
+                bag.add(new Student(c));
+        }
+    }
+
+    private void generateIsle()
+    {
+        for(int i = 0; i<12; i++)
+            isles.add(new Isle());
     }
 
     public int getMotherNature() {

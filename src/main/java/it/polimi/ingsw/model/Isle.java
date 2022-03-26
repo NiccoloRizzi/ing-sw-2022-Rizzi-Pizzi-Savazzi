@@ -28,22 +28,21 @@ public class Isle extends Tile {
         return infStrategy.getInfluence(t,students,1,tower, professors);
     }
 
-    public int getInfluenceNoColour(Player p, Colour c)
+    public int getInfluenceNoColour(Player p, Colour c,HashMap<Colour,Player> professors)
     {
         int influence = 0;
-        boolean[] temp = p.getBoard().getProfessors();
 
         influence+= students.stream()
-                .filter(student -> p.getBoard().getProfessors()[student.getType().ordinal()]&& c!=(student.getType()))
+                .filter(student -> professors.get(student.getType()).equals(p)&& c!=(student.getType()))
                 .count();
 
         if(p.getBoard().getFaction() == tower)
             influence += 1;
         return influence;
     }
-    public int getInfluenceNoColour(Team t, Colour c)
+    public int getInfluenceNoColour(Team t, Colour c,HashMap<Colour,Player> professors)
     {
-        return getInfluenceNoColour(t.getLeader(),c)+ getInfluenceNoColour(t.getMember(),c)-1;
+        return getInfluenceNoColour(t.getLeader(),c,professors)+ getInfluenceNoColour(t.getMember(),c,professors)-1;
     }
     public void setProhibited(){ prohibited = true;}
 
