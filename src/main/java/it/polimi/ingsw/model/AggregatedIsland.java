@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /*UML Changes
  * 1) Added function overload*/
@@ -24,12 +25,12 @@ public class AggregatedIsland extends Isle {
     public int getSize() {return size;}
 
     @Override
-    public int getInfluence(Player p) {
-            return infStrategy.getInfluence(p,students,size,tower);
+    public int getInfluence(Player p, HashMap<Colour,Player> professors) {
+            return infStrategy.getInfluence(p,students,size,tower,professors);
     }
     @Override
-    public int getInfluence(Team t){
-        return infStrategy.getInfluence(t,students,size,tower);
+    public int getInfluence(Team t,HashMap<Colour,Player> professors){
+        return infStrategy.getInfluence(t,students,size,tower,professors);
     }
     @Override
     public int getInfluenceNoColour(Player p, Colour c)
