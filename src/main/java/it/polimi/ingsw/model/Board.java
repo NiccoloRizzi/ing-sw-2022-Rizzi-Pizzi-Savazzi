@@ -6,7 +6,6 @@ public class Board extends Tile{
     private Faction faction;
     private int towers;
     private final int []tables;
-    private final boolean []professors;
     private final int studLimit;
 
     //the number of starting towers depends on the number of players
@@ -15,7 +14,6 @@ public class Board extends Tile{
         this.towers = towers;
         this.studLimit = (towers == 6)?9:7;
         tables = new int[4];
-        professors = new boolean[4];
     }
 
     //removes a student from the entrance
@@ -74,15 +72,6 @@ public class Board extends Tile{
         this.faction = faction;
     }
 
-    public void setProfessor(int table, boolean isThere){
-        professors[table]=isThere;
-    }
-
-    //returns the list of professors currently on this board
-    public boolean[] getProfessors() {
-        return professors.clone();
-    }
-
     public Faction getFaction() {
         return faction;
     }
@@ -92,7 +81,8 @@ public class Board extends Tile{
     }
 
     //checks if the students in a specified table of the board have reached a "coin" spot
-    public boolean checkCoin(int table){
+    public boolean checkCoin(int table)
+    {
         return (tables[table]%3)==0;
     }
 }

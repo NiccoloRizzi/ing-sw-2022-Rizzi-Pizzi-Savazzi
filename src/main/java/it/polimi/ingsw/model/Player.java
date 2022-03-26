@@ -82,6 +82,7 @@ public class Player {
         return nickname;
     }
 
+
     public int getID() {
         return ID;
     }
