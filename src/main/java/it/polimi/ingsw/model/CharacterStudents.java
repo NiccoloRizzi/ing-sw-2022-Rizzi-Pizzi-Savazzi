@@ -15,7 +15,7 @@ public class CharacterStudents extends Character {
     {
         students.add(student);
     }
-
+    public Student getStudent(int i) { return students.get(i);}
     public void addStudents(ArrayList<Student> students)
     {
         this.students.addAll(students);
