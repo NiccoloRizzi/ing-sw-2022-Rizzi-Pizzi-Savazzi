@@ -8,7 +8,7 @@ public class DefaultInfStrategy implements influenceStrategy{
         int influence = 0;
 
         influence+= students.stream()
-                            .filter(student -> professors.get(student.getType()).equals(p))
+                            .filter(student -> professors.containsKey(student.getType())&&professors.get(student.getType()).equals(p))
                             .count();
 
         if(p.getBoard().getFaction() == tower)

@@ -3,7 +3,7 @@ package it.polimi.ingsw.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PlusInfStrategy {
+public class PlusInfStrategy implements influenceStrategy{
 
     public int getInfluence(Player p, ArrayList<Student> students, int size, Faction tower, HashMap<Colour, Player> professors) {
         int influence = 0;

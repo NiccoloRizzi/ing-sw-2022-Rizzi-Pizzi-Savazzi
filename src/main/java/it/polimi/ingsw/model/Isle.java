@@ -14,6 +14,7 @@ public class Isle extends Tile {
     public Isle() {
         super();
         tower = Faction.Empty;
+        infStrategy= new DefaultInfStrategy();
     }
 
     public void setTower(Faction f) {
@@ -65,5 +66,10 @@ public class Isle extends Tile {
     public AggregatedIsland join (AggregatedIsland isle)
     {
         return isle.join(this);
+    }
+
+    public void setInfStrategy (influenceStrategy infStrategy)
+    {
+        this.infStrategy=infStrategy;
     }
 }

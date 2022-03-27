@@ -63,4 +63,9 @@ public class AggregatedIsland extends Isle {
         joinedIsle.addAll(isle.joinedIsle);
         return this;
     }
+
+    public ArrayList<Isle> getJoinedIsle()
+    {
+        return (ArrayList<Isle>) joinedIsle.clone();
+    }
 }
