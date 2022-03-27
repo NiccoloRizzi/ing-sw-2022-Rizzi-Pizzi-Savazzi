@@ -81,10 +81,12 @@ public class Board extends Tile{
         return towers;
     }
 
-    public void removeFromTable(int table){
+    public boolean removeFromTable(int table){
         if(tables[table]>0){
             tables[table]--;
+            return true;
         }
+        return false;
     }
 
     //checks if the students in a specified table of the board have reached a "coin" spot
