@@ -14,7 +14,7 @@ public class Board extends Tile{
         this.faction = faction;
         this.towers = towers;
         this.studLimit = (towers == 6)?9:7;
-        tables = new int[4];
+        tables = new int[5];
     }
 
     //removes a student from the entrance
@@ -81,9 +81,17 @@ public class Board extends Tile{
         return towers;
     }
 
+    public boolean removeFromTable(int table){
+        if(tables[table]>0){
+            tables[table]--;
+            return true;
+        }
+        return false;
+    }
+
     //checks if the students in a specified table of the board have reached a "coin" spot
     public boolean checkCoin(int table)
     {
-        return (tables[table]%3)==0;
+        return (tables[table]>0 && (tables[table])%3==0);
     }
 }
