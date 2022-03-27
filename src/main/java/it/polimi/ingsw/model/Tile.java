@@ -8,7 +8,11 @@ public class Tile
 
     public Tile ()
     {
-        students = new ArrayList<Student>();
+        students = new ArrayList<>();
+    }
+
+    public Student getStudent(int i){
+        return students.get(i);
     }
 
     public void addStudent(Student student)

@@ -10,6 +10,7 @@ public class Board extends Tile{
 
     //the number of starting towers depends on the number of players
     public Board(Faction faction, int towers) {
+        super();
         this.faction = faction;
         this.towers = towers;
         this.studLimit = (towers == 6)?9:7;

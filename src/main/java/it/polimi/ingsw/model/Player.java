@@ -8,6 +8,7 @@ package it.polimi.ingsw.model;
 * 5) Add getID()*/
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Player {
 
@@ -82,6 +83,18 @@ public class Player {
         return nickname;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return ID == player.ID;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ID);
+    }
 
     public int getID() {
         return ID;
