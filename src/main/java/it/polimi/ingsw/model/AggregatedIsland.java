@@ -54,6 +54,7 @@ public class AggregatedIsland extends Isle {
     {
         size++;
         joinedIsle.add(isle);
+        this.addStudents(isle.students);
         return this;
     }
 
@@ -61,6 +62,7 @@ public class AggregatedIsland extends Isle {
     {
         size+=isle.getSize();
         joinedIsle.addAll(isle.joinedIsle);
+        this.addStudents(isle.students);
         return this;
     }
 
