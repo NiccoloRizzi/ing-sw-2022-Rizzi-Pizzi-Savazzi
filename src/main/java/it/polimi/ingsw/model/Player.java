@@ -1,11 +1,8 @@
 package it.polimi.ingsw.model;
 
 /*UML Changes
-* 1) Add Faction attribute
-* 2) Add N_ASSISTANT attribute
 * 3) setChoosenAssistant to add out_of_range_exception
-* 4) Add createBoard()
-* 5) Add getID()*/
+*/
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -14,7 +11,7 @@ public class Player {
 
     private static final int N_ASSISTANT = 10;
 
-    private int ID;
+    private final int ID;
     private String nickname;
     private Faction faction;
     private int coins;
@@ -48,8 +45,9 @@ public class Player {
         return deck;
     }
 
+    // REFERS TO ASSISTANT ARRAY POSTIION
     public void setChoosenAssistant(int i){
-        if(i>= 0 && i <= 10){
+        if(i>= 0 && i < 10){
             usedCards.add(deck.remove(i)); // Maybe i had to add some controll on the remove...XD
         }else{
             System.out.println("Player.setChoosenAssistant(int i), i out of range");
@@ -98,6 +96,10 @@ public class Player {
 
     public int getID() {
         return ID;
+    }
+
+    public int getCoins() {
+        return coins;
     }
 
     public void createBoard(int nTowers){

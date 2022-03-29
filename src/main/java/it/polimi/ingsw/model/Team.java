@@ -8,6 +8,8 @@ import java.util.ArrayList;
 // ATTENTION: TEAM IMPLEMENTATION NEED TO BE DEFINED CLEARLY
 public class Team {
 
+    private final static int MAX_N_PLAYERS = 2;
+
     private Faction faction;
     private int towers;
     private ArrayList<Player> players;
@@ -34,9 +36,16 @@ public class Team {
 
     public void assignFaction(Faction faction){
         this.faction = faction;
+        getLeader().assignFaction(faction);
+        getMember().assignFaction(faction);
     }
 
-    public void addPlayer(Player p){
-        this.players.add(p);
+    public boolean addPlayer(Player p){
+        if(this.players.size() < MAX_N_PLAYERS) {
+            this.players.add(p);
+            return true;
+        }else{
+            return false;
+        }
     }
 }
