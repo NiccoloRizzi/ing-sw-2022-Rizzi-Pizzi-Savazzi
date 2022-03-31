@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Board extends Tile{
     private Faction faction;
     private int towers;
+    private final int towersLimit;
     private final int []tables;
     private final int studLimit;
 
@@ -14,6 +15,7 @@ public class Board extends Tile{
         this.faction = faction;
         this.towers = towers;
         this.studLimit = (towers == 6)?9:7;
+        this.towersLimit = towers;
         tables = new int[5];
     }
 
@@ -22,12 +24,12 @@ public class Board extends Tile{
         super.students.remove(i);
     }
 
-    public boolean addToEntrance(Student student) /* throws Exception*/{
+    public boolean addToEntrance(Student student) throws StudentsOutOfBoundsException{
         if(super.students.size()<this.studLimit){
             super.students.add(student);
             return true;
         }
-        return false;
+        throw(new StudentsOutOfBoundsException());
     }
 
     public int getTable(Colour c) {
@@ -45,7 +47,7 @@ public class Board extends Tile{
 
     //used to add back a tower from an Isle who gets taken by another player
     public boolean addTower() /*throws Exception*/{
-        if(towers<8){
+        if(towers<towersLimit){
             towers++;
             return true;
         }
