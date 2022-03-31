@@ -115,17 +115,19 @@ class BoardTest {
         for(int i=0; i<8;i++){
             try {
                 board2.addToEntrance(stud);
+                assertFalse(board2.isEntranceFull());
             }catch(StudentsOutOfBoundsException e){
                 e.printStackTrace();
             }
-            assertFalse(board2.isEntranceFull());
+
         }
         try {
             board2.addToEntrance(stud);
+            assertTrue(board2.isEntranceFull());
         }catch(StudentsOutOfBoundsException e){
             e.printStackTrace();
         }
-        assertTrue(board2.isEntranceFull());
+
     }
 
     @org.junit.jupiter.api.Test
