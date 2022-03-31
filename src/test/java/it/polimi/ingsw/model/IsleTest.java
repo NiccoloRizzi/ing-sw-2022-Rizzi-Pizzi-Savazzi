@@ -1,12 +1,14 @@
 package it.polimi.ingsw.model;
 
 import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class IsleTest extends TestCase {
 
+    @Test
     public void testTower() {
         Isle isle = new Isle();
         assertEquals(Faction.Empty,isle.getTower());
@@ -14,6 +16,7 @@ public class IsleTest extends TestCase {
         assertEquals(Faction.Black,isle.getTower());
     }
 
+    @Test
     public void testGetInfluenceDefault() {
         Isle isle = new Isle();
         isle.setTower(Faction.Black);
@@ -47,6 +50,7 @@ public class IsleTest extends TestCase {
         assertEquals(numStudent[Colour.Unicorns.ordinal()]+numStudent[Colour.Gnomes.ordinal()]+numStudent[Colour.Dragons.ordinal()]+1,isle.getInfluence(t,professors));
     }
 
+    @Test
     public void testGetInfluenceNoTower() {
         Isle isle = new Isle();
         isle.setInfStrategy(new noTowersStrategy());
@@ -81,6 +85,7 @@ public class IsleTest extends TestCase {
         assertEquals(numStudent[Colour.Unicorns.ordinal()]+numStudent[Colour.Gnomes.ordinal()]+numStudent[Colour.Dragons.ordinal()],isle.getInfluence(t,professors));
     }
 
+    @Test
     public void testGetInfluencePlusInf() {
         Isle isle = new Isle();
         isle.setInfStrategy(new PlusInfStrategy());
@@ -114,6 +119,8 @@ public class IsleTest extends TestCase {
         assertEquals(numStudent[Colour.Frogs.ordinal()]+numStudent[Colour.Fairies.ordinal()]+2,isle.getInfluence(p2,professors));
         assertEquals(numStudent[Colour.Unicorns.ordinal()]+numStudent[Colour.Gnomes.ordinal()]+numStudent[Colour.Dragons.ordinal()]+3,isle.getInfluence(t,professors));
     }
+
+    @Test
     public void testGetInfluenceNoColour() {
         Isle isle = new Isle();
         isle.setTower(Faction.Black);
@@ -147,6 +154,7 @@ public class IsleTest extends TestCase {
         assertEquals(numStudent[Colour.Unicorns.ordinal()]+numStudent[Colour.Gnomes.ordinal()]+1,isle.getInfluenceNoColour(t,Colour.Dragons,professors));
     }
 
+    @Test
     public void testProhibited() {
         Isle isle = new Isle();
         assertFalse(isle.prohibited);
@@ -156,6 +164,7 @@ public class IsleTest extends TestCase {
         assertFalse(isle.prohibited);
     }
 
+    @Test
     public void testJoin() {
         Isle isle1 = new Isle();
         Isle isle2 = new Isle();
@@ -164,6 +173,8 @@ public class IsleTest extends TestCase {
         assertTrue(isle.getJoinedIsle().contains(isle2));
     }
 
+
+    @Test
     public void testTestJoin() {
         Isle isle1 = new Isle();
         Isle isle2 = new Isle();

@@ -1,12 +1,14 @@
 package it.polimi.ingsw.model;
 
 import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AggregatedIslandTest extends TestCase {
 
+    @Test
     public void testGetInfluenceDefault() {
         AggregatedIsland isle = new AggregatedIsland(new Isle(),new Isle());
         isle.setTower(Faction.Black);
@@ -40,6 +42,7 @@ public class AggregatedIslandTest extends TestCase {
         assertEquals(numStudent[Colour.Unicorns.ordinal()]+numStudent[Colour.Gnomes.ordinal()]+numStudent[Colour.Dragons.ordinal()]+isle.getSize(),isle.getInfluence(t,professors));
     }
 
+    @Test
     public void testGetInfluenceNoTower() {
         AggregatedIsland isle = new AggregatedIsland(new Isle(),new Isle());
         isle.setInfStrategy(new noTowersStrategy());
@@ -73,7 +76,7 @@ public class AggregatedIslandTest extends TestCase {
         assertEquals(numStudent[Colour.Frogs.ordinal()]+numStudent[Colour.Fairies.ordinal()],isle.getInfluence(p2,professors));
         assertEquals(numStudent[Colour.Unicorns.ordinal()]+numStudent[Colour.Gnomes.ordinal()]+numStudent[Colour.Dragons.ordinal()],isle.getInfluence(t,professors));
     }
-
+    @Test
     public void testGetInfluencePlusInf() {
         AggregatedIsland isle = new AggregatedIsland(new Isle(),new Isle());
         isle.setInfStrategy(new PlusInfStrategy());
@@ -107,6 +110,7 @@ public class AggregatedIslandTest extends TestCase {
         assertEquals(numStudent[Colour.Frogs.ordinal()]+numStudent[Colour.Fairies.ordinal()]+2,isle.getInfluence(p2,professors));
         assertEquals(numStudent[Colour.Unicorns.ordinal()]+numStudent[Colour.Gnomes.ordinal()]+numStudent[Colour.Dragons.ordinal()]+2+isle.getSize(),isle.getInfluence(t,professors));
     }
+    @Test
     public void testGetInfluenceNoColour() {
         AggregatedIsland isle = new AggregatedIsland(new Isle(),new Isle());
         isle.setTower(Faction.Black);
@@ -139,7 +143,7 @@ public class AggregatedIslandTest extends TestCase {
         assertEquals(numStudent[Colour.Frogs.ordinal()]+numStudent[Colour.Fairies.ordinal()],isle.getInfluenceNoColour(p2,Colour.Dragons,professors));
         assertEquals(numStudent[Colour.Unicorns.ordinal()]+numStudent[Colour.Gnomes.ordinal()]+isle.getSize(),isle.getInfluenceNoColour(t,Colour.Dragons,professors));
     }
-
+    @Test
     public void testJoin() {
         AggregatedIsland isle = new AggregatedIsland(new Isle(),new Isle());
         assertEquals(2,isle.getSize());
@@ -149,7 +153,7 @@ public class AggregatedIslandTest extends TestCase {
         assertEquals(3,isle.getSize());
         assertTrue(isle.getJoinedIsle().contains(isle1));
     }
-
+    @Test
     public void testTestJoin() {
         AggregatedIsland isle = new AggregatedIsland(new Isle(),new Isle());
         assertEquals(2,isle.getSize());
@@ -164,6 +168,7 @@ public class AggregatedIslandTest extends TestCase {
         assertTrue(isle.getJoinedIsle().contains(isle2));
     }
 
+    @Test
     public void testGetJoinedIsle() {
         Isle isle1 = new Isle();
         Isle isle2 = new Isle();

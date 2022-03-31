@@ -33,11 +33,12 @@ class PlayerTest {
     @ValueSource(ints = {0,1,2,3,4,5,6,7,8,9,10,11,-1,-2})
     void setChoosenAssistant(int param) {
         Player p = new Player(0, "testNickname");
-        p.setChoosenAssistant(param);
         if(param >= 0 && param < 10){
+            p.setChoosenAssistant(param);
             assertEquals(9, p.getDeck().size());
             assertEquals(1, p.getUsedCards().size());
         }else{
+            assertThrowsExactly(IndexOutOfBoundsException.class, ()->{p.setChoosenAssistant(param);});
             assertEquals(10, p.getDeck().size());
             assertEquals(0, p.getUsedCards().size());
         }

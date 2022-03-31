@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model;
 
 import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
 public class CloudTest extends TestCase {
 
+    @Test
     public void testEmpty() {
         Cloud cloud = new Cloud ();
         ArrayList<Student> s = new ArrayList<Student>();

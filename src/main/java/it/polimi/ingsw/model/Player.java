@@ -47,11 +47,7 @@ public class Player {
 
     // REFERS TO ASSISTANT ARRAY POSTIION
     public void setChoosenAssistant(int i){
-        if(i>= 0 && i < 10){
-            usedCards.add(deck.remove(i)); // Maybe i had to add some controll on the remove...XD
-        }else{
-            System.out.println("Player.setChoosenAssistant(int i), i out of range");
-        }
+        usedCards.add(deck.remove(i)); // Maybe i had to add some controll on the remove...XD
     }
 
     public Board getBoard(){

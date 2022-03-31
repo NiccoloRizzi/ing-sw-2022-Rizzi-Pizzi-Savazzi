@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model;
 
 import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
 public class CharacterStudentsTest extends TestCase {
 
+    @Test
     public void testAddStudent() {
         CharacterStudents c = new CharacterStudents(0,1);
         Student s = new Student(Colour.Dragons);
@@ -13,6 +15,7 @@ public class CharacterStudentsTest extends TestCase {
         assertEquals(s,c.getStudent(0));
     }
 
+    @Test
     public void testAddStudents() {
         CharacterStudents c = new CharacterStudents(0,1);
         ArrayList<Student> s = new ArrayList<Student>();
@@ -23,6 +26,7 @@ public class CharacterStudentsTest extends TestCase {
             assertEquals(s.get(i),c.getStudent(i));
     }
 
+    @Test
     public void testRemoveStudent() {
         CharacterStudents c = new CharacterStudents(0,1);
         ArrayList<Student> s = new ArrayList<Student>();

@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model;
 
 import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
 public class TileTest extends TestCase {
 
+    @Test
     public void testAddStudent() {
         Tile t = new Tile ();
         Student s = new Student(Colour.Gnomes);
@@ -13,6 +15,7 @@ public class TileTest extends TestCase {
         assertEquals(s,t.students.get(0));
     }
 
+    @Test
     public void testAddStudents() {
         Tile t = new Tile ();
         int i = 0;
