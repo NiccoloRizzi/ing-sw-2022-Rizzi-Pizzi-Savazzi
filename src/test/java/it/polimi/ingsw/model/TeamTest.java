@@ -59,10 +59,10 @@ class TeamTest {
     }
 
     @Test
-    void addPlayer() {
+    void addPlayer()  {
         Team t = new Team();
-        assertTrue(t.addPlayer(new Player(0, "")));
-        assertTrue(t.addPlayer(new Player(1, "")));
-        assertFalse(t.addPlayer(new Player(2, "")));
+        assertDoesNotThrow(()->t.addPlayer(new Player(0, "")));
+        assertDoesNotThrow(()->t.addPlayer(new Player(1, "")));
+        assertThrowsExactly(IndexOutOfBoundsException.class, ()->t.addPlayer(new Player(2, "")));
     }
 }

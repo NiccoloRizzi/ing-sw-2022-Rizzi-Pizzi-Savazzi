@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -12,7 +13,7 @@ class PlayerTest {
     @ValueSource(ints = {0,1,2,3,4,5,6,7,8,9})
     void getChosen(int param) {
         Player p = new Player(0, "testName");
-        assertNull(p.getChosen());
+        assertThrowsExactly(IndexOutOfBoundsException.class, ()->{p.getChosen();});
         p.setChoosenAssistant(param);
         assertNotNull(p.getChosen());
         assertEquals(param+1, p.getChosen().getValue());
@@ -119,5 +120,14 @@ class PlayerTest {
         p.createBoard(param);
         assertNotNull(p.getBoard());
         assertEquals(param, p.getBoard().getTowers());
+    }
+
+    @Test
+    void testHashCode() {
+        Player p = new Player(0, "");
+        Player p2 = new Player(0, "");
+        Player p3 = new Player(1, "");
+        assertEquals(p.hashCode(), p2.hashCode());
+        assertNotEquals(p2.hashCode(), p3.hashCode());
     }
 }

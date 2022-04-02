@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 
 import java.util.ArrayList;
@@ -163,8 +162,10 @@ public class GameModel {
     {
         return professors.get(c);
     }
+
     public void setProfessor(Colour c, Player p)
     {
-        professors.replace(c,p);
+        // professors.replace(c,p);
+        professors.put(c, p);
     }
 }

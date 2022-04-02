@@ -19,7 +19,8 @@ public class Player {
     private final ArrayList<Assistant> deck;
     private final ArrayList<Assistant> usedCards;
 
-    // Param nickname??? see setNickname() comment
+    /**@param ID of the player
+     * @param nickname of the player**/
     public Player(int ID, String nickname){
         this.ID = ID;
         this.nickname = nickname;
@@ -32,51 +33,70 @@ public class Player {
         usedCards = new ArrayList<>();
     }
 
-    // NULL if usedCards is empty
-    public Assistant getChosen(){
-        if(!usedCards.isEmpty()){
-            return usedCards.get(usedCards.size() - 1);
-        }
-        return null;
+    /**@return choosen assistant
+     * @throws IndexOutOfBoundsException if usedCards is empty**/
+    public Assistant getChosen() throws IndexOutOfBoundsException{
+        return usedCards.get(usedCards.size() - 1);
     }
 
-    // Clone or not clone???
+    /**@return deck of assistants of the player**/
     public ArrayList<Assistant> getDeck(){
         return deck;
     }
 
-    // REFERS TO ASSISTANT ARRAY POSTIION
-    public void setChoosenAssistant(int i){
+    /**@param i is the index of the array of the assistants
+     * @throws IndexOutOfBoundsException if i is not a valid value**/
+    public void setChoosenAssistant(int i) throws IndexOutOfBoundsException{
         usedCards.add(deck.remove(i)); // Maybe i had to add some controll on the remove...XD
     }
 
+    /**@return the board of the player**/
     public Board getBoard(){
         return school;
     }
 
+    /**
+     * Add a single coin
+     */
     public void addCoin(){
         coins++;
     }
 
+    /**
+     * @param faction to assign to the player and the board
+     */
     public void assignFaction(Faction faction){
         this.faction = faction;
         school.setFaction(faction);
     }
 
-    // Clone or not clone???
+    /**
+     * @return used assistants
+     */
     public ArrayList<Assistant> getUsedCards(){
         return usedCards;
     }
 
-    // Utile on no??? Va tolto dal costruttore???
+    /**
+     *
+     * @param nickname to give to the player
+     */
     public void setNickname(String nickname){
         this.nickname = nickname;
     }
 
+    /**
+     *
+     * @return player's nickname
+     */
     public String getNickname() {
         return nickname;
     }
 
+    /**
+     * @param o is the player
+     * @return true if the players ID are equals
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -85,19 +105,35 @@ public class Player {
         return ID == player.ID;
     }
 
+    /**
+     *
+     * @return the hash code based in ID
+     */
     @Override
     public int hashCode() {
         return Objects.hash(ID);
     }
 
+    /**
+     *
+     * @return id of the player
+     */
     public int getID() {
         return ID;
     }
 
+    /**
+     *
+     * @return player's coins
+     */
     public int getCoins() {
         return coins;
     }
 
+    /**
+     *
+     * @param nTowers is the number of towers the board need based on the number of players
+     */
     public void createBoard(int nTowers){
         school = new Board(this.faction, nTowers);
     }
