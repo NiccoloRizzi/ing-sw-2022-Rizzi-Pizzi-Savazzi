@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.NotEnoughCoinsException;
+import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -7,12 +10,12 @@ import java.util.Random;
 public class GameModel {
     private int unusedCoins;
     private int motherNature;
-    private ArrayList<Student> bag;
-    private ArrayList<Player> players;
+    private final ArrayList<Student> bag;
+    private final ArrayList<Player> players;
     protected HashMap<Colour,Player> professors;
-    private ArrayList<Isle> isles;
-    private ArrayList<Cloud> clouds;
-    private ArrayList<Character> characters;
+    private final ArrayList<Isle> isles;
+    private final ArrayList<Cloud> clouds;
+    private final ArrayList<Character> characters;
     private ArrayList<Team> teams;
     private ArrayList<Character> activeCharacters;
 
@@ -30,11 +33,21 @@ public class GameModel {
         professors = new HashMap<Colour,Player>();
     }
 
+    public int numberOfProfessors(Player p){
+        int num=0;
+        for(Colour c : Colour.values()){
+            num+=(professors.get(c).equals(p))?1:0;
+        }
+        return num;
+    }
+
     private void generateBag()
     {
         for(Colour c: Colour.values())
         {
-            for(int i = 0; i<26; i++)
+            //it only generates 24 students for each colour (instead of 26)
+            //because 2 students of each colour get removed at the start of the game
+            for(int i = 0; i<24; i++)
                 bag.add(new Student(c));
         }
     }
@@ -66,6 +79,15 @@ public class GameModel {
     {
         motherNature = (motherNature+moves)%12;
     }
+
+    public boolean checkEmptyBag(){
+        return  bag.size()<=0;
+    }
+
+    public ArrayList<Player> getPlayers(){
+        return  players;
+    }
+
     public Player getPlayer(int playerID) {
         for(Player p : players){
             if(p.getID() == playerID){
@@ -73,6 +95,14 @@ public class GameModel {
             }
         }
         return null;
+    }
+
+    public ArrayList<Cloud> getClouds() {
+        return clouds;
+    }
+
+    public ArrayList<Isle> getIsles() {
+        return isles;
     }
 
     public Isle getIsle(int isleID){
@@ -103,12 +133,21 @@ public class GameModel {
         return unusedCoins;
     }
 
-    public void addCoin(int numCoins){
-        this.unusedCoins += numCoins;
+    public void addCoins(int numCoins){
+        if(numCoins>=0)
+            this.unusedCoins += numCoins;
     }
 
-    public void setMotherNPos(int isleID){
-        this.motherNature = isleID;
+    public void removeCoin() {
+        if(unusedCoins>0)
+            unusedCoins--;
+    }
+
+    public void setMotherNPos (int isleID) throws TileOutOfBoundsException{
+        if(isleID<=11 && isleID>=0)
+            this.motherNature = isleID;
+        else
+            throw new TileOutOfBoundsException();
     }
 
     public Student getRandomStudent(){
