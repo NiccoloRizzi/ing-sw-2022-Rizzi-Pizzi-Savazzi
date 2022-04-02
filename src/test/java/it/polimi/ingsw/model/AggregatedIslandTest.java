@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+
 public class AggregatedIslandTest extends TestCase {
 
     @Test
@@ -155,19 +158,18 @@ public class AggregatedIslandTest extends TestCase {
     }
     @Test
     public void testTestJoin() {
-        AggregatedIsland isle = new AggregatedIsland(new Isle(),new Isle());
-        assertEquals(2,isle.getSize());
+        AggregatedIsland isle = new AggregatedIsland(new Isle(), new Isle());
+        assertEquals(2, isle.getSize());
         Isle isle1 = new Isle();
         Isle isle2 = new Isle();
-        AggregatedIsland isle3 = new AggregatedIsland(isle1,isle2);
+        AggregatedIsland isle3 = new AggregatedIsland(isle1, isle2);
         assertFalse(isle.getJoinedIsle().contains(isle1));
         assertFalse(isle.getJoinedIsle().contains(isle2));
         isle.join(isle3);
-        assertEquals(4,isle.getSize());
+        assertEquals(4, isle.getSize());
         assertTrue(isle.getJoinedIsle().contains(isle1));
         assertTrue(isle.getJoinedIsle().contains(isle2));
     }
-
     @Test
     public void testGetJoinedIsle() {
         Isle isle1 = new Isle();

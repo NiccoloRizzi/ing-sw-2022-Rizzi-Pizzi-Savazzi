@@ -14,9 +14,8 @@ public class GameModel {
     protected HashMap<Colour,Player> professors;
     private final ArrayList<Isle> isles;
     private final ArrayList<Cloud> clouds;
-    private final ArrayList<Character> characters;
     private ArrayList<Team> teams;
-    private ArrayList<Character> activeCharacters;
+    private final ArrayList<Character> activeCharacters;
 
     public GameModel(){
         unusedCoins = 20;
@@ -27,9 +26,16 @@ public class GameModel {
         isles = new ArrayList<Isle>();
         generateIsle();
         clouds = new ArrayList<Cloud>();
-        characters = new ArrayList<Character>();
         activeCharacters= new ArrayList<Character>();
         professors = new HashMap<Colour,Player>();
+        final int[] id = new Random().ints(0, 12).distinct().limit(3).toArray();
+        for (int i = 0; i < 3; i++)
+        {
+            if(id[i] == 0 || id[i] == 6 || id[i] == 10 )
+                activeCharacters.add(new CharacterStudents(id[i],id[i]%3 +1));
+            else
+                activeCharacters.add(new Character(id[i],id[i]%3 +1));
+        }
     }
 
     public int numberOfProfessors(Player p){
@@ -167,5 +173,10 @@ public class GameModel {
     {
         // professors.replace(c,p);
         professors.put(c, p);
+    }
+
+    public Character getCharacter (int id)
+    {
+        return activeCharacters.get(id);
     }
 }
