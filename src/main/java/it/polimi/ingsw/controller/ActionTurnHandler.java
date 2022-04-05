@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.GameModel;
+import it.polimi.ingsw.model.*;
 
 public class ActionTurnHandler {
     private int currentPlayer;
@@ -26,5 +27,27 @@ public class ActionTurnHandler {
         }
     }
 
+    public void checkProfessors(Colour type)
+    {
+        if(!gameModel.getPlayer(currentPlayer).equals(gameModel.getProfessor(type))) {
+            if(gameModel.getProfessor(type).getBoard().getTable(type) < gameModel.getPlayer(currentPlayer).getBoard().getTable(type))
+                gameModel.setProfessor(type,gameModel.getPlayer(currentPlayer));
+        }
+    }
+
+    public void checkIsleJoin(int index)
+    {
+        if(gameModel.getIsle(index).getTower() == gameModel.getIsle((index == 0)? gameModel.getIsles().size()-1: index -1).getTower())
+        {
+            gameModel.joinIsle(index,(index == 0)? gameModel.getIsles().size()-1: index -1);
+            index--;
+        }
+
+        if(gameModel.getIsle(index).getTower() == gameModel.getIsle((index +1)%gameModel.getIsles().size()).getTower())
+        {
+            gameModel.joinIsle(index,(index +1)%gameModel.getIsles().size());
+            index--;
+        }
+    }
 
 }

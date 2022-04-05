@@ -179,4 +179,21 @@ public class GameModel {
     {
         return activeCharacters.get(id);
     }
+
+    public void joinIsle(int isle1,int isle2)
+    {
+        AggregatedIsland temp =isles.get(isle1).join(isles.get(isle2));
+        if(isle1>isle2)
+        {
+            isles.remove(isle1);
+            isles.remove(isle2);
+            isles.add(isle2,temp);
+        }
+        else
+        {
+            isles.remove(isle2);
+            isles.remove(isle1);
+            isles.add(isle1,temp);
+        }
+    }
 }

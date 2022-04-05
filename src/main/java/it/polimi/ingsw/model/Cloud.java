@@ -13,5 +13,9 @@ public class Cloud extends Tile {
         students.clear();
         return temp;
     }
+    public boolean isEmpty ()
+    {
+        return students.isEmpty();
+    }
 
 }

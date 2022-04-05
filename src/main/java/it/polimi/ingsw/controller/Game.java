@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class Game {
 
-    private final static int MAX_N_ISELS = 12;
+    private final static int MAX_N_ISLES = 12;
 
     private GameModel gameModel; // WHEN TO INITIALIZE???
     private ActionTurnHandler turn;
@@ -80,17 +80,20 @@ public class Game {
         }
         Random rand = new Random();
         try {
-            gameModel.setMotherNPos(rand.nextInt(MAX_N_ISELS));
+            gameModel.setMotherNPos(rand.nextInt(MAX_N_ISLES));
         } catch (TileOutOfBoundsException e) {
             e.printStackTrace();
         }
-        for(int i = 0; i < MAX_N_ISELS; i++){
-            if(i != gameModel.getMotherNature() && i != (gameModel.getMotherNature() + MAX_N_ISELS/2) % MAX_N_ISELS){
-                gameModel.getIsle(i).addStudent(tempStud.remove(rand.nextInt(MAX_N_ISELS - 2)));
+        for(int i = 0; i < MAX_N_ISLES; i++){
+            if(i != gameModel.getMotherNature() && i != (gameModel.getMotherNature() + MAX_N_ISLES /2) % MAX_N_ISLES){
+                gameModel.getIsle(i).addStudent(tempStud.remove(rand.nextInt(MAX_N_ISLES - 2)));
             }
         }
 
-        gameModel.createClouds();
+        for(Cloud c: gameModel.getClouds())
+        {
+            c.addStudents(gameModel.extractStudents((numOfPLayers == 3)?4:3));
+        }
 
         for(Player p : gameModel.getPlayers()){
             p.createBoard((numOfPLayers == 3)?6:8);
