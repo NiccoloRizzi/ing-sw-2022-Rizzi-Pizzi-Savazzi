@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import java.util.ArrayList;
+import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 
 public class Board extends Tile{
     private Faction faction;
@@ -9,7 +9,11 @@ public class Board extends Tile{
     private final int []tables;
     private final int studLimit;
 
-    //the number of starting towers depends on the number of players
+    /**
+     * Constructor for the board.
+    * @param faction The colour of the towers (Black, White, Grey)
+     * @param towers The number of starting towers
+     */
     public Board(Faction faction, int towers) {
         super();
         this.faction = faction;
@@ -19,30 +23,44 @@ public class Board extends Tile{
         tables = new int[5];
     }
 
-    //removes a student from the entrance
+    /**
+     * Removes a student from the entrance.
+     * @param i Position of the student in the collection
+     */
     public void removeStudent(int i) /* throws Exception*/ {
         super.students.remove(i);
     }
 
-    public boolean addToEntrance(Student student) throws StudentsOutOfBoundsException{
+    /**
+     *
+     * @param student The student that will be added to the player's entrance
+     * @throws StudentsOutOfBoundsException When adding a student to a full entrance
+     */
+    public void addToEntrance(Student student) throws StudentsOutOfBoundsException {
         if(super.students.size()<this.studLimit){
             super.students.add(student);
-            return true;
         }
         throw(new StudentsOutOfBoundsException());
     }
 
+    /**
+     *
+     * @param c The colour of the table
+     * @return  The number of students in the table of the given colour
+     */
     public int getTable(Colour c) {
         return tables[c.ordinal()];
     }
 
-    //adds a student TO A SPECIFIED TABLE
-    public boolean addToTable(int table){
+    /**
+     *
+     * @param table The position of the table in the collection
+     */
+    public void addToTable (int table) throws StudentsOutOfBoundsException{
         if(!isTableFull(table)){
             tables[table]++;
-            return true;
         }
-        return false;
+        throw new StudentsOutOfBoundsException();
     }
 
     //used to add back a tower from an Isle who gets taken by another player
