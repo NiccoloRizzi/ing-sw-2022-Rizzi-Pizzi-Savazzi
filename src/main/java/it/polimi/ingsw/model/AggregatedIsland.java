@@ -32,23 +32,6 @@ public class AggregatedIsland extends Isle {
     public int getInfluence(Team t,HashMap<Colour,Player> professors){
         return infStrategy.getInfluence(t,students,size,tower,professors);
     }
-    @Override
-    public int getInfluenceNoColour(Player p, Colour c,HashMap<Colour,Player> professors)
-    {
-        int influence = 0;
-        influence+= students.stream()
-                .filter(student -> professors.get(student.getType()).equals(p)&& c!=(student.getType()))
-                .count();
-
-        if(p.getBoard().getFaction() == tower)
-            influence += size;
-        return influence;
-    }
-    @Override
-    public int getInfluenceNoColour(Team t, Colour c,HashMap<Colour,Player> professors)
-    {
-        return getInfluenceNoColour(t.getLeader(),c,professors)+ getInfluenceNoColour(t.getMember(),c,professors)-size;
-    }
 
     public AggregatedIsland join (Isle isle)
     {

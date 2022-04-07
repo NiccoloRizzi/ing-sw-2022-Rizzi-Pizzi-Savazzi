@@ -117,6 +117,7 @@ public class AggregatedIslandTest extends TestCase {
     public void testGetInfluenceNoColour() {
         AggregatedIsland isle = new AggregatedIsland(new Isle(),new Isle());
         isle.setTower(Faction.Black);
+        isle.setInfStrategy(new NoColourStrategy(Colour.Dragons));
         ArrayList<Student> s = new ArrayList<Student>();
         int[] numStudent = {1,2,3,4,5};
         for(Colour c:Colour.values())
@@ -142,9 +143,9 @@ public class AggregatedIslandTest extends TestCase {
         professors.put(Colour.Frogs,p2);
         professors.put(Colour.Fairies,p2);
         professors.put(Colour.Unicorns,p3);
-        assertEquals(numStudent[Colour.Gnomes.ordinal()]+isle.getSize(),isle.getInfluenceNoColour(p1,Colour.Dragons,professors));
-        assertEquals(numStudent[Colour.Frogs.ordinal()]+numStudent[Colour.Fairies.ordinal()],isle.getInfluenceNoColour(p2,Colour.Dragons,professors));
-        assertEquals(numStudent[Colour.Unicorns.ordinal()]+numStudent[Colour.Gnomes.ordinal()]+isle.getSize(),isle.getInfluenceNoColour(t,Colour.Dragons,professors));
+        assertEquals(numStudent[Colour.Gnomes.ordinal()]+isle.getSize(),isle.getInfluence(p1,professors));
+        assertEquals(numStudent[Colour.Frogs.ordinal()]+numStudent[Colour.Fairies.ordinal()],isle.getInfluence(p2,professors));
+        assertEquals(numStudent[Colour.Unicorns.ordinal()]+numStudent[Colour.Gnomes.ordinal()]+isle.getSize(),isle.getInfluence(t,professors));
     }
     @Test
     public void testJoin() {
