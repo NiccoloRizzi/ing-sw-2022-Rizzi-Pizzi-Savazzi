@@ -22,7 +22,9 @@ public class CharacterStudents extends Character {
     public int getStudents(Colour c) { return students.get(c);}
 
     public void addStudents(HashMap<Colour, Integer> studentsToAdd) {
-        students.forEach((c,v)->v+=studentsToAdd.get(c));
+        for(Colour c : Colour.values()){
+            students.replace(c, students.get(c) + 1);
+        }
     }
     public  void removeStudent(Colour c) throws StudentsOutOfBoundsException{
         if(students.get(c)>0)

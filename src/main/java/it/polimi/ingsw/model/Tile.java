@@ -29,6 +29,8 @@ public class Tile
     }
 
     public void addStudents(HashMap<Colour, Integer> studentsToAdd){
-        students.forEach((c,v)->v+=studentsToAdd.get(c));
+        for(Colour c : Colour.values()){
+            students.replace(c, students.get(c) + 1);
+        }
     }
 }
