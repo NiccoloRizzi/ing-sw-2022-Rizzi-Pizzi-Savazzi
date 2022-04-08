@@ -10,19 +10,20 @@ public class NoColourStrategy implements influenceStrategy{
     {
         this.noColour=noColour;
     }
-    public int getInfluence(Player p, ArrayList<Student> students, int size, Faction tower, HashMap<Colour,Player> professors){
+    public int getInfluence(Player p, HashMap<Colour,Integer> students, int size, Faction tower, HashMap<Colour,Player> professors){
         int influence = 0;
 
-        influence+= students.stream()
-                .filter(student -> professors.containsKey(student.getType())&&professors.get(student.getType()).equals(p)&&student.getType()!=noColour)
-                .count();
+        for(Colour c: Colour.values())
+        {
+            influence += (c == noColour) ? 0 : students.get(c);
+        }
 
         if(p.getBoard().getFaction() == tower)
             influence += size;
         return influence;
     }
 
-    public int getInfluence(Team t, ArrayList<Student> students, int size, Faction tower,HashMap<Colour,Player> professors)
+    public int getInfluence(Team t, HashMap<Colour, Integer> students, int size, Faction tower, HashMap<Colour,Player> professors)
     {
         return getInfluence(t.getLeader(),students,size,tower,professors)+ getInfluence(t.getMember(),students,size,tower,professors)-size;
     }
