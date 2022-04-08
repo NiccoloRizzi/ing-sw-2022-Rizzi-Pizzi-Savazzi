@@ -9,7 +9,7 @@ import java.util.Random;
 public class GameModel {
     private int unusedCoins;
     private int motherNature;
-    private final ArrayList<Student> bag;
+    private final HashMap<Colour, Integer> bag;
     private final ArrayList<Player> players;
     protected HashMap<Colour,Player> professors;
     private final ArrayList<Isle> isles;
@@ -20,7 +20,7 @@ public class GameModel {
     public GameModel(){
         unusedCoins = 20;
         motherNature = (new Random()).nextInt(12);
-        bag = new ArrayList<Student>();
+        bag = new HashMap<>();
         generateBag();
         players = new ArrayList<Player>();
         isles = new ArrayList<Isle>();
@@ -52,8 +52,7 @@ public class GameModel {
         {
             //it only generates 24 students for each colour (instead of 26)
             //because 2 students of each colour get removed at the start of the game
-            for(int i = 0; i<24; i++)
-                bag.add(new Student(c));
+            bag.put(c, 24);
         }
     }
 
@@ -67,26 +66,43 @@ public class GameModel {
         return motherNature;
     }
 
-    public ArrayList<Student> extractStudents(int num){
-        ArrayList<Student> extractedStud = new ArrayList<>();
-        Random rand = new Random();
-        // EXCEPTION
+    public HashMap<Colour, Integer> extractStudents(int num){
+        HashMap<Colour, Integer> extractedStud = new HashMap<>();
+        for(Colour c : Colour.values()){
+            extractedStud.put(c, 0);
+        }
         if(num >= 0 && num < bag.size()){
             for(int i = 0; i < num; i++){
-                int randomPos = rand.nextInt(bag.size());
-                extractedStud.add(bag.remove(randomPos));
+                Colour extracted = getRandomStudent();
+                extractedStud.put(extracted, extractedStud.get(extracted) + 1);
             }
             return extractedStud;
         }
         return null;
+//        HashMap<Colour, Integer> extractedStud = new HashMap<>();
+//        Random rand = new Random();
+//        // EXCEPTION
+//        if(num >= 0 && num < bag.size()){
+//            for(int i = 0; i < num; i++){
+//                int randomPos = rand.nextInt(bag.size());
+//                extractedStud.add(bag.remove(randomPos));
+//            }
+//            return extractedStud;
+//        }
+//        return null;
     }
+
     public void moveMN(int moves)
     {
         motherNature = (motherNature+moves)%12;
     }
 
     public boolean checkEmptyBag(){
-        return  bag.size()<=0;
+        int size = 0;
+        for(Colour c : Colour.values()){
+            size += bag.get(c);
+        }
+        return size<=0;
     }
 
     public ArrayList<Player> getPlayers(){
@@ -155,13 +171,31 @@ public class GameModel {
             throw new TileOutOfBoundsException();
     }
 
-    public Student getRandomStudent(){
+    public Colour getRandomStudent(){
+        int totStud = 0;
+        for(Colour c : bag.keySet()){
+            totStud += bag.get(c);
+        }
         Random rand = new Random();
-        return bag.get(rand.nextInt(bag.size()));
+        int selected = rand.nextInt(totStud);
+        Colour selectedColour = null;
+
+        int verify = 0;
+        for(Colour c : Colour.values()){
+            verify += bag.get(c);
+            if(selected <= verify){
+                selectedColour = c;
+            }
+        }
+
+        bag.replace(selectedColour, bag.get(selectedColour) - 1);
+        return selectedColour;
+//        Random rand = new Random();
+//        return bag.get(rand.nextInt(bag.size()));
     }
 
-    public void addStudent(ArrayList<Student> students){
-        bag.addAll(students);
+    public void addStudent(HashMap<Colour, Integer> students){
+        bag.forEach((c,v)->v += students.get(c));
     }
 
     public Player getProfessor (Colour c)
