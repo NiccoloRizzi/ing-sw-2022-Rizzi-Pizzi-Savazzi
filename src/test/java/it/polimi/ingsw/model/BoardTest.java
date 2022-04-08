@@ -12,13 +12,13 @@ class BoardTest {
     void removeStudent() {
         Board board = new Board(Faction.Black, 8);
         board.addStudent(Colour.Dragons);
-        assertEquals(board.students.size(),1);
+        assertEquals(board.students.get(Colour.Dragons),1);
         try {
             board.removeStudent(Colour.Dragons);
         }catch(StudentsOutOfBoundsException e){
             e.printStackTrace();
         }
-        assertEquals(board.students.size(),0);
+        assertEquals(board.getStudents(Colour.Dragons),0);
     }
 
     @ParameterizedTest
@@ -32,12 +32,11 @@ class BoardTest {
         }
         for(int i=1; i<((k==6)?9:7);i++){
             try {
-                board.addToEntrance(Colour.values()[i % 5]);
+                board.addToEntrance(Colour.Dragons);
             }catch(StudentsOutOfBoundsException e){
                 e.printStackTrace();
             }
         }
-        assertEquals((k==6)?9:7, board.students.size());
         assertThrowsExactly(StudentsOutOfBoundsException.class, ()->board.addToEntrance(Colour.Dragons));
     }
 
