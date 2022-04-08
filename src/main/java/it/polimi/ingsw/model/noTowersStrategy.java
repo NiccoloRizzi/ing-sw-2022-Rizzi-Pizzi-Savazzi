@@ -9,7 +9,7 @@ public class noTowersStrategy implements influenceStrategy{
         int influence = 0;
             for(Colour c: Colour.values())
             {
-                influence += students.get(c);
+                influence += (professors.get(c).equals(p))?students.get(c):0;
             }
 //        if(p.getBoard().getFaction() == tower){
 //            for(Student s : students){

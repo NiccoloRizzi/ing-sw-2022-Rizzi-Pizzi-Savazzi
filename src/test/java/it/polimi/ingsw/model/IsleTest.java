@@ -20,11 +20,10 @@ public class IsleTest extends TestCase {
     public void testGetInfluenceDefault() {
         Isle isle = new Isle();
         isle.setTower(Faction.Black);
-        ArrayList<Student> s = new ArrayList<Student>();
+        HashMap<Colour,Integer> s = new HashMap<Colour,Integer>();
         int[] numStudent = {1,2,3,4,5};
         for(Colour c:Colour.values())
-            for(int i = 0; i < numStudent[c.ordinal()];i++)
-                s.add(new Student(c));
+            s.put(c,numStudent[c.ordinal()]);
         isle.addStudents(s);
         HashMap<Colour,Player> professors = new HashMap<Colour,Player>();
         Player p1 = new Player(1,"pippo");
@@ -55,11 +54,10 @@ public class IsleTest extends TestCase {
         Isle isle = new Isle();
         isle.setInfStrategy(new noTowersStrategy());
         isle.setTower(Faction.Black);
-        ArrayList<Student> s = new ArrayList<Student>();
+        HashMap<Colour,Integer> s = new HashMap<Colour,Integer>();
         int[] numStudent = {1,2,3,4,5};
         for(Colour c:Colour.values())
-            for(int i = 0; i < numStudent[c.ordinal()];i++)
-                s.add(new Student(c));
+            s.put(c,numStudent[c.ordinal()]);
         isle.addStudents(s);
         HashMap<Colour,Player> professors = new HashMap<Colour,Player>();
         Player p1 = new Player(1,"pippo");
@@ -90,11 +88,10 @@ public class IsleTest extends TestCase {
         Isle isle = new Isle();
         isle.setInfStrategy(new PlusInfStrategy());
         isle.setTower(Faction.Black);
-        ArrayList<Student> s = new ArrayList<Student>();
+        HashMap<Colour,Integer> s = new HashMap<Colour,Integer>();
         int[] numStudent = {1,2,3,4,5};
         for(Colour c:Colour.values())
-            for(int i = 0; i < numStudent[c.ordinal()];i++)
-                s.add(new Student(c));
+                s.put(c,numStudent[c.ordinal()]);
         isle.addStudents(s);
         HashMap<Colour,Player> professors = new HashMap<Colour,Player>();
         Player p1 = new Player(1,"pippo");
@@ -125,11 +122,10 @@ public class IsleTest extends TestCase {
         Isle isle = new Isle();
         isle.setTower(Faction.Black);
         isle.setInfStrategy(new NoColourStrategy(Colour.Dragons));
-        ArrayList<Student> s = new ArrayList<Student>();
+        HashMap<Colour,Integer> s = new HashMap<Colour,Integer>();
         int[] numStudent = {1,2,3,4,5};
         for(Colour c:Colour.values())
-            for(int i = 0; i < numStudent[c.ordinal()];i++)
-                s.add(new Student(c));
+            s.put(c,numStudent[c.ordinal()]);
         isle.addStudents(s);
         HashMap<Colour,Player> professors = new HashMap<Colour,Player>();
         Player p1 = new Player(1,"pippo");

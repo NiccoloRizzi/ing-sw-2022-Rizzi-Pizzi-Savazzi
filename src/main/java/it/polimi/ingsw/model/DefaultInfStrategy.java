@@ -9,7 +9,8 @@ public class DefaultInfStrategy implements influenceStrategy{
 
         for(Colour c: Colour.values())
         {
-            influence += students.get(c);
+            influence += (p.equals(professors.get(c)))?students.get(c):0;
+
         }
 
         if(p.getBoard().getFaction() == tower)
@@ -21,5 +22,4 @@ public class DefaultInfStrategy implements influenceStrategy{
     {
         return getInfluence(t.getLeader(),students,size,tower,professors)+ getInfluence(t.getMember(),students,size,tower,professors)-size;
     }
-
 }

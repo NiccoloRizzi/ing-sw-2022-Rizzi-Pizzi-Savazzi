@@ -12,7 +12,7 @@ public class PlusInfStrategy implements influenceStrategy{
         }
         for(Colour c: Colour.values())
         {
-            influence += students.get(c);
+            influence += (professors.get(c).equals(p))?students.get(c):0;
         }
 
         return influence + 2;

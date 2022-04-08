@@ -11,7 +11,8 @@ public class Cloud extends Tile {
 
     public HashMap<Colour,Integer> empty() {
         HashMap<Colour, Integer> temp = new HashMap<>(students);
-        students.forEach((k, v) -> v = 0);
+        for(Colour c:Colour.values())
+            students.put(c,0);
         return temp;
     }
 }

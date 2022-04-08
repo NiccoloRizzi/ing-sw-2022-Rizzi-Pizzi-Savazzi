@@ -30,7 +30,7 @@ public class Tile
 
     public void addStudents(HashMap<Colour, Integer> studentsToAdd){
         for(Colour c : Colour.values()){
-            students.replace(c, students.get(c) + 1);
+            students.replace(c, students.get(c)+studentsToAdd.get(c));
         }
     }
 }

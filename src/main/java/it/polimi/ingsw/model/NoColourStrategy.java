@@ -15,7 +15,7 @@ public class NoColourStrategy implements influenceStrategy{
 
         for(Colour c: Colour.values())
         {
-            influence += (c == noColour) ? 0 : students.get(c);
+            influence += (professors.get(c).equals(p)&&c!=noColour)?students.get(c):0;
         }
 
         if(p.getBoard().getFaction() == tower)

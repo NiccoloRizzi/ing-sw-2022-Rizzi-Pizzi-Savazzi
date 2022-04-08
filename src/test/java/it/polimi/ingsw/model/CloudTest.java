@@ -4,23 +4,24 @@ import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CloudTest extends TestCase {
 
     @Test
     public void testEmpty() {
         Cloud cloud = new Cloud ();
-        ArrayList<Student> s = new ArrayList<Student>();
+        HashMap<Colour,Integer> s = new HashMap<Colour,Integer>();
         for(Colour c: Colour.values())
-            s.add(new Student(c));
+            s.put(c,1);
         assertTrue(cloud.isEmpty());
         cloud.addStudents(s);
         assertFalse(cloud.isEmpty());
-        ArrayList<Student> s1 = cloud.empty();
-        assertTrue(cloud.students.isEmpty());
+        HashMap<Colour,Integer> s1 = cloud.empty();
+        assertTrue(cloud.isEmpty());
         assertEquals(s.size(),s1.size());
-        for(int i = 0; i < s.size();i++)
-            assertEquals(s.get(i),s1.get(i));
+        for(Colour c: Colour.values())
+            assertEquals(s.get(c),s1.get(c));
 
     }
 }
