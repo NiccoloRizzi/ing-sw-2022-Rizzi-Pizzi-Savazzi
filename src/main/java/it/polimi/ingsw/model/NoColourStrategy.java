@@ -3,13 +3,19 @@ package it.polimi.ingsw.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DefaultInfStrategy implements influenceStrategy{
+public class NoColourStrategy implements influenceStrategy{
+    private Colour noColour;
+
+    public NoColourStrategy(Colour noColour)
+    {
+        this.noColour=noColour;
+    }
     public int getInfluence(Player p, HashMap<Colour,Integer> students, int size, Faction tower, HashMap<Colour,Player> professors){
         int influence = 0;
 
         for(Colour c: Colour.values())
         {
-            influence += students.get(c);
+            influence += (c == noColour) ? 0 : students.get(c);
         }
 
         if(p.getBoard().getFaction() == tower)
@@ -21,5 +27,4 @@ public class DefaultInfStrategy implements influenceStrategy{
     {
         return getInfluence(t.getLeader(),students,size,tower,professors)+ getInfluence(t.getMember(),students,size,tower,professors)-size;
     }
-
 }

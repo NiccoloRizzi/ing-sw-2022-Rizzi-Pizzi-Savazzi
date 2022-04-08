@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
+import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.*;
 
 import java.util.*;
@@ -66,7 +66,7 @@ public class Game {
         try{
             gameModel.removeCoin();
             gameModel.getPlayer(p.getID()).addCoin();
-        }catch(NotEnoughCoinException e){
+        }catch(NotEnoughCoinsException e){
             // WHAT??? TELL THE PLAYER THE COINS ARE FINISHED?
         }
     }
@@ -121,7 +121,7 @@ public class Game {
         try{
             gameModel.getPlayer(playerID).setChoosenAssistant(assistantID);
         }catch (IndexOutOfBoundsException e){
-            notify = "Assistant choosen id must be less than 10 and more than 0";
+            notify = "Assistant chosen id must be less than 10 and more than 0";
         }
     }
 

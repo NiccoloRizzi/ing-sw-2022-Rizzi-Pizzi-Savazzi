@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.*;
 
@@ -49,5 +50,22 @@ public class ActionTurnHandler {
             index--;
         }
     }
-
+    //type = 1 muove sull'isola mentre type = 0 muove sul tavolo
+    public void moveStudent(int boardPosition, boolean type, int isleIndex)
+    {
+        Student temp = gameModel.getPlayer(currentPlayer).getBoard().getStudent(boardPosition);
+        gameModel.getPlayer(currentPlayer).getBoard().removeStudent(boardPosition);
+        if(type)
+        {
+            gameModel.getIsle(isleIndex).addStudent(temp);
+        }
+        else
+        {
+            try {
+                gameModel.getPlayer(currentPlayer).getBoard().addToTable(temp.getType().ordinal());
+            }catch (StudentsOutOfBoundsException e){
+                //error message: tavolo pieno
+            }
+        }
+    }
 }

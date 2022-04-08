@@ -13,7 +13,9 @@ public class CloudTest extends TestCase {
         ArrayList<Student> s = new ArrayList<Student>();
         for(Colour c: Colour.values())
             s.add(new Student(c));
+        assertTrue(cloud.isEmpty());
         cloud.addStudents(s);
+        assertFalse(cloud.isEmpty());
         ArrayList<Student> s1 = cloud.empty();
         assertTrue(cloud.students.isEmpty());
         assertEquals(s.size(),s1.size());
