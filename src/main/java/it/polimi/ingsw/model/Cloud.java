@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Cloud extends Tile {
 
@@ -8,14 +9,9 @@ public class Cloud extends Tile {
         super();
     }
 
-    public ArrayList<Student> empty() {
-        ArrayList<Student> temp = new ArrayList<Student>(students);
-        students.clear();
+    public HashMap<Colour,Integer> empty() {
+        HashMap<Colour, Integer> temp = new HashMap<>(students);
+        students.forEach((k, v) -> v = 0);
         return temp;
     }
-    public boolean isEmpty ()
-    {
-        return students.isEmpty();
-    }
-
 }

@@ -2,11 +2,14 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 
+import java.util.Arrays;
+import java.util.HashMap;
+
 public class Board extends Tile{
     private Faction faction;
     private int towers;
     private final int towersLimit;
-    private final int []tables;
+    private final HashMap<Colour, Integer> tables;
     private final int studLimit;
 
     /**
@@ -20,27 +23,36 @@ public class Board extends Tile{
         this.towers = towers;
         this.studLimit = (towers == 6)?9:7;
         this.towersLimit = towers;
-        tables = new int[5];
+        tables = new HashMap<>();
+        for(Colour c: Colour.values()){
+            tables.put(c,0);
+        }
     }
 
     /**
      * Removes a student from the entrance.
-     * @param i Position of the student in the collection
+     * @param c Colour of the students to be removed
      */
-    public void removeStudent(int i) /* throws Exception*/ {
-        super.students.remove(i);
+    public void removeStudent(Colour c) throws StudentsOutOfBoundsException {
+        if(students.get(c)>0){
+            students.replace(c,students.get(c)-1);
+        }
+        else
+            throw new StudentsOutOfBoundsException();
     }
 
     /**
      *
-     * @param student The student that will be added to the player's entrance
+     * @param student Colour of the student that will be added to the player's entrance
      * @throws StudentsOutOfBoundsException When adding a student to a full entrance
      */
-    public void addToEntrance(Student student) throws StudentsOutOfBoundsException {
-        if(super.students.size()<this.studLimit){
-            super.students.add(student);
+    public void addToEntrance(Colour student) throws StudentsOutOfBoundsException {
+        if(!isEntranceFull()){
+            students.replace(student,students.get(student)+1);
         }
-        throw(new StudentsOutOfBoundsException());
+        else
+            throw new StudentsOutOfBoundsException();
+
     }
 
     /**
@@ -49,44 +61,45 @@ public class Board extends Tile{
      * @return  The number of students in the table of the given colour
      */
     public int getTable(Colour c) {
-        return tables[c.ordinal()];
+        return tables.get(c);
     }
 
     /**
      *
      * @param table The position of the table in the collection
      */
-    public void addToTable (int table) throws StudentsOutOfBoundsException{
+    public void addToTable (Colour table) throws StudentsOutOfBoundsException{
         if(!isTableFull(table)){
-            tables[table]++;
+            tables.replace(table,tables.get(table)+1);
         }
-        throw new StudentsOutOfBoundsException();
+        else
+            throw new StudentsOutOfBoundsException();
     }
 
     //used to add back a tower from an Isle who gets taken by another player
-    public boolean addTower() /*throws Exception*/{
+    public void addTower(){
         if(towers<towersLimit){
             towers++;
-            return true;
         }
-        return false;
     }
 
     //when a player builds a tower on an isle, it gets removed from his board
-    public boolean useTower() /*throws Exception*/{
+    public void useTower() /*throws Exception*/{
         if(towers>0){
             towers--;
-            return true;
         }
-        return false;
     }
 
-    public boolean isTableFull(int table){
-        return (tables[table]==10);
+    public boolean isTableFull(Colour table){
+        return (tables.get(table)>=10);
     }
 
     public boolean isEntranceFull(){
-        return super.students.size()==studLimit;
+       int students= (Arrays.stream(Colour.values()))
+                .map(C -> super.students.get(C))
+                .reduce(0, (e1,e2)-> e1+e2);
+
+       return students>=studLimit;
     }
 
     public void setFaction(Faction faction){
@@ -101,17 +114,19 @@ public class Board extends Tile{
         return towers;
     }
 
-    public boolean removeFromTable(int table){
-        if(tables[table]>0){
-            tables[table]--;
-            return true;
+    public void removeFromTable(Colour table) throws StudentsOutOfBoundsException{
+        if(tables.get(table)>0){
+            tables.replace(table,tables.get(table)-1);
         }
-        return false;
+        else{
+            throw new StudentsOutOfBoundsException();
+        }
+
     }
 
     //checks if the students in a specified table of the board have reached a "coin" spot
-    public boolean checkCoin(int table)
+    public boolean checkCoin(Colour table)
     {
-        return (tables[table]>0 && (tables[table])%3==0);
+        return (tables.get(table)>0 && (tables.get(table)%3==0));
     }
 }

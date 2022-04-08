@@ -1,27 +1,32 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CharacterStudents extends Character {
-    private ArrayList<Student> students;
+    private final HashMap<Colour, Integer> students;
 
     public CharacterStudents (int id, int price)
     {
         super(id,price);
-        students = new ArrayList<Student> ();
+        students = new HashMap<>();
     }
 
-    public void addStudent(Student student)
+    public void addStudent(Colour student)
     {
-        students.add(student);
+        students.replace(student, students.get(student)+1);
     }
-    public Student getStudent(int i) { return students.get(i);}
-    public void addStudents(ArrayList<Student> students)
-    {
-        this.students.addAll(students);
+
+    public int getStudents(Colour c) { return students.get(c);}
+
+    public void addStudents(HashMap<Colour, Integer> studentsToAdd) {
+        students.forEach((c,v)->v+=studentsToAdd.get(c));
     }
-    public Student removeStudent(int i)
-    {
-        return students.remove(i);
+    public  void removeStudent(Colour c) throws StudentsOutOfBoundsException{
+        if(students.get(c)>0)
+            students.replace(c,students.get(c)-1);
+        else throw new StudentsOutOfBoundsException();
     }
 }
