@@ -41,6 +41,8 @@ public class Board extends Tile{
             throw new StudentsOutOfBoundsException();
     }
 
+
+
     /**
      *
      * @param student Colour of the student that will be added to the player's entrance

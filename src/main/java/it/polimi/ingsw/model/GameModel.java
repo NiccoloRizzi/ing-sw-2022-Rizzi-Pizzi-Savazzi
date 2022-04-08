@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.NotEnoughCoinsException;
+import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 
 import java.util.ArrayList;
@@ -79,17 +81,6 @@ public class GameModel {
             return extractedStud;
         }
         return null;
-//        HashMap<Colour, Integer> extractedStud = new HashMap<>();
-//        Random rand = new Random();
-//        // EXCEPTION
-//        if(num >= 0 && num < bag.size()){
-//            for(int i = 0; i < num; i++){
-//                int randomPos = rand.nextInt(bag.size());
-//                extractedStud.add(bag.remove(randomPos));
-//            }
-//            return extractedStud;
-//        }
-//        return null;
     }
 
     public void moveMN(int moves)
@@ -126,20 +117,18 @@ public class GameModel {
         return isles;
     }
 
-    public Isle getIsle(int isleID){
-        // FOR EXCEPTION
+    public Isle getIsle(int isleID) throws TileOutOfBoundsException{
         if(isleID >= 0 && isleID < isles.size()){
             return isles.get(isleID);
         }
-        return null;
+        throw new TileOutOfBoundsException();
     }
 
-    public Cloud getCloud(int cloudID){
-        // FOR EXCEPTION
+    public Cloud getCloud(int cloudID) throws TileOutOfBoundsException {
         if(cloudID >= 0 && cloudID < clouds.size()){
             return clouds.get(cloudID);
         }
-        return null;
+        throw new TileOutOfBoundsException();
     }
 
     public Team getTeam(int teamID){
@@ -154,14 +143,21 @@ public class GameModel {
         return unusedCoins;
     }
 
-    public void addCoins(int numCoins){
-        if(numCoins>=0)
+    public void addCoins(int numCoins) throws NotEnoughCoinsException{
+        if(numCoins>=0 && numCoins+unusedCoins<=20)
             this.unusedCoins += numCoins;
+        else if (numCoins+unusedCoins > 20){
+            throw new NotEnoughCoinsException();
+        }
+
     }
 
-    public void removeCoin() {
+    public void removeCoin() throws NotEnoughCoinsException {
         if(unusedCoins>0)
             unusedCoins--;
+        else{
+            throw new NotEnoughCoinsException();
+        }
     }
 
     public void setMotherNPos (int isleID) throws TileOutOfBoundsException{
@@ -169,6 +165,10 @@ public class GameModel {
             this.motherNature = isleID;
         else
             throw new TileOutOfBoundsException();
+    }
+
+    public int getStudents(Colour c){
+        return bag.get(c);
     }
 
     public Colour getRandomStudent(){
@@ -190,12 +190,17 @@ public class GameModel {
 
         bag.replace(selectedColour, bag.get(selectedColour) - 1);
         return selectedColour;
-//        Random rand = new Random();
-//        return bag.get(rand.nextInt(bag.size()));
+
     }
 
-    public void addStudent(HashMap<Colour, Integer> students){
-        bag.forEach((c,v)->v += students.get(c));
+    public void addStudents(HashMap<Colour, Integer> students){
+        for(Colour c: students.keySet()){
+            bag.replace(c,students.get(c)+bag.get(c));
+        }
+    }
+
+    public void addStudent(Colour student){
+        bag.replace(student, bag.get(student)+1);
     }
 
     public Player getProfessor (Colour c)

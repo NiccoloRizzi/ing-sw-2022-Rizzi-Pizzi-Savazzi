@@ -33,4 +33,8 @@ public class Tile
             students.replace(c, students.get(c)+studentsToAdd.get(c));
         }
     }
+
+    public int getStudents(Colour c){
+        return students.get(c);
+    }
 }

@@ -12,6 +12,9 @@ public class CharacterStudents extends Character {
     {
         super(id,price);
         students = new HashMap<>();
+        for(Colour c: Colour.values()){
+            students.put(c,0);
+        }
     }
 
     public void addStudent(Colour student)
