@@ -1,39 +1,45 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
-
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CharacterStudentsTest extends TestCase {
 
     @Test
     public void testAddStudent() {
         CharacterStudents c = new CharacterStudents(0,1);
-        Student s = new Student(Colour.Dragons);
-        c.addStudent(s);
-        assertEquals(s,c.getStudent(0));
+        c.addStudent(Colour.Dragons);
+        assertEquals(1,c.getStudents(Colour.Dragons));
     }
 
     @Test
-    public void testAddStudents() {
-        CharacterStudents c = new CharacterStudents(0,1);
-        ArrayList<Student> s = new ArrayList<Student>();
+    public void testAddRemoveStudents() {
+        CharacterStudents cs = new CharacterStudents(0,1);
+        HashMap<Colour, Integer> s = new HashMap<>();
         for (Colour color: Colour.values())
-            s.add(new Student(color));
-        c.addStudents(s);
-        for(int i = 0; i<s.size();i++)
-            assertEquals(s.get(i),c.getStudent(i));
+            s.put(color, 1);
+
+        cs.addStudents(s);
+        for(Colour c: Colour.values())
+            assertEquals(s.get(c).intValue() , cs.getStudents(c));
+
+        for(Colour c: Colour.values()){
+            try {
+                cs.removeStudent(c);
+            }catch(StudentsOutOfBoundsException e){
+                e.printStackTrace();
+            }
+        }
+
+        for(Colour c: Colour.values()) {
+            assertEquals(0, cs.getStudents(c));
+        }
+
+        assertThrowsExactly(StudentsOutOfBoundsException.class, ()->cs.removeStudent(Colour.Dragons));
     }
 
-    @Test
-    public void testRemoveStudent() {
-        CharacterStudents c = new CharacterStudents(0,1);
-        ArrayList<Student> s = new ArrayList<Student>();
-        for (Colour color: Colour.values())
-            s.add(new Student(color));
-        c.addStudents(s);
-        for(int i = 0; i<s.size();i++)
-            assertEquals(s.get(i),c.removeStudent(0));
-    }
 }

@@ -11,10 +11,13 @@ class BoardTest {
     @org.junit.jupiter.api.Test
     void removeStudent() {
         Board board = new Board(Faction.Black, 8);
-        Student stud = new Student(Colour.Dragons);
-        board.addStudent(stud);
+        board.addStudent(Colour.Dragons);
         assertEquals(board.students.size(),1);
-        board.removeStudent(0);
+        try {
+            board.removeStudent(Colour.Dragons);
+        }catch(StudentsOutOfBoundsException e){
+            e.printStackTrace();
+        }
         assertEquals(board.students.size(),0);
     }
 
@@ -22,21 +25,20 @@ class BoardTest {
     @ValueSource(ints = {6,8})
     void addToEntrance(int k) {
         Board board= new Board(Faction.Black, k);
-        Student stud = new Student(Colour.Dragons);
         try {
-            board.addToEntrance(stud);
+            board.addToEntrance(Colour.Dragons);
         }catch(StudentsOutOfBoundsException e){
             e.printStackTrace();
         }
         for(int i=1; i<((k==6)?9:7);i++){
             try {
-                board.addToEntrance(new Student(Colour.values()[i % 5]));
+                board.addToEntrance(Colour.values()[i % 5]);
             }catch(StudentsOutOfBoundsException e){
                 e.printStackTrace();
             }
         }
         assertEquals((k==6)?9:7, board.students.size());
-        assertThrowsExactly(StudentsOutOfBoundsException.class, ()->board.addToEntrance(stud));
+        assertThrowsExactly(StudentsOutOfBoundsException.class, ()->board.addToEntrance(Colour.Dragons));
     }
 
     @org.junit.jupiter.api.Test
@@ -52,14 +54,14 @@ class BoardTest {
             for (int j = 0; j < 10; j++) {
                 assertEquals(j, board.getTable(Colour.values()[i]));
                 try{
-                    board.addToTable(i);
+                    board.addToTable(Colour.values()[i]);
                 }catch(StudentsOutOfBoundsException e){
                     e.printStackTrace();
                 }
 
             }
-            int finalI = i;
-            assertThrowsExactly(StudentsOutOfBoundsException.class,()->board.addToTable(finalI));
+            Colour c = Colour.values()[i];
+            assertThrowsExactly(StudentsOutOfBoundsException.class,()->board.addToTable(c));
             assertEquals(board.getTable(Colour.values()[i]), 10);
         }
     }
@@ -70,15 +72,13 @@ class BoardTest {
     void useAddTower(int k) {
         Board board = new Board(Faction.Black, k);
         assertEquals(board.getTowers(),k);
-        assertFalse(board.addTower());
         board.useTower();
         assertEquals(board.getTowers(),k-1);
-        assertTrue(board.addTower());
+        board.addTower();
         assertEquals(board.getTowers(),k);
         for(int i=0; i<k;i++)
             board.useTower();
         assertEquals(board.getTowers(),0);
-        assertFalse(board.useTower());
     }
 
     @ParameterizedTest
@@ -86,24 +86,24 @@ class BoardTest {
     void isTableFull(int k) {
             Board board = new Board(Faction.Black, 8);
             for (int i = 0; i < 10; i++) {
-                assertFalse(board.isTableFull(k));
+                assertFalse(board.isTableFull(Colour.values()[k]));
                 try {
-                    board.addToTable(k);
+                    board.addToTable(Colour.values()[k]);
                 }catch(StudentsOutOfBoundsException e){
                     e.printStackTrace();
                 }
             }
-            assertTrue(board.isTableFull((k)));
+            assertTrue(board.isTableFull((Colour.values()[k])));
     }
 
     @org.junit.jupiter.api.Test
     void isEntranceFull() {
         Board board = new Board(Faction.Black, 8);
         assertFalse(board.isEntranceFull());
-        Student stud = new Student(Colour.Dragons);
+        Colour c= Colour.Dragons;
         for(int i=0; i<6;i++){
             try {
-                board.addToEntrance(stud);
+                board.addToEntrance(c);
             }
                 catch(StudentsOutOfBoundsException e){
                     e.printStackTrace();
@@ -111,7 +111,7 @@ class BoardTest {
             assertFalse(board.isEntranceFull());
         }
         try {
-            board.addToEntrance(stud);
+            board.addToEntrance(c);
         }catch(StudentsOutOfBoundsException e){
             e.printStackTrace();
         }
@@ -121,7 +121,7 @@ class BoardTest {
         assertFalse(board2.isEntranceFull());
         for(int i=0; i<8;i++){
             try {
-                board2.addToEntrance(stud);
+                board2.addToEntrance(c);
                 assertFalse(board2.isEntranceFull());
             }catch(StudentsOutOfBoundsException e){
                 e.printStackTrace();
@@ -129,7 +129,7 @@ class BoardTest {
 
         }
         try {
-            board2.addToEntrance(stud);
+            board2.addToEntrance(c);
             assertTrue(board2.isEntranceFull());
         }catch(StudentsOutOfBoundsException e){
             e.printStackTrace();
@@ -158,21 +158,26 @@ class BoardTest {
     void removeFromTable() {
         Board board = new Board(Faction.Black,8);
         try {
-            board.addToTable(0);
+            board.addToTable(Colour.values()[0]);
         }catch(StudentsOutOfBoundsException e){
             e.printStackTrace();
         }
         assertEquals(1,board.getTable(Colour.values()[0]));
-        board.removeFromTable(0);
+        try{
+            board.removeFromTable(Colour.values()[0]);
+        }catch(StudentsOutOfBoundsException e){
+            e.printStackTrace();
+        }
         assertEquals(0,board.getTable(Colour.values()[0]));
-        assertFalse(board.removeFromTable(0));
+        assertThrowsExactly(StudentsOutOfBoundsException.class ,() -> board.removeFromTable(Colour.values()[0]));
     }
 
 
     @ParameterizedTest
     @ValueSource(ints= {0,1,2,3,4})
-    void checkCoin(int param){
+    void checkCoin(int input){
         try {
+            Colour param = Colour.values()[input];
             Board board = new Board(Faction.Black, 8);
             assertFalse(board.checkCoin(param));
             board.addToTable(param);
