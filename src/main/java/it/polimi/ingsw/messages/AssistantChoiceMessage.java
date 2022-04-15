@@ -22,6 +22,6 @@ public class AssistantChoiceMessage implements Message{
 
     @Override
     public void accept(MessageVisitor visitor) {
-        visitor.visitAssistantChoiceMessage(this);
+        visitor.visit(this);
     }
 }

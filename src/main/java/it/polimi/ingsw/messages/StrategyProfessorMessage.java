@@ -22,6 +22,6 @@ public class StrategyProfessorMessage implements Message{
 
     @Override
     public void accept(MessageVisitor visitor) {
-        visitor.visitStrategyProfessorMessage(this);
+        visitor.visit(this);
     }
 }

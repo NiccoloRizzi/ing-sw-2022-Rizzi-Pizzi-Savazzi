@@ -5,36 +5,36 @@ import it.polimi.ingsw.model.GameModel;
 
 public class MessageVisitor {
 
-    final GameModel gameModel;
+    final Game game;
 
-    public MessageVisitor(GameModel gameModel){
-        this.gameModel = gameModel;
+    public MessageVisitor(Game game){
+        this.game = game;
     }
 
-    public void visitAssistantChoiceMessage(AssistantChoiceMessage assistantChoiceMessage){
+    public void visit(AssistantChoiceMessage assistantChoiceMessage){
     }
-    public void visitMoveStudentMessage(MoveStudentMessage moveStudentMessage){
+    public void visit(MoveStudentMessage moveStudentMessage){
     }
-    public void visitMoveMotherNatureMessage(MoveMotherNatureMessage moveMotherNatureMessage){
+    public void visit(MoveMotherNatureMessage moveMotherNatureMessage){
     }
-    public void visitCloudChoiceMessage(CloudChoiceMessage cloudChoiceMessage){
+    public void visit(CloudChoiceMessage cloudChoiceMessage){
     }
-    public void visitIsleInfluenceCharacterMessage(IsleInfluenceCharacterMessage isleInfluenceCharacterMessage){
+    public void visit(IsleInfluenceCharacterMessage isleInfluenceCharacterMessage){
     }
-    public void visitMoveStudentCharacterMessage(MoveStudentCharacterMessage moveStudentCharacterMessage){
+    public void visit(MoveStudentCharacterMessage moveStudentCharacterMessage){
     }
-    public void visitStrategyProfessorMessage(StrategyProfessorMessage strategyProfessorMessage){
+    public void visit(StrategyProfessorMessage strategyProfessorMessage){
     }
-    public void visitSimilMotherNatureMessage(SimilMotherNatureMesage similMotherNatureMesage){
+    public void visit(SimilMotherNatureMesage similMotherNatureMesage){
     }
-    public void visitPlus2MoveMnMessage(Plus2MoveMnMessage plus2MoveMnMessage){
+    public void visit(Plus2MoveMnMessage plus2MoveMnMessage){
     }
-    public void visitProhibitedIsleCharacterMessage(ProhibitedIsleCharacterMessage prohibitedIsleCharacterMessage){
+    public void visit(ProhibitedIsleCharacterMessage prohibitedIsleCharacterMessage){
     }
-    public void visitMove6StudCharacterMessage(Move6StudCharacterMessage move6StudCharacterMessage){
+    public void visit(Move6StudCharacterMessage move6StudCharacterMessage){
     }
-    public void visitMove2StudCharacterMessage(Move2StudCharacterMessage move2StudCharacterMessage){
+    public void visit(Move2StudCharacterMessage move2StudCharacterMessage){
     }
-    public void visitRemove3StudCharacterMessage(Remove3StudCharacterMessage remove3StudCharacterMessage){
+    public void visit(Remove3StudCharacterMessage remove3StudCharacterMessage){
     }
 }

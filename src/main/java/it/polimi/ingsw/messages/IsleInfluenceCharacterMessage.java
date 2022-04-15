@@ -41,6 +41,6 @@ public class IsleInfluenceCharacterMessage implements Message{
 
     @Override
     public void accept(MessageVisitor visitor) {
-        visitor.visitIsleInfluenceCharacterMessage(this);
+        visitor.visit(this);
     }
 }

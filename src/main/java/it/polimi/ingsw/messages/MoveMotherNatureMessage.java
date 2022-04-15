@@ -22,6 +22,6 @@ public class MoveMotherNatureMessage implements Message{
 
     @Override
     public void accept(MessageVisitor visitor) {
-        visitor.visitMoveMotherNatureMessage(this);
+        visitor.visit(this);
     }
 }

@@ -28,6 +28,6 @@ public class SimilMotherNatureMesage implements Message{
 
     @Override
     public void accept(MessageVisitor visitor) {
-        visitor.visitSimilMotherNatureMessage(this);
+        visitor.visit(this);
     }
 }

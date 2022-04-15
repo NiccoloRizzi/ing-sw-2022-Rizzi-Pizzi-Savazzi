@@ -22,6 +22,6 @@ public class Plus2MoveMnMessage implements Message{
 
     @Override
     public void accept(MessageVisitor visitor) {
-        visitor.visitPlus2MoveMnMessage(this);
+        visitor.visit(this);
     }
 }
