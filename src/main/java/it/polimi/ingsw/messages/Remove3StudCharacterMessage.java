@@ -27,6 +27,6 @@ public class Remove3StudCharacterMessage implements Message{
     }
 
     public void accept(MessageVisitor visitor){
-        visitor.visitRemove3StudCharacterMessage(this);
+        visitor.visit(this);
     }
 }

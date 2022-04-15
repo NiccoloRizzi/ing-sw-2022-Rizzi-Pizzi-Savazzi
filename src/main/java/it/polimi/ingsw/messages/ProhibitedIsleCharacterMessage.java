@@ -27,6 +27,6 @@ public class ProhibitedIsleCharacterMessage implements Message{
     }
 
     public void accept(MessageVisitor visitor){
-        visitor.visitProhibitedIsleCharacterMessage(this);
+        visitor.visit(this);
     }
 }

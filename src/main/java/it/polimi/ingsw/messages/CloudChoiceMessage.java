@@ -22,6 +22,6 @@ public class CloudChoiceMessage implements Message{
 
     @Override
     public void accept(MessageVisitor visitor) {
-        visitor.visitCloudChoiceMessage(this);
+        visitor.visit(this);
     }
 }

@@ -1,16 +1,18 @@
 package it.polimi.ingsw.messages;
 
 import it.polimi.ingsw.controller.MessageVisitor;
+import it.polimi.ingsw.model.Colour;
 
 public class Move6StudCharacterMessage implements Message{
     private final int charId;
     private final int playerId;
-    private final int[] studs; //SINGLE???
-    private final int[] studs_2; // SINGLE???
+    private final Colour[] studs; //SINGLE???
+    private final Colour[] studs_2; // SINGLE???
 
-    public Move6StudCharacterMessage(int charId, int playerId, int[] studs, int[] studs_2) {
+    public Move6StudCharacterMessage(int charId, int playerId, Colour[] studs, Colour[] studs_2) {
         this.charId = charId;
         this.playerId = playerId;
+
         this.studs = studs.clone();
         this.studs_2 = studs_2.clone();
     }
@@ -19,7 +21,7 @@ public class Move6StudCharacterMessage implements Message{
         return charId;
     }
 
-    public int[] getStuds_2() {
+    public Colour[] getStuds_2() {
         return studs_2;
     }
 
@@ -27,11 +29,11 @@ public class Move6StudCharacterMessage implements Message{
         return playerId;
     }
 
-    public int[] getStuds() {
+    public Colour[] getStuds() {
         return studs;
     }
 
     public void accept(MessageVisitor visitor){
-        visitor.visitMove6StudCharacterMessage(this);
+        visitor.visit(this);
     }
 }
