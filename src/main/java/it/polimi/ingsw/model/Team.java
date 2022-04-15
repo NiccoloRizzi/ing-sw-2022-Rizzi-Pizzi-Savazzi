@@ -38,6 +38,22 @@ public class Team {
         return players.get(1); // ATTENTION
     }
 
+    public void useTower(){
+        if(towers>0) {
+            towers--;
+            players.get(0).getBoard().useTower();
+            players.get(1).getBoard().useTower();
+        }
+    }
+
+    public void addTower(){
+        if(towers<8){
+            towers++;
+            players.get(0).getBoard().addTower();
+            players.get(1).getBoard().addTower();
+        }
+    }
+
     /**
      *
      * @return faction of the team

@@ -9,14 +9,14 @@ public class ActionTurnHandler {
     private int currentPlayer;
     private GameModel gameModel;
     private int studentsToMove;
-    private CheckProfessorStrategy professorstrategy;
-    private MoveMNStrategy moveMNstrategy;
+    private CheckProfessorStrategy professorStrategy;
+    private MoveMnStrategy moveMNstrategy;
 
     public ActionTurnHandler(int currentPlayer,GameModel gameModel,int numofplayers){
         this.currentPlayer = currentPlayer;
         this.gameModel = gameModel;
-        professorstrategy= new DefaultCheckProfessorStrategy();
-        moveMNstrategy = (numofplayers == 4)? new TeamMoveMNStrategy () : new PlayerMoveMNStrategy();
+        professorStrategy= new DefaultCheckProfessorStrategy();
+        moveMNstrategy = (numofplayers == 4)? new TeamMoveMnStrategy () : new PlayerMoveMnStrategy();
 
     }
 
@@ -66,7 +66,7 @@ public class ActionTurnHandler {
                     gameModel.getPlayer(currentPlayer).getBoard().removeStudent(student);
                 }catch(StudentsOutOfBoundsException e)
                 {
-                    e.printStackTrace();;
+                    e.printStackTrace();
                 }
                 if (type) {
                     try {
@@ -78,7 +78,7 @@ public class ActionTurnHandler {
                 } else {
                     try {
                         gameModel.getPlayer(currentPlayer).getBoard().addToTable(student);
-                        checkProfessor(Student);
+                        professorStrategy.checkProfessor(gameModel,student,currentPlayer);
                         studentsToMove--;
                     } catch (StudentsOutOfBoundsException e) {
                         //error message: tavolo pieno
