@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class Isle extends Tile {
 
     protected Faction tower;
-    protected boolean prohibited;
+    protected int prohibited;
     protected influenceStrategy   infStrategy;
 
     /**
@@ -29,13 +29,15 @@ public class Isle extends Tile {
         return infStrategy.getInfluence(t,students,1,tower, professors);
     }
 
-    public void setProhibited(){ prohibited = true;}
+    public void setProhibited(){ prohibited ++;}
 
     public boolean removeProhibited()
     {
-        boolean temp = prohibited;
-        prohibited = false;
-        return temp;
+       if(prohibited > 0) {
+           prohibited--;
+           return true;
+       }
+        return false;
     }
 
     public Faction getTower(){

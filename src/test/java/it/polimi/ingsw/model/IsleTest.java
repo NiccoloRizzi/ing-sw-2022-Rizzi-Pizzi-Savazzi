@@ -154,11 +154,12 @@ public class IsleTest extends TestCase {
     @Test
     public void testProhibited() {
         Isle isle = new Isle();
-        assertFalse(isle.prohibited);
+        assertFalse(isle.removeProhibited());
         isle.setProhibited();
-        assertTrue(isle.prohibited);
+        isle.setProhibited();
+        assertTrue(isle.removeProhibited());
         isle.removeProhibited();
-        assertFalse(isle.prohibited);
+        assertFalse(isle.removeProhibited());
     }
 
     @Test
