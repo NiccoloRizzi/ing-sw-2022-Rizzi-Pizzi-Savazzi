@@ -30,6 +30,15 @@ public class ActionTurnHandler {
         }
     }
 
+    public void moveMnToIsle(int isleId){
+        try {
+            gameModel.setMotherNPos(isleId);
+        } catch (TileOutOfBoundsException e) {
+            e.printStackTrace();
+            String answer = "ISLE INDEX OUT OF BOUND";
+        }
+    }
+
     public void moveFromCloud(int cloudId, int playerId){
         String answer;
         try{

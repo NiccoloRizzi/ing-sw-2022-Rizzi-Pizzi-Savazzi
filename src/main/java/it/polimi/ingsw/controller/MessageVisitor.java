@@ -4,7 +4,10 @@ import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 import it.polimi.ingsw.messages.*;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.GameModel;
+import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.Character;
+
+import java.util.ArrayList;
 
 public class MessageVisitor {
 
@@ -23,17 +26,88 @@ public class MessageVisitor {
     public void visit(CloudChoiceMessage cloudChoiceMessage){
     }
     public void visit(IsleInfluenceCharacterMessage isleInfluenceCharacterMessage){
+        int isleId = isleInfluenceCharacterMessage.getIsleIndex();
+        int playerId = isleInfluenceCharacterMessage.getPlayerId();
+        int charId = isleInfluenceCharacterMessage.getCharatcerId();
+        Colour noColor = isleInfluenceCharacterMessage.getNoColour();
+        if(game.getCurrentPlayer() == playerId){
+            try{
+                Character character = game.getGameModel().getCharacter(charId);
+                Isle isle = game.getGameModel().getIsle(isleId);
+                switch (CharactersEnum.values()[character.getId()]){
+                    case NO_TOWER_INFLUENCE: isle.setInfStrategy(new noTowersStrategy()); break;
+                    case PLUS_2_INFLUENCE: isle.setInfStrategy(new PlusInfStrategy()); break;
+                    case NO_COLOUR_INFLUENCE: isle.setInfStrategy(new NoColourStrategy(noColor));
+                }
+                character.use();
+            }catch (TileOutOfBoundsException e){
+                e.printStackTrace();
+                String error = "INDICE ISOLA ERRATO";
+            }
+        }else{
+            String error = "NON è IL TUO TURNO";
+        }
     }
     public void visit(MoveStudentCharacterMessage moveStudentCharacterMessage){
+        int playerId = moveStudentCharacterMessage.getPlayerId();
+        int charId = moveStudentCharacterMessage.getCharacterId();
+        Colour stud = moveStudentCharacterMessage.getStudentIndex();
+        int tileId = moveStudentCharacterMessage.getTileIndex();
+        if(game.getCurrentPlayer() == playerId){
+            CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(charId);
+            try {
+                Isle isle = game.getGameModel().getIsle(tileId);
+                Board board = game.getGameModel().getPlayer(playerId).getBoard();
+                character.removeStudent(stud);
+                character.addStudent(game.getGameModel().getRandomStudent());
+                switch (CharactersEnum.values()[character.getId()]){
+                    case ONE_STUD_TO_ISLE: isle.addStudent(stud); break;
+                    case ONE_STUD_TO_TABLES: board.addToTable(stud);
+                }
+                character.use();
+            } catch (TileOutOfBoundsException e) {
+                e.printStackTrace();
+                String error = "INDICE ISOLA ERRATO";
+            }catch (StudentsOutOfBoundsException e) {
+                e.printStackTrace();
+                String error = "INDICE STUDENTE ERRATO";
+            }
+
+        }else{
+            String error = "NON è IL TUO TURNO";
+        }
     }
     public void visit(StrategyProfessorMessage strategyProfessorMessage){
+        int playerId = strategyProfessorMessage.getPlayerId();
+        int charId = strategyProfessorMessage.getCharacterId();
+        if(game.getCurrentPlayer() == playerId){
+            Character character = game.getGameModel().getCharacter(charId);
+            ActionTurnHandler handler = game.getTurnHandler();
+            handler.setProfessorStrategy(new ModifiedCheckProfessorStrategy());
+            character.use();
+        }else{
+            String error = "NON è IL TUO TURNO";
+        }
     }
     public void visit(SimilMotherNatureMesage similMotherNatureMesage){
+        int playerId = similMotherNatureMesage.getPlayerId();
+        int charId = similMotherNatureMesage.getCharacterId();
+        int isleId = similMotherNatureMesage.getIsleIndex();
+        if(game.getCurrentPlayer() == playerId){
+            ActionTurnHandler handler = game.getTurnHandler();
+            Character character = game.getGameModel().getCharacter(charId);
+            handler.moveMnToIsle(isleId);
+            handler.checkIsleJoin(isleId);
+            character.use();
+        }else{
+            String error = "NON è IL TUO TURNO";
+        }
     }
     public void visit(Plus2MoveMnMessage plus2MoveMnMessage){
         String answer;
         if(plus2MoveMnMessage.getPlayerId() == game.getCurrentPlayer()) {
             game.getGameModel().getPlayer(game.getCurrentPlayer()).getChosen().Boost();
+            game.getGameModel().getCharacter(plus2MoveMnMessage.getCharacterId()).use();
         }
         else
         {
@@ -142,6 +216,7 @@ public class MessageVisitor {
                     }catch(StudentsOutOfBoundsException e){}
                 }
             }
+            game.getGameModel().getCharacter(remove3StudCharacterMessage.getCharId()).use();
             answer = "Player" +game.getGameModel().getPlayer(game.getCurrentPlayer()).getNickname() + "used character to remove 3 student";
         }
         else
