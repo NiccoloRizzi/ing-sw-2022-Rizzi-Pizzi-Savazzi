@@ -18,7 +18,7 @@ class GameModelTest {
 
     @Test
     void extractStudents() {
-        GameModel gm =new GameModel();
+        GameModel gm =new GameModel(2);
         HashMap <Colour, Integer> h = gm.extractStudents(4);
         for(Colour c: Colour.values()){
             assertEquals(h.get(c),24-gm.getStudents(c));
@@ -45,7 +45,7 @@ class GameModelTest {
     @Test
     void addCoins() {
         try {
-            GameModel gm = new GameModel();
+            GameModel gm = new GameModel(2);
             gm.removeCoin();
             assertEquals(gm.getCoins(), 19);
             gm.addCoins(1);
@@ -58,7 +58,7 @@ class GameModelTest {
     @ParameterizedTest
     @ValueSource(ints={-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12})
     void setGetMoveMN(int param) {
-        GameModel gm = new GameModel();
+        GameModel gm = new GameModel(2);
         if(param<12 && param>=0) {
             assertDoesNotThrow(() -> gm.setMotherNPos(param));
             gm.moveMN(param);
@@ -71,7 +71,7 @@ class GameModelTest {
 
     @Test
     void getRandomStudent() {
-        GameModel gm = new GameModel();
+        GameModel gm = new GameModel(2);
         Colour s = gm.getRandomStudent();
         assertEquals(gm.getStudents(s),24-1);
     }
@@ -79,7 +79,7 @@ class GameModelTest {
     @ParameterizedTest
     @ValueSource(ints={0,1,2,3,4})
     void addStudent(int i) {
-        GameModel gm = new GameModel();
+        GameModel gm = new GameModel(2);
         int start = gm.getStudents(Colour.values()[i]);
         gm.addStudent(Colour.values()[i]);
         assertEquals(start+1,gm.getStudents(Colour.values()[i]));
@@ -87,7 +87,7 @@ class GameModelTest {
 
     @Test
     void getSetProfessor() {
-        GameModel gm = new GameModel();
+        GameModel gm = new GameModel(2);
         Player p = new Player(0,"Guybrush");
         gm.setProfessor(Colour.Dragons,p);
         assertEquals(gm.getProfessor(Colour.Dragons),p);

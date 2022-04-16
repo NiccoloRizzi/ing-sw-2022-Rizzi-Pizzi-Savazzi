@@ -10,14 +10,24 @@ public class ActionTurnHandler {
     private GameModel gameModel;
     private int studentsToMove;
     private CheckProfessorStrategy professorStrategy;
-    private MoveMnStrategy moveMNstrategy;
+    private CheckTowerStrategy moveMNstrategy;
 
     public ActionTurnHandler(int currentPlayer,GameModel gameModel,int numOfPlayers){
         this.currentPlayer = currentPlayer;
         this.gameModel = gameModel;
         professorStrategy= new DefaultCheckProfessorStrategy();
-        moveMNstrategy = (numOfPlayers == 4)? new TeamMoveMnStrategy () : new PlayerMoveMnStrategy();
+        moveMNstrategy = (numOfPlayers == 4)? new TeamCheckTowerStrategy() : new PlayerCheckTowerStrategy();
 
+    }
+
+    public void moveMn(int moves){
+        Assistant a = gameModel.getPlayers().get(currentPlayer).getChosen();
+        if(moves<=a.getMn_moves()+a.getBoost() && moves>=0){
+            gameModel.moveMN(moves);
+        }
+        else{
+            String answer="The number of moves must be between 0 and "+a.getMn_moves()+a.getBoost()+"!";
+        }
     }
 
     public void moveFromCloud(int cloudId, int playerId){

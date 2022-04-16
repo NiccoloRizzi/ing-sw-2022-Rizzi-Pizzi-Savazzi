@@ -38,19 +38,19 @@ public class Team {
         return players.get(1); // ATTENTION
     }
 
-    public void useTower(){
-        if(towers>0) {
-            towers--;
-            players.get(0).getBoard().useTower();
-            players.get(1).getBoard().useTower();
+    public void useTowers(int t){
+        if(towers>=t) {
+            towers-=t;
+            players.get(0).getBoard().useTowers(t);
+            players.get(1).getBoard().useTowers(t);
         }
     }
 
-    public void addTower(){
-        if(towers<8){
-            towers++;
-            players.get(0).getBoard().addTower();
-            players.get(1).getBoard().addTower();
+    public void addTowers(int t){
+        if(towers+t<=8){
+            towers+=t;
+            players.get(0).getBoard().addTowers(t);
+            players.get(1).getBoard().addTowers(t);
         }
     }
 

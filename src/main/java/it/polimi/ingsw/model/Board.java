@@ -85,6 +85,18 @@ public class Board extends Tile{
         }
     }
 
+    public void addTowers(int t){
+        if(towers+t<=towersLimit){
+            towers+=t;
+        }
+    }
+
+    public void useTowers(int t){
+        if(towers>=t){
+            towers-=t;
+        }
+    }
+
     //when a player builds a tower on an isle, it gets removed from his board
     public void useTower() /*throws Exception*/{
         if(towers>0){

@@ -21,6 +21,10 @@ public class Isle extends Tile {
         this.tower = f;
     }
 
+    public int getSize(){
+        return 1;
+    }
+
     public int getInfluence(Player p, HashMap<Colour,Player> professors) {
         return infStrategy.getInfluence(p,students,1,tower, professors);
     }
