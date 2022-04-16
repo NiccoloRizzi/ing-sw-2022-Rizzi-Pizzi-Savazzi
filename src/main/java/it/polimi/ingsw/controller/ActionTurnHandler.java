@@ -12,11 +12,11 @@ public class ActionTurnHandler {
     private CheckProfessorStrategy professorStrategy;
     private MoveMnStrategy moveMNstrategy;
 
-    public ActionTurnHandler(int currentPlayer,GameModel gameModel,int numofplayers){
+    public ActionTurnHandler(int currentPlayer,GameModel gameModel,int numOfPlayers){
         this.currentPlayer = currentPlayer;
         this.gameModel = gameModel;
         professorStrategy= new DefaultCheckProfessorStrategy();
-        moveMNstrategy = (numofplayers == 4)? new TeamMoveMnStrategy () : new PlayerMoveMnStrategy();
+        moveMNstrategy = (numOfPlayers == 4)? new TeamMoveMnStrategy () : new PlayerMoveMnStrategy();
 
     }
 
