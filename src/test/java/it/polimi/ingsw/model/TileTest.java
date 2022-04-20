@@ -21,10 +21,10 @@ public class TileTest extends TestCase {
         Tile t = new Tile ();
         HashMap<Colour, Integer> s = new HashMap<>();
         for(Colour c: Colour.values())
-            s.put(c, 1);
+            s.put(c, c.ordinal());
         t.addStudents(s);
         for(Colour c: Colour.values()) {
-            Assertions.assertEquals(1, (int)t.students.get(c));
+            Assertions.assertEquals(c.ordinal(), (int)t.students.get(c));
         }
     }
 }

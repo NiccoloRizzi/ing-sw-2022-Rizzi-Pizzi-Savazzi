@@ -10,13 +10,13 @@ public class ActionTurnHandler {
     private GameModel gameModel;
     private int studentsToMove;
     private CheckProfessorStrategy professorStrategy;
-    private CheckTowerStrategy moveMNstrategy;
+    private CheckTowerStrategy checkTowerStrategy;
 
     public ActionTurnHandler(int currentPlayer,GameModel gameModel,int numOfPlayers){
         this.currentPlayer = currentPlayer;
         this.gameModel = gameModel;
         professorStrategy= new DefaultCheckProfessorStrategy();
-        moveMNstrategy = (numOfPlayers == 4)? new TeamCheckTowerStrategy() : new PlayerCheckTowerStrategy();
+        checkTowerStrategy = (numOfPlayers == 4)? new TeamCheckTowerStrategy() : new PlayerCheckTowerStrategy();
 
     }
 
@@ -30,13 +30,8 @@ public class ActionTurnHandler {
         }
     }
 
-    public void moveMnToIsle(int isleId){
-        try {
-            gameModel.setMotherNPos(isleId);
-        } catch (TileOutOfBoundsException e) {
-            e.printStackTrace();
-            String answer = "ISLE INDEX OUT OF BOUND";
-        }
+    public void checkIsle(int isleId){
+        checkTowerStrategy.moveMn(gameModel, isleId);
     }
 
     public void moveFromCloud(int cloudId, int playerId){

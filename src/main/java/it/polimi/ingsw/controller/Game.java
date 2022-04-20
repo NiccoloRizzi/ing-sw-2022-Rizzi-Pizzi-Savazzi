@@ -17,7 +17,7 @@ public class Game {
 
     private GameModel gameModel; // WHEN TO INITIALIZE???
     private ActionTurnHandler turn;
-    private boolean started;
+    private boolean planning;
     private List<Integer> playersOrder;
     private int currentPlayer;
 
@@ -60,6 +60,10 @@ public class Game {
             }
         }
         return false;
+    }
+
+    public boolean isPlanning() {
+        return planning;
     }
 
     public void giveCoin(Player p){
