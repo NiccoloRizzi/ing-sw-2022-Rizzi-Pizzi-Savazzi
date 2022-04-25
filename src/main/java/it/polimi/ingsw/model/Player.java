@@ -137,4 +137,12 @@ public class Player {
     public void createBoard(int nTowers){
         school = new Board(this.faction, nTowers);
     }
+
+    public boolean hasUsed(int assistantId){
+        for(Assistant a: usedCards){
+            if(a.getValue()==assistantId)
+                return true;
+        }
+        return false;
+    }
 }

@@ -78,13 +78,6 @@ public class Board extends Tile{
             throw new StudentsOutOfBoundsException();
     }
 
-    //used to add back a tower from an Isle who gets taken by another player
-    public void addTower(){
-        if(towers<towersLimit){
-            towers++;
-        }
-    }
-
     public void addTowers(int t){
         if(towers+t<=towersLimit){
             towers+=t;
@@ -94,13 +87,6 @@ public class Board extends Tile{
     public void useTowers(int t){
         if(towers>=t){
             towers-=t;
-        }
-    }
-
-    //when a player builds a tower on an isle, it gets removed from his board
-    public void useTower() /*throws Exception*/{
-        if(towers>0){
-            towers--;
         }
     }
 

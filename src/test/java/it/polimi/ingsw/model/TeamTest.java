@@ -65,4 +65,22 @@ class TeamTest {
         assertDoesNotThrow(()->t.addPlayer(new Player(1, "")));
         assertThrowsExactly(IndexOutOfBoundsException.class, ()->t.addPlayer(new Player(2, "")));
     }
+
+    @Test
+    void useAddTowers(){
+        Team t = new Team();
+        Player p1 = new Player(0,"Giorgio");
+        Player p2 = new Player(1, "Fabrizio");
+        p1.createBoard(8);
+        p2.createBoard(8);
+        t.addPlayer(p1);
+        t.addPlayer(p2);
+        t.useTowers(4);
+        assertEquals(p1.getBoard().getTowers(), 4);
+        assertEquals(p1.getBoard().getTowers(), 4);
+        t.addTowers(2);
+        assertEquals(p1.getBoard().getTowers(),6);
+        assertEquals(p2.getBoard().getTowers(),6);
+
+    }
 }

@@ -8,13 +8,13 @@ public class MoveStudentMessage implements Message{
     private final int playerId;
     private final Colour student;
     private final int tileIndex;
-    private final int type;
+    private final boolean toTable;
 
-    public MoveStudentMessage(int playerId, Colour student, int tileIndex, int type) {
+    public MoveStudentMessage(int playerId, Colour student, int tileIndex, boolean toTable) {
         this.playerId = playerId;
         this.student = student;
         this.tileIndex = tileIndex;
-        this.type = type;
+        this.toTable = toTable;
     }
 
     public int getPlayerId() {
@@ -29,8 +29,8 @@ public class MoveStudentMessage implements Message{
         return tileIndex;
     }
 
-    public int getType() {
-        return type;
+    public boolean isToTable() {
+        return toTable;
     }
 
     @Override

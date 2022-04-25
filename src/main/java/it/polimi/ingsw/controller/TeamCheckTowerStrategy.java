@@ -23,7 +23,6 @@ public class TeamCheckTowerStrategy implements CheckTowerStrategy {
                     current.setTower(owners.get().getFaction());
                     if(otherTeam.getFaction()==oldfaction)
                         otherTeam.addTowers(current.getSize());
-
                 }
 
             }

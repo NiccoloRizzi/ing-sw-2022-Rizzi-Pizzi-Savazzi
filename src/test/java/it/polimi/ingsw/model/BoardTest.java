@@ -68,15 +68,15 @@ class BoardTest {
 
     @ParameterizedTest
     @ValueSource(ints = {6,8})
-    void useAddTower(int k) {
+    void useAddTowers(int k) {
         Board board = new Board(Faction.Black, k);
         assertEquals(board.getTowers(),k);
-        board.useTower();
+        board.useTowers(1);
         assertEquals(board.getTowers(),k-1);
-        board.addTower();
+        board.addTowers(1);
         assertEquals(board.getTowers(),k);
         for(int i=0; i<k;i++)
-            board.useTower();
+            board.useTowers(1);
         assertEquals(board.getTowers(),0);
     }
 
@@ -149,7 +149,7 @@ class BoardTest {
     void getTowers(int param) {
         Board board = new Board(Faction.Black, param);
         assertEquals(board.getTowers(),param);
-        board.useTower();
+        board.useTowers(1);
         assertEquals(board.getTowers(),param-1);
     }
 

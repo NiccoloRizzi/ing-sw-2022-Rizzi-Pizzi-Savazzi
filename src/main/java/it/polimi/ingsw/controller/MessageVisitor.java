@@ -4,52 +4,93 @@ import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 import it.polimi.ingsw.messages.*;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.Character;
+
 
 import java.util.ArrayList;
 
 public class MessageVisitor {
 
     final Game game;
-
     public MessageVisitor(Game game){
         this.game = game;
     }
 
     public void visit(AssistantChoiceMessage assistantChoiceMessage){
+        int playerID = game.getCurrentPlayer();
+        if(assistantChoiceMessage.getPlayerId()==playerID && game.getTurnHandler().getPhase()==Phase.ASSISTANT) {
+            ArrayList<Player> players = game.getGameModel().getPlayers();
+            Player player = players.get(playerID);
+            int id = assistantChoiceMessage.getAssistantId();
+            if(player.getDeck().size()>1) {
+                for (int i = 0; i < game.getPlayersOrder().indexOf(playerID); i++) {
+                    if (players.get(game.getPlayersOrder().get(i)).getChosen().getValue() == id) {
+                        String answer = "L'assistente è già stato scelto da un altro giocatore.";
+                        break;
+                    }
+                }
+            }
+            if(!player.hasUsed(id)){
+                player.setChoosenAssistant(id);
+            }
+            else{
+                String answer = "Hai già usato questo assistente.";
+            }
+        }else{
+            String answer= "Non è il tuo turno per scegliere l'assistente.";
+        }
+
     }
     public void visit(MoveStudentMessage moveStudentMessage){
+            int playerID = moveStudentMessage.getPlayerId();
+            Colour student = moveStudentMessage.getStudentIndex();
+            if (playerID == game.getCurrentPlayer() && game.getTurnHandler().getStudentsToMove()>0) {
+                Player current = game.getGameModel().getPlayer(playerID);
+                if (moveStudentMessage.isToTable()) {
+                    game.getTurnHandler().moveStudentToTable(student);
+                } else {
+                    int isle = moveStudentMessage.getTileIndex();
+                    game.getTurnHandler().moveStudentToIsle(student,isle);
+                }
+            }
     }
     public void visit(MoveMotherNatureMessage moveMotherNatureMessage){
+        if(moveMotherNatureMessage.getPlayerId()==game.getCurrentPlayer() && game.getTurnHandler().getPhase()==Phase.MOTHERNATURE){
+            game.getTurnHandler().moveMn(moveMotherNatureMessage.getMoves());
+        }
+        else{
+            String answer = "Non è il tuo turno per spostare madre natura.";
+        }
     }
     public void visit(CloudChoiceMessage cloudChoiceMessage){
+        if(game.getCurrentPlayer()==cloudChoiceMessage.getPlayerId() && game.getTurnHandler().getPhase()==Phase.CLOUD){
+            game.getTurnHandler().moveFromCloud(cloudChoiceMessage.getCloudIndex(), cloudChoiceMessage.getPlayerId());
+        }
+        else{
+            String answer = "Non è il tuo turno per scegliere la nuvola.";
+        }
     }
     public void visit(IsleInfluenceCharacterMessage isleInfluenceCharacterMessage){
         int isleId = isleInfluenceCharacterMessage.getIsleIndex();
         int playerId = isleInfluenceCharacterMessage.getPlayerId();
         int charId = isleInfluenceCharacterMessage.getCharatcerId();
         Colour noColor = isleInfluenceCharacterMessage.getNoColour();
-        if(!game.isPlanning()){
-            if(game.getCurrentPlayer() == playerId){
-                try{
-                    Character character = game.getGameModel().getCharacter(charId);
-                    Isle isle = game.getGameModel().getIsle(isleId);
-                    switch (CharactersEnum.values()[character.getId()]){
-                        case NO_TOWER_INFLUENCE: isle.setInfStrategy(new noTowersStrategy()); break;
-                        case PLUS_2_INFLUENCE: isle.setInfStrategy(new PlusInfStrategy()); break;
-                        case NO_COLOUR_INFLUENCE: isle.setInfStrategy(new NoColourStrategy(noColor));
-                    }
-                    character.use();
-                }catch (TileOutOfBoundsException e){
-                    e.printStackTrace();
-                    String error = "INDICE ISOLA ERRATO";
+        if(game.getCurrentPlayer() == playerId){
+            try{
+                Character character = game.getGameModel().getCharacter(charId);
+                Isle isle = game.getGameModel().getIsle(isleId);
+                switch (CharactersEnum.values()[character.getId()]){
+                    case NO_TOWER_INFLUENCE: isle.setInfStrategy(new noTowersStrategy()); break;
+                    case PLUS_2_INFLUENCE: isle.setInfStrategy(new PlusInfStrategy()); break;
+                    case NO_COLOUR_INFLUENCE: isle.setInfStrategy(new NoColourStrategy(noColor));
                 }
-            }else{
-                String error = "NON è IL TUO TURNO";
+                character.use();
+            }catch (TileOutOfBoundsException e){
+                e.printStackTrace();
+                String error = "INDICE ISOLA ERRATO";
             }
         }else{
-            String error = "Solo durante fase azione";
+            String error = "NON è IL TUO TURNO";
         }
     }
     public void visit(MoveStudentCharacterMessage moveStudentCharacterMessage){
@@ -57,207 +98,175 @@ public class MessageVisitor {
         int charId = moveStudentCharacterMessage.getCharacterId();
         Colour stud = moveStudentCharacterMessage.getStudentIndex();
         int tileId = moveStudentCharacterMessage.getTileIndex();
-        if(!game.isPlanning()){
-            if(game.getCurrentPlayer() == playerId){
-                CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(charId);
-                try {
-                    Isle isle = game.getGameModel().getIsle(tileId);
-                    Board board = game.getGameModel().getPlayer(playerId).getBoard();
-                    character.removeStudent(stud);
-                    character.addStudent(game.getGameModel().getRandomStudent());
-                    switch (CharactersEnum.values()[character.getId()]){
-                        case ONE_STUD_TO_ISLE: isle.addStudent(stud); break;
-                        case ONE_STUD_TO_TABLES: board.addToTable(stud);
-                    }
-                    character.use();
-                } catch (TileOutOfBoundsException e) {
-                    e.printStackTrace();
-                    String error = "INDICE ISOLA ERRATO";
-                }catch (StudentsOutOfBoundsException e) {
-                    e.printStackTrace();
-                    String error = "INDICE STUDENTE ERRATO";
+        if(game.getCurrentPlayer() == playerId){
+            CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(charId);
+            try {
+                Isle isle = game.getGameModel().getIsle(tileId);
+                Board board = game.getGameModel().getPlayer(playerId).getBoard();
+                character.removeStudent(stud);
+                character.addStudent(game.getGameModel().getRandomStudent());
+                switch (CharactersEnum.values()[character.getId()]){
+                    case ONE_STUD_TO_ISLE: isle.addStudent(stud); break;
+                    case ONE_STUD_TO_TABLES: board.addToTable(stud);
                 }
-
-            }else{
-                String error = "NON è IL TUO TURNO";
+                character.use();
+            } catch (TileOutOfBoundsException e) {
+                e.printStackTrace();
+                String error = "INDICE ISOLA ERRATO";
+            }catch (StudentsOutOfBoundsException e) {
+                e.printStackTrace();
+                String error = "INDICE STUDENTE ERRATO";
             }
+
         }else{
-            String error = "Solo durante fase azione";
+            String error = "NON è IL TUO TURNO";
         }
     }
     public void visit(StrategyProfessorMessage strategyProfessorMessage){
         int playerId = strategyProfessorMessage.getPlayerId();
         int charId = strategyProfessorMessage.getCharacterId();
-        if(!game.isPlanning()){
-            if(game.getCurrentPlayer() == playerId){
-                Character character = game.getGameModel().getCharacter(charId);
-                ActionTurnHandler handler = game.getTurnHandler();
-                handler.setProfessorStrategy(new ModifiedCheckProfessorStrategy());
-                character.use();
-            }else{
-                String error = "NON è IL TUO TURNO";
-            }
+        if(game.getCurrentPlayer() == playerId){
+            Character character = game.getGameModel().getCharacter(charId);
+            ActionTurnHandler handler = game.getTurnHandler();
+            handler.setProfessorStrategy(new ModifiedCheckProfessorStrategy());
+            character.use();
         }else{
-            String error = "Solo durante fase azione";
+            String error = "NON è IL TUO TURNO";
         }
     }
     public void visit(SimilMotherNatureMesage similMotherNatureMesage){
         int playerId = similMotherNatureMesage.getPlayerId();
         int charId = similMotherNatureMesage.getCharacterId();
         int isleId = similMotherNatureMesage.getIsleIndex();
-        if(!game.isPlanning()){
-            if(game.getCurrentPlayer() == playerId){
-                ActionTurnHandler handler = game.getTurnHandler();
-                Character character = game.getGameModel().getCharacter(charId);
-                handler.checkIsle(isleId);
-                handler.checkIsleJoin(isleId);
-                character.use();
-            }else{
-                String error = "NON è IL TUO TURNO";
-            }
+        if(game.getCurrentPlayer() == playerId){
+            ActionTurnHandler handler = game.getTurnHandler();
+            Character character = game.getGameModel().getCharacter(charId);
+            handler.moveMnToIsle(isleId);
+            handler.checkIsleJoin(isleId);
+            character.use();
         }else{
-            String error = "Solo durante fase azione";
+            String error = "NON è IL TUO TURNO";
         }
     }
     public void visit(Plus2MoveMnMessage plus2MoveMnMessage){
         String answer;
-        if(!game.isPlanning()){
-            if(plus2MoveMnMessage.getPlayerId() == game.getCurrentPlayer()) {
-                game.getGameModel().getPlayer(game.getCurrentPlayer()).getChosen().Boost();
-                game.getGameModel().getCharacter(plus2MoveMnMessage.getCharacterId()).use();
-            }
-            else
-            {
-                answer = "Not your turn";
-            }
-        }else{
-            String error = "Solo durante fase azione";
+        if(plus2MoveMnMessage.getPlayerId() == game.getCurrentPlayer()) {
+            game.getGameModel().getPlayer(game.getCurrentPlayer()).getChosen().Boost();
+            game.getGameModel().getCharacter(plus2MoveMnMessage.getCharacterId()).use();
+        }
+        else
+        {
+            answer = "Not your turn";
         }
     }
     public void visit(ProhibitedIsleCharacterMessage prohibitedIsleCharacterMessage){
         String answer;
-        if(!game.isPlanning()){
-            if(prohibitedIsleCharacterMessage.getPlayerId() == game.getCurrentPlayer()) {
-                try{
-                    game.getGameModel().getIsle(prohibitedIsleCharacterMessage.getIsleIndex()).setProhibited();
-                }catch(TileOutOfBoundsException e){
-                    answer = "Isle doesn't exist";
-                }
-                game.getGameModel().getCharacter(prohibitedIsleCharacterMessage.getCharId()).use();
+        if(prohibitedIsleCharacterMessage.getPlayerId() == game.getCurrentPlayer()) {
+            try{
+                game.getGameModel().getIsle(prohibitedIsleCharacterMessage.getIsleIndex()).setProhibited();
+            }catch(TileOutOfBoundsException e){
+                answer = "Isle doesn't exist";
             }
-            else
-            {
-                answer = "Not your turn";
-            }
-        }else{
-            String error = "Solo durante fase azione";
+            game.getGameModel().getCharacter(prohibitedIsleCharacterMessage.getCharId()).use();
+        }
+        else
+        {
+            answer = "Not your turn";
         }
     }
     public void visit(Move6StudCharacterMessage move6StudCharacterMessage){
         String answer;
-        if(!game.isPlanning()){
-            if(move6StudCharacterMessage.getPlayerId() == game.getCurrentPlayer())
+        if(move6StudCharacterMessage.getPlayerId() == game.getCurrentPlayer())
+        {
+            CharacterStudents character= (CharacterStudents) game.getGameModel().getCharacter(move6StudCharacterMessage.getCharId());
+            Board board =  game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard();
+            for(Colour c: move6StudCharacterMessage.getStuds())
             {
-                CharacterStudents character= (CharacterStudents) game.getGameModel().getCharacter(move6StudCharacterMessage.getCharId());
-                Board board =  game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard();
-                for(Colour c: move6StudCharacterMessage.getStuds())
-                {
-                    try {
-                        board.removeStudent(c);
-                    }catch(StudentsOutOfBoundsException e){
-                        answer="student not valid";
-                    }
-                    character.addStudent(c);
+                try {
+                    board.removeStudent(c);
+                }catch(StudentsOutOfBoundsException e){
+                    answer="student not valid";
                 }
-                for(Colour c: move6StudCharacterMessage.getStuds())
-                {
-                    try {
-                        board.addToEntrance(c);
-                    }catch (StudentsOutOfBoundsException e){
-                        answer = "entrance is full";
-                    }
-                    try {
-                        character.removeStudent(c);
-                    }catch (StudentsOutOfBoundsException e){
-                        answer = "character is empty";
-                    }
-                }
-                game.getGameModel().getCharacter(move6StudCharacterMessage.getCharId()).use();
+                character.addStudent(c);
             }
-            else
+            for(Colour c: move6StudCharacterMessage.getStuds())
             {
-                answer = "Not your turn";
+                try {
+                    board.addToEntrance(c);
+                }catch (StudentsOutOfBoundsException e){
+                    answer = "entrance is full";
+                }
+                try {
+                    character.removeStudent(c);
+                }catch (StudentsOutOfBoundsException e){
+                    answer = "character is empty";
+                }
             }
-        }else{
-            String error = "Solo durante fase azione";
+            game.getGameModel().getCharacter(move6StudCharacterMessage.getCharId()).use();
+        }
+        else
+        {
+            answer = "Not your turn";
         }
     }
     public void visit(Move2StudCharacterMessage move2StudCharacterMessage){
         String answer;
-        if(!game.isPlanning()){
-            if(move2StudCharacterMessage.getPlayerId() == game.getCurrentPlayer())
+        if(move2StudCharacterMessage.getPlayerId() == game.getCurrentPlayer())
+        {
+            Board board =  game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard();
+            for(Colour c: move2StudCharacterMessage.getStud())
             {
-                Board board =  game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard();
-                for(Colour c: move2StudCharacterMessage.getStud())
-                {
-                    try {
-                        board.removeStudent(c);
-                    }catch(StudentsOutOfBoundsException e){
-                        answer="student not valid";
-                    }
-                    try {
-                        board.addToTable(c);
-                    }catch(StudentsOutOfBoundsException e){
-                        answer="table is full";
-                    }
+                try {
+                    board.removeStudent(c);
+                }catch(StudentsOutOfBoundsException e){
+                    answer="student not valid";
+                }
+                try {
+                    board.addToTable(c);
+                }catch(StudentsOutOfBoundsException e){
+                    answer="table is full";
+                }
 
-                }
-                for(Colour c: move2StudCharacterMessage.getStud_2())
-                {
-                    try {
-                        board.addToEntrance(c);
-                    }catch (StudentsOutOfBoundsException e){
-                        answer = "entrance is full";
-                    }
-                    try {
-                        board.removeFromTable(c);
-                    }catch (StudentsOutOfBoundsException e){
-                        answer = "table is empty";
-                    }
-                    game.getGameModel().getCharacter(move2StudCharacterMessage.getCharId()).use();
-                }
             }
-            else
+            for(Colour c: move2StudCharacterMessage.getStud_2())
             {
-                answer = "Not your turn";
+                try {
+                    board.addToEntrance(c);
+                }catch (StudentsOutOfBoundsException e){
+                    answer = "entrance is full";
+                }
+                try {
+                    board.removeFromTable(c);
+                }catch (StudentsOutOfBoundsException e){
+                    answer = "table is empty";
+                }
+                game.getGameModel().getCharacter(move2StudCharacterMessage.getCharId()).use();
             }
-        }else{
-            String error = "Solo durante fase azione";
+        }
+        else
+        {
+            answer = "Not your turn";
         }
     }
     public void visit(Remove3StudCharacterMessage remove3StudCharacterMessage){
         String answer;
-        if(!game.isPlanning()){
-            if(remove3StudCharacterMessage.getPlayerId() == game.getCurrentPlayer())
+        if(remove3StudCharacterMessage.getPlayerId() == game.getCurrentPlayer())
+        {
+            for(Player p: game.getGameModel().getPlayers())
             {
-                for(Player p: game.getGameModel().getPlayers())
+                for(int i = 0; i <3 ;i++)
                 {
-                    for(int i = 0; i <3 ;i++)
-                    {
-                        try{
-                            p.getBoard().removeFromTable(remove3StudCharacterMessage.getColour());
-                        }catch(StudentsOutOfBoundsException e){}
-                    }
+                    try{
+                        p.getBoard().removeFromTable(remove3StudCharacterMessage.getColour());
+                    }catch(StudentsOutOfBoundsException e){}
                 }
-                game.getGameModel().getCharacter(remove3StudCharacterMessage.getCharId()).use();
-                answer = "Player" +game.getGameModel().getPlayer(game.getCurrentPlayer()).getNickname() + "used character to remove 3 student";
             }
-            else
-            {
-                answer = "Not your turn";
-            }
-        }else{
-            String error = "Solo durante fase azione";
+            game.getGameModel().getCharacter(remove3StudCharacterMessage.getCharId()).use();
+            answer = "Player" +game.getGameModel().getPlayer(game.getCurrentPlayer()).getNickname() + "used character to remove 3 student";
+        }
+        else
+        {
+            answer = "Not your turn";
         }
     }
 }

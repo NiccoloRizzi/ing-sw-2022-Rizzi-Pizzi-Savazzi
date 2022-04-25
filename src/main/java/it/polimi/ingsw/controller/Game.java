@@ -17,7 +17,7 @@ public class Game {
 
     private GameModel gameModel; // WHEN TO INITIALIZE???
     private ActionTurnHandler turn;
-    private boolean planning;
+    private boolean started;
     private List<Integer> playersOrder;
     private int currentPlayer;
 
@@ -62,10 +62,6 @@ public class Game {
         return false;
     }
 
-    public boolean isPlanning() {
-        return planning;
-    }
-
     public void giveCoin(Player p){
 //        try{
 //            gameModel.removeCoin();
@@ -73,6 +69,10 @@ public class Game {
 //        }catch(NotEnoughCoinsException e){
 //            // WHAT??? TELL THE PLAYER THE COINS ARE FINISHED?
 //        }
+    }
+
+    public List<Integer> getPlayersOrder() {
+        return playersOrder;
     }
 
     // EXPECTED ALL PLAYERS CREATED
