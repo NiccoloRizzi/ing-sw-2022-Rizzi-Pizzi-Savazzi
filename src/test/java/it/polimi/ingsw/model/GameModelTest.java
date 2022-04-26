@@ -18,12 +18,13 @@ class GameModelTest {
 
     @Test
     void extractStudents() {
-        GameModel gm =new GameModel(2);
-        HashMap <Colour, Integer> h = gm.extractStudents(4);
-        for(Colour c: Colour.values()){
-            assertEquals(h.get(c),24-gm.getStudents(c));
+        GameModel gm = new GameModel(2);
+        HashMap<Colour, Integer> h = gm.extractStudents(68);
+        for (Colour c : Colour.values()) {
+            assertEquals(h.get(c), 24 - gm.getStudents(c));
         }
     }
+
 
     @Test
     void getPlayer() {
