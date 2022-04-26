@@ -32,12 +32,20 @@ public class GameModel {
         clouds = new ArrayList<Cloud>();
         activeCharacters = new ArrayList<Character>();
         professors = new HashMap<Colour, Player>();
+        for(Colour c: Colour.values()){
+            professors.put(c,null);
+        }
         final int[] id = new Random().ints(0, 12).distinct().limit(3).toArray();
         for (int i = 0; i < 3; i++) {
             if (id[i] == 0 || id[i] == 6 || id[i] == 10)
                 activeCharacters.add(new CharacterStudents(id[i], id[i] % 3 + 1));
             else
                 activeCharacters.add(new Character(id[i], id[i] % 3 + 1));
+        }
+        if(numOfPlayers==4){
+            teams=new ArrayList<>();
+            teams.add(new Team());
+            teams.add(new Team());
         }
     }
 
@@ -71,7 +79,7 @@ public class GameModel {
         for (Colour c : Colour.values()) {
             extractedStud.put(c, 0);
         }
-        if (num >= 0 && num < bag.size()) {
+        if (num >= 0 && num < getBagSize()) {
             for (int i = 0; i < num; i++) {
                 Colour extracted = getRandomStudent();
                 extractedStud.put(extracted, extractedStud.get(extracted) + 1);
@@ -95,6 +103,14 @@ public class GameModel {
             size += bag.get(c);
         }
         return size <= 0;
+    }
+
+    public int getBagSize(){
+        int total=0;
+        for(Colour c: Colour.values()){
+            total+=getStudents(c);
+        }
+        return total;
     }
 
     public ArrayList<Team> getTeams(){

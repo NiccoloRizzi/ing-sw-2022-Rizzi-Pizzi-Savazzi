@@ -98,15 +98,16 @@ public class Game {
             e.printStackTrace();
         }
 
-        for(int i=0; i<MAX_N_ISLES; i++) {
-            int student = rand.nextInt(students.size());
-            try {
-                if (!(gameModel.getMotherNature() == i || (gameModel.getMotherNature() + 6) % 12 == i)) {
-                    gameModel.getIsle(i).addStudent(students.remove(student));
+        for(int i=0; i<MAX_N_ISLES && students.size()>0; i++) {
+                int student = rand.nextInt(students.size());
+                try {
+                    if (!(gameModel.getMotherNature() == i || (gameModel.getMotherNature() + 6) % 12 == i)) {
+                        gameModel.getIsle(i).addStudent(students.remove(student));
+                    }
+                } catch (TileOutOfBoundsException e) {
+                    e.printStackTrace();
                 }
-            } catch (TileOutOfBoundsException e) {
-                e.printStackTrace();
-            }
+
 
 
         }
