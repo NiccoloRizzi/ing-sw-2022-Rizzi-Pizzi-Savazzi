@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 
 //import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.exceptions.NotEnoughCoinsException;
+import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,7 +20,13 @@ class GameModelTest {
     @Test
     void extractStudents() {
         GameModel gm = new GameModel(2);
-        HashMap<Colour, Integer> h = gm.extractStudents(68);
+        HashMap<Colour, Integer> h= new HashMap<>();
+        try {
+            h = gm.extractStudents(68);
+        }catch(StudentsOutOfBoundsException e)
+        {
+            e.printStackTrace();
+        }
         for (Colour c : Colour.values()) {
             assertEquals(h.get(c), 24 - gm.getStudents(c));
         }
@@ -73,7 +80,14 @@ class GameModelTest {
     @Test
     void getRandomStudent() {
         GameModel gm = new GameModel(2);
-        Colour s = gm.getRandomStudent();
+        Colour s = Colour.Dragons;
+        try{
+            s = gm.getRandomStudent();
+        }catch(StudentsOutOfBoundsException e)
+        {
+            e.printStackTrace();
+        }
+
         assertEquals(gm.getStudents(s),24-1);
     }
 

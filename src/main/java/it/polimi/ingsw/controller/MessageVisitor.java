@@ -170,7 +170,7 @@ public class MessageVisitor {
             if (game.getCurrentPlayer() == playerId) {
                 ActionTurnHandler handler = game.getTurnHandler();
                 Character character = game.getGameModel().getCharacter(charId);
-                handler.moveMnToIsle(isleId);
+             //   handler.moveMnToIsle(isleId);
                 handler.checkIsleJoin(isleId);
                 character.use();
             } else {

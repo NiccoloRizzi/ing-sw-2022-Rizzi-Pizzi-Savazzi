@@ -114,12 +114,18 @@ public class Game {
 
         for(Cloud c: gameModel.getClouds())
         {
-            c.addStudents(gameModel.extractStudents((playersNumber == 3)?4:3));
+            try {
+                c.addStudents(gameModel.extractStudents((playersNumber == 3) ? 4 : 3));
+            }catch(StudentsOutOfBoundsException e) {
+                e.printStackTrace();
+            }
         }
 
         for(Player p : gameModel.getPlayers()){
             p.createBoard((playersNumber == 3)?6:8);
-            p.getBoard().addStudents(gameModel.extractStudents((playersNumber==3)?9:7));
+            try {
+                p.getBoard().addStudents(gameModel.extractStudents((playersNumber == 3) ? 9 : 7));
+            }catch(StudentsOutOfBoundsException e){}
         }
 
         currentPlayer = rand.nextInt(gameModel.getPlayers().size());
@@ -134,8 +140,8 @@ public class Game {
         return gameModel;
     }
 
-    public void createPlayer(String nickname, int ID){
-        gameModel.addPlayer(ID,nickname);
+    public void createPlayer(String nickname){
+        gameModel.addPlayer(gameModel.getPlayers().size(),nickname);
     }
 
     public int getCurrentPlayer(){

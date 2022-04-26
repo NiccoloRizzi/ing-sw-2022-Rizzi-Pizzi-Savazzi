@@ -34,17 +34,6 @@ public class ActionTurnHandler {
         }
     }
 
-    public void moveMnToIsle(int isleId){
-        try {
-            gameModel.setMotherNPos(isleId);
-        } catch (TileOutOfBoundsException e) {
-            e.printStackTrace();
-            String answer = "ISLE INDEX OUT OF BOUND";
-        }
-    }
-
-
-
     public void moveStudentToIsle(Colour student, int isle){
         Player player = gameModel.getPlayer(currentPlayer);
         try{
@@ -128,36 +117,36 @@ public class ActionTurnHandler {
     }
 
     //type = 1 muove sull'isola mentre type = 0 muove sul tavolo
-    public void moveStudent(Colour student, boolean type, int isleIndex) {
-        if (studentsToMove > 0) {
-            if (gameModel.getPlayer(currentPlayer).getBoard().getStudents(student) > 0) {
-                try {
-                    gameModel.getPlayer(currentPlayer).getBoard().removeStudent(student);
-                }catch(StudentsOutOfBoundsException e)
-                {
-                    e.printStackTrace();
-                }
-                if (type) {
-                    try {
-                        gameModel.getIsle(isleIndex).addStudent(student);
-                        studentsToMove--;
-                    } catch (TileOutOfBoundsException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        gameModel.getPlayer(currentPlayer).getBoard().addToTable(student);
-                        professorStrategy.checkProfessor(gameModel,student,currentPlayer);
-                        studentsToMove--;
-                    } catch (StudentsOutOfBoundsException e) {
-                        //error message: tavolo pieno
-                    }
-                }
-            }
-        } else {
-            //messaggio errore mossa non consentita
-        }
-    }
+//    public void moveStudent(Colour student, boolean type, int isleIndex) {
+//        if (studentsToMove > 0) {
+//            if (gameModel.getPlayer(currentPlayer).getBoard().getStudents(student) > 0) {
+//                try {
+//                    gameModel.getPlayer(currentPlayer).getBoard().removeStudent(student);
+//                }catch(StudentsOutOfBoundsException e)
+//                {
+//                    e.printStackTrace();
+//                }
+//                if (type) {
+//                    try {
+//                        gameModel.getIsle(isleIndex).addStudent(student);
+//                        studentsToMove--;
+//                    } catch (TileOutOfBoundsException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    try {
+//                        gameModel.getPlayer(currentPlayer).getBoard().addToTable(student);
+//                        professorStrategy.checkProfessor(gameModel,student,currentPlayer);
+//                        studentsToMove--;
+//                    } catch (StudentsOutOfBoundsException e) {
+//                        //error message: tavolo pieno
+//                    }
+//                }
+//            }
+//        } else {
+//            //messaggio errore mossa non consentita
+//        }
+//    }
 
     public Phase getPhase(){
         return phase;

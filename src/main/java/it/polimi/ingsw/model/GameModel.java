@@ -1,11 +1,9 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.exceptions.NotEnoughCoinsException;
-import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
-import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
-
+import it.polimi.ingsw.exceptions.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Random;
 
 public class GameModel {
@@ -74,7 +72,7 @@ public class GameModel {
         return motherNature;
     }
 
-    public HashMap<Colour, Integer> extractStudents(int num) {
+    public HashMap<Colour, Integer> extractStudents(int num) throws StudentsOutOfBoundsException{
         HashMap<Colour, Integer> extractedStud = new HashMap<>();
         for (Colour c : Colour.values()) {
             extractedStud.put(c, 0);
@@ -82,7 +80,8 @@ public class GameModel {
         if (num >= 0 && num < getBagSize()) {
             for (int i = 0; i < num; i++) {
                 Colour extracted = getRandomStudent();
-                extractedStud.put(extracted, extractedStud.get(extracted) + 1);
+
+                    extractedStud.put(extracted, extractedStud.get(extracted) + 1);
             }
             return extractedStud;
         }
@@ -203,26 +202,19 @@ public class GameModel {
     }
 
 
-    public Colour getRandomStudent(){
-        int totStud = 0;
-        for(Colour c : bag.keySet()){
-            totStud += bag.get(c);
-        }
+    public Colour getRandomStudent () throws StudentsOutOfBoundsException{
         Random rand = new Random();
-        int selected = rand.nextInt(totStud);
-        Colour selectedColour = null;
+        int selected = rand.nextInt(getBagSize());
 
         int verify = 0;
         for(Colour c : Colour.values()){
             verify += bag.get(c);
             if(selected <= verify){
-                selectedColour = c;
+                bag.replace(c, bag.get(c) - 1);
+                return c;
             }
         }
-
-        bag.replace(selectedColour, bag.get(selectedColour) - 1);
-        return selectedColour;
-
+        throw new StudentsOutOfBoundsException();
     }
 
     public void addStudents(HashMap<Colour, Integer> students){
