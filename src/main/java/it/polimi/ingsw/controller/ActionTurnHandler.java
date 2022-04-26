@@ -2,7 +2,6 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
-import it.polimi.ingsw.messages.ErrorMessage;
 import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.*;
 

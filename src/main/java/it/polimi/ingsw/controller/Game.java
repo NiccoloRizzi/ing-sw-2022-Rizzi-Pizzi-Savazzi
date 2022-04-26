@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.*;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,11 +19,15 @@ public class Game {
     private GameModel gameModel; // WHEN TO INITIALIZE???
     private ActionTurnHandler turn;
     private boolean started;
+    private int playersNumber;
     private List<Integer> playersOrder;
     private int currentPlayer;
+    private boolean expertMode;
 
-    public void setGameModelDEBUG(GameModel g){
-        this.gameModel = g;
+    public Game(int playersNumber, boolean expertMode){
+        this.playersNumber= playersNumber;
+        gameModel = new GameModel(playersNumber);
+        this.expertMode = expertMode;
     }
 
     public Player getWinner(){
@@ -62,6 +67,10 @@ public class Game {
         return false;
     }
 
+    public void startActionTurn(){
+       turn = new ActionTurnHandler(currentPlayer,gameModel, playersNumber);
+    }
+
     public void giveCoin(Player p){
 //        try{
 //            gameModel.removeCoin();
@@ -76,10 +85,11 @@ public class Game {
     }
 
     // EXPECTED ALL PLAYERS CREATED
-    public void setupGame(int numOfPLayers){
-        HashMap<Colour,Integer> tempStud = new HashMap<Colour,Integer>();
-        for(Colour c : Colour.values()){
-            tempStud.put(c,2);
+    public void setupGame(){
+        ArrayList<Colour> students = new ArrayList<>();
+        for(Colour c: Colour.values()){
+            students.add(c);
+            students.add(c);
         }
         Random rand = new Random();
         try {
@@ -87,32 +97,44 @@ public class Game {
         } catch (TileOutOfBoundsException e) {
             e.printStackTrace();
         }
-//        for(int i = 0; i < MAX_N_ISLES; i++){
-//            if(i != gameModel.getMotherNature() && i != (gameModel.getMotherNature() + MAX_N_ISLES /2) % MAX_N_ISLES){
-//                gameModel.getIsle(i).addStudent(tempStud.remove(rand.nextInt(MAX_N_ISLES - 2)));
-//            }
-//        }
+
+        for(int i=0; i<MAX_N_ISLES; i++) {
+            int student = rand.nextInt(students.size());
+            try {
+                if (!(gameModel.getMotherNature() == i || (gameModel.getMotherNature() + 6) % 12 == i)) {
+                    gameModel.getIsle(i).addStudent(students.remove(student));
+                }
+            } catch (TileOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+
+
+        }
 
         for(Cloud c: gameModel.getClouds())
         {
-            c.addStudents(gameModel.extractStudents((numOfPLayers == 3)?4:3));
+            c.addStudents(gameModel.extractStudents((playersNumber == 3)?4:3));
         }
 
         for(Player p : gameModel.getPlayers()){
-            p.createBoard((numOfPLayers == 3)?6:8);
-            p.getBoard().addStudents(gameModel.extractStudents((numOfPLayers==3)?9:7));
+            p.createBoard((playersNumber == 3)?6:8);
+            p.getBoard().addStudents(gameModel.extractStudents((playersNumber==3)?9:7));
         }
 
         currentPlayer = rand.nextInt(gameModel.getPlayers().size());
         // TURN HANDLER??? I DON'T REMEMBER...
     }
 
+    public boolean isExpertMode(){
+        return expertMode;
+    }
+
     public GameModel getGameModel(){
         return gameModel;
     }
 
-    public Player createPLayer(String nickname, int ID){
-        return new Player(ID, nickname);
+    public void createPlayer(String nickname, int ID){
+        gameModel.addPlayer(ID,nickname);
     }
 
     public int getCurrentPlayer(){
