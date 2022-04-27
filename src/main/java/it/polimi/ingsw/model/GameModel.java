@@ -30,9 +30,6 @@ public class GameModel {
         clouds = new ArrayList<Cloud>();
         activeCharacters = new ArrayList<Character>();
         professors = new HashMap<Colour, Player>();
-        for(Colour c: Colour.values()){
-            professors.put(c,null);
-        }
         final int[] id = new Random().ints(0, 12).distinct().limit(3).toArray();
         for (int i = 0; i < 3; i++) {
             if (id[i] == 0 || id[i] == 6 || id[i] == 10)
