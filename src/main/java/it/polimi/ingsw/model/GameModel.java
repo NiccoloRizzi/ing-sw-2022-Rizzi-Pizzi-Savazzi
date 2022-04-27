@@ -24,18 +24,20 @@ public class GameModel {
         motherNature = (new Random()).nextInt(12);
         bag = new HashMap<>();
         generateBag();
-        players = new ArrayList<Player>();
-        isles = new ArrayList<Isle>();
+        players = new ArrayList<>();
+        isles = new ArrayList<>();
         generateIsle();
-        clouds = new ArrayList<Cloud>();
-        activeCharacters = new ArrayList<Character>();
-        professors = new HashMap<Colour, Player>();
-        final int[] id = new Random().ints(0, 12).distinct().limit(3).toArray();
+        clouds = new ArrayList<>();
+        activeCharacters = new ArrayList<>();
+        professors = new HashMap<>();
+
+        final int[] sorted = new Random().ints(0, 12).distinct().limit(3).toArray();
         for (int i = 0; i < 3; i++) {
-            if (id[i] == 0 || id[i] == 6 || id[i] == 10)
-                activeCharacters.add(new CharacterStudents(id[i], id[i] % 3 + 1));
+            CharactersEnum character = CharactersEnum.values()[sorted[i]];
+            if (character==CharactersEnum.ONE_STUD_TO_ISLE || character==CharactersEnum.ONE_STUD_TO_TABLES || character==CharactersEnum.EXCHANGE_3_STUD)
+                activeCharacters.add(new CharacterStudents(character));
             else
-                activeCharacters.add(new Character(id[i], id[i] % 3 + 1));
+                activeCharacters.add(new Character(character));
         }
         if(numOfPlayers==4){
             teams=new ArrayList<>();
@@ -190,7 +192,7 @@ public class GameModel {
     }
 
     public void addPlayer(int id, String nickname) {
-        if (players.size() < numOfPlayers) {
+        if (players.size() < numOfPlayers){
             Player p = new Player(id, nickname);
             players.add(p);
             if (numOfPlayers == 4)
@@ -224,9 +226,12 @@ public class GameModel {
         bag.replace(student, bag.get(student)+1);
     }
 
-    public Player getProfessor (Colour c)
+    public Optional<Player> getProfessorOwner (Colour c)
     {
-        return professors.get(c);
+        if(professors.containsKey(c)){
+            return Optional.of(professors.get(c));
+        }
+        else return Optional.empty();
     }
 
     public void setProfessor(Colour c, Player p)

@@ -11,14 +11,16 @@ public class CharacterStudentsTest extends TestCase {
 
     @Test
     public void testAddStudent() {
-        CharacterStudents c = new CharacterStudents(0,1);
-        c.addStudent(Colour.Dragons);
-        assertEquals(1,c.getStudents(Colour.Dragons));
+        CharactersEnum c = CharactersEnum.ONE_STUD_TO_ISLE;
+        CharacterStudents character = new CharacterStudents(c);
+        character.addStudent(Colour.Dragons);
+        assertEquals(1,character.getStudents(Colour.Dragons));
     }
 
     @Test
     public void testAddRemoveStudents() {
-        CharacterStudents cs = new CharacterStudents(0,1);
+        CharactersEnum character = CharactersEnum.ONE_STUD_TO_ISLE;
+        CharacterStudents cs = new CharacterStudents(character);
         HashMap<Colour, Integer> s = new HashMap<>();
         for (Colour color: Colour.values())
             s.put(color, 1);

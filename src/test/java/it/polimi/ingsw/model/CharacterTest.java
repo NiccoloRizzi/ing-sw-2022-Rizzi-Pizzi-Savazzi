@@ -2,30 +2,30 @@ package it.polimi.ingsw.model;
 
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class CharacterTest extends TestCase {
 
-    @Test
-    public void testGetPrice() {
-        int price = 1;
-        Character c = new Character(0,price);
-        assertEquals(price,c.getPrice());
+    @ParameterizedTest
+    @ValueSource(ints={0,1,2,3,4,5,6,7,8,9,10,11})
+    public void testGetPrice(int pos) {
+        CharactersEnum c = CharactersEnum.values()[pos];
+        int price = c.getPrice();
+        Character character = new Character(c);
+        assertEquals(character.getPrice(),price);
     }
 
-    @Test
-    public void testGetId() {
-        int id = 0;
-        Character c = new Character(id,1);
-        assertEquals(id,c.getId());
-    }
 
-    @Test
-    public void testUse() {
-        int price = 1;
-        Character c = new Character(0,price);
-        c.use();
-        assertEquals(price+1,c.getPrice());
-        c.use();
-        assertEquals(price+1,c.getPrice());
+    @ParameterizedTest
+    @ValueSource(ints={0,1,2,3,4,5,6,7,8,9,10,11})
+    public void testUse(int pos) {
+        CharactersEnum c = CharactersEnum.values()[pos];
+        int price = c.getPrice();
+        Character character = new Character(c);
+        character.use();
+        assertEquals(price+1,character.getPrice());
+        character.use();
+        assertEquals(price+1,character.getPrice());
     }
 }

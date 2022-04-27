@@ -74,7 +74,7 @@ public class MessageVisitor {
         String answer;
         int isleId = isleInfluenceCharacterMessage.getIsleIndex();
         int playerId = isleInfluenceCharacterMessage.getPlayerId();
-        int charId = isleInfluenceCharacterMessage.getCharatcerId();
+        int charId = isleInfluenceCharacterMessage.getCharacterId();
         Colour noColor = isleInfluenceCharacterMessage.getNoColour();
         if (game.isExpertMode())
         {
@@ -82,7 +82,7 @@ public class MessageVisitor {
                 try {
                     Character character = game.getGameModel().getCharacter(charId);
                     Isle isle = game.getGameModel().getIsle(isleId);
-                    switch (CharactersEnum.values()[character.getId()]) {
+                    switch (character.getCard()) {
                         case NO_TOWER_INFLUENCE:
                             isle.setInfStrategy(new noTowersStrategy());
                             break;
@@ -119,7 +119,7 @@ public class MessageVisitor {
                     Board board = game.getGameModel().getPlayer(playerId).getBoard();
                     character.removeStudent(stud);
                     character.addStudent(game.getGameModel().getRandomStudent());
-                    switch (CharactersEnum.values()[character.getId()]) {
+                    switch (character.getCard()) {
                         case ONE_STUD_TO_ISLE:
                             isle.addStudent(stud);
                             break;
@@ -295,6 +295,7 @@ public class MessageVisitor {
                         try {
                             p.getBoard().removeFromTable(remove3StudCharacterMessage.getColour());
                         } catch (StudentsOutOfBoundsException e) {
+                            e.printStackTrace();
                         }
                     }
                 }
