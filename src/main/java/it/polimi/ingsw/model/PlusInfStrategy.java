@@ -10,7 +10,7 @@ public class PlusInfStrategy implements influenceStrategy{
         if (tower.equals(p.getBoard().getFaction())) {
             influence += size;
         }
-        for(Colour c: Colour.values())
+        for(Colour c: professors.keySet())
         {
             influence += (professors.get(c).equals(p))?students.get(c):0;
         }

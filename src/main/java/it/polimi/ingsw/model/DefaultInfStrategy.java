@@ -7,7 +7,7 @@ public class DefaultInfStrategy implements influenceStrategy{
     public int getInfluence(Player p, HashMap<Colour,Integer> students, int size, Faction tower, HashMap<Colour,Player> professors){
         int influence = 0;
 
-        for(Colour c: Colour.values())
+        for(Colour c: professors.keySet())
         {
             influence += (p.equals(professors.get(c)))?students.get(c):0;
 

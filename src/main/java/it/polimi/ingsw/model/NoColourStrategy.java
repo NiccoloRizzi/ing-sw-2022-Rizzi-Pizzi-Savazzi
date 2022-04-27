@@ -13,7 +13,7 @@ public class NoColourStrategy implements influenceStrategy{
     public int getInfluence(Player p, HashMap<Colour,Integer> students, int size, Faction tower, HashMap<Colour,Player> professors){
         int influence = 0;
 
-        for(Colour c: Colour.values())
+        for(Colour c: professors.keySet())
         {
             influence += (professors.get(c).equals(p)&&c!=noColour)?students.get(c):0;
         }
