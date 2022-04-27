@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Optional;
 
 public class TeamCheckTowerStrategy implements CheckTowerStrategy {
-    public void moveMn(GameModel gm, int island){
+    public void checkTower(GameModel gm, int island){
         HashMap<Colour, Player> profs = gm.getProfessors();
         Faction oldfaction;
         try {

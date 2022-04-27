@@ -166,6 +166,7 @@ public class IsleTest extends TestCase {
     public void testJoin() {
         Isle isle1 = new Isle();
         Isle isle2 = new Isle();
+        isle1.getSize();
         AggregatedIsland isle = isle1.join(isle2);
         assertTrue(isle.getJoinedIsle().contains(isle1));
         assertTrue(isle.getJoinedIsle().contains(isle2));

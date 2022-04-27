@@ -64,7 +64,7 @@ public class MessageVisitor {
     }
     public void visit(CloudChoiceMessage cloudChoiceMessage){
         if(game.getCurrentPlayer()==cloudChoiceMessage.getPlayerId() && game.getTurnHandler().getPhase()==Phase.CLOUD){
-            game.getTurnHandler().moveFromCloud(cloudChoiceMessage.getCloudIndex(), cloudChoiceMessage.getPlayerId());
+            game.getTurnHandler().moveFromCloud(cloudChoiceMessage.getCloudIndex());
         }
         else{
             String answer = "Non è il tuo turno per scegliere la nuvola.";
@@ -125,6 +125,7 @@ public class MessageVisitor {
                             break;
                         case ONE_STUD_TO_TABLES:
                             board.addToTable(stud);
+                            game.getTurnHandler().checkProfessor(stud);
                     }
                     character.use();
                 } catch (TileOutOfBoundsException e) {
@@ -277,6 +278,12 @@ public class MessageVisitor {
                         answer = "table is empty";
                     }
                     game.getGameModel().getCharacter(move2StudCharacterMessage.getCharId()).use();
+                }
+                for (Colour c : move2StudCharacterMessage.getStud_2()) {
+                    game.getTurnHandler().checkProfessor(c);
+                }
+                for (Colour c : move2StudCharacterMessage.getStud()) {
+                    game.getTurnHandler().checkProfessor(c);
                 }
             } else {
                 answer = "Not your turn";

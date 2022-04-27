@@ -18,4 +18,14 @@ public class AssistantTest extends TestCase {
         Assistant a = new Assistant(0,moves);
         assertEquals(moves,a.getMn_moves());
     }
+
+    @Test
+    public void testBoost()
+    {
+        int moves = 2;
+        Assistant a = new Assistant(0,moves);
+        assertEquals(moves,a.getMn_moves()+a.getBoost());
+        a.Boost();
+        assertEquals(moves+2,a.getMn_moves()+a.getBoost());
+    }
 }

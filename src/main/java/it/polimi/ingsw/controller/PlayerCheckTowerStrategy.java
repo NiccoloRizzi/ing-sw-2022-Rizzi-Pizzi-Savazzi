@@ -8,7 +8,7 @@ import java.util.Optional;
 
 
 public class PlayerCheckTowerStrategy implements CheckTowerStrategy {
-    public void moveMn(GameModel gm, int island){
+    public void checkTower(GameModel gm, int island){
         Faction oldfaction;
         HashMap<Colour, Player> profs = gm.getProfessors();
         try {

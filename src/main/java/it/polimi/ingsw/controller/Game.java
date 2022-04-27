@@ -125,7 +125,9 @@ public class Game {
             p.createBoard((playersNumber == 3)?6:8);
             try {
                 p.getBoard().addStudents(gameModel.extractStudents((playersNumber == 3) ? 9 : 7));
-            }catch(StudentsOutOfBoundsException e){}
+            }catch(StudentsOutOfBoundsException e){
+                e.printStackTrace();
+            }
         }
 
         currentPlayer = rand.nextInt(gameModel.getPlayers().size());
