@@ -28,7 +28,7 @@ public class Player {
         coins = 0;
         deck = new ArrayList<>();
         for(int i = 0; i < N_ASSISTANT; i++){
-            deck.add(new Assistant(i + 1, (i+2)/2));
+            deck.add(new Assistant(i+1, (i+2)/2));
         }
         usedCards = new ArrayList<>();
     }
@@ -140,7 +140,7 @@ public class Player {
 
     public boolean hasUsed(int assistantId){
         for(Assistant a: usedCards){
-            if(a.getValue()==assistantId)
+            if(a.getValue()==assistantId+1)
                 return true;
         }
         return false;

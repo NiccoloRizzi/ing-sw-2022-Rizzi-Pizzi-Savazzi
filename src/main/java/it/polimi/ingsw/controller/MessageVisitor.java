@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 import it.polimi.ingsw.messages.*;
+import it.polimi.ingsw.messages.Answers.ErrorMessage;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.Character;
 
@@ -18,26 +19,27 @@ public class MessageVisitor {
 
     public void visit(AssistantChoiceMessage assistantChoiceMessage){
         int playerID = game.getCurrentPlayer();
-        if(assistantChoiceMessage.getPlayerId()==playerID && game.getTurnHandler().getPhase()==Phase.ASSISTANT) {
+        if(assistantChoiceMessage.getPlayerId()==playerID && game.isPlanning()) {
             ArrayList<Player> players = game.getGameModel().getPlayers();
             Player player = players.get(playerID);
             int id = assistantChoiceMessage.getAssistantId();
-            if(player.getDeck().size()>1) {
-                for (int i = 0; i < game.getPlayersOrder().indexOf(playerID); i++) {
-                    if (players.get(game.getPlayersOrder().get(i)).getChosen().getValue() == id) {
-                        String answer = "L'assistente è già stato scelto da un altro giocatore.";
-                        break;
+            if(!player.hasUsed(id)) {
+                if (player.getDeck().size() > 1) {
+                    if(game.alreadyUsed(id)){
+                        String answer = ErrorMessage.AssistantOtherPlayerError;
+                    }
+                    else{
+                        player.setChoosenAssistant(id);
+                        game.nextPlayer();
                     }
                 }
             }
-            if(!player.hasUsed(id)){
-                player.setChoosenAssistant(id);
-            }
             else{
-                String answer = "Hai già usato questo assistente.";
+                String answer = ErrorMessage.AssistantAlreadyChosenError;
             }
+
         }else{
-            String answer= "Non è il tuo turno per scegliere l'assistente.";
+            String answer = ErrorMessage.TurnError;
         }
 
     }

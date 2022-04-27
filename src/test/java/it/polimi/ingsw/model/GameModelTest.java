@@ -105,7 +105,8 @@ class GameModelTest {
         GameModel gm = new GameModel(2);
         Player p = new Player(0,"Guybrush");
         gm.setProfessor(Colour.Dragons,p);
-        assertEquals(gm.getProfessorOwner(Colour.Dragons),p);
+        assertTrue(gm.getProfessorOwner(Colour.Dragons).isPresent());
+        assertEquals(gm.getProfessorOwner(Colour.Dragons).get(),p);
     }
 
 }
