@@ -18,6 +18,8 @@ public class ActionTurnHandler {
     public ActionTurnHandler(int currentPlayer,GameModel gameModel,int numOfPlayers){
         this.currentPlayer = currentPlayer;
         this.gameModel = gameModel;
+        studentsToMove = 3;
+        phase = Phase.STUDENTS;
         professorStrategy= new DefaultCheckProfessorStrategy();
         checkTowerStrategy = (numOfPlayers == 4)? new TeamCheckTowerStrategy() : new PlayerCheckTowerStrategy();
 
@@ -28,8 +30,9 @@ public class ActionTurnHandler {
         Optional<String> answer = Optional.empty();
         if(moves<=a.getMn_moves()+a.getBoost() && moves>=0){
             gameModel.moveMN(moves);
-            checkTowerStrategy.checkTower(gameModel,gameModel.getMotherNature());
-
+            checkTower(gameModel.getMotherNature());
+            checkIsleJoin(gameModel.getMotherNature());
+            phase=Phase.CLOUD;
         }
         else{
             answer=Optional.of("The number of moves must be between 0 and "+a.getMn_moves()+a.getBoost()+"!");
@@ -45,7 +48,7 @@ public class ActionTurnHandler {
                     gameModel.getIsle(isle).addStudent(student);
                     studentsToMove --;
                     if(studentsToMove  == 0)
-                        phase = Phase.CLOUD;
+                        phase = Phase.MOTHERNATURE;
                 }
             }
             else {
@@ -69,7 +72,7 @@ public class ActionTurnHandler {
                     checkProfessor(student);
                     studentsToMove --;
                     if(studentsToMove  == 0)
-                        phase = Phase.CLOUD;
+                        phase = Phase.MOTHERNATURE;
                 }
                 else{
                     answer = Optional.of("Il tavolo è pieno.");
@@ -108,8 +111,8 @@ public class ActionTurnHandler {
     {
         try {
             if (gameModel.getIsle(index).getTower() == gameModel.getIsle((index == 0) ? gameModel.getIsles().size() - 1 : index - 1).getTower()) {
-                gameModel.joinIsle(index, (index == 0) ? gameModel.getIsles().size() - 1 : index - 1);
-                index--;
+                gameModel.joinIsle((index == 0) ? gameModel.getIsles().size() - 1 : index - 1, index);
+                index = (index == 0) ? 0: index - 1;
             }
 
             if (gameModel.getIsle(index).getTower() == gameModel.getIsle((index + 1) % gameModel.getIsles().size()).getTower()) {
@@ -135,5 +138,9 @@ public class ActionTurnHandler {
     public void checkProfessor(Colour student)
     {
         professorStrategy.checkProfessor(gameModel,student,currentPlayer);
+    }
+
+    public void checkTower(int isle){
+        checkTowerStrategy.checkTower(gameModel,isle);
     }
 }

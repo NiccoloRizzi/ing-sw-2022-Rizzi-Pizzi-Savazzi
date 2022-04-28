@@ -28,6 +28,10 @@ public class GameModel {
         isles = new ArrayList<>();
         generateIsle();
         clouds = new ArrayList<>();
+        for(int i= 0; i < numOfPlayers;i++)
+        {
+            clouds.add(new Cloud());
+        }
         activeCharacters = new ArrayList<>();
         professors = new HashMap<>();
 

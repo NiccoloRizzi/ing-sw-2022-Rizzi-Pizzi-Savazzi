@@ -107,9 +107,6 @@ public class Game {
                 } catch (TileOutOfBoundsException e) {
                     e.printStackTrace();
                 }
-
-
-
         }
 
         for(Cloud c: gameModel.getClouds())
@@ -128,6 +125,14 @@ public class Game {
             }catch(StudentsOutOfBoundsException e){
                 e.printStackTrace();
             }
+        }
+        if(playersNumber == 4)
+        {
+            gameModel.getTeam(0).assignFaction(Faction.Black);
+            gameModel.getTeam(1).assignFaction(Faction.White);
+        }else{
+            for(int i = 0;i<gameModel.getPlayers().size();i++)
+                gameModel.getPlayer(i).assignFaction(Faction.values()[i+1]);
         }
 
         currentPlayer = rand.nextInt(gameModel.getPlayers().size());
