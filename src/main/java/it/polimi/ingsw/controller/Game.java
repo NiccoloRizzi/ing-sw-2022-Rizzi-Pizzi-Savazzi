@@ -18,9 +18,10 @@ public class Game {
 
     private GameModel gameModel; // WHEN TO INITIALIZE???
     private ActionTurnHandler turn;
-    private boolean started;
+    private boolean planningPhase;
     private int playersNumber;
-    private List<Integer> playersOrder;
+    private ArrayList<Integer> planningOrder;
+    private ArrayList<Integer> actionOrder;
     private int currentPlayer;
     private boolean expertMode;
 
@@ -71,6 +72,10 @@ public class Game {
        turn = new ActionTurnHandler(currentPlayer,gameModel, playersNumber);
     }
 
+    public boolean isPlanning(){
+        return planningPhase;
+    }
+
     public void giveCoin(Player p){
 //        try{
 //            gameModel.removeCoin();
@@ -80,12 +85,28 @@ public class Game {
 //        }
     }
 
-    public List<Integer> getPlayersOrder() {
-        return playersOrder;
+    public ArrayList<Integer> getPlanningOrder() {
+        return planningOrder;
+    }
+
+    public boolean alreadyUsed(int assistantId){
+        ArrayList<Player> players = gameModel.getPlayers();
+        for (int i = 0; i < planningOrder.indexOf(currentPlayer); i++) {
+            if (players.get(planningOrder.get(i)).getChosen().getValue() == assistantId+1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ArrayList<Integer> getActionOrder(){
+        return actionOrder;
     }
 
     // EXPECTED ALL PLAYERS CREATED
     public void setupGame(){
+        planningOrder = new ArrayList<>();
+        actionOrder = new ArrayList<>();
         ArrayList<Colour> students = new ArrayList<>();
         for(Colour c: Colour.values()){
             students.add(c);
@@ -135,8 +156,11 @@ public class Game {
                 gameModel.getPlayer(i).assignFaction(Faction.values()[i+1]);
         }
 
-        currentPlayer = rand.nextInt(gameModel.getPlayers().size());
-        // TURN HANDLER??? I DON'T REMEMBER...
+        currentPlayer = rand.nextInt(playersNumber);
+        for(int i=0;i<playersNumber;i++){
+            planningOrder.add((currentPlayer+i)%playersNumber);
+        }
+        planningPhase = true;
     }
 
     public boolean isExpertMode(){
@@ -159,6 +183,7 @@ public class Game {
         String notify = null;
         try{
             gameModel.getPlayer(playerID).setChoosenAssistant(assistantID);
+            nextPlayer();
         }catch (IndexOutOfBoundsException e){
             notify = "Assistant chosen id must be less than 10 and more than 0";
         }
@@ -167,9 +192,38 @@ public class Game {
     public void checkNextOrder(){
         ArrayList<Player> tempPlayers = new ArrayList<>(gameModel.getPlayers());
         tempPlayers.sort(Comparator.comparingInt(p -> p.getChosen().getValue()));
-        playersOrder = tempPlayers.stream()
-                .map(Player::getID)
-                .collect(Collectors.toList());
+        actionOrder = tempPlayers.stream()
+                .map(player -> player.getID())
+                .collect(Collectors.toCollection(ArrayList<Integer>::new));
+
+        int first = actionOrder.get(0);
+        for(int i=1;i<playersNumber;i++){
+            planningOrder.set(i,(first+i)%playersNumber);
+        }
+    }
+
+    public void nextPlayer(){
+        if(planningPhase){
+            if(planningOrder.indexOf(currentPlayer)==planningOrder.size()-1){
+                planningPhase = false;
+                checkNextOrder();
+                currentPlayer = actionOrder.get(0);
+                startActionTurn();
+            }
+            else{
+                currentPlayer=planningOrder.get(planningOrder.indexOf(currentPlayer)+1);
+            }
+        }
+        else{
+            if(currentPlayer==actionOrder.size()-1){
+                currentPlayer = planningOrder.get(0);
+                planningPhase = true;
+            }
+            else {
+                currentPlayer = actionOrder.get(actionOrder.indexOf(currentPlayer) + 1);
+                startActionTurn();
+            }
+        }
     }
 
     public ActionTurnHandler getTurnHandler()
