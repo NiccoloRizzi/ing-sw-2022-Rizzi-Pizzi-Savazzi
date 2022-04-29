@@ -230,5 +230,7 @@ public class Game {
     {
         return turn;
     }
-
+    public void setCurrentPlayer(int currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
 }

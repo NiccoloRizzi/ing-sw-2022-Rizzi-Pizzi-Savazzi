@@ -143,4 +143,12 @@ public class ActionTurnHandler {
     public void checkTower(int isle){
         checkTowerStrategy.checkTower(gameModel,isle);
     }
+    public void setCurrentPlayer(Player player)
+    {
+        this.currentPlayer = player.getID();
+    }
+
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
 }

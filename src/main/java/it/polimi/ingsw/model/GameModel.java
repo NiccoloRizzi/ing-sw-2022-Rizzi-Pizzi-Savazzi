@@ -204,6 +204,12 @@ public class GameModel {
         }
     }
 
+    public void setCharacter_DEBUG(int pos, CharactersEnum character){
+        if (character==CharactersEnum.ONE_STUD_TO_ISLE || character==CharactersEnum.ONE_STUD_TO_TABLES || character==CharactersEnum.EXCHANGE_3_STUD)
+            activeCharacters.set(0, new CharacterStudents(character));
+        else
+            activeCharacters.set(0, new Character(character));
+    }
 
     public Colour getRandomStudent () throws StudentsOutOfBoundsException{
         Random rand = new Random();
