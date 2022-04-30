@@ -181,9 +181,17 @@ class MessageVisitorTest {
 
     }
 
+    int charSize(CharacterStudents character){
+        int size = 0;
+        for(Colour c : Colour.values()){
+            size += character.getStudents(c);
+        }
+        return size;
+    }
+
     @ParameterizedTest
     @MethodSource("argsA")
-    void testVisitIsleInfluenceCharacterMessage(CharactersEnum charType, int playerNum) throws TileOutOfBoundsException {
+    void testVisitIsleInfluenceCharacterMessage(CharactersEnum charType, int playerNum) throws TileOutOfBoundsException, NotEnoughCoinsException {
 
         // Test observes the influence based on this isle, character, player (or team), faction and colors
         final int CHAR_ID = 0;
@@ -199,6 +207,7 @@ class MessageVisitorTest {
         Game game = new Game(playerNum, true);
         game.getGameModel().setCharacter_DEBUG(0, charType);
         GameModel gameModel = game.getGameModel();
+        game.startActionTurn();
         for(int p = 0; p < playerNum; p++){
             game.createPlayer("p" + p);
         }
@@ -210,6 +219,7 @@ class MessageVisitorTest {
         HashMap<Colour, Player> professors = gameModel.getProfessors();
 
         // Setup test background
+        for(int i = 0; i < 3; i++){ player_a.addCoin(); gameModel.removeCoin();}
         player_a.createBoard((playerNum == 3)?6:8);
         player_b.createBoard((playerNum == 3)?6:8);
         player_a.assignFaction(FACTION);
@@ -257,7 +267,7 @@ class MessageVisitorTest {
 
     @ParameterizedTest
     @MethodSource("argsB")
-    void testVisitMoveStudentCharacterMessage(Colour colour, CharactersEnum charType) throws TileOutOfBoundsException {
+    void testVisitMoveStudentCharacterMessage(Colour colour, CharactersEnum charType) throws TileOutOfBoundsException, NotEnoughCoinsException {
 
         // Test observes the behaviour based on these variables
         final int CHAR_ID = 0;
@@ -279,6 +289,16 @@ class MessageVisitorTest {
 
         // Setup test background
         player.createBoard(8);
+        for(int i = 0; i < 3; i++){ player.addCoin(); gameModel.removeCoin(); }
+        for(int i = 0; i < 4; i++){
+            for(Colour c : Colour.values()){
+                try{
+                    character.removeStudent(c);
+                }catch (Exception ignored){
+
+                }
+            }
+        }
         character.addStudent(Colour.Dragons);
         character.addStudent(Colour.Dragons);
         character.addStudent(Colour.Fairies);
@@ -295,6 +315,7 @@ class MessageVisitorTest {
         assertEquals(0, isle.getStudents(Colour.Fairies));
         assertEquals(0, isle.getStudents(Colour.Dragons));
         assertEquals(0, isle.getStudents(Colour.Frogs));
+        assertEquals(4, charSize(character));
 
         // Test
         MoveStudentCharacterMessage message = new MoveStudentCharacterMessage(PLAYER_ID, CHAR_ID, colour, ISLE_ID);
@@ -318,11 +339,12 @@ class MessageVisitorTest {
             assertEquals((colour==Colour.Dragons)?1:0, isle.getStudents(Colour.Dragons));
             assertEquals((colour==Colour.Frogs)?1:0, isle.getStudents(Colour.Frogs));
         }
+        assertEquals(4, charSize(character));
     }
 
     @ParameterizedTest
     @MethodSource("argsC")
-    void testVisitStrategyProfessorMessage(Colour colour) throws StudentsOutOfBoundsException {
+    void testVisitStrategyProfessorMessage(Colour colour) throws StudentsOutOfBoundsException, NotEnoughCoinsException {
 
         // Referent constants
         final int PLAYER_ID_A = 0;
@@ -348,6 +370,7 @@ class MessageVisitorTest {
         Board boardB = playerB.getBoard();
 
         // Before test condition
+        for(int i = 0; i < 5; i++){ playerA.addCoin(); gameModel.removeCoin(); }
         boardA.addToTable(colour);
         turn.setCurrentPlayer(playerA);
         game.setCurrentPlayer(playerA.getID());
@@ -379,7 +402,7 @@ class MessageVisitorTest {
     }
 
     @Test
-    void testVisitSimilMotherNatureMesage() throws TileOutOfBoundsException {
+    void testVisitSimilMotherNatureMesage() throws TileOutOfBoundsException, NotEnoughCoinsException {
 
         // Referent constants
         final int PLAYER_ID_A = 0;
@@ -405,6 +428,7 @@ class MessageVisitorTest {
         Isle isleS = gameModel.getIsle((ISLE_ID + 1) % 12);
 
         // Setting background
+        for(int i = 0; i < 7; i++){ playerA.addCoin(); gameModel.removeCoin(); }
         playerA.assignFaction(Faction.Black);
         playerB.assignFaction(Faction.White);
         gameModel.setProfessor(Colour.Fairies, playerA);
@@ -422,6 +446,7 @@ class MessageVisitorTest {
         assertEquals(12, gameModel.getIsles().size());
         isle.addStudent(Colour.Fairies);
         isle.addStudent(Colour.Fairies);
+        game.startActionTurn();
         message.accept(visitor);
         assertEquals(Faction.Black, isle.getTower());
         assertEquals(10, gameModel.getIsles().size());

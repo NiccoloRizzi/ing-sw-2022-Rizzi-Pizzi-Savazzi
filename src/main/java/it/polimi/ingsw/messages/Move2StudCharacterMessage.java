@@ -21,11 +21,11 @@ public class Move2StudCharacterMessage implements Message{
         return stud_2;
     }
 
-    public int getCharId() {
+    public int getCharacterID() {
         return charId;
     }
 
-    public int getPlayerId() {
+    public int getPlayerID() {
         return playerId;
     }
 

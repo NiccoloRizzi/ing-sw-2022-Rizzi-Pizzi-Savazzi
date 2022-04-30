@@ -19,19 +19,19 @@ public class MoveStudentCharacterMessage implements Message{
         // this.type = type; REDUNDANT
     }
 
-    public int getPlayerId() {
+    public int getPlayerID() {
         return playerId;
     }
 
-    public int getCharacterId() {
+    public int getCharacterID() {
         return characterId;
     }
 
-    public Colour getStudentIndex() {
+    public Colour getStudent() {
         return student;
     }
 
-    public int getTileIndex() {
+    public int getTileID() {
         return tileIndex;
     }
 

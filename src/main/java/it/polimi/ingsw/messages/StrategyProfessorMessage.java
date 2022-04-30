@@ -12,11 +12,11 @@ public class StrategyProfessorMessage implements Message{
         this.playerId = playerId;
     }
 
-    public int getCharacterId() {
+    public int getCharacterID() {
         return characterId;
     }
 
-    public int getPlayerId() {
+    public int getPlayerID() {
         return playerId;
     }
 

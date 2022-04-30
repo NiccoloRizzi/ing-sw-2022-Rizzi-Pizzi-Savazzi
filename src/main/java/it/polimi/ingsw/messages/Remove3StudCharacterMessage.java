@@ -14,11 +14,11 @@ public class Remove3StudCharacterMessage implements Message{
         this.colour = colour;
     }
 
-    public int getCharId() {
+    public int getCharacterID() {
         return charId;
     }
 
-    public int getPlayerId() {
+    public int getPlayerID() {
         return playerId;
     }
 

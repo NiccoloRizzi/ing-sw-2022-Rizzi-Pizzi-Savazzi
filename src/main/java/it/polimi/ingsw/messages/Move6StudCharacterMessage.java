@@ -17,7 +17,7 @@ public class Move6StudCharacterMessage implements Message{
         this.studs_2 = studFromChar.clone();
     }
 
-    public int getCharId() {
+    public int getCharacterID() {
         return charId;
     }
 
@@ -25,7 +25,7 @@ public class Move6StudCharacterMessage implements Message{
         return studs_2;
     }
 
-    public int getPlayerId() {
+    public int getPlayerID() {
         return playerId;
     }
 

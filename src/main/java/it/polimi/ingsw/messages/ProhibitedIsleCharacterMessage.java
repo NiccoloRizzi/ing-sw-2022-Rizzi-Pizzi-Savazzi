@@ -14,15 +14,15 @@ public class ProhibitedIsleCharacterMessage implements Message{
         this.isleIndex = isleIndex;
     }
 
-    public int getCharId() {
+    public int getCharacterID() {
         return charId;
     }
 
-    public int getPlayerId() {
+    public int getPlayerID() {
         return playerId;
     }
 
-    public int getIsleIndex() {
+    public int getIsleID() {
         return isleIndex;
     }
 

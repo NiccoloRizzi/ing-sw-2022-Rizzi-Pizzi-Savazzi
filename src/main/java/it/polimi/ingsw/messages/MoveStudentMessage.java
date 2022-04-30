@@ -17,15 +17,15 @@ public class MoveStudentMessage implements Message{
         this.toTable = toTable;
     }
 
-    public int getPlayerId() {
+    public int getPlayerID() {
         return playerId;
     }
 
-    public Colour getStudentIndex() {
+    public Colour getStudent() {
         return student;
     }
 
-    public int getTileIndex() {
+    public int getTileID() {
         return tileIndex;
     }
 
