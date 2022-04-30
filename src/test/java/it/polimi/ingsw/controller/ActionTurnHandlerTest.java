@@ -196,9 +196,10 @@ class ActionTurnHandlerTest {
         game.createPlayer("B");
         game.setupGame();
         game.startActionTurn();
+        int player = game.getCurrentPlayer();
         assertEquals(3,game.getTurnHandler().getStudentsToMove());
-        game.getGameModel().getPlayer(0).getBoard().addStudent(Colour.Dragons);
-        game.getGameModel().getPlayer(0).getBoard().addStudent(Colour.Gnomes);
+        game.getGameModel().getPlayer(player).getBoard().addStudent(Colour.Dragons);
+        game.getGameModel().getPlayer(player).getBoard().addStudent(Colour.Gnomes);
         game.getTurnHandler().moveStudentToTable(Colour.Dragons);
         assertEquals(2,game.getTurnHandler().getStudentsToMove());
         game.getTurnHandler().moveStudentToIsle(Colour.Gnomes,0);

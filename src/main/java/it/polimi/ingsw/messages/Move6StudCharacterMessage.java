@@ -9,19 +9,19 @@ public class Move6StudCharacterMessage implements Message{
     private final Colour[] studs; //SINGLE???
     private final Colour[] studs_2; // SINGLE???
 
-    public Move6StudCharacterMessage(int charId, int playerId, Colour[] studs, Colour[] studs_2) {
+    public Move6StudCharacterMessage(int charId, int playerId, Colour[] studFromBoard, Colour[] studFromChar) {
         this.charId = charId;
         this.playerId = playerId;
 
-        this.studs = studs.clone();
-        this.studs_2 = studs_2.clone();
+        this.studs = studFromBoard.clone();
+        this.studs_2 = studFromChar.clone();
     }
 
     public int getCharId() {
         return charId;
     }
 
-    public Colour[] getStuds_2() {
+    public Colour[] getStudsFromChar() {
         return studs_2;
     }
 
@@ -29,7 +29,7 @@ public class Move6StudCharacterMessage implements Message{
         return playerId;
     }
 
-    public Colour[] getStuds() {
+    public Colour[] getStudFromBoard() {
         return studs;
     }
 

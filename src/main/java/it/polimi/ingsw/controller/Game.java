@@ -160,6 +160,7 @@ public class Game {
         for(int i=0;i<playersNumber;i++){
             planningOrder.add((currentPlayer+i)%playersNumber);
         }
+        gameModel.setUpCharacter();
         planningPhase = true;
     }
 

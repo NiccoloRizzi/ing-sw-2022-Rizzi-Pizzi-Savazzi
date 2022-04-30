@@ -17,10 +17,12 @@ public class GameModel {
     private final ArrayList<Cloud> clouds;
     private ArrayList<Team> teams;
     private final ArrayList<Character> activeCharacters;
+    int prohibited;
 
     public GameModel(int numOfPlayers) {
         this.numOfPlayers = numOfPlayers;
         unusedCoins = 20;
+        prohibited = 4;
         motherNature = (new Random()).nextInt(12);
         bag = new HashMap<>();
         generateBag();
@@ -32,17 +34,20 @@ public class GameModel {
         {
             clouds.add(new Cloud());
         }
+
         activeCharacters = new ArrayList<>();
         professors = new HashMap<>();
 
         final int[] sorted = new Random().ints(0, 12).distinct().limit(3).toArray();
         for (int i = 0; i < 3; i++) {
             CharactersEnum character = CharactersEnum.values()[sorted[i]];
-            if (character==CharactersEnum.ONE_STUD_TO_ISLE || character==CharactersEnum.ONE_STUD_TO_TABLES || character==CharactersEnum.EXCHANGE_3_STUD)
+            if (character==CharactersEnum.ONE_STUD_TO_ISLE||character==CharactersEnum.ONE_STUD_TO_TABLES||character==CharactersEnum.EXCHANGE_3_STUD){
                 activeCharacters.add(new CharacterStudents(character));
+            }
             else
                 activeCharacters.add(new Character(character));
         }
+
         if(numOfPlayers==4){
             teams=new ArrayList<>();
             teams.add(new Team());
@@ -206,9 +211,9 @@ public class GameModel {
 
     public void setCharacter_DEBUG(int pos, CharactersEnum character){
         if (character==CharactersEnum.ONE_STUD_TO_ISLE || character==CharactersEnum.ONE_STUD_TO_TABLES || character==CharactersEnum.EXCHANGE_3_STUD)
-            activeCharacters.set(0, new CharacterStudents(character));
+            activeCharacters.set(pos, new CharacterStudents(character));
         else
-            activeCharacters.set(0, new Character(character));
+            activeCharacters.set(pos, new Character(character));
     }
 
     public Colour getRandomStudent () throws StudentsOutOfBoundsException{
@@ -269,6 +274,43 @@ public class GameModel {
             isles.remove(isle2);
             isles.remove(isle1);
             isles.add(isle1,temp);
+        }
+    }
+
+    public int getProhibited()
+    {
+        return prohibited;
+    }
+    public void useProhibited()
+    {
+        prohibited --;
+    }
+
+    public void setUpCharacter()
+    {
+        for (int i = 0; i < 3; i++) {
+            CharactersEnum character = getCharacter(i).getCard();
+            if (character == CharactersEnum.ONE_STUD_TO_ISLE) {
+                try {
+                    ((CharacterStudents) activeCharacters.get(i)).addStudents(extractStudents(4));
+                } catch (StudentsOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (character == CharactersEnum.ONE_STUD_TO_TABLES) {
+                try {
+                    ((CharacterStudents) activeCharacters.get(i)).addStudents(extractStudents(4));
+                } catch (StudentsOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (character == CharactersEnum.EXCHANGE_3_STUD) {
+                try {
+                    ((CharacterStudents) activeCharacters.get(i)).addStudents(extractStudents(6));
+                } catch (StudentsOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

@@ -201,12 +201,18 @@ public class MessageVisitor {
         String answer;
         if(game.isExpertMode()) {
             if (prohibitedIsleCharacterMessage.getPlayerId() == game.getCurrentPlayer()) {
-                try {
-                    game.getGameModel().getIsle(prohibitedIsleCharacterMessage.getIsleIndex()).setProhibited();
-                } catch (TileOutOfBoundsException e) {
-                    answer = "Isle doesn't exist";
+                if(game.getGameModel().getProhibited() > 0) {
+                    try {
+                        game.getGameModel().getIsle(prohibitedIsleCharacterMessage.getIsleIndex()).setProhibited();
+                    } catch (TileOutOfBoundsException e) {
+                        answer = "Isle doesn't exist";
+                    }
+                    game.getGameModel().getCharacter(prohibitedIsleCharacterMessage.getCharId()).use();
+                    game.getGameModel().useProhibited();
                 }
-                game.getGameModel().getCharacter(prohibitedIsleCharacterMessage.getCharId()).use();
+                else{
+                    answer = "All 4 prohibited tile already in use";
+                }
             } else {
                 answer = "Not your turn";
             }
@@ -221,7 +227,7 @@ public class MessageVisitor {
             if (move6StudCharacterMessage.getPlayerId() == game.getCurrentPlayer()) {
                 CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(move6StudCharacterMessage.getCharId());
                 Board board = game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard();
-                for (Colour c : move6StudCharacterMessage.getStuds()) {
+                for (Colour c : move6StudCharacterMessage.getStudFromBoard()) {
                     try {
                         board.removeStudent(c);
                     } catch (StudentsOutOfBoundsException e) {
@@ -229,7 +235,7 @@ public class MessageVisitor {
                     }
                     character.addStudent(c);
                 }
-                for (Colour c : move6StudCharacterMessage.getStuds()) {
+                for (Colour c : move6StudCharacterMessage.getStudsFromChar()) {
                     try {
                         board.addToEntrance(c);
                     } catch (StudentsOutOfBoundsException e) {
@@ -255,7 +261,7 @@ public class MessageVisitor {
         if(game.isExpertMode()) {
             if (move2StudCharacterMessage.getPlayerId() == game.getCurrentPlayer()) {
                 Board board = game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard();
-                for (Colour c : move2StudCharacterMessage.getStud()) {
+                for (Colour c : move2StudCharacterMessage.getStudFromBoard()) {
                     try {
                         board.removeStudent(c);
                     } catch (StudentsOutOfBoundsException e) {
@@ -268,7 +274,7 @@ public class MessageVisitor {
                     }
 
                 }
-                for (Colour c : move2StudCharacterMessage.getStud_2()) {
+                for (Colour c : move2StudCharacterMessage.getStudFromTables()) {
                     try {
                         board.addToEntrance(c);
                     } catch (StudentsOutOfBoundsException e) {
@@ -281,10 +287,10 @@ public class MessageVisitor {
                     }
                     game.getGameModel().getCharacter(move2StudCharacterMessage.getCharId()).use();
                 }
-                for (Colour c : move2StudCharacterMessage.getStud_2()) {
+                for (Colour c : move2StudCharacterMessage.getStudFromTables()) {
                     game.getTurnHandler().checkProfessor(c);
                 }
-                for (Colour c : move2StudCharacterMessage.getStud()) {
+                for (Colour c : move2StudCharacterMessage.getStudFromBoard()) {
                     game.getTurnHandler().checkProfessor(c);
                 }
             } else {

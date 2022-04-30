@@ -10,14 +10,14 @@ public class Move2StudCharacterMessage implements Message{
     private final Colour[] stud;
     private final Colour[] stud_2;
 
-    public Move2StudCharacterMessage(int charId, int playerId, Colour[] stud, Colour[] stud_2) {
+    public Move2StudCharacterMessage(int charId, int playerId, Colour[] studFromBoard, Colour[] studFromTables) {
         this.charId = charId;
         this.playerId = playerId;
-        this.stud = stud.clone();
-        this.stud_2 = stud_2;
+        this.stud = studFromBoard.clone();
+        this.stud_2 = studFromTables;
     }
 
-    public Colour[] getStud_2() {
+    public Colour[] getStudFromTables() {
         return stud_2;
     }
 
@@ -29,7 +29,7 @@ public class Move2StudCharacterMessage implements Message{
         return playerId;
     }
 
-    public Colour[] getStud() {
+    public Colour[] getStudFromBoard() {
         return stud;
     }
 
