@@ -186,16 +186,6 @@ public class Game {
         return currentPlayer;
     }
 
-    public void chooseAssistant(int assistantID, int playerID){
-        String notify = null;
-        try{
-            gameModel.getPlayer(playerID).setChoosenAssistant(assistantID);
-            nextPlayer();
-        }catch (IndexOutOfBoundsException e){
-            notify = "Assistant chosen id must be less than 10 and more than 0";
-        }
-    }
-
     public void checkNextOrder(){
         ArrayList<Player> tempPlayers = new ArrayList<>(gameModel.getPlayers());
         tempPlayers.sort(Comparator.comparingInt(p -> p.getChosen().getValue()));
@@ -231,6 +221,10 @@ public class Game {
                 startActionTurn();
             }
         }
+    }
+
+    public int getPlayersNumber(){
+        return playersNumber;
     }
 
     public ActionTurnHandler getTurnHandler()

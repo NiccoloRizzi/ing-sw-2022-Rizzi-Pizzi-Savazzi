@@ -57,7 +57,7 @@ public class GameModel {
 
     public int numberOfProfessors(Player p) {
         int num = 0;
-        for (Colour c : Colour.values()) {
+        for (Colour c : professors.keySet()) {
             num += (professors.get(c).equals(p)) ? 1 : 0;
         }
         return num;
@@ -85,7 +85,7 @@ public class GameModel {
         for (Colour c : Colour.values()) {
             extractedStud.put(c, 0);
         }
-        if (num >= 0 && num < getBagSize()) {
+        if (num >= 0 && num <= getBagSize()) {
             for (int i = 0; i < num; i++) {
                 Colour extracted = getRandomStudent();
 
@@ -97,7 +97,7 @@ public class GameModel {
     }
 
     public void moveMN(int moves) {
-        motherNature = (motherNature + moves) % 12;
+        motherNature = (motherNature + moves) % isles.size();
     }
 
     public HashMap<Colour, Player> getProfessors(){
