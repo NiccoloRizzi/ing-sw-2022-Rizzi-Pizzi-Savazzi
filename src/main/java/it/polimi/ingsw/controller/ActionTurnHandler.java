@@ -15,6 +15,8 @@ public class ActionTurnHandler {
     private CheckTowerStrategy checkTowerStrategy;
     private Phase phase;
 
+    private boolean usedCharacter;
+
     public ActionTurnHandler(int currentPlayer,GameModel gameModel,int numOfPlayers){
         this.currentPlayer = currentPlayer;
         this.gameModel = gameModel;
@@ -22,7 +24,7 @@ public class ActionTurnHandler {
         phase = Phase.STUDENTS;
         professorStrategy= new DefaultCheckProfessorStrategy();
         checkTowerStrategy = (numOfPlayers == 4)? new TeamCheckTowerStrategy() : new PlayerCheckTowerStrategy();
-
+        usedCharacter = false;
     }
 
     public void moveMn(int moves){
@@ -152,5 +154,12 @@ public class ActionTurnHandler {
 
     public int getCurrentPlayer() {
         return currentPlayer;
+    }
+    public boolean isUsedCharacter() {
+        return usedCharacter;
+    }
+    public void setUsedCharacter (boolean used)
+    {
+        usedCharacter = used;
     }
 }

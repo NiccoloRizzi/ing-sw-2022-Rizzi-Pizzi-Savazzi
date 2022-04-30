@@ -480,6 +480,7 @@ class MessageVisitorTest {
         assertFalse(game.getGameModel().getIsle(isle).removeProhibited());
         System.out.println(CharactersEnum.PROHIBITED.getPrice());
         messageVisitor.visit(new ProhibitedIsleCharacterMessage(0,player,isle));
+        game.getTurnHandler().setUsedCharacter(false);
         messageVisitor.visit(new ProhibitedIsleCharacterMessage(0,player,isle));
         assertEquals(2,game.getGameModel().getProhibited());
         assertTrue(game.getGameModel().getIsle(isle).removeProhibited());
