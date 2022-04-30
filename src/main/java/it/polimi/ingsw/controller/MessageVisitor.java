@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 import it.polimi.ingsw.messages.*;
@@ -9,12 +10,32 @@ import it.polimi.ingsw.model.Character;
 
 
 import java.util.ArrayList;
+import java.util.SplittableRandom;
 
 public class MessageVisitor {
 
     final Game game;
     public MessageVisitor(Game game){
         this.game = game;
+    }
+
+    private void useCharacter(int charId) {
+        if (game.getGameModel().getCharacter(charId).getUsed()){
+            game.getGameModel().getPlayer(game.getCurrentPlayer()).removeCoins(game.getGameModel().getCharacter(charId).getPrice());
+            try {
+                game.getGameModel().addCoins(game.getGameModel().getCharacter(charId).getPrice());
+            } catch (NotEnoughCoinsException e) {
+                e.printStackTrace();
+            }
+        } else {
+            game.getGameModel().getPlayer(game.getCurrentPlayer()).removeCoins(game.getGameModel().getCharacter(charId).getPrice());
+            try {
+                game.getGameModel().addCoins(game.getGameModel().getCharacter(charId).getPrice() - 1);
+            } catch (NotEnoughCoinsException e) {
+                e.printStackTrace();
+            }
+        }
+        game.getGameModel().getCharacter(charId).use();
     }
 
     public void visit(AssistantChoiceMessage assistantChoiceMessage){
@@ -188,8 +209,13 @@ public class MessageVisitor {
         String answer;
         if (game.isExpertMode()) {
             if (plus2MoveMnMessage.getPlayerId() == game.getCurrentPlayer()) {
-                game.getGameModel().getPlayer(game.getCurrentPlayer()).getChosen().Boost();
-                game.getGameModel().getCharacter(plus2MoveMnMessage.getCharacterId()).use();
+                if(game.getGameModel().getPlayer(game.getCurrentPlayer()).getCoins()>=game.getGameModel().getCharacter(plus2MoveMnMessage.getCharacterId()).getPrice()) {
+                    game.getGameModel().getPlayer(game.getCurrentPlayer()).getChosen().Boost();
+                    useCharacter(plus2MoveMnMessage.getCharacterId());
+
+                }else{
+                    answer = "Not enough coin";
+                }
             } else {
                 answer = "Not your turn";
             }
@@ -201,17 +227,20 @@ public class MessageVisitor {
         String answer;
         if(game.isExpertMode()) {
             if (prohibitedIsleCharacterMessage.getPlayerId() == game.getCurrentPlayer()) {
-                if(game.getGameModel().getProhibited() > 0) {
-                    try {
-                        game.getGameModel().getIsle(prohibitedIsleCharacterMessage.getIsleIndex()).setProhibited();
-                    } catch (TileOutOfBoundsException e) {
-                        answer = "Isle doesn't exist";
+                if(game.getGameModel().getPlayer(game.getCurrentPlayer()).getCoins()>=game.getGameModel().getCharacter(prohibitedIsleCharacterMessage.getCharId()).getPrice()) {
+                    if (game.getGameModel().getProhibited() > 0) {
+                        try {
+                            game.getGameModel().getIsle(prohibitedIsleCharacterMessage.getIsleIndex()).setProhibited();
+                        } catch (TileOutOfBoundsException e) {
+                            answer = "Isle doesn't exist";
+                        }
+                        game.getGameModel().useProhibited();
+                        useCharacter(prohibitedIsleCharacterMessage.getCharId());;
+                    } else {
+                        answer = "All 4 prohibited tile already in use";
                     }
-                    game.getGameModel().getCharacter(prohibitedIsleCharacterMessage.getCharId()).use();
-                    game.getGameModel().useProhibited();
-                }
-                else{
-                    answer = "All 4 prohibited tile already in use";
+                }else{
+                    answer = "Not enough coins";
                 }
             } else {
                 answer = "Not your turn";
@@ -225,29 +254,33 @@ public class MessageVisitor {
         String answer;
         if(game.isExpertMode()) {
             if (move6StudCharacterMessage.getPlayerId() == game.getCurrentPlayer()) {
-                CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(move6StudCharacterMessage.getCharId());
-                Board board = game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard();
-                for (Colour c : move6StudCharacterMessage.getStudFromBoard()) {
-                    try {
-                        board.removeStudent(c);
-                    } catch (StudentsOutOfBoundsException e) {
-                        answer = "student not valid";
+                if(game.getGameModel().getPlayer(game.getCurrentPlayer()).getCoins()>=game.getGameModel().getCharacter(move6StudCharacterMessage.getCharId()).getPrice()) {
+                    CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(move6StudCharacterMessage.getCharId());
+                    Board board = game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard();
+                    for (Colour c : move6StudCharacterMessage.getStudFromBoard()) {
+                        try {
+                            board.removeStudent(c);
+                        } catch (StudentsOutOfBoundsException e) {
+                            answer = "student not valid";
+                        }
+                        character.addStudent(c);
                     }
-                    character.addStudent(c);
+                    for (Colour c : move6StudCharacterMessage.getStudsFromChar()) {
+                        try {
+                            board.addToEntrance(c);
+                        } catch (StudentsOutOfBoundsException e) {
+                            answer = "entrance is full";
+                        }
+                        try {
+                            character.removeStudent(c);
+                        } catch (StudentsOutOfBoundsException e) {
+                            answer = "character is empty";
+                        }
+                    }
+                    useCharacter(move6StudCharacterMessage.getCharId());
+                }else {
+                    answer="Not enough coins";
                 }
-                for (Colour c : move6StudCharacterMessage.getStudsFromChar()) {
-                    try {
-                        board.addToEntrance(c);
-                    } catch (StudentsOutOfBoundsException e) {
-                        answer = "entrance is full";
-                    }
-                    try {
-                        character.removeStudent(c);
-                    } catch (StudentsOutOfBoundsException e) {
-                        answer = "character is empty";
-                    }
-                }
-                game.getGameModel().getCharacter(move6StudCharacterMessage.getCharId()).use();
             } else {
                 answer = "Not your turn";
             }
@@ -256,42 +289,47 @@ public class MessageVisitor {
             answer = "Not available in normal mode";
         }
     }
+
     public void visit(Move2StudCharacterMessage move2StudCharacterMessage){
         String answer;
         if(game.isExpertMode()) {
             if (move2StudCharacterMessage.getPlayerId() == game.getCurrentPlayer()) {
-                Board board = game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard();
-                for (Colour c : move2StudCharacterMessage.getStudFromBoard()) {
-                    try {
-                        board.removeStudent(c);
-                    } catch (StudentsOutOfBoundsException e) {
-                        answer = "student not valid";
-                    }
-                    try {
-                        board.addToTable(c);
-                    } catch (StudentsOutOfBoundsException e) {
-                        answer = "table is full";
-                    }
+                if(game.getGameModel().getPlayer(game.getCurrentPlayer()).getCoins()>=game.getGameModel().getCharacter(move2StudCharacterMessage.getCharId()).getPrice()) {
+                    Board board = game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard();
+                    for (Colour c : move2StudCharacterMessage.getStudFromBoard()) {
+                        try {
+                            board.removeStudent(c);
+                        } catch (StudentsOutOfBoundsException e) {
+                            answer = "student not valid";
+                        }
+                        try {
+                            board.addToTable(c);
+                        } catch (StudentsOutOfBoundsException e) {
+                            answer = "table is full";
+                        }
 
-                }
-                for (Colour c : move2StudCharacterMessage.getStudFromTables()) {
-                    try {
-                        board.addToEntrance(c);
-                    } catch (StudentsOutOfBoundsException e) {
-                        answer = "entrance is full";
                     }
-                    try {
-                        board.removeFromTable(c);
-                    } catch (StudentsOutOfBoundsException e) {
-                        answer = "table is empty";
+                    for (Colour c : move2StudCharacterMessage.getStudFromTables()) {
+                        try {
+                            board.addToEntrance(c);
+                        } catch (StudentsOutOfBoundsException e) {
+                            answer = "entrance is full";
+                        }
+                        try {
+                            board.removeFromTable(c);
+                        } catch (StudentsOutOfBoundsException e) {
+                            answer = "table is empty";
+                        }
                     }
-                    game.getGameModel().getCharacter(move2StudCharacterMessage.getCharId()).use();
-                }
-                for (Colour c : move2StudCharacterMessage.getStudFromTables()) {
-                    game.getTurnHandler().checkProfessor(c);
-                }
-                for (Colour c : move2StudCharacterMessage.getStudFromBoard()) {
-                    game.getTurnHandler().checkProfessor(c);
+                    useCharacter(move2StudCharacterMessage.getCharId());
+                    for (Colour c : move2StudCharacterMessage.getStudFromTables()) {
+                        game.getTurnHandler().checkProfessor(c);
+                    }
+                    for (Colour c : move2StudCharacterMessage.getStudFromBoard()) {
+                        game.getTurnHandler().checkProfessor(c);
+                    }
+                }else{
+                    answer="Not enough coins";
                 }
             } else {
                 answer = "Not your turn";
@@ -305,17 +343,22 @@ public class MessageVisitor {
         String answer;
         if(game.isExpertMode()) {
             if (remove3StudCharacterMessage.getPlayerId() == game.getCurrentPlayer()) {
-                for (Player p : game.getGameModel().getPlayers()) {
-                    for (int i = 0; i < 3; i++) {
-                        try {
-                            p.getBoard().removeFromTable(remove3StudCharacterMessage.getColour());
-                        } catch (StudentsOutOfBoundsException e) {
-                            e.printStackTrace();
+                if(game.getGameModel().getPlayer(game.getCurrentPlayer()).getCoins()>=game.getGameModel().getCharacter(remove3StudCharacterMessage.getCharId()).getPrice()) {
+
+                    for (Player p : game.getGameModel().getPlayers()) {
+                        for (int i = 0; i < 3; i++) {
+                            try {
+                                p.getBoard().removeFromTable(remove3StudCharacterMessage.getColour());
+                            } catch (StudentsOutOfBoundsException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
+                    useCharacter(remove3StudCharacterMessage.getCharId());
+                    answer = "Player" + game.getGameModel().getPlayer(game.getCurrentPlayer()).getNickname() + "used character to remove 3 student";
+                }else{
+                    answer ="Not enough coins";
                 }
-                game.getGameModel().getCharacter(remove3StudCharacterMessage.getCharId()).use();
-                answer = "Player" + game.getGameModel().getPlayer(game.getCurrentPlayer()).getNickname() + "used character to remove 3 student";
             } else {
                 answer = "Not your turn";
             }

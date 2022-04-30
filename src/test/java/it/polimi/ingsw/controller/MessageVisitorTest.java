@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 import it.polimi.ingsw.messages.*;
@@ -309,12 +310,23 @@ class MessageVisitorTest {
         game.startActionTurn();
         game.getGameModel().setCharacter_DEBUG(0,CharactersEnum.PLUS_2_MN);
         int player = game.getCurrentPlayer();
+        for(int i = 0; i < 5; i++) {
+            try {
+                game.getGameModel().removeCoin();
+                game.getGameModel().getPlayer(player).addCoin();
+            }catch(NotEnoughCoinsException e) {
+                e.printStackTrace();
+            }
+        }
         game.getGameModel().getPlayer(player).setChoosenAssistant(0);
         Assistant a = game.getGameModel().getPlayer(player).getChosen();
         int moves = a.getMn_moves() + a.getBoost();
         messageVisitor.visit(new Plus2MoveMnMessage(0,player));
         assertEquals(moves+2,a.getMn_moves()+a.getBoost());
         assertEquals(CharactersEnum.PLUS_2_MN.getPrice()+1,game.getGameModel().getCharacter(0).getPrice());
+
+
+        assertEquals(6-CharactersEnum.PLUS_2_MN.getPrice(),game.getGameModel().getPlayer(player).getCoins());
     }
 
     @Test
@@ -328,14 +340,26 @@ class MessageVisitorTest {
         game.startActionTurn();
         game.getGameModel().setCharacter_DEBUG(0,CharactersEnum.PROHIBITED);
         int player = game.getCurrentPlayer();
+        for(int i = 0; i < 5; i++) {
+            try {
+                game.getGameModel().removeCoin();
+                game.getGameModel().getPlayer(player).addCoin();
+            }catch(NotEnoughCoinsException e) {
+                e.printStackTrace();
+            }
+        }
         int isle = new Random().nextInt(12);
         assertFalse(game.getGameModel().getIsle(isle).removeProhibited());
+        System.out.println(CharactersEnum.PROHIBITED.getPrice());
         messageVisitor.visit(new ProhibitedIsleCharacterMessage(0,player,isle));
         messageVisitor.visit(new ProhibitedIsleCharacterMessage(0,player,isle));
         assertEquals(2,game.getGameModel().getProhibited());
         assertTrue(game.getGameModel().getIsle(isle).removeProhibited());
         assertTrue(game.getGameModel().getIsle(isle).removeProhibited());
         assertFalse(game.getGameModel().getIsle(isle).removeProhibited());
+
+
+       assertEquals(6-2*CharactersEnum.PROHIBITED.getPrice()-1,game.getGameModel().getPlayer(player).getCoins());
     }
 
     @Test
@@ -349,7 +373,14 @@ class MessageVisitorTest {
         game.startActionTurn();
         game.getGameModel().setCharacter_DEBUG(0, CharactersEnum.EXCHANGE_3_STUD);
         int player = game.getCurrentPlayer();
-
+        for(int i = 0; i < 5; i++) {
+            try {
+                game.getGameModel().removeCoin();
+                game.getGameModel().getPlayer(player).addCoin();
+            }catch(NotEnoughCoinsException e) {
+                e.printStackTrace();
+            }
+        }
         CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(0);
         character.addStudent(Colour.Gnomes);
         character.addStudent(Colour.Dragons);
@@ -388,6 +419,9 @@ class MessageVisitorTest {
         assertEquals(expectedC.get(Colour.Frogs) + 1, character.getStudents(Colour.Frogs));
         assertEquals(expectedC.get(Colour.Unicorns) + 1, character.getStudents(Colour.Unicorns));
         assertEquals(expectedC.get(Colour.Fairies) + 1, character.getStudents(Colour.Fairies));
+
+
+        assertEquals(6-CharactersEnum.EXCHANGE_3_STUD.getPrice(),game.getGameModel().getPlayer(player).getCoins());
     }
 
     @Test
@@ -401,6 +435,14 @@ class MessageVisitorTest {
         game.startActionTurn();
         game.getGameModel().setCharacter_DEBUG(0, CharactersEnum.EXCHANGE_2_STUD);
         int player = game.getCurrentPlayer();
+        for(int i = 0; i < 5; i++) {
+            try {
+                game.getGameModel().removeCoin();
+                game.getGameModel().getPlayer(player).addCoin();
+            }catch(NotEnoughCoinsException e) {
+                e.printStackTrace();
+            }
+        }
         Board board = game.getGameModel().getPlayer(player).getBoard();
         for(Colour c: Colour.values()) {
             try {
@@ -438,6 +480,8 @@ class MessageVisitorTest {
         assertEquals(tables.get(Colour.Fairies)+1,board.getTable(Colour.Fairies));
         assertEquals(tables.get(Colour.Unicorns)+1,board.getTable(Colour.Unicorns));
 
+
+        assertEquals(6-CharactersEnum.EXCHANGE_2_STUD.getPrice(),game.getGameModel().getPlayer(player).getCoins());
     }
 
     @Test
@@ -451,6 +495,14 @@ class MessageVisitorTest {
         game.startActionTurn();
         game.getGameModel().setCharacter_DEBUG(0, CharactersEnum.REMOVE_3_STUD);
         int player = game.getCurrentPlayer();
+        for(int i = 0; i < 5; i++) {
+            try {
+                game.getGameModel().removeCoin();
+                game.getGameModel().getPlayer(player).addCoin();
+            }catch(NotEnoughCoinsException e) {
+                e.printStackTrace();
+            }
+        }
         Colour colour = Colour.values()[(new Random()).nextInt(5)];
         HashMap<Player,Integer> playerStud = new HashMap<>();
         int i = 1;
@@ -470,5 +522,6 @@ class MessageVisitorTest {
         {
             assertEquals((playerStud.get(p)-3<0)?0:playerStud.get(p)-3,p.getBoard().getTable(colour));
         }
+        assertEquals(6-CharactersEnum.REMOVE_3_STUD.getPrice(),game.getGameModel().getPlayer(player).getCoins());
     }
 }

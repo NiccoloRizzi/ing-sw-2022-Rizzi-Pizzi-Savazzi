@@ -141,6 +141,12 @@ public class Game {
 
         for(Player p : gameModel.getPlayers()){
             p.createBoard((playersNumber == 3)?6:8);
+            p.addCoin();
+            try {
+                gameModel.removeCoin();
+            }catch (NotEnoughCoinsException e){
+                e.printStackTrace();
+            }
             try {
                 p.getBoard().addStudents(gameModel.extractStudents((playersNumber == 3) ? 9 : 7));
             }catch(StudentsOutOfBoundsException e){

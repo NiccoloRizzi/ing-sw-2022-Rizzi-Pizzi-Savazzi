@@ -145,4 +145,9 @@ public class Player {
         }
         return false;
     }
+
+    public void removeCoins(int coins)
+    {
+        this.coins = this.coins-coins;
+    }
 }

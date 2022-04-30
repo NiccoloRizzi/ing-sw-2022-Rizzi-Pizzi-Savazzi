@@ -26,5 +26,9 @@ public class Character {
         }
     }
 
+    public boolean getUsed()
+    {
+        return used;
+    }
 
 }
