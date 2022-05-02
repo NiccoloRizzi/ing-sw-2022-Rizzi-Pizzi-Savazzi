@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
+import it.polimi.ingsw.exceptions.TowerOutOfBoundException;
 import it.polimi.ingsw.model.*;
 
 import java.util.HashMap;
@@ -37,6 +38,8 @@ public class TeamCheckTowerStrategy implements CheckTowerStrategy {
 
             }
         }catch(TileOutOfBoundsException e){
+            e.printStackTrace();
+        } catch (TowerOutOfBoundException e) {
             e.printStackTrace();
         }
 

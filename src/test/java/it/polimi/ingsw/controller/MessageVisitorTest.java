@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.exceptions.NotEnoughCoinsException;
+import it.polimi.ingsw.exceptions.PlayerOutOfBoundException;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 import it.polimi.ingsw.messages.*;
@@ -57,7 +58,7 @@ class MessageVisitorTest {
     }
 
 
-    public void setupGame(Phase phase, int playersNumber, boolean expertMode){
+    public void setupGame(Phase phase, int playersNumber, boolean expertMode) throws PlayerOutOfBoundException {
         game = new Game(playersNumber, expertMode);
         game.createPlayer("Alberto");
         game.createPlayer("Lorenzo");
@@ -98,7 +99,7 @@ class MessageVisitorTest {
     }
 
     @Test
-    void visitAssistantMessageTest() {
+    void visitAssistantMessageTest() throws PlayerOutOfBoundException {
         Game game = new Game(4, true);
         game.createPlayer("Alberto");
         game.createPlayer("Lorenzo");
@@ -117,7 +118,7 @@ class MessageVisitorTest {
     }
 
     @Test
-    void testVisitMoveStudentMessage() {
+    void testVisitMoveStudentMessage() throws PlayerOutOfBoundException {
         //toIsle
         setupGame(Phase.STUDENTS,4,true);
         int playerId = game.getActionOrder().get(0);
@@ -147,7 +148,7 @@ class MessageVisitorTest {
     }
 
     @Test
-    void testVisitMotherNatureMessage() {
+    void testVisitMotherNatureMessage() throws PlayerOutOfBoundException {
                 setupGame(Phase.MOTHERNATURE, 4, true);
                 System.out.println(game.getGameModel().getIsles().size());
                 Random rand = new Random();
@@ -161,7 +162,7 @@ class MessageVisitorTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0,1,2,3})
-    void testVisitCloudChoiceMessage(int cloudId){
+    void testVisitCloudChoiceMessage(int cloudId) throws PlayerOutOfBoundException {
         setupGame(Phase.CLOUD,4,true);
         int playerId = game.getCurrentPlayer();
         CloudChoiceMessage ccm = new CloudChoiceMessage(playerId,cloudId);
@@ -191,7 +192,7 @@ class MessageVisitorTest {
 
     @ParameterizedTest
     @MethodSource("argsA")
-    void testVisitIsleInfluenceCharacterMessage(CharactersEnum charType, int playerNum) throws TileOutOfBoundsException, NotEnoughCoinsException {
+    void testVisitIsleInfluenceCharacterMessage(CharactersEnum charType, int playerNum) throws TileOutOfBoundsException, NotEnoughCoinsException, PlayerOutOfBoundException {
 
         // Test observes the influence based on this isle, character, player (or team), faction and colors
         final int CHAR_ID = 0;
@@ -219,7 +220,7 @@ class MessageVisitorTest {
         HashMap<Colour, Player> professors = gameModel.getProfessors();
 
         // Setup test background
-        for(int i = 0; i < 3; i++){ player_a.addCoin(); gameModel.removeCoin();}
+        for(int i = 0; i < 3; i++){ gameModel.giveCoin(player_a);}
         player_a.createBoard((playerNum == 3)?6:8);
         player_b.createBoard((playerNum == 3)?6:8);
         player_a.assignFaction(FACTION);
@@ -267,7 +268,7 @@ class MessageVisitorTest {
 
     @ParameterizedTest
     @MethodSource("argsB")
-    void testVisitMoveStudentCharacterMessage(Colour colour, CharactersEnum charType) throws TileOutOfBoundsException, NotEnoughCoinsException {
+    void testVisitMoveStudentCharacterMessage(Colour colour, CharactersEnum charType) throws TileOutOfBoundsException, NotEnoughCoinsException, PlayerOutOfBoundException {
 
         // Test observes the behaviour based on these variables
         final int CHAR_ID = 0;
@@ -289,7 +290,7 @@ class MessageVisitorTest {
 
         // Setup test background
         player.createBoard(8);
-        for(int i = 0; i < 3; i++){ player.addCoin(); gameModel.removeCoin(); }
+        for(int i = 0; i < 3; i++){ gameModel.giveCoin(player); }
         for(int i = 0; i < 4; i++){
             for(Colour c : Colour.values()){
                 try{
@@ -344,7 +345,7 @@ class MessageVisitorTest {
 
     @ParameterizedTest
     @MethodSource("argsC")
-    void testVisitStrategyProfessorMessage(Colour colour) throws StudentsOutOfBoundsException, NotEnoughCoinsException {
+    void testVisitStrategyProfessorMessage(Colour colour) throws StudentsOutOfBoundsException, NotEnoughCoinsException, PlayerOutOfBoundException {
 
         // Referent constants
         final int PLAYER_ID_A = 0;
@@ -370,7 +371,7 @@ class MessageVisitorTest {
         Board boardB = playerB.getBoard();
 
         // Before test condition
-        for(int i = 0; i < 5; i++){ playerA.addCoin(); gameModel.removeCoin(); }
+        for(int i = 0; i < 5; i++){ gameModel.giveCoin(playerA); }
         boardA.addToTable(colour);
         turn.setCurrentPlayer(playerA);
         game.setCurrentPlayer(playerA.getID());
@@ -402,7 +403,7 @@ class MessageVisitorTest {
     }
 
     @Test
-    void testVisitSimilMotherNatureMesage() throws TileOutOfBoundsException, NotEnoughCoinsException {
+    void testVisitSimilMotherNatureMesage() throws TileOutOfBoundsException, NotEnoughCoinsException, PlayerOutOfBoundException {
 
         // Referent constants
         final int PLAYER_ID_A = 0;
@@ -428,7 +429,7 @@ class MessageVisitorTest {
         Isle isleS = gameModel.getIsle((ISLE_ID + 1) % 12);
 
         // Setting background
-        for(int i = 0; i < 7; i++){ playerA.addCoin(); gameModel.removeCoin(); }
+        for(int i = 0; i < 7; i++){ playerA.addCoin();  }
         playerA.assignFaction(Faction.Black);
         playerB.assignFaction(Faction.White);
         gameModel.setProfessor(Colour.Fairies, playerA);
@@ -453,8 +454,7 @@ class MessageVisitorTest {
     }
 
     @Test
-    void testVisitPlus2MoveMnMessage()
-    {
+    void testVisitPlus2MoveMnMessage() throws PlayerOutOfBoundException {
         Game game = new Game(2,true);
         MessageVisitor messageVisitor = new MessageVisitor(game);
         game.createPlayer("A");
@@ -464,12 +464,7 @@ class MessageVisitorTest {
         game.getGameModel().setCharacter_DEBUG(0,CharactersEnum.PLUS_2_MN);
         int player = game.getCurrentPlayer();
         for(int i = 0; i < 5; i++) {
-            try {
-                game.getGameModel().removeCoin();
-                game.getGameModel().getPlayer(player).addCoin();
-            }catch(NotEnoughCoinsException e) {
-                e.printStackTrace();
-            }
+            game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
         }
         game.getGameModel().getPlayer(player).setChoosenAssistant(0);
         Assistant a = game.getGameModel().getPlayer(player).getChosen();
@@ -483,8 +478,7 @@ class MessageVisitorTest {
     }
 
     @Test
-    void testVisitProhibitedIsleCharacterMessage() throws TileOutOfBoundsException
-    {
+    void testVisitProhibitedIsleCharacterMessage() throws TileOutOfBoundsException, PlayerOutOfBoundException {
         Game game = new Game(2,true);
         MessageVisitor messageVisitor = new MessageVisitor(game);
         game.createPlayer("A");
@@ -494,12 +488,7 @@ class MessageVisitorTest {
         game.getGameModel().setCharacter_DEBUG(0,CharactersEnum.PROHIBITED);
         int player = game.getCurrentPlayer();
         for(int i = 0; i < 5; i++) {
-            try {
-                game.getGameModel().removeCoin();
-                game.getGameModel().getPlayer(player).addCoin();
-            }catch(NotEnoughCoinsException e) {
-                e.printStackTrace();
-            }
+            game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
         }
         int isle = new Random().nextInt(12);
         assertFalse(game.getGameModel().getIsle(isle).removeProhibited());
@@ -517,7 +506,7 @@ class MessageVisitorTest {
     }
 
     @Test
-    void testVisitMove6StudCharacterMessage() throws TileOutOfBoundsException {
+    void testVisitMove6StudCharacterMessage() throws TileOutOfBoundsException, PlayerOutOfBoundException {
         Game game = new Game(3, true);
         MessageVisitor messageVisitor = new MessageVisitor(game);
         game.createPlayer("A");
@@ -528,12 +517,7 @@ class MessageVisitorTest {
         game.getGameModel().setCharacter_DEBUG(0, CharactersEnum.EXCHANGE_3_STUD);
         int player = game.getCurrentPlayer();
         for(int i = 0; i < 5; i++) {
-            try {
-                game.getGameModel().removeCoin();
-                game.getGameModel().getPlayer(player).addCoin();
-            }catch(NotEnoughCoinsException e) {
-                e.printStackTrace();
-            }
+            game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
         }
         CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(0);
         character.addStudent(Colour.Gnomes);
@@ -579,7 +563,7 @@ class MessageVisitorTest {
     }
 
     @Test
-    void testVisitMove2StudCharacterMessage() throws StudentsOutOfBoundsException {
+    void testVisitMove2StudCharacterMessage() throws StudentsOutOfBoundsException, PlayerOutOfBoundException {
         Game game = new Game(3, true);
         MessageVisitor messageVisitor = new MessageVisitor(game);
         game.createPlayer("A");
@@ -590,12 +574,7 @@ class MessageVisitorTest {
         game.getGameModel().setCharacter_DEBUG(0, CharactersEnum.EXCHANGE_2_STUD);
         int player = game.getCurrentPlayer();
         for(int i = 0; i < 5; i++) {
-            try {
-                game.getGameModel().removeCoin();
-                game.getGameModel().getPlayer(player).addCoin();
-            }catch(NotEnoughCoinsException e) {
-                e.printStackTrace();
-            }
+            game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
         }
         Board board = game.getGameModel().getPlayer(player).getBoard();
         for(Colour c: Colour.values()) {
@@ -639,7 +618,7 @@ class MessageVisitorTest {
     }
 
     @Test
-    void testVisitRemove3StudCharacterMessage() throws StudentsOutOfBoundsException {
+    void testVisitRemove3StudCharacterMessage() throws StudentsOutOfBoundsException, PlayerOutOfBoundException {
         Game game = new Game(3, true);
         MessageVisitor messageVisitor = new MessageVisitor(game);
         game.createPlayer("A");
@@ -650,12 +629,7 @@ class MessageVisitorTest {
         game.getGameModel().setCharacter_DEBUG(0, CharactersEnum.REMOVE_3_STUD);
         int player = game.getCurrentPlayer();
         for(int i = 0; i < 5; i++) {
-            try {
-                game.getGameModel().removeCoin();
-                game.getGameModel().getPlayer(player).addCoin();
-            }catch(NotEnoughCoinsException e) {
-                e.printStackTrace();
-            }
+            game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
         }
         Colour colour = Colour.values()[(new Random()).nextInt(5)];
         HashMap<Player,Integer> playerStud = new HashMap<>();

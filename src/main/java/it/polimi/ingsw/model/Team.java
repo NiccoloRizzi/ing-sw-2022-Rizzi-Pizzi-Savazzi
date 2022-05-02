@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.TowerOutOfBoundException;
+
 import java.util.ArrayList;
 
 /*UML Changes
@@ -38,7 +40,7 @@ public class Team {
         return players.get(1); // ATTENTION
     }
 
-    public void useTowers(int t){
+    public void useTowers(int t) throws TowerOutOfBoundException{
         if(towers>=t) {
             towers-=t;
             players.get(0).getBoard().useTowers(t);
@@ -46,7 +48,7 @@ public class Team {
         }
     }
 
-    public void addTowers(int t){
+    public void addTowers(int t) throws TowerOutOfBoundException {
         if(towers+t<=8){
             towers+=t;
             players.get(0).getBoard().addTowers(t);

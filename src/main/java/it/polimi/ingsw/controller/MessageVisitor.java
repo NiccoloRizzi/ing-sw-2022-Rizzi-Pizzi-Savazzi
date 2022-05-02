@@ -153,7 +153,7 @@ public class MessageVisitor {
                             Isle isle = game.getGameModel().getIsle(tileId);
                             Board board = game.getGameModel().getPlayer(playerId).getBoard();
                             character.removeStudent(stud);
-                            character.addStudent(game.getGameModel().getRandomStudent());
+                            character.addStudent(game.getGameModel().extractRandomStudent());
                             switch (character.getCard()) {
                                 case ONE_STUD_TO_ISLE:
                                     isle.addStudent(stud);

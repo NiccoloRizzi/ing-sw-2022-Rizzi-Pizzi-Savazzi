@@ -1,7 +1,9 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.exceptions.PlayerOutOfBoundException;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
+import it.polimi.ingsw.exceptions.TowerOutOfBoundException;
 import it.polimi.ingsw.messages.AssistantChoiceMessage;
 import it.polimi.ingsw.messages.MoveStudentMessage;
 import it.polimi.ingsw.model.Colour;
@@ -24,7 +26,7 @@ class GameTest {
     Game game;
 
 
-    void setup(int players, boolean expertMode){
+    void setup(int players, boolean expertMode) throws PlayerOutOfBoundException {
         game = new Game(players,expertMode);
         game.createPlayer("Giorgio");
         game.createPlayer("Fabrizio");
@@ -37,7 +39,7 @@ class GameTest {
     }
 
     @Test
-    void alreadyUsed(){
+    void alreadyUsed() throws PlayerOutOfBoundException {
         setup(4,true);
         Player player = game.getGameModel().getPlayer(game.getCurrentPlayer());
         assertFalse(game.alreadyUsed(0));
@@ -48,7 +50,7 @@ class GameTest {
 
     @ParameterizedTest
     @ValueSource(ints ={1,2,3,4})
-    void getWinner(int typeCheck){
+    void getWinner(int typeCheck) throws TowerOutOfBoundException, PlayerOutOfBoundException {
         setup(3,true);
         Player player1 = game.getGameModel().getPlayer(0);
         Player player2 = game.getGameModel().getPlayer(1);
@@ -73,7 +75,7 @@ class GameTest {
 
     @ParameterizedTest
     @ValueSource(ints ={1,2,3,4})
-    void checkEnd(int typeCheck) {
+    void checkEnd(int typeCheck) throws TowerOutOfBoundException, PlayerOutOfBoundException {
         setup(4,true);
         Player player = game.getGameModel().getPlayer(0);
         switch(typeCheck) {
@@ -125,7 +127,7 @@ class GameTest {
 
     @ParameterizedTest
     @ValueSource(ints = {2,3,4})
-    void setupGame(int players) throws TileOutOfBoundsException {
+    void setupGame(int players) throws TileOutOfBoundsException, PlayerOutOfBoundException {
         HashMap<Colour, Integer> students = new HashMap<>();
         for(Colour c: Colour.values()){
             students.put(c,0);
@@ -158,7 +160,7 @@ class GameTest {
 
     @Test
     @CsvSource({"2,3,ciao"})
-    void createPlayer() {
+    void createPlayer() throws PlayerOutOfBoundException {
         Game game = new Game(2, true);
         game.createPlayer("Giorgio");
         game.createPlayer("Paolo");
@@ -171,7 +173,7 @@ class GameTest {
 
     @ParameterizedTest
     @ValueSource(ints = {2,3,4})
-    void getCurrentPlayer(int players) {
+    void getCurrentPlayer(int players) throws PlayerOutOfBoundException {
         setup(players,true);
         for(int i = 0; i<game.getPlanningOrder().size(); i++){
             assertEquals(game.getPlanningOrder().get(i),(game.getCurrentPlayer()+i)%game.getPlanningOrder().size());
@@ -180,7 +182,7 @@ class GameTest {
 
 
     @Test
-    void checkNextOrder() {
+    void checkNextOrder() throws PlayerOutOfBoundException {
         setup(4,true);
         MessageVisitor mv = new MessageVisitor(game);
         ArrayList<Integer> order = new ArrayList<>(game.getPlanningOrder());
