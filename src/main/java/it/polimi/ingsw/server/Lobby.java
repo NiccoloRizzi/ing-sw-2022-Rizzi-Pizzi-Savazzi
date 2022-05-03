@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Lobby {
     private ArrayList<PlayerConnection> players;
     private final int numOfPlayer;
-    private final boolean mode;
+    private final boolean expertMode;
     private Server server;
     private Game game;
     private MessageVisitor messageVisitor;
@@ -18,7 +18,7 @@ public class Lobby {
     public Lobby (int numOfPlayer,boolean mode, Server server)
     {
         this.numOfPlayer=numOfPlayer;
-        this.mode = mode;
+        this.expertMode = mode;
         this.server = server;
         started = false;
     }
@@ -31,14 +31,14 @@ public class Lobby {
         return numOfPlayer;
     }
 
-    public boolean isMode() {
+    public boolean isExpertModeMode() {
         return mode;
     }
 
     public synchronized boolean  addPlayer(PlayerConnection player)
     {
         for(PlayerConnection p: players){
-            if(!p.checkConnection())
+            if(!p.isActive())
             {
                 closeLobby();
                 return false;
@@ -62,12 +62,12 @@ public class Lobby {
         game = new Game(numOfPlayer,mode);
         messageVisitor = new MessageVisitor(game);
         for(PlayerConnection player: players){
-            game.createPlayer(PlayerConnection.getNickname());
+            game.createPlayer(player.getNickname());
             player.setMessageVisitor(messageVisitor);
         }
         for(PlayerConnection player: players) {
          //invio messaggio di inizio partita
-            new thread(player).start();
+            new Thread(player).start();
         }
     }
 
@@ -77,5 +77,31 @@ public class Lobby {
             player.closeConnection();
         }
         server.removeLobby(this);
+    }
+
+    public void deregister(PlayerConnection player)
+    {
+        for(PlayerConnection p: players){
+            if(!p.equal(player))
+//              player.send(); messaggio giocatore disconnesso
+        }
+        closeLobby();
+    }
+
+    public void gameEnd(){
+        for(PlayerConnection p: players){
+            if(!p.equal(player))
+//              player.send(); messaggio vittoria
+        }
+        closeLobby();
+    }
+
+    public ArrayList<String> getNicknames()
+    {
+        ArrayList<String> temp = new ArrayList<>();
+        for(PlayerConnection player: players) {
+            temp.add(player.getNickname());
+        }
+        return temp;
     }
 }
