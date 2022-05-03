@@ -14,15 +14,15 @@ public class SimilMotherNatureMesage implements Message{
         this.isleIndex = isleIndex;
     }
 
-    public int getCharacterId() {
+    public int getCharacterID() {
         return characterId;
     }
 
-    public int getPlayerId() {
+    public int getPlayerID() {
         return playerId;
     }
 
-    public int getIsleIndex() {
+    public int getIsleID() {
         return isleIndex;
     }
 

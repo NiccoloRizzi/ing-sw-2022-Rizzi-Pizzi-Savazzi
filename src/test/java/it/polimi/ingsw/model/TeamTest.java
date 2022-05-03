@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.TowerOutOfBoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -67,7 +68,7 @@ class TeamTest {
     }
 
     @Test
-    void useAddTowers(){
+    void useAddTowers() throws TowerOutOfBoundException {
         Team t = new Team();
         Player p1 = new Player(0,"Giorgio");
         Player p2 = new Player(1, "Fabrizio");

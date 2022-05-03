@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
+import it.polimi.ingsw.exceptions.TowerOutOfBoundException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -78,15 +79,19 @@ public class Board extends Tile{
             throw new StudentsOutOfBoundsException();
     }
 
-    public void addTowers(int t){
+    public void addTowers(int t) throws TowerOutOfBoundException{
         if(towers+t<=towersLimit){
             towers+=t;
+        }else{
+            throw new TowerOutOfBoundException();
         }
     }
 
-    public void useTowers(int t){
+    public void useTowers(int t) throws TowerOutOfBoundException{
         if(towers>=t){
             towers-=t;
+        }else{
+            throw new TowerOutOfBoundException();
         }
     }
 

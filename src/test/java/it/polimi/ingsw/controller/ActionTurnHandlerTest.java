@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.exceptions.PlayerOutOfBoundException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 import it.polimi.ingsw.model.AggregatedIsland;
 import it.polimi.ingsw.model.Colour;
@@ -15,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ActionTurnHandlerTest {
 
     @Test
-    void moveMn() {
+    void moveMn() throws PlayerOutOfBoundException {
         Game game = new Game(2,false);
         game.createPlayer("A");
         game.createPlayer("B");
@@ -45,7 +46,7 @@ class ActionTurnHandlerTest {
         }
     }
     @Test
-    void moveMn4() {
+    void moveMn4() throws PlayerOutOfBoundException {
         Game game = new Game(4, false);
         game.createPlayer("A");
         game.createPlayer("B");
@@ -77,7 +78,7 @@ class ActionTurnHandlerTest {
     }
 
     @Test
-    void moveStudentToIsle() {
+    void moveStudentToIsle() throws PlayerOutOfBoundException {
         Game game = new Game(2,false);
         Random rand = new Random();
         game.createPlayer("A");
@@ -114,7 +115,7 @@ class ActionTurnHandlerTest {
     }
 
     @Test
-    void moveStudentToTable() {
+    void moveStudentToTable() throws PlayerOutOfBoundException {
         Game game = new Game(2, false);
         Random rand = new Random();
         game.createPlayer("A");
@@ -136,7 +137,7 @@ class ActionTurnHandlerTest {
     }
 
     @Test
-    void moveFromCloud() {
+    void moveFromCloud() throws PlayerOutOfBoundException {
         Game game = new Game(2, false);
         Random rand = new Random();
         game.createPlayer("A");
@@ -159,7 +160,7 @@ class ActionTurnHandlerTest {
     }
 
     @Test
-    void checkIsleJoin() {
+    void checkIsleJoin() throws PlayerOutOfBoundException {
         Game game = new Game(2, false);
         int rand = new Random().nextInt(12);
         game.createPlayer("A");
@@ -189,7 +190,7 @@ class ActionTurnHandlerTest {
     }
 
     @Test
-    void getStudentsToMove() {
+    void getStudentsToMove() throws PlayerOutOfBoundException {
         Game game = new Game(2, false);
         int rand = new Random().nextInt(12);
         game.createPlayer("A");
@@ -207,7 +208,7 @@ class ActionTurnHandlerTest {
     }
 
     @Test
-    void getPhase() {
+    void getPhase() throws PlayerOutOfBoundException {
         Game game = new Game(2, false);
         int rand = new Random().nextInt(12);
         game.createPlayer("A");

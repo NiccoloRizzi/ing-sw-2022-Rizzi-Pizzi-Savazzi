@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
+import it.polimi.ingsw.exceptions.TowerOutOfBoundException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -68,7 +69,7 @@ class BoardTest {
 
     @ParameterizedTest
     @ValueSource(ints = {6,8})
-    void useAddTowers(int k) {
+    void useAddTowers(int k) throws TowerOutOfBoundException {
         Board board = new Board(Faction.Black, k);
         assertEquals(board.getTowers(),k);
         board.useTowers(1);
@@ -146,7 +147,7 @@ class BoardTest {
 
     @ParameterizedTest
     @ValueSource(ints ={6,8})
-    void getTowers(int param) {
+    void getTowers(int param) throws TowerOutOfBoundException {
         Board board = new Board(Faction.Black, param);
         assertEquals(board.getTowers(),param);
         board.useTowers(1);

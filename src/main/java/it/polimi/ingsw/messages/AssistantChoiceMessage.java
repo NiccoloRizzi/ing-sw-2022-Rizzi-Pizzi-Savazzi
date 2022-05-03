@@ -12,11 +12,11 @@ public class AssistantChoiceMessage implements Message{
         this.playerId = playerId;
     }
 
-    public int getAssistantId() {
+    public int getAssistantID() {
         return assistantId;
     }
 
-    public int getPlayerId() {
+    public int getPlayerID() {
         return playerId;
     }
 

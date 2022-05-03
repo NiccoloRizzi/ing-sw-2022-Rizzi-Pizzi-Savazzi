@@ -87,7 +87,7 @@ public class GameModel {
         }
         if (num >= 0 && num <= getBagSize()) {
             for (int i = 0; i < num; i++) {
-                Colour extracted = getRandomStudent();
+                Colour extracted = extractRandomStudent();
 
                     extractedStud.put(extracted, extractedStud.get(extracted) + 1);
             }
@@ -200,12 +200,14 @@ public class GameModel {
         return bag.get(c);
     }
 
-    public void addPlayer(int id, String nickname) {
+    public void addPlayer(int id, String nickname) throws PlayerOutOfBoundException{
         if (players.size() < numOfPlayers){
             Player p = new Player(id, nickname);
             players.add(p);
             if (numOfPlayers == 4)
                 teams.get(id > 1 ? 1 : 0).addPlayer(p);
+        }else{
+            throw new PlayerOutOfBoundException();
         }
     }
 
@@ -216,7 +218,7 @@ public class GameModel {
             activeCharacters.set(pos, new Character(character));
     }
 
-    public Colour getRandomStudent () throws StudentsOutOfBoundsException{
+    public Colour extractRandomStudent() throws StudentsOutOfBoundsException{
         Random rand = new Random();
         int selected = rand.nextInt(getBagSize());
 
@@ -251,7 +253,6 @@ public class GameModel {
 
     public void setProfessor(Colour c, Player p)
     {
-        // professors.replace(c,p);
         professors.put(c, p);
     }
 
@@ -313,4 +314,18 @@ public class GameModel {
             }
         }
     }
+
+    public void giveCoin(Player p){
+        String answer = null;
+        try{
+            removeCoin();
+            getPlayer(p.getID()).addCoin();
+        } catch (NotEnoughCoinsException e) {
+            e.printStackTrace();
+            answer = "Available coins finished";
+        }
+    }
+
+
+
 }

@@ -12,7 +12,7 @@ public class MoveMotherNatureMessage implements Message{
         this.moves = moves;
     }
 
-    public int getPlayerId() {
+    public int getPlayerID() {
         return playerId;
     }
 

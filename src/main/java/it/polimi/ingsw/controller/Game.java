@@ -76,15 +76,6 @@ public class Game {
         return planningPhase;
     }
 
-    public void giveCoin(Player p){
-//        try{
-//            gameModel.removeCoin();
-//            gameModel.getPlayer(p.getID()).addCoin();
-//        }catch(NotEnoughCoinsException e){
-//            // WHAT??? TELL THE PLAYER THE COINS ARE FINISHED?
-//        }
-    }
-
     public ArrayList<Integer> getPlanningOrder() {
         return planningOrder;
     }
@@ -141,12 +132,7 @@ public class Game {
 
         for(Player p : gameModel.getPlayers()){
             p.createBoard((playersNumber == 3)?6:8);
-            p.addCoin();
-            try {
-                gameModel.removeCoin();
-            }catch (NotEnoughCoinsException e){
-                e.printStackTrace();
-            }
+            gameModel.giveCoin(p);
             try {
                 p.getBoard().addStudents(gameModel.extractStudents((playersNumber == 3) ? 9 : 7));
             }catch(StudentsOutOfBoundsException e){
@@ -178,7 +164,7 @@ public class Game {
         return gameModel;
     }
 
-    public void createPlayer(String nickname){
+    public void createPlayer(String nickname) throws PlayerOutOfBoundException {
         gameModel.addPlayer(gameModel.getPlayers().size(),nickname);
     }
 

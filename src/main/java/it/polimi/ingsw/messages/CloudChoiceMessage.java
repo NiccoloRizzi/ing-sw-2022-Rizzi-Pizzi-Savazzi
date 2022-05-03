@@ -16,7 +16,7 @@ public class CloudChoiceMessage implements Message{
         return playerId;
     }
 
-    public int getCloudIndex() {
+    public int getCloudID() {
         return cloudIndex;
     }
 
