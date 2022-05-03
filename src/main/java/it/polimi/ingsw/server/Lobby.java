@@ -2,6 +2,7 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.MessageVisitor;
+import it.polimi.ingsw.exceptions.PlayerOutOfBoundException;
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class Lobby {
     }
 
     public boolean isExpertMode() {
-        return mode;
+        return expertMode;
     }
 
     public synchronized boolean  addPlayer(PlayerConnection player)
@@ -59,10 +60,14 @@ public class Lobby {
     public synchronized void startGame()
     {
         started = true;
-        game = new Game(numOfPlayer,mode);
+        game = new Game(numOfPlayer,expertMode);
         messageVisitor = new MessageVisitor(game);
         for(PlayerConnection player: players){
-            game.createPlayer(player.getNickname());
+            try {
+                game.createPlayer(player.getNickname());
+            }catch(PlayerOutOfBoundException e){
+                e.printStackTrace();
+            }
             player.setMessageVisitor(messageVisitor);
         }
         notifyAll();
@@ -79,7 +84,7 @@ public class Lobby {
     public void deregister(PlayerConnection player)
     {
         for(PlayerConnection p: players){
-            if(!p.equal(player))
+       //     if(!p.equals(player))
 //              player.send(); messaggio giocatore disconnesso
         }
         closeLobby();
@@ -87,7 +92,7 @@ public class Lobby {
 
     public void gameEnd(){
         for(PlayerConnection p: players){
-            if(!p.equal(player))
+      //      if(!p.equals(player))
 //              player.send(); messaggio vittoria
         }
         closeLobby();

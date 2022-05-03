@@ -29,7 +29,6 @@ public class Server {
     public void addToLobby(PlayerConnection connection){
         boolean added = false;
         boolean uniqueNickname = true;
-        connection.receiveInfo();
         synchronized (lobbies) {
             for (Lobby lobby : lobbies) {
                 if (lobby.getNicknames().contains(connection.getNickname())) {
@@ -40,12 +39,12 @@ public class Server {
             }
             if (uniqueNickname) {
                 for (Lobby lobby : lobbies) {
-                    if (lobby.getNumOfPlayer() = connection.getNumOfPlayers() && lobby.isExpertMode() = connection.isExpertMode() && !lobby.isStarted()) {
+                    if (lobby.getNumOfPlayer() == connection.getNumOfPlayers() && lobby.isExpertMode() == connection.isExpertMode() && !lobby.isStarted()) {
                         added = lobby.addPlayer(connection);
                     }
                 }
                 if (!added) {
-                    Lobby lobby = new Lobby(connection.getNumOfplayers(), connection.isExpertMode(), this);
+                    Lobby lobby = new Lobby(connection.getNumOfPlayers(), connection.isExpertMode(), this);
                     lobby.addPlayer(connection);
                     lobbies.add(lobby);
                 }
