@@ -31,7 +31,7 @@ public class Lobby {
         return numOfPlayer;
     }
 
-    public boolean isExpertModeMode() {
+    public boolean isExpertMode() {
         return mode;
     }
 
@@ -65,10 +65,7 @@ public class Lobby {
             game.createPlayer(player.getNickname());
             player.setMessageVisitor(messageVisitor);
         }
-        for(PlayerConnection player: players) {
-         //invio messaggio di inizio partita
-            new Thread(player).start();
-        }
+        notifyAll();
     }
 
     public synchronized void closeLobby()
