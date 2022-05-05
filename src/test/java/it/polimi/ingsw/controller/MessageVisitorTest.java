@@ -150,7 +150,6 @@ class MessageVisitorTest {
     @Test
     void testVisitMotherNatureMessage() throws PlayerOutOfBoundException {
                 setupGame(Phase.MOTHERNATURE, 4, true);
-                System.out.println(game.getGameModel().getIsles().size());
                 Random rand = new Random();
                 int playerId = game.getCurrentPlayer();
                 int mn = game.getGameModel().getMotherNature();
@@ -403,7 +402,7 @@ class MessageVisitorTest {
     }
 
     @Test
-    void testVisitSimilMotherNatureMesage() throws TileOutOfBoundsException, NotEnoughCoinsException, PlayerOutOfBoundException {
+    void testVisitSimilMotherNatureMesage() throws TileOutOfBoundsException, PlayerOutOfBoundException {
 
         // Referent constants
         final int PLAYER_ID_A = 0;
@@ -429,7 +428,7 @@ class MessageVisitorTest {
         Isle isleS = gameModel.getIsle((ISLE_ID + 1) % 12);
 
         // Setting background
-        for(int i = 0; i < 7; i++){ playerA.addCoin();  }
+        for(int i = 0; i < 7; i++){ gameModel.giveCoin(playerA); }
         playerA.assignFaction(Faction.Black);
         playerB.assignFaction(Faction.White);
         gameModel.setProfessor(Colour.Fairies, playerA);
@@ -492,7 +491,6 @@ class MessageVisitorTest {
         }
         int isle = new Random().nextInt(12);
         assertFalse(game.getGameModel().getIsle(isle).removeProhibited());
-        System.out.println(CharactersEnum.PROHIBITED.getPrice());
         messageVisitor.visit(new ProhibitedIsleCharacterMessage(0,player,isle));
         game.getTurnHandler().setUsedCharacter(false);
         messageVisitor.visit(new ProhibitedIsleCharacterMessage(0,player,isle));

@@ -19,7 +19,6 @@ public class PlayerConnection implements Runnable, EventListener {
     private int numOfPlayers;
     private boolean expertMode;
     private ObjectOutputStream out;
-    private MessageDeSerializer mds;
     private boolean active;
     private MessageVisitor mv;
     private Lobby lobby;
@@ -102,7 +101,7 @@ public class PlayerConnection implements Runnable, EventListener {
             }
             while(isActive()){
                 read = in.nextLine();
-                Message message = mds.deserialize(read);
+                Message message = MoveSerializer.deserialize(read);
                 message.accept(mv);
             }
             closeConnection();

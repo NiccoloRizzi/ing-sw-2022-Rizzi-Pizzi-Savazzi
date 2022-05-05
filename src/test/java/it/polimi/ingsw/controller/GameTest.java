@@ -104,12 +104,10 @@ class GameTest {
             case 3:
                 assertFalse(game.checkEnd());
                 try {
-                    System.out.println(game.getGameModel().getBagSize());
                     game.getGameModel().extractStudents(game.getGameModel().getBagSize());
                 }catch(StudentsOutOfBoundsException e){
                     e.printStackTrace();
                 }
-                System.out.println(game.getGameModel().getBagSize());
                 assertTrue(game.checkEnd());
                 break;
             case 4:
@@ -190,7 +188,6 @@ class GameTest {
             AssistantChoiceMessage acm = new AssistantChoiceMessage(i,game.getPlanningOrder().get(i));
             mv.visit(acm);
         }
-        System.out.println(game.getActionOrder());
         assertEquals(game.getActionOrder(),order);
 
 

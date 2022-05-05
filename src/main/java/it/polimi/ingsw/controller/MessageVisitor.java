@@ -402,8 +402,7 @@ public class MessageVisitor {
                             for (int i = 0; i < 3; i++) {
                                 try {
                                     p.getBoard().removeFromTable(remove3StudCharacterMessage.getColour());
-                                } catch (StudentsOutOfBoundsException e) {
-                                    e.printStackTrace();
+                                } catch (StudentsOutOfBoundsException ignored) {
                                 }
                             }
                         }
