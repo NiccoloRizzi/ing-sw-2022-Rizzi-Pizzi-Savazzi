@@ -6,10 +6,12 @@ import java.util.HashMap;
 
 public class Tile
 {
+    protected int ID;
     protected HashMap<Colour, Integer> students;
 
-    public Tile ()
+    public Tile (int ID)
     {
+        this.ID = ID;
         students = new HashMap<>();
         for(Colour c: Colour.values()){
             students.put(c,0);

@@ -7,10 +7,10 @@ import java.util.HashMap;
 
 public class ClientIsle implements ClientModel{
 
-    final int id;
-    final private Faction controlling;
-    final private HashMap<Colour, Integer> students;
-    final private boolean motherNature;
+    private final int id;
+    private final Faction controlling;
+    private final HashMap<Colour, Integer> students;
+    private final boolean motherNature;
 
     public ClientIsle(ClientIsle isle) {
         this.id = isle.id;

@@ -10,7 +10,7 @@ public class CloudTest extends TestCase {
 
     @Test
     public void testEmpty() {
-        Cloud cloud = new Cloud ();
+        Cloud cloud = new Cloud (0);
         HashMap<Colour,Integer> s = new HashMap<Colour,Integer>();
         for(Colour c: Colour.values())
             s.put(c,1);

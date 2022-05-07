@@ -5,8 +5,8 @@ import java.util.HashMap;
 
 public class Cloud extends Tile {
 
-    public Cloud() {
-        super();
+    public Cloud(int ID) {
+        super(ID);
     }
 
     public HashMap<Colour,Integer> empty() {

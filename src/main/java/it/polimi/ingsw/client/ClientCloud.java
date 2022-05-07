@@ -1,0 +1,23 @@
+package it.polimi.ingsw.client;
+
+import it.polimi.ingsw.model.Colour;
+
+import java.util.HashMap;
+
+public class ClientCloud implements ClientModel{
+
+    private int id;
+    private HashMap<Colour, Integer> students;
+
+    public int getId() {
+        return id;
+    }
+    public HashMap<Colour, Integer> getStudents() {
+        return students;
+    }
+
+    @Override
+    public void accept(View visitor) {
+        visitor.visit(this);
+    }
+}

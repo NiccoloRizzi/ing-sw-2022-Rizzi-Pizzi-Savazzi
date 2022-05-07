@@ -30,9 +30,9 @@ public class GameModel {
         isles = new ArrayList<>();
         generateIsle();
         clouds = new ArrayList<>();
-        for(int i= 0; i < numOfPlayers;i++)
+        for(int i= 0; i < numOfPlayers; i++)
         {
-            clouds.add(new Cloud());
+            clouds.add(new Cloud(i));
         }
 
         activeCharacters = new ArrayList<>();
