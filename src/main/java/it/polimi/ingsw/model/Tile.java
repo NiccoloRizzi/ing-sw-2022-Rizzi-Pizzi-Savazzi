@@ -1,10 +1,8 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.client.ClientModel;
+import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.server.Observable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public abstract class Tile extends Observable<ClientModel>

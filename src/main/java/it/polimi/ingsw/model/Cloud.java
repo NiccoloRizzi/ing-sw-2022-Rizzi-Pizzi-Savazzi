@@ -1,8 +1,7 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.client.ClientCloud;
+import it.polimi.ingsw.clientModels.ClientCloud;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Cloud extends Tile {

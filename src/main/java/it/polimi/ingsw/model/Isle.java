@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.client.ClientIsle;
+import it.polimi.ingsw.clientModels.ClientIsle;
 
 import java.util.HashMap;
 

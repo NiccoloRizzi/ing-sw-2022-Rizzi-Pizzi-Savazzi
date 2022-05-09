@@ -1,5 +1,6 @@
-package it.polimi.ingsw.client;
+package it.polimi.ingsw.clientModels;
 
+import it.polimi.ingsw.client.View;
 import it.polimi.ingsw.model.Colour;
 
 import java.util.HashMap;

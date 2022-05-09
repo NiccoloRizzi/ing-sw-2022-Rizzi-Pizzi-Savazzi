@@ -3,14 +3,12 @@ package it.polimi.ingsw.server;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import it.polimi.ingsw.client.ClientModel;
-import it.polimi.ingsw.controller.Game;
+import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.controller.MessageVisitor;
 import it.polimi.ingsw.messages.Message;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.EventListener;
 import java.util.Scanner;
 
 public class PlayerConnection implements Runnable, Observer<ClientModel> {

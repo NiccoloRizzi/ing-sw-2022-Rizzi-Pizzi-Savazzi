@@ -1,11 +1,7 @@
-package it.polimi.ingsw.client;
+package it.polimi.ingsw.clientModels;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import it.polimi.ingsw.client.ClientBoard;
-import it.polimi.ingsw.client.ClientIsle;
-import it.polimi.ingsw.client.ClientModel;
-import it.polimi.ingsw.client.ClientPlayer;
 
 public class ClientModelDeSerializer {
 
@@ -21,6 +17,10 @@ public class ClientModelDeSerializer {
                 return gson.fromJson(json, ClientPlayer.class);
             case "ClientIsle":
                 return gson.fromJson(json, ClientIsle.class);
+            case "ClientGameModel":
+                return gson.fromJson(json, ClientGameModel.class);
+            case "ClientCloud":
+                return gson.fromJson(json, ClientCloud.class);
             default:
                 throw new NullPointerException();
         }

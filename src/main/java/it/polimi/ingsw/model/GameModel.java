@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.client.ClientModel;
+import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.exceptions.*;
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,13 +1,16 @@
 package it.polimi.ingsw.client;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import it.polimi.ingsw.clientModels.*;
 
 public class View {
 
-    private ClientBoard board;
-    private ClientPlayer player;
-    private ArrayList<ClientIsle> isle;
+    private ClientPlayer[] players;
+    private ClientGameModel gameModel;
+    private ClientBoard[] boards;
+    private ClientCloud[] clouds;
+
+
+
     private final Client client;
 
     public View(Client client){
@@ -18,24 +21,37 @@ public class View {
         client.writeToSocket(messageToSend);
     }
 
-    public ClientBoard getBoard() {
-        return board;
+    public ClientGameModel getGameModel() {
+        return gameModel;
     }
-    public ClientPlayer getPlayer() {
-        return player;
+    public ClientBoard[] getBoards() {
+        return boards;
     }
-    public ArrayList<ClientIsle> getIsle() {
-        return isle;
+    public ClientPlayer[] getPlayer() {
+        return players;
+    }
+    public ClientCloud[] getClouds() {
+        return clouds;
     }
 
     public synchronized void visit(ClientBoard clientBoard){
-        board = clientBoard;
-        System.out.println(board.getEntrance());
+        boards[clientBoard.getPlayerID()] = clientBoard;
     }
     public synchronized void visit(ClientIsle clientIsle){
-        isle.set(clientIsle.getId(), clientIsle);
+        for(int i = 0; i < gameModel.getIsles().length; i++){
+            if(gameModel.getIsles()[i].getId() == clientIsle.getId()){
+                gameModel.getIsles()[i] = clientIsle;
+                break;
+            }
+        }
     }
     public synchronized void visit(ClientPlayer clientPLayer){
-        player = clientPLayer;
+        players[clientPLayer.getId()] = clientPLayer;
+    }
+    public synchronized void visit(ClientGameModel clientGameModel){
+        gameModel = clientGameModel;
+    }
+    public synchronized void visit(ClientCloud clientCloud){
+        clouds[clientCloud.getId()] = clientCloud;
     }
 }

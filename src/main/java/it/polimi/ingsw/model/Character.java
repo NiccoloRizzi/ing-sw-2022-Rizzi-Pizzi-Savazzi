@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.client.ClientModel;
+import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.server.Observable;
 
 public class Character extends Observable<ClientModel> {

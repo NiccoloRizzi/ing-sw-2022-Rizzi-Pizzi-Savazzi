@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.client.ClientBoard;
+import it.polimi.ingsw.clientModels.ClientBoard;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TowerOutOfBoundException;
 

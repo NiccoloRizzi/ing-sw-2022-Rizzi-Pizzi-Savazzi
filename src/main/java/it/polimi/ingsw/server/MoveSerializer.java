@@ -2,7 +2,7 @@ package it.polimi.ingsw.server;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import it.polimi.ingsw.client.ClientBoard;
+import it.polimi.ingsw.clientModels.ClientBoard;
 import it.polimi.ingsw.messages.*;
 
 public class MoveSerializer {

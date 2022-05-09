@@ -4,14 +4,13 @@ package it.polimi.ingsw.model;
 * 3) setChoosenAssistant to add out_of_range_exception
 */
 
-import it.polimi.ingsw.client.ClientModel;
-import it.polimi.ingsw.client.ClientPlayer;
+import it.polimi.ingsw.clientModels.ClientModel;
+import it.polimi.ingsw.clientModels.ClientPlayer;
 import it.polimi.ingsw.server.Observable;
 import it.polimi.ingsw.server.Observer;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class Player extends Observable<ClientModel> {
 
