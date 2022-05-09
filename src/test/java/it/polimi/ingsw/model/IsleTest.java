@@ -10,7 +10,7 @@ public class IsleTest extends TestCase {
 
     @Test
     public void testTower() {
-        Isle isle = new Isle();
+        Isle isle = new Isle(0);
         assertEquals(Faction.Empty,isle.getTower());
         isle.setTower(Faction.Black);
         assertEquals(Faction.Black,isle.getTower());
@@ -18,7 +18,7 @@ public class IsleTest extends TestCase {
 
     @Test
     public void testGetInfluenceDefault() {
-        Isle isle = new Isle();
+        Isle isle = new Isle(0);
         isle.setTower(Faction.Black);
         HashMap<Colour,Integer> s = new HashMap<Colour,Integer>();
         int[] numStudent = {1,2,3,4,5};
@@ -51,7 +51,7 @@ public class IsleTest extends TestCase {
 
     @Test
     public void testGetInfluenceNoTower() {
-        Isle isle = new Isle();
+        Isle isle = new Isle(0);
         isle.setInfStrategy(new noTowersStrategy());
         isle.setTower(Faction.Black);
         HashMap<Colour,Integer> s = new HashMap<Colour,Integer>();
@@ -85,7 +85,7 @@ public class IsleTest extends TestCase {
 
     @Test
     public void testGetInfluencePlusInf() {
-        Isle isle = new Isle();
+        Isle isle = new Isle(0);
         isle.setInfStrategy(new PlusInfStrategy());
         isle.setTower(Faction.Black);
         HashMap<Colour,Integer> s = new HashMap<Colour,Integer>();
@@ -119,7 +119,7 @@ public class IsleTest extends TestCase {
 
     @Test
     public void testGetInfluenceNoColour() {
-        Isle isle = new Isle();
+        Isle isle = new Isle(0);
         isle.setTower(Faction.Black);
         isle.setInfStrategy(new NoColourStrategy(Colour.Dragons));
         HashMap<Colour,Integer> s = new HashMap<Colour,Integer>();
@@ -153,7 +153,7 @@ public class IsleTest extends TestCase {
 
     @Test
     public void testProhibited() {
-        Isle isle = new Isle();
+        Isle isle = new Isle(0);
         assertFalse(isle.removeProhibited());
         isle.setProhibited();
         isle.setProhibited();
@@ -164,24 +164,15 @@ public class IsleTest extends TestCase {
 
     @Test
     public void testJoin() {
-        Isle isle1 = new Isle();
-        Isle isle2 = new Isle();
-        isle1.getSize();
-        AggregatedIsland isle = isle1.join(isle2);
-        assertTrue(isle.getJoinedIsle().contains(isle1));
-        assertTrue(isle.getJoinedIsle().contains(isle2));
+        Isle isle1 = new Isle(0);
+        Isle isle2 = new Isle(1);
+        isle1.addStudent(Colour.Unicorns);
+        isle2.addStudent(Colour.Frogs);
+        isle2.addStudent(Colour.Unicorns);
+        Isle isle = isle1.join(isle2);
+        assertEquals(2,isle.getSize());
+        assertEquals(2,isle.getStudents(Colour.Unicorns));
+        assertEquals(1,isle.getStudents(Colour.Gnomes));
     }
 
-
-    @Test
-    public void testTestJoin() {
-        Isle isle1 = new Isle();
-        Isle isle2 = new Isle();
-        Isle isle3 = new Isle();
-        AggregatedIsland isle = isle1.join(isle2);
-        isle = isle3.join(isle);
-        assertTrue(isle.getJoinedIsle().contains(isle1));
-        assertTrue(isle.getJoinedIsle().contains(isle2));
-        assertTrue(isle.getJoinedIsle().contains(isle3));
-    }
 }

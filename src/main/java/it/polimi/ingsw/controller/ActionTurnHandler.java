@@ -113,16 +113,7 @@ public class ActionTurnHandler {
     public void checkIsleJoin(int index)
     {
         try {
-            if(gameModel.getIsle(index).getTower()!=Faction.Empty) {
-                if (gameModel.getIsle(index).getTower() == gameModel.getIsle((index == 0) ? gameModel.getIsles().size() - 1 : index - 1).getTower()) {
-                    gameModel.joinIsle((index == 0) ? gameModel.getIsles().size() - 1 : index - 1, index);
-                    index = (index == 0) ? 0 : index - 1;
-                }
-
-                if (gameModel.getIsle(index).getTower() == gameModel.getIsle((index + 1) % gameModel.getIsles().size()).getTower()) {
-                    gameModel.joinIsle(index, (index + 1) % gameModel.getIsles().size());
-                }
-            }
+            gameModel.joinIsle(index);
         }catch(TileOutOfBoundsException e)
         {
             e.printStackTrace();

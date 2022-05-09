@@ -1,10 +1,13 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.client.ClientModel;
+import it.polimi.ingsw.server.Observable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class Tile
+public abstract class Tile extends Observable<ClientModel>
 {
     protected int ID;
     protected HashMap<Colour, Integer> students;
@@ -28,14 +31,17 @@ public class Tile
     public void addStudent(Colour col)
     {
         students.replace(col, students.get(col)+1);
+        notifyChange();
     }
 
     public void addStudents(HashMap<Colour, Integer> studentsToAdd){
         for(Colour c : Colour.values()){
             students.replace(c, students.get(c)+studentsToAdd.get(c));
         }
+        notifyChange();
     }
 
+    public abstract void notifyChange ();
     public int getStudents(Colour c){
         return students.get(c);
     }

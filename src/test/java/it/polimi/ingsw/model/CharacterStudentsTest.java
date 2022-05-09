@@ -12,7 +12,7 @@ public class CharacterStudentsTest extends TestCase {
     @Test
     public void testAddStudent() {
         CharactersEnum c = CharactersEnum.ONE_STUD_TO_ISLE;
-        CharacterStudents character = new CharacterStudents(c);
+        CharacterStudents character = new CharacterStudents(0,c);
         character.addStudent(Colour.Dragons);
         assertEquals(1,character.getStudents(Colour.Dragons));
     }
@@ -20,7 +20,7 @@ public class CharacterStudentsTest extends TestCase {
     @Test
     public void testAddRemoveStudents() {
         CharactersEnum character = CharactersEnum.ONE_STUD_TO_ISLE;
-        CharacterStudents cs = new CharacterStudents(character);
+        CharacterStudents cs = new CharacterStudents(0,character);
         HashMap<Colour, Integer> s = new HashMap<>();
         for (Colour color: Colour.values())
             s.put(color, 1);

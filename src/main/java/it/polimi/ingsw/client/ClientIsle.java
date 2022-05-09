@@ -10,13 +10,11 @@ public class ClientIsle implements ClientModel{
     private final int id;
     private final Faction controlling;
     private final HashMap<Colour, Integer> students;
-    private final boolean motherNature;
 
-    public ClientIsle(ClientIsle isle) {
-        this.id = isle.id;
-        this.controlling = isle.controlling;
-        this.students = (HashMap<Colour, Integer>) isle.students.clone();
-        this.motherNature = isle.motherNature;
+    public ClientIsle(int id,Faction controlling,HashMap<Colour, Integer> students) {
+        this.id = id;
+        this.controlling = controlling;
+        this.students = students;
     }
 
     public int getId() {
@@ -29,10 +27,6 @@ public class ClientIsle implements ClientModel{
 
     public HashMap<Colour, Integer> getStudents() {
         return students;
-    }
-
-    public boolean isMotherNature() {
-        return motherNature;
     }
 
     @Override

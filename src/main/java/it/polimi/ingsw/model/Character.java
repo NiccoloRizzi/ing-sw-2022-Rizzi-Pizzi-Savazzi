@@ -1,11 +1,15 @@
 package it.polimi.ingsw.model;
 
-public class Character {
+import it.polimi.ingsw.client.ClientModel;
+import it.polimi.ingsw.server.Observable;
+
+public class Character extends Observable<ClientModel> {
+    int ID;
     private final CharactersEnum card;
     private int price;
     private boolean used = false;
 
-    public Character(CharactersEnum character)
+    public Character(int ID,CharactersEnum character)
     {
         this.card = character;
         this.price = character.getPrice();

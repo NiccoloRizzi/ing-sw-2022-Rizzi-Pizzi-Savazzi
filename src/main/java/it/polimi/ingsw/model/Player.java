@@ -4,10 +4,16 @@ package it.polimi.ingsw.model;
 * 3) setChoosenAssistant to add out_of_range_exception
 */
 
+import it.polimi.ingsw.client.ClientModel;
+import it.polimi.ingsw.client.ClientPlayer;
+import it.polimi.ingsw.server.Observable;
+import it.polimi.ingsw.server.Observer;
+
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
-public class Player {
+public class Player extends Observable<ClientModel> {
 
     private static final int N_ASSISTANT = 10;
 
@@ -48,6 +54,7 @@ public class Player {
      * @throws IndexOutOfBoundsException if i is not a valid value**/
     public void setChoosenAssistant(int i) throws IndexOutOfBoundsException{
         usedCards.add(deck.remove(i)); // Maybe i had to add some controll on the remove...XD
+        notifyChange();
     }
 
     /**@return the board of the player**/
@@ -60,6 +67,7 @@ public class Player {
      */
     public void addCoin(){
         coins++;
+        notifyChange();
     }
 
     /**
@@ -135,7 +143,7 @@ public class Player {
      * @param nTowers is the number of towers the board need based on the number of players
      */
     public void createBoard(int nTowers){
-        school = new Board(this.faction, nTowers);
+        school = new Board(this.faction, nTowers,ID);
     }
 
     public boolean hasUsed(int assistantId){
@@ -149,5 +157,19 @@ public class Player {
     public void removeCoins(int coins)
     {
         this.coins = this.coins-coins;
+        notifyChange();
+    }
+
+    public void notifyChange()
+    {
+        Integer[] used = usedCards.stream().map(x->x.getValue()).toArray(Integer[]::new);
+        Integer[] intDeck = deck.stream().map(x->x.getValue()).toArray(Integer[]::new);
+        notify(new ClientPlayer(used,intDeck,coins,nickname,ID));
+    }
+
+    @Override
+    public void addObserver(Observer<ClientModel> observer) {
+        super.addObserver(observer);
+        school.addObserver(observer);
     }
 }

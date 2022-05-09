@@ -12,7 +12,7 @@ public class CharacterTest extends TestCase {
     public void testGetPrice(int pos) {
         CharactersEnum c = CharactersEnum.values()[pos];
         int price = c.getPrice();
-        Character character = new Character(c);
+        Character character = new Character(0,c);
         assertEquals(character.getPrice(),price);
     }
 
@@ -22,7 +22,7 @@ public class CharacterTest extends TestCase {
     public void testUse(int pos) {
         CharactersEnum c = CharactersEnum.values()[pos];
         int price = c.getPrice();
-        Character character = new Character(c);
+        Character character = new Character(0,c);
         character.use();
         assertEquals(price+1,character.getPrice());
         character.use();

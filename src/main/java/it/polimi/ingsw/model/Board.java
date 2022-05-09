@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.client.ClientBoard;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TowerOutOfBoundException;
 
@@ -15,11 +16,11 @@ public class Board extends Tile{
 
     /**
      * Constructor for the board.
-    * @param faction The colour of the towers (Black, White, Grey)
+     * @param faction The colour of the towers (Black, White, Grey)
      * @param towers The number of starting towers
      */
-    public Board(Faction faction, int towers) {
-        super();
+    public Board(Faction faction, int towers,int playerID) {
+        super(playerID);
         this.faction = faction;
         this.towers = towers;
         this.studLimit = (towers == 6)?9:7;
@@ -37,6 +38,7 @@ public class Board extends Tile{
     public void removeStudent(Colour c) throws StudentsOutOfBoundsException {
         if(students.get(c)>0){
             students.replace(c,students.get(c)-1);
+            notifyChange();
         }
         else
             throw new StudentsOutOfBoundsException();
@@ -52,6 +54,7 @@ public class Board extends Tile{
     public void addToEntrance(Colour student) throws StudentsOutOfBoundsException {
         if(!isEntranceFull()){
             students.replace(student,students.get(student)+1);
+            notifyChange();
         }
         else
             throw new StudentsOutOfBoundsException();
@@ -74,6 +77,7 @@ public class Board extends Tile{
     public void addToTable (Colour table) throws StudentsOutOfBoundsException{
         if(!isTableFull(table)){
             tables.replace(table,tables.get(table)+1);
+            notifyChange();
         }
         else
             throw new StudentsOutOfBoundsException();
@@ -82,6 +86,7 @@ public class Board extends Tile{
     public void addTowers(int t) throws TowerOutOfBoundException{
         if(towers+t<=towersLimit){
             towers+=t;
+            notifyChange();
         }else{
             throw new TowerOutOfBoundException();
         }
@@ -90,6 +95,7 @@ public class Board extends Tile{
     public void useTowers(int t) throws TowerOutOfBoundException{
         if(towers>=t){
             towers-=t;
+            notifyChange();
         }else{
             throw new TowerOutOfBoundException();
         }
@@ -122,16 +128,22 @@ public class Board extends Tile{
     public void removeFromTable(Colour table) throws StudentsOutOfBoundsException{
         if(tables.get(table)>0){
             tables.replace(table,tables.get(table)-1);
+            notifyChange();
         }
         else{
             throw new StudentsOutOfBoundsException();
         }
-
     }
 
     //checks if the students in a specified table of the board have reached a "coin" spot
     public boolean checkCoin(Colour table)
     {
         return (tables.get(table)>0 && (tables.get(table)%3==0));
+    }
+   @Override
+    public void notifyChange(){
+        HashMap<Colour,Integer> tempTables = new HashMap<>(tables);
+        HashMap<Colour,Integer> tempStudents = new HashMap<>(students);
+        notify(new ClientBoard(ID,faction,towers,tempTables,tempStudents));
     }
 }

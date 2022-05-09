@@ -11,7 +11,7 @@ class BoardTest {
 
     @org.junit.jupiter.api.Test
     void removeStudent() {
-        Board board = new Board(Faction.Black, 8);
+        Board board = new Board(Faction.Black, 8,0);
         board.addStudent(Colour.Dragons);
         assertEquals(board.students.get(Colour.Dragons),1);
         try {
@@ -25,7 +25,7 @@ class BoardTest {
     @ParameterizedTest
     @ValueSource(ints = {6,8})
     void addToEntrance(int k) {
-        Board board= new Board(Faction.Black, k);
+        Board board= new Board(Faction.Black, k,0);
         try {
             board.addToEntrance(Colour.Dragons);
         }catch(StudentsOutOfBoundsException e){
@@ -43,13 +43,13 @@ class BoardTest {
 
     @org.junit.jupiter.api.Test
     void getTable() {
-        Board board = new Board(Faction.Black, 8);
+        Board board = new Board(Faction.Black, 8,0);
         assertEquals(board.getTable(Colour.values()[0]),0);
     }
 
     @org.junit.jupiter.api.Test
     void addToTable() {
-        Board board = new Board(Faction.Black, 8);
+        Board board = new Board(Faction.Black, 8,0);
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 10; j++) {
                 assertEquals(j, board.getTable(Colour.values()[i]));
@@ -70,7 +70,7 @@ class BoardTest {
     @ParameterizedTest
     @ValueSource(ints = {6,8})
     void useAddTowers(int k) throws TowerOutOfBoundException {
-        Board board = new Board(Faction.Black, k);
+        Board board = new Board(Faction.Black, k,0);
         assertEquals(board.getTowers(),k);
         board.useTowers(1);
         assertEquals(board.getTowers(),k-1);
@@ -84,7 +84,7 @@ class BoardTest {
     @ParameterizedTest
     @ValueSource(ints={0,1,2,3,4})
     void isTableFull(int k) {
-            Board board = new Board(Faction.Black, 8);
+            Board board = new Board(Faction.Black, 8,0);
             for (int i = 0; i < 10; i++) {
                 assertFalse(board.isTableFull(Colour.values()[k]));
                 try {
@@ -98,7 +98,7 @@ class BoardTest {
 
     @org.junit.jupiter.api.Test
     void isEntranceFull() {
-        Board board = new Board(Faction.Black, 8);
+        Board board = new Board(Faction.Black, 8,0);
         assertFalse(board.isEntranceFull());
         Colour c= Colour.Dragons;
         for(int i=0; i<6;i++){
@@ -117,7 +117,7 @@ class BoardTest {
         }
         assertTrue(board.isEntranceFull());
 
-        Board board2 = new Board(Faction.Black, 6);
+        Board board2 = new Board(Faction.Black, 6,0);
         assertFalse(board2.isEntranceFull());
         for(int i=0; i<8;i++){
             try {
@@ -139,7 +139,7 @@ class BoardTest {
 
     @org.junit.jupiter.api.Test
     void getSetFaction() {
-        Board board = new Board(Faction.Black, 8);
+        Board board = new Board(Faction.Black, 8,0);
         assertEquals(board.getFaction(), Faction.Black);
         board.setFaction(Faction.White);
         assertEquals(board.getFaction(), Faction.White);
@@ -148,7 +148,7 @@ class BoardTest {
     @ParameterizedTest
     @ValueSource(ints ={6,8})
     void getTowers(int param) throws TowerOutOfBoundException {
-        Board board = new Board(Faction.Black, param);
+        Board board = new Board(Faction.Black, param,0);
         assertEquals(board.getTowers(),param);
         board.useTowers(1);
         assertEquals(board.getTowers(),param-1);
@@ -156,7 +156,7 @@ class BoardTest {
 
     @org.junit.jupiter.api.Test
     void removeFromTable() {
-        Board board = new Board(Faction.Black,8);
+        Board board = new Board(Faction.Black,8,0);
         try {
             board.addToTable(Colour.values()[0]);
         }catch(StudentsOutOfBoundsException e){
@@ -178,7 +178,7 @@ class BoardTest {
     void checkCoin(int input){
         try {
             Colour param = Colour.values()[input];
-            Board board = new Board(Faction.Black, 8);
+            Board board = new Board(Faction.Black, 8,0);
             assertFalse(board.checkCoin(param));
             board.addToTable(param);
             assertFalse(board.checkCoin(param));

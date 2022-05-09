@@ -2,7 +2,6 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.exceptions.PlayerOutOfBoundException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
-import it.polimi.ingsw.model.AggregatedIsland;
 import it.polimi.ingsw.model.Colour;
 import it.polimi.ingsw.model.Faction;
 import it.polimi.ingsw.model.Isle;
@@ -167,6 +166,7 @@ class ActionTurnHandlerTest {
         game.createPlayer("B");
         game.setupGame();
         game.startActionTurn();
+        HashMap<Colour,Integer>students = new HashMap<>();
 
         try {
             Isle isle1 = game.getGameModel().getIsle((rand==0)?11:rand-1);
@@ -176,13 +176,17 @@ class ActionTurnHandlerTest {
             isle1.setTower(Faction.Black);
             isle2.setTower(Faction.Black);
             isle3.setTower(Faction.Black);
+            for(Colour c: Colour.values())
+            {
+                students.put(c,isle1.getStudents(c)+isle2.getStudents(c)+isle3.getStudents(c));
+            }
 
             game.getTurnHandler().checkIsleJoin(rand);
 
             assertEquals(3,game.getGameModel().getIsle((rand== 0)?0:rand-1).getSize());
-            assertEquals(isle1,((AggregatedIsland)(game.getGameModel().getIsle((rand== 0)?0:rand-1))).getJoinedIsle().get(0));
-            assertEquals(isle2,((AggregatedIsland)(game.getGameModel().getIsle((rand== 0)?0:rand-1))).getJoinedIsle().get(1));
-            assertEquals(isle3,((AggregatedIsland)(game.getGameModel().getIsle((rand== 0)?0:rand-1))).getJoinedIsle().get(2));
+            for(Colour c: Colour.values()) {
+                assertEquals(students.get(c),game.getGameModel().getIsle((rand== 0)?0:rand-1).getStudents(c));
+            }
         }catch(TileOutOfBoundsException e) {
             e.printStackTrace();
         }

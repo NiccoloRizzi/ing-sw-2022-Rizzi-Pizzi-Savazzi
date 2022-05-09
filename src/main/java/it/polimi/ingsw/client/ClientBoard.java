@@ -7,10 +7,24 @@ import java.util.HashMap;
 
 public class ClientBoard implements ClientModel{
 
+    private int playerID;
     private final Faction faction;
     private final int towers;
     private final HashMap<Colour, Integer> tables;
     private final HashMap<Colour, Integer> entrance;
+
+    public ClientBoard(int playerID,Faction faction,int towers,HashMap<Colour,Integer> tables,HashMap<Colour,Integer> entrance)
+    {
+        this.playerID = playerID;
+        this.faction = faction;
+        this.towers = towers;
+        this.tables = tables;
+        this.entrance = entrance;
+    }
+
+    public int getPlayerID() {
+        return playerID;
+    }
 
     public Faction getFaction() {
         return faction;

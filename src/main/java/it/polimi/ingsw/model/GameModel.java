@@ -1,12 +1,15 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.client.ClientModel;
 import it.polimi.ingsw.exceptions.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Random;
+import it.polimi.ingsw.server.Observable;
+import it.polimi.ingsw.server.Observer;
 
-public class GameModel {
+public class GameModel extends Observable<ClientModel> {
     private int unusedCoins;
     private int motherNature;
     private final int numOfPlayers;
@@ -42,10 +45,10 @@ public class GameModel {
         for (int i = 0; i < 3; i++) {
             CharactersEnum character = CharactersEnum.values()[sorted[i]];
             if (character==CharactersEnum.ONE_STUD_TO_ISLE||character==CharactersEnum.ONE_STUD_TO_TABLES||character==CharactersEnum.EXCHANGE_3_STUD){
-                activeCharacters.add(new CharacterStudents(character));
+                activeCharacters.add(new CharacterStudents(i,character));
             }
             else
-                activeCharacters.add(new Character(character));
+                activeCharacters.add(new Character(i,character));
         }
 
         if(numOfPlayers==4){
@@ -73,7 +76,7 @@ public class GameModel {
 
     private void generateIsle() {
         for (int i = 0; i < 12; i++)
-            isles.add(new Isle());
+            isles.add(new Isle(i));
     }
 
     public int getMotherNature() {
@@ -213,9 +216,9 @@ public class GameModel {
 
     public void setCharacter_DEBUG(int pos, CharactersEnum character){
         if (character==CharactersEnum.ONE_STUD_TO_ISLE || character==CharactersEnum.ONE_STUD_TO_TABLES || character==CharactersEnum.EXCHANGE_3_STUD)
-            activeCharacters.set(pos, new CharacterStudents(character));
+            activeCharacters.set(pos, new CharacterStudents(pos,character));
         else
-            activeCharacters.set(pos, new Character(character));
+            activeCharacters.set(pos, new Character(pos,character));
     }
 
     public Colour extractRandomStudent() throws StudentsOutOfBoundsException{
@@ -261,20 +264,36 @@ public class GameModel {
         return activeCharacters.get(id);
     }
 
-    public void joinIsle(int isle1,int isle2)
+    public void joinIsle(int isle) throws TileOutOfBoundsException
     {
-        AggregatedIsland temp =isles.get(isle1).join(isles.get(isle2));
-        if(isle1>isle2)
-        {
-            isles.remove(isle1);
-            isles.remove(isle2);
-            isles.add(isle2,temp);
+        if(isle<0 || isle>=isles.size())
+            throw new TileOutOfBoundsException();
+        if(isles.get(isle).getTower().equals(isles.get((isle+1)%isles.size())) && !isles.get(isle).getTower().equals(Faction.Empty)) {
+            Isle temp = isles.get(isle).join(isles.get((isle + 1) % isles.size()));
+            if(isle != isles.size()-1)
+            {
+                isles.remove((isle+1)%isles.size());
+                isles.remove(isle);
+                isles.add(isle,temp);
+            }else{
+                isles.remove(isle);
+                isles.remove(0);
+                isles.add(temp);
+                isle --;
+            }
         }
-        else
-        {
-            isles.remove(isle2);
-            isles.remove(isle1);
-            isles.add(isle1,temp);
+        if(isles.get(isle).getTower().equals(isles.get((isle==0)?isles.size()-1:isle-1)) && !isles.get(isle).getTower().equals(Faction.Empty)) {
+            Isle temp = isles.get(isle).join(isles.get((isle==0)?isles.size()-1:isle-1));
+            if(isle != 0)
+            {
+                isles.remove(isle);
+                isles.remove(isle-1);
+                isles.add(isle-1,temp);
+            }else{
+                isles.remove(isles.size()-1);
+                isles.remove(0);
+                isles.add(0,temp);
+            }
         }
     }
 
@@ -326,6 +345,21 @@ public class GameModel {
         }
     }
 
-
-
+    @Override
+    public void addObserver(Observer<ClientModel> observer) {
+        super.addObserver(observer);
+        for(Player p: players)
+        {
+            p.addObserver(observer);
+        }
+        for(Isle i:isles){
+            i.addObserver(observer);
+        }
+        for(Cloud c: clouds){
+            c.addObserver(observer);
+        }
+        for(Character c: activeCharacters){
+            c.addObserver(observer);
+        }
+    }
 }

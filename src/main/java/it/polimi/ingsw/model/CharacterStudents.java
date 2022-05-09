@@ -8,9 +8,9 @@ import java.util.HashMap;
 public class CharacterStudents extends Character {
     private final HashMap<Colour, Integer> students;
 
-    public CharacterStudents (CharactersEnum character)
+    public CharacterStudents (int id,CharactersEnum character)
     {
-        super(character);
+        super(id,character);
         students = new HashMap<>();
         for(Colour c: Colour.values()){
             students.put(c,0);

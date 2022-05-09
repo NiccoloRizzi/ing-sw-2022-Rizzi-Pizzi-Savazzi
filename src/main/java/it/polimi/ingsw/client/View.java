@@ -33,7 +33,7 @@ public class View {
         System.out.println(board.getEntrance());
     }
     public synchronized void visit(ClientIsle clientIsle){
-        isle.set(clientIsle.id, clientIsle);
+        isle.set(clientIsle.getId(), clientIsle);
     }
     public synchronized void visit(ClientPlayer clientPLayer){
         player = clientPLayer;

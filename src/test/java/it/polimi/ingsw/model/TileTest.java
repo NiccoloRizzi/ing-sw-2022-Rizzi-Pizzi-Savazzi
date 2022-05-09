@@ -11,14 +11,14 @@ public class TileTest extends TestCase {
 
     @Test
     public void testAddStudent() {
-        Tile t = new Tile (0);
+        Isle t = new Isle (0);
         t.addStudent(Colour.Gnomes);
         Assertions.assertEquals(1, (int)t.students.get(Colour.Gnomes));
     }
 
     @Test
     public void testAddStudents() {
-        Tile t = new Tile (0);
+        Isle t = new Isle (0);
         HashMap<Colour, Integer> s = new HashMap<>();
         for(Colour c: Colour.values())
             s.put(c, c.ordinal());

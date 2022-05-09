@@ -1,18 +1,22 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.client.ClientIsle;
+
 import java.util.HashMap;
 
 public class Isle extends Tile {
 
-    protected Faction tower;
-    protected int prohibited;
-    protected influenceStrategy   infStrategy;
+    private Faction tower;
+    private int prohibited;
+    private influenceStrategy infStrategy;
+    private int size;
+
 
     /**
      * Default constructor
      */
-    public Isle() {
-        super();
+    public Isle(int Id) {
+        super(Id);
         tower = Faction.Empty;
         infStrategy= new DefaultInfStrategy();
     }
@@ -22,7 +26,7 @@ public class Isle extends Tile {
     }
 
     public int getSize(){
-        return 1;
+        return size;
     }
 
     public int getInfluence(Player p, HashMap<Colour,Player> professors) {
@@ -48,18 +52,23 @@ public class Isle extends Tile {
         return this.tower;
     }
 
-    public AggregatedIsland join (Isle isle)
+    public Isle join (Isle isle)
     {
-        return new AggregatedIsland(this ,isle);
+        for(Colour c: Colour.values()){
+            this.students.put(c,this.students.get(c)+isle.students.get(c));
+        }
+        this.size += isle.size;
+        return this;
     }
 
-    public AggregatedIsland join (AggregatedIsland isle)
-    {
-        return isle.join(this);
-    }
 
     public void setInfStrategy (influenceStrategy infStrategy)
     {
         this.infStrategy=infStrategy;
+    }
+
+    public void notifyChange()
+    {
+        notify(new ClientIsle(ID,tower,new HashMap<Colour, Integer>(students)));
     }
 }

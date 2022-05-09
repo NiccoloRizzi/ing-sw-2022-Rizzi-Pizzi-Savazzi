@@ -9,6 +9,11 @@ public class ClientCloud implements ClientModel{
     private int id;
     private HashMap<Colour, Integer> students;
 
+    public ClientCloud (int id, HashMap<Colour, Integer> students)
+    {
+        this.id = id;
+        this.students = students;
+    }
     public int getId() {
         return id;
     }
