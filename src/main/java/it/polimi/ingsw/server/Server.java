@@ -11,13 +11,22 @@ public class Server {
     private static final int PORT= 12345;
     private ServerSocket serverSocket;
     private ArrayList<Lobby> lobbies;
-    private ExecutorService executor = Executors.newFixedThreadPool(128);
+    private final ExecutorService executor = Executors.newFixedThreadPool(128);
+
+    public Server(){
+        try {
+            this.serverSocket = new ServerSocket(PORT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void run(){
         System.out.println("Server listening on port: " + PORT);
         while(true){
             try {
                 Socket socket = serverSocket.accept();
+                System.out.println("Player connected.");
                 PlayerConnection connection = new PlayerConnection(socket,this);
                 executor.submit(connection);
             } catch (IOException e){
