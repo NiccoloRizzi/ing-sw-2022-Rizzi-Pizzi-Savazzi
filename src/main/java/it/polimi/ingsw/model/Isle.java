@@ -19,6 +19,7 @@ public class Isle extends Tile {
         super(Id);
         tower = Faction.Empty;
         infStrategy= new DefaultInfStrategy();
+        size = 1;
     }
 
     public void setTower(Faction f) {

@@ -172,7 +172,7 @@ public class IsleTest extends TestCase {
         Isle isle = isle1.join(isle2);
         assertEquals(2,isle.getSize());
         assertEquals(2,isle.getStudents(Colour.Unicorns));
-        assertEquals(1,isle.getStudents(Colour.Gnomes));
+        assertEquals(1,isle.getStudents(Colour.Frogs));
     }
 
 }

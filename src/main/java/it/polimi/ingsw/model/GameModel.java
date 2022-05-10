@@ -268,7 +268,7 @@ public class GameModel extends Observable<ClientModel> {
     {
         if(isle<0 || isle>=isles.size())
             throw new TileOutOfBoundsException();
-        if(isles.get(isle).getTower().equals(isles.get((isle+1)%isles.size())) && !isles.get(isle).getTower().equals(Faction.Empty)) {
+        if(isles.get(isle).getTower().equals(isles.get((isle+1)%isles.size()).getTower()) && !isles.get(isle).getTower().equals(Faction.Empty)) {
             Isle temp = isles.get(isle).join(isles.get((isle + 1) % isles.size()));
             if(isle != isles.size()-1)
             {
@@ -282,7 +282,7 @@ public class GameModel extends Observable<ClientModel> {
                 isle --;
             }
         }
-        if(isles.get(isle).getTower().equals(isles.get((isle==0)?isles.size()-1:isle-1)) && !isles.get(isle).getTower().equals(Faction.Empty)) {
+        if(isles.get(isle).getTower().equals(isles.get((isle==0)?isles.size()-1:isle-1).getTower()) && !isles.get(isle).getTower().equals(Faction.Empty)) {
             Isle temp = isles.get(isle).join(isles.get((isle==0)?isles.size()-1:isle-1));
             if(isle != 0)
             {
