@@ -11,8 +11,22 @@ public class ClientGameModel implements ClientModel{
     int motherNature;
     private ClientIsle[] isles;
 
+    public ClientGameModel(HashMap<Colour, ClientPlayer> professors, int motherNature, ClientIsle[] isles) {
+        this.professors = professors;
+        this.motherNature = motherNature;
+        this.isles = isles;
+    }
+
     public ClientIsle[] getIsles() {
         return isles;
+    }
+
+    public HashMap<Colour, ClientPlayer> getProfessors() {
+        return professors;
+    }
+
+    public int getMotherNature() {
+        return motherNature;
     }
 
     @Override
