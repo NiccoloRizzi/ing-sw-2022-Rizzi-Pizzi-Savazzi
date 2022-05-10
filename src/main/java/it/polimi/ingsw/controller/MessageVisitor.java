@@ -46,7 +46,7 @@ public class MessageVisitor {
             if(!player.hasUsed(id)) {
                 if (player.getDeck().size() > 1) {
                     if(game.alreadyUsed(id)){
-                        String answer = ErrorMessage.AssistantOtherPlayerError;
+                        //String answer = ErrorMessage.AssistantOtherPlayerError;
                     }
                     else{
                         player.setChoosenAssistant(id);
@@ -55,11 +55,11 @@ public class MessageVisitor {
                 }
             }
             else{
-                String answer = ErrorMessage.AssistantAlreadyChosenError;
+                //String answer = ErrorMessage.AssistantAlreadyChosenError;
             }
 
         }else{
-            String answer = ErrorMessage.TurnError;
+            //String answer = ErrorMessage.TurnError;
         }
 
     }
