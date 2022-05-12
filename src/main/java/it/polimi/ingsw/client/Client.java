@@ -22,6 +22,13 @@ public class Client {
         view = new View(this);
     }
 
+    public Client(){
+        socket = null;
+        in = null;
+        out = null;
+        view = null;
+    }
+
     public boolean isActive() {
         return isActive;
     }

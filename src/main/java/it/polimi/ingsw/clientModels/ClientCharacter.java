@@ -29,6 +29,22 @@ public class ClientCharacter implements ClientModel{
         this.students = students;
     }
 
+    public int getID() {
+        return ID;
+    }
+
+    public CharactersEnum getCard() {
+        return card;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public HashMap<Colour, Integer> getStudents() {
+        return students;
+    }
+
     @Override
     public void accept(View visitor) {
         visitor.visit(this);

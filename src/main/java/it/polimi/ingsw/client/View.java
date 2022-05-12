@@ -8,8 +8,13 @@ public class View {
     private ClientGameModel gameModel;
     private ClientBoard[] boards;
     private ClientCloud[] clouds;
+    private ClientCharacter[] characters;
 
+    private int myID;
 
+    public int getMyID() {
+        return myID;
+    }
 
     private final Client client;
 
@@ -38,9 +43,9 @@ public class View {
         boards[clientBoard.getPlayerID()] = clientBoard;
     }
     public synchronized void visit(ClientIsle clientIsle){
-        for(int i = 0; i < gameModel.getIsles().length; i++){
-            if(gameModel.getIsles()[i].getId() == clientIsle.getId()){
-                gameModel.getIsles()[i] = clientIsle;
+        for(int i = 0; i < gameModel.getIsles().size(); i++){
+            if(gameModel.getIsles().get(i).getId() == clientIsle.getId()){
+                gameModel.getIsles().set(i, clientIsle);
                 break;
             }
         }
@@ -53,5 +58,12 @@ public class View {
     }
     public synchronized void visit(ClientCloud clientCloud){
         clouds[clientCloud.getId()] = clientCloud;
+    }
+    public synchronized void visit(int myID){
+        boards = new ClientBoard[4];
+        this.myID = myID;
+    }
+    public synchronized void visit(ClientCharacter character){
+        characters[character.getID()] = character;
     }
 }

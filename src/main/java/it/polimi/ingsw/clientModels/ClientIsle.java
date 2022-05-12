@@ -22,6 +22,14 @@ public class ClientIsle implements ClientModel{
         this.prohibited=prohibited;
     }
 
+    public int getSize() {
+        return size;
+    }
+
+    public int getProhibited() {
+        return prohibited;
+    }
+
     public int getId() {
         return id;
     }
