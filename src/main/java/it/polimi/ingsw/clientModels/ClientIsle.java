@@ -11,11 +11,12 @@ public class ClientIsle implements ClientModel{
     private final int id;
     private final Faction controlling;
     private final HashMap<Colour, Integer> students;
-
+    private int size;
     private final int prohibited;
 
-    public ClientIsle(int id,Faction controlling,HashMap<Colour, Integer> students,int prohibited) {
+    public ClientIsle(int id,Faction controlling,HashMap<Colour, Integer> students,int prohibited, int size) {
         this.id = id;
+        this.size = size;
         this.controlling = controlling;
         this.students = students;
         this.prohibited=prohibited;
