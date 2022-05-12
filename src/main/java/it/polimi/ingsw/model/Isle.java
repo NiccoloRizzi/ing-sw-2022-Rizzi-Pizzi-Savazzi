@@ -70,6 +70,10 @@ public class Isle extends Tile {
 
     public void notifyChange()
     {
-        notify(new ClientIsle(ID,tower,new HashMap<Colour, Integer>(students)));
+        notify(new ClientIsle(ID,tower,new HashMap<Colour, Integer>(students),prohibited));
+    }
+
+    public ClientIsle getClientIsle(){
+        return new ClientIsle(ID,tower,new HashMap<Colour, Integer>(students),prohibited);
     }
 }

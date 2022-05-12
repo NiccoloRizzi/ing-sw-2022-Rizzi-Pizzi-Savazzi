@@ -1,13 +1,14 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.clientModels.ClientCharacter;
 import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.server.Observable;
 
 public class Character extends Observable<ClientModel> {
-    int ID;
-    private final CharactersEnum card;
-    private int price;
-    private boolean used = false;
+    protected int ID;
+    protected final CharactersEnum card;
+    protected int price;
+    protected boolean used = false;
 
     public Character(int ID,CharactersEnum character)
     {
@@ -27,12 +28,18 @@ public class Character extends Observable<ClientModel> {
         if(!used){
             price++;
             used=true;
+            notifyChange();
         }
     }
 
     public boolean getUsed()
     {
         return used;
+    }
+
+    public void notifyChange()
+    {
+        notify(new ClientCharacter(ID,card,price));
     }
 
 }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.messages.Answers;
+package it.polimi.ingsw.clientModels.Answers;
 
 import it.polimi.ingsw.client.View;
 import it.polimi.ingsw.model.Faction;

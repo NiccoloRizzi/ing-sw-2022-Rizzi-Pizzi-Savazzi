@@ -12,10 +12,13 @@ public class ClientIsle implements ClientModel{
     private final Faction controlling;
     private final HashMap<Colour, Integer> students;
 
-    public ClientIsle(int id,Faction controlling,HashMap<Colour, Integer> students) {
+    private final int prohibited;
+
+    public ClientIsle(int id,Faction controlling,HashMap<Colour, Integer> students,int prohibited) {
         this.id = id;
         this.controlling = controlling;
         this.students = students;
+        this.prohibited=prohibited;
     }
 
     public int getId() {

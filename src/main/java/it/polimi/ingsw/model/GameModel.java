@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.clientModels.ClientGameModel;
+import it.polimi.ingsw.clientModels.ClientIsle;
 import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.exceptions.*;
 import java.util.ArrayList;
@@ -101,6 +103,7 @@ public class GameModel extends Observable<ClientModel> {
 
     public void moveMN(int moves) {
         motherNature = (motherNature + moves) % isles.size();
+        notifyChange();
     }
 
     public HashMap<Colour, Player> getProfessors(){
@@ -193,8 +196,10 @@ public class GameModel extends Observable<ClientModel> {
     }
 
     public void setMotherNPos(int isleID) throws TileOutOfBoundsException {
-        if (isleID <= 11 && isleID >= 0)
+        if (isleID <= 11 && isleID >= 0) {
             this.motherNature = isleID;
+            notifyChange();
+        }
         else
             throw new TileOutOfBoundsException();
     }
@@ -257,6 +262,7 @@ public class GameModel extends Observable<ClientModel> {
     public void setProfessor(Colour c, Player p)
     {
         professors.put(c, p);
+        notifyChange();
     }
 
     public Character getCharacter (int id)
@@ -295,6 +301,7 @@ public class GameModel extends Observable<ClientModel> {
                 isles.add(0,temp);
             }
         }
+        notifyChange();
     }
 
     public int getProhibited()
@@ -361,5 +368,20 @@ public class GameModel extends Observable<ClientModel> {
         for(Character c: activeCharacters){
             c.addObserver(observer);
         }
+    }
+
+    public void notifyChange()
+    {
+        HashMap<Colour,Integer> prof = new HashMap<>();
+        for (Colour c: professors.keySet())
+        {
+            prof.put(c, professors.get(c).getID());
+        }
+        ArrayList<ClientIsle> tempIsles = new ArrayList<>();
+        for (Isle i:isles)
+        {
+            tempIsles.add(i.getClientIsle());
+        }
+        notify(new ClientGameModel(prof,motherNature,tempIsles));
     }
 }

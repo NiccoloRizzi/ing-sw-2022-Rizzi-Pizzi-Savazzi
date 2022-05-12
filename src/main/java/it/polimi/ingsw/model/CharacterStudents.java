@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.clientModels.ClientCharacter;
+import it.polimi.ingsw.clientModels.ClientIsle;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 
 import java.util.ArrayList;
@@ -28,10 +30,20 @@ public class CharacterStudents extends Character {
         for(Colour c : Colour.values()){
             students.replace(c, students.get(c) + studentsToAdd.get(c));
         }
+        notifyChange();
     }
     public  void removeStudent(Colour c) throws StudentsOutOfBoundsException{
-        if(students.get(c)>0)
-            students.replace(c,students.get(c)-1);
+        if(students.get(c)>0) {
+            students.replace(c, students.get(c) - 1);
+            notifyChange();
+        }
         else throw new StudentsOutOfBoundsException();
+    }
+
+    @Override
+    public void notifyChange()
+    {
+        HashMap<Colour,Integer> temp = new HashMap<>(students);
+        notify(new ClientCharacter(ID,card,price,temp));
     }
 }
