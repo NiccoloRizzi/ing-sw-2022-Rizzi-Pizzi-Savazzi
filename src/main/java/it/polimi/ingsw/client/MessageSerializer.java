@@ -102,6 +102,7 @@ public class MessageSerializer {
     public static String serialize(PlayerMessage message){
         String json = gson.toJson(message);
         JsonObject jsonObject = gson.fromJson(json,JsonObject.class);
+        jsonObject.addProperty("type","PlayerMessage");
         return jsonObject.toString();
     }
 }

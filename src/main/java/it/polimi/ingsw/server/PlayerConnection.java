@@ -5,22 +5,26 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.controller.MessageVisitor;
+import it.polimi.ingsw.exceptions.EmptyMessageException;
 import it.polimi.ingsw.messages.Message;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class PlayerConnection implements Runnable, Observer<ClientModel> {
-    private Server server;
-    private Socket socket;
+    private final Server server;
+    private final Socket socket;
     private String nickname;
     private int numOfPlayers;
     private boolean expertMode;
-    private ObjectOutputStream out;
+    private PrintWriter out;
     private boolean active;
     private MessageVisitor mv;
     private Lobby lobby;
+    private boolean verified = true;
 
     public int getNumOfPlayers() {
         return numOfPlayers;
@@ -33,8 +37,9 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
     public PlayerConnection(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
+        active = true;
         try {
-            out = new ObjectOutputStream(socket.getOutputStream());
+            out = new PrintWriter(socket.getOutputStream());
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -60,13 +65,8 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
     }
 
     public synchronized void send(Object answer){
-        try{
-            out.reset();
-            out.writeObject(answer);
+            out.println(answer);
             out.flush();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
     }
 
     public synchronized void closeConnection(){
@@ -77,31 +77,63 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
         }
         active = false;
     }
+    public void connectionChecker(){
+        Random random = new Random();
+        Gson gson = new Gson();
+        String json;
+        while(isActive()) {
+            JsonObject jo = new JsonObject();
+            jo.addProperty("type","ping");
+            send(jo.toString());
+            verified = false;
+            try {
+                TimeUnit.SECONDS.sleep(10);
+                if (!verified) {
+                    System.out.println(nickname + " disconnected.");
+                    closeConnection();
+                }
+                TimeUnit.SECONDS.sleep(10);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void run(){
         String read;
         Scanner in;
+        int i=0;
         try{
             in = new Scanner(socket.getInputStream());
             read = in.nextLine();
             Gson gson = new Gson();
-            JsonObject player = gson.fromJson(read, JsonObject.class);
-            nickname = player.get("nickname").getAsString();
-            numOfPlayers = player.get("players").getAsInt();
-            expertMode = player.get("expert").getAsBoolean();
-            server.addToLobby(this);
-            while(!lobby.isStarted()){
-                try {
-                    wait();
-                }
-                catch(InterruptedException e){
-                    e.printStackTrace();
+            JsonObject message = gson.fromJson(read, JsonObject.class);
+            if(message.get("type").getAsString().equals("PlayerMessage")) {
+                nickname = message.get("nickname").getAsString();
+                numOfPlayers = message.get("playersNumber").getAsInt();
+                expertMode = message.get("expertMode").getAsBoolean();
+                server.addToLobby(this);
+            }
+            synchronized (lobby) {
+                while (!lobby.isStarted()) {
+                    try {
+                        lobby.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+            new Thread(()->connectionChecker()).start();
             while(isActive()){
                 read = in.nextLine();
-                Message message = MoveSerializer.deserialize(read);
-                message.accept(mv);
+                message = gson.fromJson(read,JsonObject.class);
+                if(message.get("type").getAsString().equals("pong")) {
+                    verified = true;
+                }else {
+                    Message actionMessage = MoveSerializer.deserialize(read);
+                    send(actionMessage);
+                    actionMessage.accept(mv);
+                }
             }
             closeConnection();
         }catch(IOException e){
@@ -112,6 +144,10 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
 
     @Override
     public void update(ClientModel message) {
-
+        try {
+            send(ModelSerializer.serialize(message));
+        }catch(EmptyMessageException e){
+            e.printStackTrace();
+        }
     }
 }

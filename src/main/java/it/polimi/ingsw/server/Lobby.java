@@ -8,10 +8,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Lobby {
-    private ArrayList<PlayerConnection> players;
+    private final ArrayList<PlayerConnection> players;
     private final int numOfPlayer;
     private final boolean expertMode;
-    private Server server;
+    private final Server server;
     private Game game;
     private MessageVisitor messageVisitor;
     private boolean started;
@@ -22,9 +22,10 @@ public class Lobby {
         this.expertMode = mode;
         this.server = server;
         started = false;
+        players=new ArrayList<>();
     }
 
-    public boolean isStarted() {
+    public synchronized boolean isStarted() {
         return started;
     }
 
@@ -36,19 +37,17 @@ public class Lobby {
         return expertMode;
     }
 
-    public synchronized boolean  addPlayer(PlayerConnection player)
-    {
-        for(PlayerConnection p: players){
-            if(!p.isActive())
-            {
-                closeLobby();
-                return false;
-            }
-        }
+    public synchronized boolean addPlayer(PlayerConnection player) {
+//        for(PlayerConnection p: players){
+//            if(!p.isActive())
+//            {
+//                closeLobby();
+//                return false;
+//            }
+//        }
         if(players.size() < numOfPlayer) {
             players.add(player);
             player.setLobby(this);
-
             if (players.size() == numOfPlayer)
                 startGame();
 
@@ -59,6 +58,7 @@ public class Lobby {
 
     public synchronized void startGame()
     {
+        System.out.println("Starting game of lobby "+server.getLobbies().indexOf(this));
         started = true;
         game = new Game(numOfPlayer,expertMode);
         messageVisitor = new MessageVisitor(game);
@@ -70,6 +70,7 @@ public class Lobby {
             }
             player.setMessageVisitor(messageVisitor);
         }
+        game.setupGame();
         notifyAll();
     }
 
