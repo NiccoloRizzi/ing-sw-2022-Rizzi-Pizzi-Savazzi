@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.clientModels.*;
+import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
+import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 
 public class View {
 
@@ -20,6 +22,9 @@ public class View {
 
     public View(Client client){
         this.client = client;
+        if(client.isExpert()){
+            characters = new ClientCharacter[3];
+        }
     }
 
     public synchronized void sendMessage(String messageToSend) {
@@ -37,6 +42,9 @@ public class View {
     }
     public ClientCloud[] getClouds() {
         return clouds;
+    }
+    public ClientCharacter[] getCharacters() {
+        return characters;
     }
 
     public synchronized void visit(ClientBoard clientBoard){
@@ -65,5 +73,11 @@ public class View {
     }
     public synchronized void visit(ClientCharacter character){
         characters[character.getID()] = character;
+    }
+    public synchronized void visit(ErrorMessage errorMessage){
+
+    }
+    public synchronized void visit(TurnMessage errorMessage){
+
     }
 }

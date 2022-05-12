@@ -80,6 +80,10 @@ public class Client {
         return t;
     }
 
+    public boolean isExpert() {
+        return expert;
+    }
+
     public void writeToSocket(String message) {
         Thread t = new Thread(() -> {
             out.println(message);
