@@ -1,7 +1,11 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.clientModels.Answers.TurnMessage;
+import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.server.Observable;
+import it.polimi.ingsw.server.Observer;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -12,7 +16,7 @@ import java.util.stream.Collectors;
  * 1) Added function getWinner() <br>
  */
 
-public class Game {
+public class Game extends Observable<ClientModel> {
 
     private final static int MAX_N_ISLES = 12;
 
@@ -29,6 +33,7 @@ public class Game {
         this.playersNumber= playersNumber;
         gameModel = new GameModel(playersNumber);
         this.expertMode = expertMode;
+        turn = new ActionTurnHandler(gameModel);
     }
 
     public Player getWinner(){
@@ -69,7 +74,7 @@ public class Game {
     }
 
     public void startActionTurn(){
-       turn = new ActionTurnHandler(currentPlayer,gameModel, playersNumber);
+       turn.setupActionTurnHandler(currentPlayer, playersNumber);
     }
 
     public boolean isPlanning(){
@@ -154,6 +159,7 @@ public class Game {
         }
         gameModel.setUpCharacter();
         planningPhase = true;
+        notify(new TurnMessage(currentPlayer, TurnMessage.Turn.PLANNING));
     }
 
     public boolean isExpertMode(){
@@ -192,19 +198,23 @@ public class Game {
                 checkNextOrder();
                 currentPlayer = actionOrder.get(0);
                 startActionTurn();
+                notify(new TurnMessage(currentPlayer, TurnMessage.Turn.ACTION_STUDENTS));
             }
             else{
                 currentPlayer=planningOrder.get(planningOrder.indexOf(currentPlayer)+1);
+                notify(new TurnMessage(currentPlayer, TurnMessage.Turn.PLANNING));
             }
         }
         else{
             if(currentPlayer==actionOrder.size()-1){
                 currentPlayer = planningOrder.get(0);
                 planningPhase = true;
+                notify(new TurnMessage(currentPlayer, TurnMessage.Turn.PLANNING));
             }
             else {
                 currentPlayer = actionOrder.get(actionOrder.indexOf(currentPlayer) + 1);
                 startActionTurn();
+                notify(new TurnMessage(currentPlayer, TurnMessage.Turn.ACTION_STUDENTS));
             }
         }
     }
@@ -219,5 +229,11 @@ public class Game {
     }
     public void setCurrentPlayer(int currentPlayer) {
         this.currentPlayer = currentPlayer;
+    }
+
+    @Override
+    public void addObserver(Observer<ClientModel> observer){
+        super.addObserver(observer);
+        turn.addObserver(observer);
     }
 }

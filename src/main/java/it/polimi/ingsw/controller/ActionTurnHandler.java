@@ -1,14 +1,20 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
+import it.polimi.ingsw.clientModels.Answers.TurnMessage;
+import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.server.Observable;
+import it.polimi.ingsw.server.Observer;
 
+import java.util.List;
 import java.util.Optional;
 
-public class ActionTurnHandler {
+public class ActionTurnHandler extends Observable<ClientModel> {
     private int currentPlayer;
     private GameModel gameModel;
     private int studentsToMove;
@@ -18,9 +24,13 @@ public class ActionTurnHandler {
 
     private boolean usedCharacter;
 
-    public ActionTurnHandler(int currentPlayer,GameModel gameModel,int numOfPlayers){
-        this.currentPlayer = currentPlayer;
+    public ActionTurnHandler(GameModel gameModel){
         this.gameModel = gameModel;
+
+    }
+
+    public void setupActionTurnHandler(int currentPlayer,int numOfPlayers){
+        this.currentPlayer = currentPlayer;
         studentsToMove = 3;
         phase = Phase.STUDENTS;
         professorStrategy= new DefaultCheckProfessorStrategy();
@@ -30,15 +40,16 @@ public class ActionTurnHandler {
 
     public void moveMn(int moves){
         Assistant a = gameModel.getPlayers().get(currentPlayer).getChosen();
-        Optional<String> answer = Optional.empty();
+
         if(moves<=a.getMn_moves()+a.getBoost() && moves>=0){
             gameModel.moveMN(moves);
             checkTower(gameModel.getMotherNature());
             checkIsleJoin(gameModel.getMotherNature());
             phase=Phase.CLOUD;
+            notify(new TurnMessage(currentPlayer, TurnMessage.Turn.ACTION_CLOUDS));
         }
         else{
-            answer=Optional.of("The number of moves must be between 0 and "+a.getMn_moves()+a.getBoost()+"!");
+            notify(new ErrorMessage(ErrorMessage.ErrorType.MovesError));
         }
     }
 
@@ -52,10 +63,11 @@ public class ActionTurnHandler {
                     studentsToMove --;
                     if(studentsToMove  == 0)
                         phase = Phase.MOTHERNATURE;
+                        notify(new TurnMessage(currentPlayer, TurnMessage.Turn.ACTION_MN));
                 }
             }
             else {
-                String answer = "Not enough students to move";
+                notify(new ErrorMessage(ErrorMessage.ErrorType.StudentError));
             }
         }catch(StudentsOutOfBoundsException e){
             e.printStackTrace();
@@ -65,7 +77,6 @@ public class ActionTurnHandler {
     }
 
     public void moveStudentToTable(Colour student){
-        Optional<String> answer = Optional.empty();
         try{
             Player player = gameModel.getPlayer(currentPlayer);
             if(player.getBoard().getStudents(student)>0) {
@@ -76,12 +87,13 @@ public class ActionTurnHandler {
                     studentsToMove --;
                     if(studentsToMove  == 0)
                         phase = Phase.MOTHERNATURE;
+                    notify(new TurnMessage(currentPlayer, TurnMessage.Turn.ACTION_MN));
                 }
                 else{
-                    answer = Optional.of("Il tavolo è pieno.");
+                    notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsFullError));
                 }
             }else{
-                answer = Optional.of("Non hai abbastanza studenti.");
+                notify(new ErrorMessage(ErrorMessage.ErrorType.StudentError));
             }
 
 
@@ -92,10 +104,10 @@ public class ActionTurnHandler {
     }
 
     public void moveFromCloud(int cloudId){
-        Optional<String> answer=Optional.empty();
+
         try{
             if(gameModel.getCloud(cloudId).isEmpty()){
-                answer= Optional.of("The cloud you chose has already been emptied.");
+                notify(new ErrorMessage(ErrorMessage.ErrorType.CloudError));
             }
             else{
                 try {

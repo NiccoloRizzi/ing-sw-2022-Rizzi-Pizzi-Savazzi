@@ -1,17 +1,19 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
+import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 import it.polimi.ingsw.messages.*;
-import it.polimi.ingsw.messages.Answers.ErrorMessage;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.Character;
+import it.polimi.ingsw.server.Observable;
 
 
 import java.util.ArrayList;
 
-public class MessageVisitor {
+public class MessageVisitor extends Observable<ClientModel> {
 
     final Game game;
     public MessageVisitor(Game game){
@@ -46,7 +48,7 @@ public class MessageVisitor {
             if(!player.hasUsed(id)) {
                 if (player.getDeck().size() > 1) {
                     if(game.alreadyUsed(id)){
-                        //String answer = ErrorMessage.AssistantOtherPlayerError;
+                        notify(new ErrorMessage(ErrorMessage.ErrorType.AssistantOtherPlayerError));
                     }
                     else{
                         player.setChoosenAssistant(id);
@@ -55,11 +57,11 @@ public class MessageVisitor {
                 }
             }
             else{
-                //String answer = ErrorMessage.AssistantAlreadyChosenError;
+                notify(new ErrorMessage(ErrorMessage.ErrorType.AssistantAlreadyChosenError));
             }
 
         }else{
-            //String answer = ErrorMessage.TurnError;
+            notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
         }
 
     }
@@ -81,7 +83,7 @@ public class MessageVisitor {
             game.getTurnHandler().moveMn(moveMotherNatureMessage.getMoves());
         }
         else{
-            String answer = "Non è il tuo turno per spostare madre natura.";
+            notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
         }
     }
     public void visit(CloudChoiceMessage cloudChoiceMessage){
@@ -89,7 +91,7 @@ public class MessageVisitor {
             game.getTurnHandler().moveFromCloud(cloudChoiceMessage.getCloudID());
         }
         else{
-            String answer = "Non è il tuo turno per scegliere la nuvola.";
+            notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
         }
     }
     public void visit(IsleInfluenceCharacterMessage isleInfluenceCharacterMessage) {
@@ -120,21 +122,21 @@ public class MessageVisitor {
                             useCharacter(charId);
                         } catch (TileOutOfBoundsException e) {
                             e.printStackTrace();
-                            answer = "INDICE ISOLA ERRATO";
+                            notify(new ErrorMessage(ErrorMessage.ErrorType.IsleError));
                         }
                     }else{
-                        answer = "Non hai abbastanza monete";
+                        notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
                 }
                 else {
-                    answer = "NON è IL TUO TURNO";
+                    notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));;
                 }
             }else {
-                answer = "Personaggià già usato";
+                notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
             }
         }
         else {
-            answer = "Not available in normal mode";
+            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
         }
     }
     public void visit(MoveStudentCharacterMessage moveStudentCharacterMessage){
@@ -165,24 +167,24 @@ public class MessageVisitor {
                             useCharacter(charId);
                         } catch (TileOutOfBoundsException e) {
                             e.printStackTrace();
-                            answer = "INDICE ISOLA ERRATO";
+                            notify(new ErrorMessage(ErrorMessage.ErrorType.IsleError));
                         } catch (StudentsOutOfBoundsException e) {
                             e.printStackTrace();
-                            answer = "INDICE STUDENTE ERRATO";
+                            notify(new ErrorMessage(ErrorMessage.ErrorType.StudentError));
                         }
                     }else{
-                        answer = "Non hai abbastanza monete";
+                        notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
 
                 } else {
-                    answer = "NON è IL TUO TURNO";
+                    notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
                 }
             }else{
-                answer = "Personaggio già usato";
+                notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
             }
         }
         else {
-            answer = "Not available in normal mode";
+            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
         }
     }
     public void visit(StrategyProfessorMessage strategyProfessorMessage){
@@ -199,17 +201,17 @@ public class MessageVisitor {
                         handler.setProfessorStrategy(new ModifiedCheckProfessorStrategy());
                         useCharacter(charId);
                     }else{
-                        answer = "Personaggio già usato";
+                        notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                     }
                 }else{
-                    answer = "Non hai abbastanza monete";
+                    notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
                 }
             } else {
-                answer = "NON è IL TUO TURNO";
+                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
-            answer = "Not available in normal mode";
+            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
         }
     }
     public void visit(SimilMotherNatureMesage similMotherNatureMesage){
@@ -228,17 +230,17 @@ public class MessageVisitor {
                         handler.checkIsleJoin(isleId);
                         useCharacter(charId);
                     }else{
-                        answer = "Non hai abbastanza monete";
+                        notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
                 }else{
-                    answer = "Personaggio già usato";
+                    notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             } else {
-                answer = "NON è IL TUO TURNO";
+                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
-            answer = "Not available in normal mode";
+            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
         }
     }
     public void visit(Plus2MoveMnMessage plus2MoveMnMessage){
@@ -251,16 +253,16 @@ public class MessageVisitor {
                         useCharacter(plus2MoveMnMessage.getCharacterID());
 
                     } else {
-                        answer = "Not enough coin";
+                        notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
                 }else{
-                    answer = "In this turn a character was already used";
+                    notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             } else {
-                answer = "Not your turn";
+                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
             }
         }  else {
-            answer = "Not available in normal mode";
+            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
         }
     }
     public void visit(ProhibitedIsleCharacterMessage prohibitedIsleCharacterMessage){
@@ -272,27 +274,26 @@ public class MessageVisitor {
                         if (game.getGameModel().getProhibited() > 0) {
                             try {
                                 game.getGameModel().getIsle(prohibitedIsleCharacterMessage.getIsleID()).setProhibited();
+                                game.getGameModel().useProhibited();
+                                useCharacter(prohibitedIsleCharacterMessage.getCharacterID());
                             } catch (TileOutOfBoundsException e) {
-                                answer = "Isle doesn't exist";
+                                notify(new ErrorMessage(ErrorMessage.ErrorType.IsleError));
                             }
-                            game.getGameModel().useProhibited();
-                            useCharacter(prohibitedIsleCharacterMessage.getCharacterID());
-                            ;
                         } else {
-                            answer = "All 4 prohibited tile already in use";
+                            notify(new ErrorMessage(ErrorMessage.ErrorType.ProhibitedError));
                         }
                     } else {
-                        answer = "Not enough coins";
+                        notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
                 }else{
-                    answer = "In this turn a character was already used";
+                    notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             } else {
-                answer = "Not your turn";
+                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
-            answer = "Not available in normal mode";
+            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
         }
     }
     public void visit(Move6StudCharacterMessage move6StudCharacterMessage){
@@ -307,7 +308,7 @@ public class MessageVisitor {
                         try {
                             board.removeStudent(c);
                         } catch (StudentsOutOfBoundsException e) {
-                            answer = "student not valid";
+                            notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsEmptyError));
                         }
                         character.addStudent(c);
                     }
@@ -315,27 +316,27 @@ public class MessageVisitor {
                         try {
                             board.addToEntrance(c);
                         } catch (StudentsOutOfBoundsException e) {
-                            answer = "entrance is full";
+                            notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsFullError));
                         }
                         try {
                             character.removeStudent(c);
                         } catch (StudentsOutOfBoundsException e) {
-                            answer = "character is empty";
+                            notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsEmptyError));
                         }
                     }
                     useCharacter(move6StudCharacterMessage.getCharacterID());
                 } else {
-                    answer = "Not enough coins";
+                    notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
                 }
             }else {
-                answer = "In this turn a character was already used";
+                    notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
             }
             } else {
-                answer = "Not your turn";
+                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
-            answer = "Not available in normal mode";
+            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
         }
     }
 
@@ -350,12 +351,12 @@ public class MessageVisitor {
                             try {
                                 board.removeStudent(c);
                             } catch (StudentsOutOfBoundsException e) {
-                                answer = "student not valid";
+                                notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsEmptyError));
                             }
                             try {
                                 board.addToTable(c);
                             } catch (StudentsOutOfBoundsException e) {
-                                answer = "table is full";
+                                notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsFullError));
                             }
 
                         }
@@ -363,12 +364,12 @@ public class MessageVisitor {
                             try {
                                 board.addToEntrance(c);
                             } catch (StudentsOutOfBoundsException e) {
-                                answer = "entrance is full";
+                                notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsFullError));
                             }
                             try {
                                 board.removeFromTable(c);
                             } catch (StudentsOutOfBoundsException e) {
-                                answer = "table is empty";
+                                notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsEmptyError));
                             }
                         }
                         useCharacter(move2StudCharacterMessage.getCharacterID());
@@ -379,17 +380,17 @@ public class MessageVisitor {
                             game.getTurnHandler().checkProfessor(c);
                         }
                     } else {
-                        answer = "Not enough coins";
+                        notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
                 }else{
-                    answer = "In this turn a character was already used";
+                    notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             } else {
-                answer = "Not your turn";
+                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
-            answer = "Not available in normal mode";
+            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
         }
     }
     public void visit(Remove3StudCharacterMessage remove3StudCharacterMessage){
@@ -409,17 +410,17 @@ public class MessageVisitor {
                         useCharacter(remove3StudCharacterMessage.getCharacterID());
                         answer = "Player" + game.getGameModel().getPlayer(game.getCurrentPlayer()).getNickname() + "used character to remove 3 student";
                     } else {
-                        answer = "Not enough coins";
+                        notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
                 }else{
-                    answer = "In this turn a character was already used";
+                    notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             } else {
-                answer = "Not your turn";
+                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
-            answer = "Not available in normal mode";
+            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
         }
     }
 }
