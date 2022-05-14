@@ -3,6 +3,7 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.clientModels.*;
 import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
+import it.polimi.ingsw.clientModels.Answers.WinMessage;
 
 public class View {
 
@@ -78,6 +79,10 @@ public class View {
 
     }
     public synchronized void visit(TurnMessage errorMessage){
+
+    }
+
+    public synchronized void visit(WinMessage winMessage){
 
     }
 }
