@@ -384,4 +384,19 @@ public class GameModel extends Observable<ClientModel> {
         }
         notify(new ClientGameModel(prof,motherNature,tempIsles));
     }
+
+    public void sendFullModel()
+    {
+        notifyChange();
+        for(Cloud c: clouds){
+            c.notifyChange();
+        }
+        for (Player p:players){
+            p.notifyChange();
+            p.getBoard().notifyChange();
+        }
+        for(Character c: activeCharacters){
+            c.notifyChange();
+        }
+    }
 }

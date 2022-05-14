@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.clientModels.ClientIsle;
+import it.polimi.ingsw.clientModels.ClientModel;
+import it.polimi.ingsw.server.Observer;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 
@@ -8,12 +11,31 @@ import java.util.HashMap;
 
 public class IsleTest extends TestCase {
 
+
+    private class TestObs implements Observer<ClientModel> {
+        public ClientModel message;
+
+        @Override
+        public void update(ClientModel message) {
+            this.message = message;
+        }
+    }
     @Test
     public void testTower() {
         Isle isle = new Isle(0);
+        TestObs obs = new TestObs();
+        isle.addObserver(obs);
         assertEquals(Faction.Empty,isle.getTower());
         isle.setTower(Faction.Black);
+        ClientIsle message = (ClientIsle)obs.message;
         assertEquals(Faction.Black,isle.getTower());
+        assertEquals(message.getControlling(),isle.getTower());
+        assertEquals(message.getSize(),isle.getSize());
+        assertEquals(message.getId(),isle.getID());
+        for (Colour c: Colour.values()){
+            assertEquals((int)message.getStudents().get(c),isle.getStudents(c));
+        }
+        assertEquals(message.getProhibited(),0);
     }
 
     @Test
@@ -154,12 +176,24 @@ public class IsleTest extends TestCase {
     @Test
     public void testProhibited() {
         Isle isle = new Isle(0);
+        TestObs obs = new TestObs();
+        isle.addObserver(obs);
         assertFalse(isle.removeProhibited());
         isle.setProhibited();
+        ClientIsle message = (ClientIsle)obs.message;
+        assertEquals(message.getProhibited(),1);
         isle.setProhibited();
+        message = (ClientIsle)obs.message;
+        assertEquals(message.getProhibited(),2);
         assertTrue(isle.removeProhibited());
+        message = (ClientIsle)obs.message;
+        assertEquals(message.getProhibited(),1);
         isle.removeProhibited();
+        message = (ClientIsle)obs.message;
+        assertEquals(message.getProhibited(),0);
         assertFalse(isle.removeProhibited());
+        message = (ClientIsle)obs.message;
+        assertEquals(message.getProhibited(),0);
     }
 
     @Test

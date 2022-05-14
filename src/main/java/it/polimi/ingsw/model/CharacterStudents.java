@@ -22,6 +22,7 @@ public class CharacterStudents extends Character {
     public void addStudent(Colour student)
     {
         students.replace(student, students.get(student)+1);
+        notifyChange();
     }
 
     public int getStudents(Colour c) { return students.get(c);}

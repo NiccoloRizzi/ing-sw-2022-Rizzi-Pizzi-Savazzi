@@ -115,6 +115,7 @@ public class Board extends Tile{
 
     public void setFaction(Faction faction){
         this.faction = faction;
+        notifyChange();
     }
 
     public Faction getFaction() {

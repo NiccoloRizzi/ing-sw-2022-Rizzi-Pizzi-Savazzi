@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.clientModels.ClientModel;
+import it.polimi.ingsw.clientModels.ClientPlayer;
+import it.polimi.ingsw.server.Observer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -9,6 +12,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
 
+    private class TestObs implements Observer<ClientModel> {
+        public ClientModel message;
+
+        @Override
+        public void update(ClientModel message) {
+            this.message = message;
+        }
+    }
     @ParameterizedTest
     @ValueSource(ints = {0,1,2,3,4,5,6,7,8,9})
     void getChosen(int param) {
@@ -34,10 +45,20 @@ class PlayerTest {
     @ValueSource(ints = {0,1,2,3,4,5,6,7,8,9,10,11,-1,-2})
     void setChoosenAssistant(int param) {
         Player p = new Player(0, "testNickname");
+        p.createBoard(6);
+        TestObs obs = new TestObs();
+        p.addObserver(obs);
+        ClientPlayer message;
         if(param >= 0 && param < 10){
             p.setChoosenAssistant(param);
+            message = (ClientPlayer)obs.message;
             assertEquals(9, p.getDeck().size());
             assertEquals(1, p.getUsedCards().size());
+            assertEquals(message.getUsedAssistants()[0],p.getUsedCards().get(0).getValue());
+            for (int i = 0; i < p.getDeck().size();i++)
+            {
+                assertEquals(message.getDeck()[i],p.getDeck().get(i).getValue());
+            }
         }else{
             assertThrowsExactly(IndexOutOfBoundsException.class, ()->{p.setChoosenAssistant(param);});
             assertEquals(10, p.getDeck().size());
@@ -56,9 +77,14 @@ class PlayerTest {
     @org.junit.jupiter.api.Test
     void addCoin() {
         Player p = new Player(0, "testNickname");
+        p.createBoard(6);
+        TestObs obs = new TestObs();
+        p.addObserver(obs);
         assertEquals(0, p.getCoins());
         p.addCoin();
+        ClientPlayer message = (ClientPlayer)obs.message;
         assertEquals(1,p.getCoins());
+        assertEquals(message.getCoins(),p.getCoins());
     }
 
     @org.junit.jupiter.api.Test

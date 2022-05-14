@@ -44,10 +44,11 @@ public class ClientBoard implements ClientModel{
     }
 
     public ClientBoard(ClientBoard board){
-        this.entrance = (HashMap<Colour, Integer>) board.entrance.clone();
+        this.playerID = board.playerID;
+        this.entrance = new HashMap<>(board.entrance);
         this.faction = board.faction;
         this.towers = board.towers;
-        this.tables = (HashMap<Colour, Integer>) board.tables.clone();
+        this.tables = new HashMap<>(board.tables);
     }
 
     @Override

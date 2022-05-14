@@ -43,4 +43,9 @@ public abstract class Tile extends Observable<ClientModel>
     public int getStudents(Colour c){
         return students.get(c);
     }
+
+    public int getID()
+    {
+        return ID;
+    }
 }

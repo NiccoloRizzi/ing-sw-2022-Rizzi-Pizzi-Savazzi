@@ -235,5 +235,6 @@ public class Game extends Observable<ClientModel> {
     public void addObserver(Observer<ClientModel> observer){
         super.addObserver(observer);
         turn.addObserver(observer);
+        gameModel.addObserver(observer);
     }
 }

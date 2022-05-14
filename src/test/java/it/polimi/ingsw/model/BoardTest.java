@@ -1,7 +1,10 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.clientModels.ClientBoard;
+import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TowerOutOfBoundException;
+import it.polimi.ingsw.server.Observer;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -9,31 +12,53 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
 
+    private class TestObs implements Observer<ClientModel> {
+        public ClientModel message;
+
+        @Override
+        public void update(ClientModel message) {
+            this.message = message;
+        }
+    }
+
     @org.junit.jupiter.api.Test
     void removeStudent() {
         Board board = new Board(Faction.Black, 8,0);
+        TestObs obs = new TestObs();
+        board.addObserver(obs);
         board.addStudent(Colour.Dragons);
+        ClientBoard message = (ClientBoard)obs.message;
         assertEquals(board.students.get(Colour.Dragons),1);
+        assertEquals(message.getEntrance().get(Colour.Dragons),1);
         try {
             board.removeStudent(Colour.Dragons);
+            message = (ClientBoard)obs.message;
         }catch(StudentsOutOfBoundsException e){
             e.printStackTrace();
         }
         assertEquals(board.getStudents(Colour.Dragons),0);
+        assertEquals(message.getEntrance().get(Colour.Dragons),0);
     }
 
     @ParameterizedTest
     @ValueSource(ints = {6,8})
     void addToEntrance(int k) {
         Board board= new Board(Faction.Black, k,0);
+        TestObs obs = new TestObs();
+        board.addObserver(obs);
+        ClientBoard message;
         try {
             board.addToEntrance(Colour.Dragons);
+            message = (ClientBoard)obs.message;
+            assertEquals(1,message.getEntrance().get(Colour.Dragons));
         }catch(StudentsOutOfBoundsException e){
             e.printStackTrace();
         }
         for(int i=1; i<((k==6)?9:7);i++){
             try {
                 board.addToEntrance(Colour.Dragons);
+                message = (ClientBoard)obs.message;
+                assertEquals(i+1,message.getEntrance().get(Colour.Dragons));
             }catch(StudentsOutOfBoundsException e){
                 e.printStackTrace();
             }
@@ -50,11 +75,16 @@ class BoardTest {
     @org.junit.jupiter.api.Test
     void addToTable() {
         Board board = new Board(Faction.Black, 8,0);
+        TestObs obs = new TestObs();
+        board.addObserver(obs);
+        ClientBoard message;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 10; j++) {
                 assertEquals(j, board.getTable(Colour.values()[i]));
                 try{
                     board.addToTable(Colour.values()[i]);
+                    message = (ClientBoard)obs.message;
+                    assertEquals(j+1, message.getTables().get(Colour.values()[i]));
                 }catch(StudentsOutOfBoundsException e){
                     e.printStackTrace();
                 }
@@ -71,14 +101,23 @@ class BoardTest {
     @ValueSource(ints = {6,8})
     void useAddTowers(int k) throws TowerOutOfBoundException {
         Board board = new Board(Faction.Black, k,0);
+        TestObs obs = new TestObs();
+        board.addObserver(obs);
+        ClientBoard message;
         assertEquals(board.getTowers(),k);
         board.useTowers(1);
+        message = (ClientBoard)obs.message;
+        assertEquals(k-1,message.getTowers());
         assertEquals(board.getTowers(),k-1);
         board.addTowers(1);
+        message = (ClientBoard)obs.message;
+        assertEquals(k,message.getTowers());
         assertEquals(board.getTowers(),k);
         for(int i=0; i<k;i++)
             board.useTowers(1);
         assertEquals(board.getTowers(),0);
+        message = (ClientBoard)obs.message;
+        assertEquals(0,message.getTowers());
     }
 
     @ParameterizedTest
@@ -140,9 +179,14 @@ class BoardTest {
     @org.junit.jupiter.api.Test
     void getSetFaction() {
         Board board = new Board(Faction.Black, 8,0);
+        TestObs obs = new TestObs();
+        board.addObserver(obs);
+        ClientBoard message;
         assertEquals(board.getFaction(), Faction.Black);
         board.setFaction(Faction.White);
+        message = (ClientBoard)obs.message;
         assertEquals(board.getFaction(), Faction.White);
+        assertEquals(message.getFaction(),Faction.White);
     }
 
     @ParameterizedTest
@@ -157,14 +201,21 @@ class BoardTest {
     @org.junit.jupiter.api.Test
     void removeFromTable() {
         Board board = new Board(Faction.Black,8,0);
+        TestObs obs = new TestObs();
+        board.addObserver(obs);
+        ClientBoard message;
         try {
             board.addToTable(Colour.values()[0]);
+            message = (ClientBoard) obs.message;
+            assertEquals(1,message.getTables().get(Colour.values()[0]));
         }catch(StudentsOutOfBoundsException e){
             e.printStackTrace();
         }
         assertEquals(1,board.getTable(Colour.values()[0]));
         try{
             board.removeFromTable(Colour.values()[0]);
+            message = (ClientBoard) obs.message;
+            assertEquals(0,message.getTables().get(Colour.values()[0]));
         }catch(StudentsOutOfBoundsException e){
             e.printStackTrace();
         }

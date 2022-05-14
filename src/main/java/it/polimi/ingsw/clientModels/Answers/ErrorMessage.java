@@ -31,6 +31,7 @@ public class ErrorMessage implements ClientModel {
         TileIsEmptyError,
         TileIsFullError,
         ProhibitedError,
-        MovesError
+        MovesError,
+        PlayerDisconnected
     }
 }

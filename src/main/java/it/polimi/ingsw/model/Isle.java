@@ -24,6 +24,7 @@ public class Isle extends Tile {
 
     public void setTower(Faction f) {
         this.tower = f;
+        notifyChange();
     }
 
     public int getSize(){
@@ -38,12 +39,16 @@ public class Isle extends Tile {
         return infStrategy.getInfluence(t,students,1,tower, professors);
     }
 
-    public void setProhibited(){ prohibited ++;}
+    public void setProhibited(){
+        prohibited ++;
+        notifyChange();
+    }
 
     public boolean removeProhibited()
     {
        if(prohibited > 0) {
            prohibited--;
+           notifyChange();
            return true;
        }
         return false;
