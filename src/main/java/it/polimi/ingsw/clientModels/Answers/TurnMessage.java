@@ -2,6 +2,7 @@ package it.polimi.ingsw.clientModels.Answers;
 
 import it.polimi.ingsw.client.View;
 import it.polimi.ingsw.clientModels.ClientModel;
+import it.polimi.ingsw.server.ModelSerializer;
 
 public class TurnMessage implements ClientModel {
     private final int playerId;
@@ -22,5 +23,10 @@ public class TurnMessage implements ClientModel {
     public void accept(View visitor)
     {
         visitor.visit(this);
+    }
+
+    @Override
+    public String serialize(){
+        return ModelSerializer.serialize(this);
     }
 }

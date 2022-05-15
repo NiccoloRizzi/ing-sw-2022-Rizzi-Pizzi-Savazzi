@@ -144,10 +144,6 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
 
     @Override
     public void update(ClientModel message) {
-        try {
-            send(ModelSerializer.serialize(message));
-        }catch(EmptyMessageException e){
-            e.printStackTrace();
-        }
+            send(message.serialize());
     }
 }

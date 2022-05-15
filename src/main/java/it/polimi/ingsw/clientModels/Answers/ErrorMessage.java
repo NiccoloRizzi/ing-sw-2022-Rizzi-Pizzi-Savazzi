@@ -3,6 +3,7 @@ package it.polimi.ingsw.clientModels.Answers;
 
 import it.polimi.ingsw.client.View;
 import it.polimi.ingsw.clientModels.ClientModel;
+import it.polimi.ingsw.server.ModelSerializer;
 
 public class ErrorMessage implements ClientModel {
 
@@ -33,5 +34,10 @@ public class ErrorMessage implements ClientModel {
         ProhibitedError,
         MovesError,
         PlayerDisconnected
+    }
+
+    @Override
+    public String serialize(){
+        return ModelSerializer.serialize(this);
     }
 }

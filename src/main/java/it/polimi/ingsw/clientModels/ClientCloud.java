@@ -2,6 +2,7 @@ package it.polimi.ingsw.clientModels;
 
 import it.polimi.ingsw.client.View;
 import it.polimi.ingsw.model.Colour;
+import it.polimi.ingsw.server.ModelSerializer;
 
 import java.util.HashMap;
 
@@ -25,5 +26,10 @@ public class ClientCloud implements ClientModel{
     @Override
     public void accept(View visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public String serialize(){
+        return ModelSerializer.serialize(this);
     }
 }

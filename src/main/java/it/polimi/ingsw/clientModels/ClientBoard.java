@@ -3,6 +3,7 @@ package it.polimi.ingsw.clientModels;
 import it.polimi.ingsw.client.View;
 import it.polimi.ingsw.model.Colour;
 import it.polimi.ingsw.model.Faction;
+import it.polimi.ingsw.server.ModelSerializer;
 
 import java.util.HashMap;
 
@@ -49,6 +50,11 @@ public class ClientBoard implements ClientModel{
         this.faction = board.faction;
         this.towers = board.towers;
         this.tables = new HashMap<>(board.tables);
+    }
+
+    @Override
+    public String serialize(){
+        return ModelSerializer.serialize(this);
     }
 
     @Override

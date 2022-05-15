@@ -1,14 +1,15 @@
 package it.polimi.ingsw.clientModels;
 
 import it.polimi.ingsw.client.View;
+import it.polimi.ingsw.server.ModelSerializer;
 
 public class ClientPlayer implements ClientModel{
 
-    private Integer[] usedAssistants;
-    private Integer[] deck;
-    private int coins;
-    private String nickname;
-    private int id;
+    private final Integer[] usedAssistants;
+    private final Integer[] deck;
+    private final int coins;
+    private final String nickname;
+    private final int id;
 
     public Integer[] getUsedAssistants() {
         return usedAssistants;
@@ -41,5 +42,10 @@ public class ClientPlayer implements ClientModel{
     @Override
     public void accept(View visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public String serialize(){
+        return ModelSerializer.serialize(this);
     }
 }

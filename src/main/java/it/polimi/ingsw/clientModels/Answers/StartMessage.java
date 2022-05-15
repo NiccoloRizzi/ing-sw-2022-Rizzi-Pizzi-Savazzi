@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.View;
 import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.model.Faction;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.server.ModelSerializer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +46,11 @@ public class StartMessage implements ClientModel {
         public Faction getFaction() {
             return faction;
         }
+    }
+
+    @Override
+    public String serialize(){
+        return ModelSerializer.serialize(this);
     }
 
 }
