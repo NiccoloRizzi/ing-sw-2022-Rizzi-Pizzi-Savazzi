@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
+import it.polimi.ingsw.clientModels.Answers.WinMessage;
 import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.*;
@@ -37,7 +38,7 @@ public class Game extends Observable<ClientModel> {
     }
 
     public Player getWinner(){
-        return gameModel.getPlayers().stream()
+        Player winner = gameModel.getPlayers().stream()
                 .filter(p -> (
                         p.getBoard().getTowers() == gameModel.getPlayers().stream()
                                 .map(n -> n.getBoard().getTowers())
@@ -46,6 +47,8 @@ public class Game extends Observable<ClientModel> {
                         ))
                 .max(Comparator.comparingInt(a -> gameModel.numberOfProfessors(a)))
                 .get();
+        notify(new WinMessage(winner.getID()));
+        return winner;
     }
 
     // DOESN'T SAY WHO WINS

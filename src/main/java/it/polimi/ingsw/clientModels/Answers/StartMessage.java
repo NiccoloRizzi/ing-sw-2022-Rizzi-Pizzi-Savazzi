@@ -1,13 +1,14 @@
 package it.polimi.ingsw.clientModels.Answers;
 
 import it.polimi.ingsw.client.View;
+import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.model.Faction;
 import it.polimi.ingsw.model.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class StartMessage {
+public class StartMessage implements ClientModel {
     int playerNumbers;
     HashMap<String, Tuple> players;
 
@@ -22,10 +23,11 @@ public class StartMessage {
         return players.get(nickname);
     }
 
-
-    void accept(View view){
+    @Override
+    public void accept(View visitor) {
 
     }
+
 
     private class Tuple{
         int id;

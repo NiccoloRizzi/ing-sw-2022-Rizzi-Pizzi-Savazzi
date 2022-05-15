@@ -12,7 +12,6 @@ public class View {
     private ClientBoard[] boards;
     private ClientCloud[] clouds;
     private ClientCharacter[] characters;
-
     private int myID;
 
     public int getMyID() {
@@ -31,7 +30,6 @@ public class View {
     public synchronized void sendMessage(String messageToSend) {
         client.writeToSocket(messageToSend);
     }
-
     public ClientGameModel getGameModel() {
         return gameModel;
     }
@@ -81,7 +79,6 @@ public class View {
     public synchronized void visit(TurnMessage errorMessage){
 
     }
-
     public synchronized void visit(WinMessage winMessage){
 
     }

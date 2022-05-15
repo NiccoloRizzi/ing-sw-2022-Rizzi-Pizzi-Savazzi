@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
+import it.polimi.ingsw.clientModels.Answers.StartMessage;
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.MessageVisitor;
 import it.polimi.ingsw.exceptions.PlayerOutOfBoundException;
@@ -71,7 +73,15 @@ public class Lobby {
             player.setMessageVisitor(messageVisitor);
         }
         game.setupGame();
-        notifyAll();
+        for(PlayerConnection player: players)
+        {
+            game.addObserver(player);
+        }
+        game.getGameModel().sendFullModel();
+        StartMessage start = new StartMessage(game.getGameModel().getPlayers());
+        for(PlayerConnection player: players){
+            player.update(start);
+        }
     }
 
     public synchronized void closeLobby()
@@ -85,8 +95,8 @@ public class Lobby {
     public void deregister(PlayerConnection player)
     {
         for(PlayerConnection p: players){
-       //     if(!p.equals(player))
-//              player.send(); messaggio giocatore disconnesso
+            if(!p.equals(player))
+             player.update(new ErrorMessage(ErrorMessage.ErrorType.PlayerDisconnected));
         }
         closeLobby();
     }
