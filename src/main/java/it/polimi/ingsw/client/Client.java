@@ -17,7 +17,6 @@ public class Client {
     private final PrintWriter out;
     private boolean isActive=true;
     private final View view;
-    private String nickname;
     private int pn;
     private boolean expert;
 
@@ -28,15 +27,12 @@ public class Client {
         view = new View(this);
     }
 
-    public Client(){
+    public Client(boolean expert){
         socket = null;
         in = null;
         out = null;
         view = null;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+        this.expert = expert;
     }
 
     public void setPn(int pn) {
@@ -58,9 +54,9 @@ public class Client {
     public Thread readFromSocket(){
         Thread t = new Thread(() -> {
             Gson gson = new Gson();
-            System.out.println("Thread creato!");
-            writeToSocket(MessageSerializer.serialize(new PlayerMessage(nickname,pn,expert)));
-            System.out.println("Message sent");
+//            System.out.println("Thread creato!");
+//            writeToSocket(MessageSerializer.serialize(new PlayerMessage(nickname,pn,expert)));
+//            System.out.println("Message sent");
             while (isActive) {
                 String read = in.nextLine();
                 JsonObject jo = gson.fromJson(read,JsonObject.class);

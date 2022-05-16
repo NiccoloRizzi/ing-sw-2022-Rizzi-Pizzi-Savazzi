@@ -14,6 +14,7 @@ public class StartMessage implements ClientModel {
     HashMap<String, Tuple> players;
 
     public StartMessage(ArrayList<Player> players) {
+        this.playerNumbers = players.size();
         this.players = new HashMap<>();
         for(Player p: players){
             this.players.put(p.getNickname(), new Tuple(p.getID(), p.getBoard().getFaction()));
@@ -24,13 +25,24 @@ public class StartMessage implements ClientModel {
         return players.get(nickname);
     }
 
-    @Override
-    public void accept(View visitor) {
-
+    public int getPlayerNumbers() {
+        return playerNumbers;
     }
 
+//    public HashMap<String, Tuple> getPlayers() {
+//        return players;
+//    }
 
-    private class Tuple{
+    public void accept(View view){
+        view.visit(this);
+    }
+
+    @Override
+    public String serialize() {
+        return ModelSerializer.serialize(this);
+    }
+
+    public class Tuple{
         int id;
         Faction faction;
 
@@ -47,10 +59,4 @@ public class StartMessage implements ClientModel {
             return faction;
         }
     }
-
-    @Override
-    public String serialize(){
-        return ModelSerializer.serialize(this);
-    }
-
 }
