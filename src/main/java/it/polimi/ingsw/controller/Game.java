@@ -227,7 +227,7 @@ public class Game extends Observable<ClientModel> {
             }
         }
         else{
-            if(currentPlayer==actionOrder.size()-1){
+            if(currentPlayer==actionOrder.get(actionOrder.size()-1)){
                 currentPlayer = planningOrder.get(0);
                 planningPhase = true;
                 if(!checkEndStudentAssistant())

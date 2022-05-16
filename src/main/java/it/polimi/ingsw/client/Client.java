@@ -70,20 +70,17 @@ public class Client {
     public Thread readFromSocket(){
         Thread t = new Thread(() -> {
             Gson gson = new Gson();
-            System.out.println("Thread creato!");
             writeToSocket(MessageSerializer.serialize(new PlayerMessage(nickname,pn,expert)));
-            System.out.println("Message sent");
             while (isActive) {
                 String read = in.nextLine();
-                System.out.println(read);
                 JsonObject jo = gson.fromJson(read,JsonObject.class);
                 if(jo.get("type").getAsString().equals("ping")){
-                    System.out.println("Pong!");
                     JsonObject answer = new JsonObject();
                     answer.addProperty("type","pong");
                     writeToSocket(answer.toString());
                 }
                 else {
+                    System.out.println(read);
                     ClientModel model = ClientModelDeSerializer.deserialize(read);
                     model.accept(view);
                 }
