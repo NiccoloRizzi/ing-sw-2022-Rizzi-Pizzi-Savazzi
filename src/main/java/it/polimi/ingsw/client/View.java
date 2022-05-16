@@ -2,6 +2,7 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.clientModels.*;
 import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
+import it.polimi.ingsw.clientModels.Answers.StartMessage;
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 import it.polimi.ingsw.clientModels.Answers.WinMessage;
 
@@ -13,10 +14,7 @@ public class View {
     private ClientCloud[] clouds;
     private ClientCharacter[] characters;
     private int myID;
-
-    public int getMyID() {
-        return myID;
-    }
+    private String nickname;
 
     private final Client client;
 
@@ -30,20 +28,31 @@ public class View {
     public synchronized void sendMessage(String messageToSend) {
         client.writeToSocket(messageToSend);
     }
-    public ClientGameModel getGameModel() {
+
+    public synchronized ClientGameModel getGameModel() {
         return gameModel;
     }
-    public ClientBoard[] getBoards() {
+    public synchronized ClientBoard[] getBoards() {
         return boards;
     }
-    public ClientPlayer[] getPlayer() {
+    public synchronized ClientPlayer[] getPlayers() {
         return players;
     }
-    public ClientCloud[] getClouds() {
+    public synchronized ClientCloud[] getClouds() {
         return clouds;
     }
-    public ClientCharacter[] getCharacters() {
+    public synchronized ClientCharacter[] getCharacters() {
         return characters;
+    }
+    public synchronized int getMyID() {
+        return myID;
+    }
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public synchronized void visit(ClientBoard clientBoard){
@@ -66,20 +75,22 @@ public class View {
     public synchronized void visit(ClientCloud clientCloud){
         clouds[clientCloud.getId()] = clientCloud;
     }
-    public synchronized void visit(int myID){
-        boards = new ClientBoard[4];
-        this.myID = myID;
-    }
     public synchronized void visit(ClientCharacter character){
         characters[character.getID()] = character;
     }
     public synchronized void visit(ErrorMessage errorMessage){
 
     }
-    public synchronized void visit(TurnMessage errorMessage){
+    public synchronized void visit(TurnMessage turnMessage){
 
     }
     public synchronized void visit(WinMessage winMessage){
 
+    }
+    public synchronized void visit(StartMessage startMessage){
+        players = new ClientPlayer[startMessage.getPlayerNumbers()];
+        boards = new ClientBoard[startMessage.getPlayerNumbers()];
+        clouds = new ClientCloud[startMessage.getPlayerNumbers()];
+        myID = startMessage.getPlayer(nickname).getId();
     }
 }
