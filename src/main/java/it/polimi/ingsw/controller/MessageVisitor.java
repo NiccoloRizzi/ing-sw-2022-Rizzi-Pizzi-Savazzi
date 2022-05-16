@@ -81,6 +81,7 @@ public class MessageVisitor extends Observable<ClientModel> {
     public void visit(MoveMotherNatureMessage moveMotherNatureMessage){
         if(moveMotherNatureMessage.getPlayerID()==game.getCurrentPlayer() && game.getTurnHandler().getPhase()==Phase.MOTHERNATURE){
             game.getTurnHandler().moveMn(moveMotherNatureMessage.getMoves());
+            game.checkEndTowerIsle();
         }
         else{
             notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));

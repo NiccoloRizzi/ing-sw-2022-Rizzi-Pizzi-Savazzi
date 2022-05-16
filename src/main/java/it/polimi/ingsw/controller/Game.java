@@ -47,29 +47,49 @@ public class Game extends Observable<ClientModel> {
                         ))
                 .max(Comparator.comparingInt(a -> gameModel.numberOfProfessors(a)))
                 .get();
-        notify(new WinMessage(winner.getID()));
+        Player check = gameModel.getPlayers().stream()
+                .filter(p -> (
+                        p.getBoard().getTowers() == gameModel.getPlayers().stream()
+                                .map(n -> n.getBoard().getTowers())
+                                .min(Integer::compareTo)
+                                .get() && p.getID()!= winner.getID()
+                ))
+                .max(Comparator.comparingInt(a -> gameModel.numberOfProfessors(a)))
+                .get();
+        if(winner.getBoard().getTowers() == check.getBoard().getTowers() && gameModel.numberOfProfessors(winner) == gameModel.numberOfProfessors(check)){
+            notify(new WinMessage(false));
+        }else{
+            notify(new WinMessage(winner.getID()));
+        }
         return winner;
     }
 
     // DOESN'T SAY WHO WINS
-    public boolean checkEnd(){
+    public boolean checkEndTowerIsle() {
         // TOWER FINISHED
-        for(Player p : gameModel.getPlayers()){
-            if(p.getBoard().getTowers() <= 0){
+        for (Player p : gameModel.getPlayers()) {
+            if (p.getBoard().getTowers() <= 0) {
+                getWinner();
                 return true;
             }
         }
         // MORE THAN 3 ISLES
-        if(gameModel.getIsles().size() <= 3){
+        if (gameModel.getIsles().size() <= 3) {
+            getWinner();
             return true;
         }
+        return false;
+    }
+    public boolean checkEndStudentAssistant(){
         // NO STUDENTS IN BAG
         if(gameModel.checkEmptyBag()){
+            getWinner();
             return true;
         }
         // NO MORE ASSISTANTS
         for(Player p : gameModel.getPlayers()){
             if(p.getDeck().size() <= 0){
+                getWinner();
                 return true;
             }
         }
@@ -212,7 +232,8 @@ public class Game extends Observable<ClientModel> {
             if(currentPlayer==actionOrder.size()-1){
                 currentPlayer = planningOrder.get(0);
                 planningPhase = true;
-                notify(new TurnMessage(currentPlayer, TurnMessage.Turn.PLANNING));
+                if(!checkEndStudentAssistant())
+                    notify(new TurnMessage(currentPlayer, TurnMessage.Turn.PLANNING));
             }
             else {
                 currentPlayer = actionOrder.get(actionOrder.indexOf(currentPlayer) + 1);
