@@ -65,8 +65,8 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
     }
 
     public synchronized void send(Object answer){
-            out.println(answer);
-            out.flush();
+        out.println(answer);
+        out.flush();
     }
 
     public synchronized void closeConnection(){
@@ -78,7 +78,6 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
         active = false;
     }
     public void connectionChecker(){
-        Random random = new Random();
         Gson gson = new Gson();
         String json;
         while(isActive()) {
@@ -131,7 +130,6 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
                     verified = true;
                 }else {
                     Message actionMessage = MoveSerializer.deserialize(read);
-                    send(actionMessage);
                     actionMessage.accept(mv);
                 }
             }

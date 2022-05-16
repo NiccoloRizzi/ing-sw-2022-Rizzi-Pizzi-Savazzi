@@ -62,6 +62,7 @@ public class Lobby {
     {
         System.out.println("Starting game of lobby "+server.getLobbies().indexOf(this));
         started = true;
+        notifyAll();
         game = new Game(numOfPlayer,expertMode);
         messageVisitor = new MessageVisitor(game);
         for(PlayerConnection player: players){
