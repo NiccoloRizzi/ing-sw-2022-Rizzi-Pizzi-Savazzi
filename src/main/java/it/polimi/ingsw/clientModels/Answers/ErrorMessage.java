@@ -19,6 +19,10 @@ public class ErrorMessage implements ClientModel {
         visitor.visit(this);
     }
 
+    public ErrorType getError() {
+        return error;
+    }
+
     public enum ErrorType {
         NotYourTurnError,
         NotEnoughCoinError,

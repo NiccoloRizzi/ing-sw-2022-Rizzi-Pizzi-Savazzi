@@ -47,17 +47,16 @@ public class Game extends Observable<ClientModel> {
                         ))
                 .max(Comparator.comparingInt(a -> gameModel.numberOfProfessors(a)))
                 .get();
-        Player check = gameModel.getPlayers().stream()
+        Optional<Player> check = gameModel.getPlayers().stream()
                 .filter(p -> (
                         p.getBoard().getTowers() == gameModel.getPlayers().stream()
                                 .map(n -> n.getBoard().getTowers())
                                 .min(Integer::compareTo)
                                 .get() && p.getID()!= winner.getID()
                 ))
-                .max(Comparator.comparingInt(a -> gameModel.numberOfProfessors(a)))
-                .get();
-        if(winner.getBoard().getTowers() == check.getBoard().getTowers() && gameModel.numberOfProfessors(winner) == gameModel.numberOfProfessors(check)){
-            notify(new WinMessage(false));
+                .max(Comparator.comparingInt(a -> gameModel.numberOfProfessors(a)));
+        if(check.isPresent() && winner.getBoard().getTowers() == check.get().getBoard().getTowers() && gameModel.numberOfProfessors(winner) == gameModel.numberOfProfessors(check.get())){
+            notify(new WinMessage(true));
         }else{
             notify(new WinMessage(winner.getID()));
         }
@@ -182,7 +181,6 @@ public class Game extends Observable<ClientModel> {
         }
         gameModel.setUpCharacter();
         planningPhase = true;
-        notify(new TurnMessage(currentPlayer, TurnMessage.Turn.PLANNING));
     }
 
     public boolean isExpertMode(){
@@ -260,5 +258,10 @@ public class Game extends Observable<ClientModel> {
         super.addObserver(observer);
         turn.addObserver(observer);
         gameModel.addObserver(observer);
+    }
+
+    public void sendInitialGame(){
+        gameModel.sendFullModel();
+        notify(new TurnMessage(currentPlayer, TurnMessage.Turn.PLANNING));
     }
 }

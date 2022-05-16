@@ -1,10 +1,16 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.clientModels.Answers.TurnMessage;
+import it.polimi.ingsw.clientModels.ClientBoard;
+import it.polimi.ingsw.clientModels.ClientGameModel;
+import it.polimi.ingsw.clientModels.ClientIsle;
+import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.exceptions.PlayerOutOfBoundException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 import it.polimi.ingsw.model.Colour;
 import it.polimi.ingsw.model.Faction;
 import it.polimi.ingsw.model.Isle;
+import it.polimi.ingsw.server.Observer;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -13,10 +19,20 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ActionTurnHandlerTest {
+    private class TestObs implements Observer<ClientModel> {
+        public ClientModel message;
 
+        @Override
+        public void update(ClientModel message) {
+            this.message = message;
+        }
+    }
     @Test
     void moveMn() throws PlayerOutOfBoundException {
         Game game = new Game(2,false);
+        TestObs obs = new TestObs();
+        TurnMessage message;
+        game.addObserver(obs);
         game.createPlayer("A");
         game.createPlayer("B");
         game.setupGame();
@@ -34,9 +50,13 @@ class ActionTurnHandlerTest {
             game.getGameModel().getIsle((initpos + 6) % 12).addStudent(Colour.Gnomes);
             game.getGameModel().getPlayer(player).setChoosenAssistant(5);
             game.getTurnHandler().moveMn(3);
+            message = (TurnMessage)obs.message;
+            assertEquals(TurnMessage.Turn.ACTION_CLOUDS,message.getTurn());
             assertEquals((initpos+3)%12,game.getGameModel().getMotherNature());
             assertEquals(Faction.Black,game.getGameModel().getIsle((initpos+3)%12).getTower());
             game.getTurnHandler().moveMn(3);
+            message = (TurnMessage)obs.message;
+            assertEquals(TurnMessage.Turn.ACTION_CLOUDS,message.getTurn());
             assertEquals((initpos+6)%12,game.getGameModel().getMotherNature());
             assertEquals(Faction.White,game.getGameModel().getIsle((initpos+6)%12).getTower());
         }catch(TileOutOfBoundsException e)
@@ -52,6 +72,9 @@ class ActionTurnHandlerTest {
         game.createPlayer("C");
         game.createPlayer("D");
         game.setupGame();
+        TestObs obs = new TestObs();
+        TurnMessage message;
+        game.addObserver(obs);
         game.startActionTurn();
         game.getGameModel().setProfessor(Colour.Dragons, game.getGameModel().getPlayer(0));
         game.getGameModel().setProfessor(Colour.Gnomes, game.getGameModel().getPlayer(2));
@@ -66,9 +89,13 @@ class ActionTurnHandlerTest {
             game.getGameModel().getIsle((initpos + 6) % 12).addStudent(Colour.Gnomes);
             game.getGameModel().getPlayer(player).setChoosenAssistant(5);
             game.getTurnHandler().moveMn(3);
+            message = (TurnMessage)obs.message;
+            assertEquals(TurnMessage.Turn.ACTION_CLOUDS,message.getTurn());
             assertEquals((initpos + 3) % 12, game.getGameModel().getMotherNature());
             assertEquals(Faction.Black, game.getGameModel().getIsle((initpos + 3) % 12).getTower());
             game.getTurnHandler().moveMn(3);
+            message = (TurnMessage)obs.message;
+            assertEquals(TurnMessage.Turn.ACTION_CLOUDS,message.getTurn());
             assertEquals((initpos + 6) % 12, game.getGameModel().getMotherNature());
             assertEquals(Faction.White, game.getGameModel().getIsle((initpos + 6) % 12).getTower());
         } catch (TileOutOfBoundsException e) {
@@ -83,6 +110,8 @@ class ActionTurnHandlerTest {
         game.createPlayer("A");
         game.createPlayer("B");
         game.setupGame();
+        TestObs obs = new TestObs();
+        game.addObserver(obs);
         game.startActionTurn();
         int islestud=0;
         int isle = rand.nextInt(game.getGameModel().getIsles().size());
@@ -97,10 +126,19 @@ class ActionTurnHandlerTest {
         if(boardStud != 0) {
             try {
                 assertEquals(islestud + 1, game.getGameModel().getIsle(isle).getStudents(Colour.Dragons));
+                assertEquals(islestud+1,((ClientIsle)obs.message).getStudents().get(Colour.Dragons));
             } catch (TileOutOfBoundsException e) {
                 e.printStackTrace();
             }
             assertEquals(boardStud - 1, game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().getStudents(Colour.Dragons));
+
+            game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().addStudent(Colour.Dragons);
+            game.getTurnHandler().moveStudentToIsle(Colour.Dragons,isle);
+            assertEquals(islestud+2,((ClientIsle)obs.message).getStudents().get(Colour.Dragons));
+            game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().addStudent(Colour.Dragons);
+            game.getTurnHandler().moveStudentToIsle(Colour.Dragons,isle);
+            assertEquals(TurnMessage.Turn.ACTION_MN,((TurnMessage)obs.message).getTurn());
+
         }
         else
         {
@@ -120,6 +158,8 @@ class ActionTurnHandlerTest {
         game.createPlayer("A");
         game.createPlayer("B");
         game.setupGame();
+        TestObs obs = new TestObs();
+        game.addObserver(obs);
         game.startActionTurn();
         int tablestud = game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().getTable(Colour.Dragons);
         int boardStud = game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().getStudents(Colour.Dragons);
@@ -128,6 +168,13 @@ class ActionTurnHandlerTest {
         if(boardStud != 0) {
             assertEquals(tablestud + 1, game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().getTable(Colour.Dragons));
             assertEquals(boardStud - 1, game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().getStudents(Colour.Dragons));
+            assertEquals(tablestud+1,((ClientIsle)obs.message).getStudents().get(Colour.Dragons));
+            game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().addStudent(Colour.Dragons);
+            game.getTurnHandler().moveStudentToTable(Colour.Dragons);
+            assertEquals(tablestud+2,((ClientIsle)obs.message).getStudents().get(Colour.Dragons));
+            game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().addStudent(Colour.Dragons);
+            game.getTurnHandler().moveStudentToTable(Colour.Dragons);
+            assertEquals(TurnMessage.Turn.ACTION_MN,((TurnMessage)obs.message).getTurn());
         }
         else {
             assertEquals(tablestud, game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().getTable(Colour.Dragons));
@@ -142,6 +189,8 @@ class ActionTurnHandlerTest {
         game.createPlayer("A");
         game.createPlayer("B");
         game.setupGame();
+        TestObs obs = new TestObs();
+        game.addObserver(obs);
         game.startActionTurn();
         HashMap<Colour, Integer> student = new HashMap<>();
         int cloudId = new Random().nextInt(game.getGameModel().getClouds().size());
@@ -155,7 +204,9 @@ class ActionTurnHandlerTest {
         game.getTurnHandler().moveFromCloud(cloudId);
         for (Colour c : Colour.values()) {
             assertEquals(student.get(c), game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().getStudents(c));
+            assertEquals(student.get(c),((ClientBoard)obs.message).getEntrance().get(c));
         }
+
     }
 
     @Test
@@ -165,6 +216,8 @@ class ActionTurnHandlerTest {
         game.createPlayer("A");
         game.createPlayer("B");
         game.setupGame();
+        TestObs obs = new TestObs();
+        game.addObserver(obs);
         game.startActionTurn();
         HashMap<Colour,Integer>students = new HashMap<>();
 
@@ -184,13 +237,16 @@ class ActionTurnHandlerTest {
             game.getTurnHandler().checkIsleJoin(rand);
 
             assertEquals(3,game.getGameModel().getIsle((rand== 0)?0:rand-1).getSize());
+            assertEquals(3,((ClientGameModel)obs.message).getIsles().get((rand== 0)?0:rand-1).getSize());
             for(Colour c: Colour.values()) {
                 assertEquals(students.get(c),game.getGameModel().getIsle((rand== 0)?0:rand-1).getStudents(c));
+                assertEquals(students.get(c),((ClientGameModel)obs.message).getIsles().get((rand== 0)?0:rand-1).getStudents().get(c));
             }
         }catch(TileOutOfBoundsException e) {
             e.printStackTrace();
         }
-            assertEquals(10,game.getGameModel().getIsles().size());
+        assertEquals(10,game.getGameModel().getIsles().size());
+        assertEquals(10,((ClientGameModel)obs.message).getIsles().size());
     }
 
     @Test

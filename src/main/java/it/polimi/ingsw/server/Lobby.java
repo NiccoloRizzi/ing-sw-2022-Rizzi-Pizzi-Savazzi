@@ -77,7 +77,7 @@ public class Lobby {
         {
             game.addObserver(player);
         }
-        game.getGameModel().sendFullModel();
+        game.sendInitialGame();
         StartMessage start = new StartMessage(game.getGameModel().getPlayers());
         for(PlayerConnection player: players){
             player.update(start);

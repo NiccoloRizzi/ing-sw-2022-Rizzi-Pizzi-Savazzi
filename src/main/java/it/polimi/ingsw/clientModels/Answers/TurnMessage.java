@@ -29,4 +29,12 @@ public class TurnMessage implements ClientModel {
     public String serialize(){
         return ModelSerializer.serialize(this);
     }
+
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    public Turn getTurn() {
+        return turn;
+    }
 }

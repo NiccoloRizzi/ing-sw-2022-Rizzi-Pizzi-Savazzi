@@ -61,9 +61,10 @@ public class ActionTurnHandler extends Observable<ClientModel> {
                     player.getBoard().removeStudent(student);
                     gameModel.getIsle(isle).addStudent(student);
                     studentsToMove --;
-                    if(studentsToMove  == 0)
+                    if(studentsToMove  == 0) {
                         phase = Phase.MOTHERNATURE;
                         notify(new TurnMessage(currentPlayer, TurnMessage.Turn.ACTION_MN));
+                    }
                 }
             }
             else {
@@ -85,9 +86,10 @@ public class ActionTurnHandler extends Observable<ClientModel> {
                     player.getBoard().addToTable(student);
                     checkProfessor(student);
                     studentsToMove --;
-                    if(studentsToMove  == 0)
+                    if(studentsToMove  == 0) {
                         phase = Phase.MOTHERNATURE;
-                    notify(new TurnMessage(currentPlayer, TurnMessage.Turn.ACTION_MN));
+                        notify(new TurnMessage(currentPlayer, TurnMessage.Turn.ACTION_MN));
+                    }
                 }
                 else{
                     notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsFullError));

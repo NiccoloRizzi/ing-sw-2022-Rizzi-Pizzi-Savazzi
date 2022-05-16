@@ -1,5 +1,8 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.clientModels.Answers.TurnMessage;
+import it.polimi.ingsw.clientModels.Answers.WinMessage;
+import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.exceptions.PlayerOutOfBoundException;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
@@ -9,6 +12,7 @@ import it.polimi.ingsw.messages.MoveStudentMessage;
 import it.polimi.ingsw.model.Colour;
 import it.polimi.ingsw.model.Faction;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.server.Observer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,10 +28,20 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameTest {
 
     Game game;
+    TestObs obs;
 
+    private class TestObs implements Observer<ClientModel> {
+        public ClientModel message;
 
+        @Override
+        public void update(ClientModel message) {
+            this.message = message;
+        }
+    }
     void setup(int players, boolean expertMode) throws PlayerOutOfBoundException {
         game = new Game(players,expertMode);
+        obs = new TestObs();
+        game.addObserver(obs);
         game.createPlayer("Giorgio");
         game.createPlayer("Fabrizio");
         if(players>2) {
@@ -57,8 +71,10 @@ class GameTest {
         Player player3 = game.getGameModel().getPlayer(2);
         player1.getBoard().useTowers(1);
         assertEquals(player1,game.getWinner());
+        assertEquals(player1.getID(),((WinMessage)obs.message).getId());
         player2.getBoard().useTowers(2);
         assertEquals(player2,game.getWinner());
+        assertEquals(player2.getID(),((WinMessage)obs.message).getId());
         player1.getBoard().useTowers(1);
         player3.getBoard().useTowers(2);
         try {
@@ -68,6 +84,15 @@ class GameTest {
             e.printStackTrace();
         }
         assertEquals(player3,game.getWinner());
+        assertEquals(player3.getID(),((WinMessage)obs.message).getId());
+        try {
+            player1.getBoard().addToTable(Colour.Gnomes);
+            game.getGameModel().setProfessor(Colour.Gnomes,player1);
+        }catch(StudentsOutOfBoundsException e){
+            e.printStackTrace();
+        }
+        game.getWinner();
+        assertTrue(((WinMessage)obs.message).isDraw());
     }
 
 
@@ -80,15 +105,16 @@ class GameTest {
         Player player = game.getGameModel().getPlayer(0);
         switch(typeCheck) {
             case 1:
-                assertFalse(game.checkEnd());
+                assertFalse(game.checkEndTowerIsle());
                 player.getBoard().useTowers(8);
-                assertTrue(game.checkEnd());
+                assertTrue(game.checkEndTowerIsle());
                 assertEquals(game.getWinner(),player);
+                assertEquals(player.getID(),((WinMessage)obs.message).getId());
                 break;
 
             case 2:
                 game.startActionTurn();
-                assertFalse(game.checkEnd());
+                assertFalse(game.checkEndTowerIsle());
                 for(int i=0;i<12;i++){
                     try {
                         game.getGameModel().getIsle(i).setTower((i < 4 || i > 7) ? Faction.Black : Faction.White);
@@ -99,24 +125,27 @@ class GameTest {
                 for(int i=0;i<12;i++){
                     game.getTurnHandler().checkIsleJoin(i%game.getGameModel().getIsles().size());
                 }
-                assertTrue(game.checkEnd());
+                assertTrue(game.checkEndTowerIsle());
+                assertTrue(((WinMessage)obs.message).isDraw());
                 break;
             case 3:
-                assertFalse(game.checkEnd());
+                assertFalse(game.checkEndStudentAssistant());
                 try {
                     game.getGameModel().extractStudents(game.getGameModel().getBagSize());
                 }catch(StudentsOutOfBoundsException e){
                     e.printStackTrace();
                 }
-                assertTrue(game.checkEnd());
+                assertTrue(game.checkEndStudentAssistant());
+                assertTrue(((WinMessage)obs.message).isDraw());
                 break;
             case 4:
-                assertFalse(game.checkEnd());
+                assertFalse(game.checkEndStudentAssistant());
                 for(int i=0;i<10;i++){
-                    assertFalse(game.checkEnd());
+                    assertFalse(game.checkEndStudentAssistant());
                     player.setChoosenAssistant(player.getDeck().size()-1);
                 }
-                assertTrue(game.checkEnd());
+                assertTrue(game.checkEndStudentAssistant());
+                assertTrue(((WinMessage)obs.message).isDraw());
                 break;
 
         }
@@ -131,6 +160,8 @@ class GameTest {
             students.put(c,0);
         }
         Game game = new Game(players,true);
+        obs = new TestObs();
+        game.addObserver(obs);
         game.createPlayer("Giorgio");
         game.createPlayer("Piero");
         if(players>2){
@@ -151,7 +182,8 @@ class GameTest {
             assertEquals(students.get(c),2);
         }
 
-
+        assertEquals(TurnMessage.Turn.PLANNING,((TurnMessage)obs.message).getTurn());
+        assertEquals(game.getCurrentPlayer(),((TurnMessage)obs.message).getPlayerId());
     }
 
 

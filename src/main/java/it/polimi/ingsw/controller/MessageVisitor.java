@@ -76,6 +76,8 @@ public class MessageVisitor extends Observable<ClientModel> {
                     int isle = moveStudentMessage.getTileID();
                     game.getTurnHandler().moveStudentToIsle(student,isle);
                 }
+            }else{
+                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
             }
     }
     public void visit(MoveMotherNatureMessage moveMotherNatureMessage){
@@ -90,6 +92,7 @@ public class MessageVisitor extends Observable<ClientModel> {
     public void visit(CloudChoiceMessage cloudChoiceMessage){
         if(game.getCurrentPlayer()==cloudChoiceMessage.getPlayerId() && game.getTurnHandler().getPhase()==Phase.CLOUD){
             game.getTurnHandler().moveFromCloud(cloudChoiceMessage.getCloudID());
+            game.nextPlayer();
         }
         else{
             notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
