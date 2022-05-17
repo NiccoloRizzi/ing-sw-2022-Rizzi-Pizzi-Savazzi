@@ -36,6 +36,8 @@ public class TeamCheckTowerStrategy implements CheckTowerStrategy {
                         otherTeam.addTowers(current.getSize());
                 }
 
+            }else{
+                gm.addProhibited();
             }
         }catch(TileOutOfBoundsException e){
             e.printStackTrace();

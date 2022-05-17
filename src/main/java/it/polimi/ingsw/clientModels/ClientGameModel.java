@@ -9,14 +9,16 @@ import java.util.HashMap;
 
 public class ClientGameModel implements ClientModel{
 
-    HashMap<Colour, Integer> professors;
-    int motherNature;
+    private HashMap<Colour, Integer> professors;
+    private int motherNature;
     private ArrayList<ClientIsle> isles;
+    private int prohibited;
 
-    public ClientGameModel(HashMap<Colour, Integer> professors, int motherNature, ArrayList<ClientIsle> isles) {
+    public ClientGameModel(HashMap<Colour, Integer> professors, int motherNature, ArrayList<ClientIsle> isles, int prohibited) {
         this.professors = professors;
         this.motherNature = motherNature;
         this.isles = isles;
+        this.prohibited = prohibited;
     }
 
     public ArrayList<ClientIsle> getIsles() {
@@ -36,6 +38,9 @@ public class ClientGameModel implements ClientModel{
         visitor.visit(this);
     }
 
+    public int getProhibited() {
+        return prohibited;
+    }
     @Override
     public String serialize(){
         return ModelSerializer.serialize(this);

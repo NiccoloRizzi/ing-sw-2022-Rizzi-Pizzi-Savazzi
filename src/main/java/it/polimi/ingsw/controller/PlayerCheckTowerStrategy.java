@@ -34,6 +34,8 @@ public class PlayerCheckTowerStrategy implements CheckTowerStrategy {
                             p.getBoard().addTowers(current.getSize());
                     }
                 }
+            }else{
+                gm.addProhibited();
             }
         }catch(TileOutOfBoundsException e){
             e.printStackTrace();

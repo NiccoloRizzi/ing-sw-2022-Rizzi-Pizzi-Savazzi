@@ -178,24 +178,12 @@ public class IsleTest extends TestCase {
     @Test
     public void testProhibited() {
         Isle isle = new Isle(0);
-        TestObs obs = new TestObs();
-        isle.addObserver(obs);
         assertFalse(isle.removeProhibited());
         isle.setProhibited();
-        ClientIsle message = (ClientIsle)obs.message;
-        assertEquals(message.getProhibited(),1);
         isle.setProhibited();
-        message = (ClientIsle)obs.message;
-        assertEquals(message.getProhibited(),2);
         assertTrue(isle.removeProhibited());
-        message = (ClientIsle)obs.message;
-        assertEquals(message.getProhibited(),1);
         isle.removeProhibited();
-        message = (ClientIsle)obs.message;
-        assertEquals(message.getProhibited(),0);
         assertFalse(isle.removeProhibited());
-        message = (ClientIsle)obs.message;
-        assertEquals(message.getProhibited(),0);
     }
 
     @Test

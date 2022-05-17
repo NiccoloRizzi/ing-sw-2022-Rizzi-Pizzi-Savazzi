@@ -41,14 +41,14 @@ public class Isle extends Tile {
 
     public void setProhibited(){
         prohibited ++;
-        notifyChange();
+        //notifyChange();
     }
 
     public boolean removeProhibited()
     {
        if(prohibited > 0) {
            prohibited--;
-           notifyChange();
+          // notifyChange();
            return true;
        }
         return false;
