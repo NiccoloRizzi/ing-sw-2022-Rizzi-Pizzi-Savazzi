@@ -125,8 +125,9 @@ public class CliUtil {
                 else
                     System.out.print(mtx[i][j].color.value + mtx[i][j].attribute);
             }
-            System.out.println("" + CliColors.CLEAR);
+            System.out.println();
         }
+        System.out.println(CliColors.CLEAR.value);
     }
 
     public Cell[][] unifyMtxSD(Cell[][] mtxA, Cell[][] mtxB){
@@ -471,7 +472,7 @@ public class CliUtil {
     }
     public Cell[][] generateStringMtx(String string){
         Cell[][] mtx = new Cell[1][string.length() / 3 + 1];
-        Arrays.fill(mtx[0], new Cell(CellType.CHAR, CliColors.WHITE));
+        Arrays.fill(mtx[0], new Cell(CellType.CHAR, CliColors.WHITE, "   "));
         addStringToMtx(mtx, 0,0, string);
         return mtx;
     }
@@ -489,7 +490,10 @@ public class CliUtil {
         Cell[][] boardCharCloudAssMtx = unifyMtxNS(boardCharCloudMtx, assistantsMtx);
         TurnMessage turnMessage = modelView.getTurn();
         String currentNickname = modelView.getPlayers()[turnMessage.getPlayerId()].getNickname();
-        Cell[][] errorMtx = generateStringMtx("Errore: " + modelView.getError());
+        Cell[][] errorMtx = new Cell[0][0];
+        if(modelView.getError() != null){
+            errorMtx = generateStringMtx("Errore: " + modelView.getError());
+        }
         Cell[][] turnMtx = generateStringMtx("Turno: " + turnMessage.getTurn() + " di " + currentNickname);
         Cell[][] errorPlusTurnMtx = unifyMtxNS(errorMtx, turnMtx);
         Cell[][] boardCharCloudAssIsleMtx = unifyMtxSD(boardCharCloudAssMtx, islesMtx);
