@@ -24,7 +24,7 @@ public class Isle extends Tile {
 
     public void setTower(Faction f) {
         this.tower = f;
-        notifyChange();
+        //notifyChange();
     }
 
     public int getSize(){

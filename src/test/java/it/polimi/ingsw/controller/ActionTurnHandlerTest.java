@@ -10,6 +10,7 @@ import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 import it.polimi.ingsw.model.Colour;
 import it.polimi.ingsw.model.Faction;
 import it.polimi.ingsw.model.Isle;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.server.Observer;
 import org.junit.jupiter.api.Test;
 
@@ -163,18 +164,39 @@ class ActionTurnHandlerTest {
         game.startActionTurn();
         int tablestud = game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().getTable(Colour.Dragons);
         int boardStud = game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().getStudents(Colour.Dragons);
-
+        HashMap<Colour, Player> professor = new HashMap<>(game.getGameModel().getProfessors());
         game.getTurnHandler().moveStudentToTable(Colour.Dragons);
+        boolean check = false;
         if(boardStud != 0) {
             assertEquals(tablestud + 1, game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().getTable(Colour.Dragons));
             assertEquals(boardStud - 1, game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().getStudents(Colour.Dragons));
-            //assertEquals(1,((ClientGameModel)obs.message).getProfessors().get(Colour.Dragons));
+            for(Colour c: Colour.values())
+            {
+                if ((!professor.containsKey(c)&&game.getGameModel().getProfessors().containsKey(c))||(professor.containsKey(c)&&!professor.get(c).equals(game.getGameModel().getProfessors().get(c))))
+                    check = true;
+            }
+            if(check){
+                assertEquals(game.getGameModel().getProfessorOwner(Colour.Dragons).get().getID(),((ClientGameModel)obs.message).getProfessors().get(Colour.Dragons));
+            }else {
+                assertEquals(tablestud + 1, ((ClientBoard) obs.message).getTables().get(Colour.Dragons));
+            }
             game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().addStudent(Colour.Dragons);
             game.getTurnHandler().moveStudentToTable(Colour.Dragons);
-            //assertEquals(tablestud+2,((ClientIsle)obs.message).getStudents().get(Colour.Dragons));
+            check = false;
+            professor = new HashMap<>(game.getGameModel().getProfessors());
+            for(Colour c: Colour.values())
+            {
+                if ((!professor.containsKey(c) &&game.getGameModel().getProfessors().containsKey(c))||(professor.containsKey(c)&&!professor.get(c).equals(game.getGameModel().getProfessors().get(c))))
+                    check = true;
+            }
+            if(check){
+                assertEquals(game.getGameModel().getProfessorOwner(Colour.Dragons).get().getID(),((ClientGameModel)obs.message).getProfessors().get(Colour.Dragons));
+            }else {
+                assertEquals(tablestud + 2, ((ClientBoard) obs.message).getTables().get(Colour.Dragons));
+            }
             game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().addStudent(Colour.Dragons);
             game.getTurnHandler().moveStudentToTable(Colour.Dragons);
-            //assertEquals(TurnMessage.Turn.ACTION_MN,((TurnMessage)obs.message).getTurn());
+            assertEquals(TurnMessage.Turn.ACTION_MN,((TurnMessage)obs.message).getTurn());
         }
         else {
             assertEquals(tablestud, game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard().getTable(Colour.Dragons));
