@@ -91,7 +91,7 @@ public class Client {
                     writeToSocket(answer.toString());
                 }
                 else {
-                    System.out.println(read);
+                    //System.out.println(read);
                     ClientModel model = ClientModelDeSerializer.deserialize(read);
                     model.accept(view);
                 }
@@ -132,6 +132,10 @@ public class Client {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void update(Message action){
+        writeToSocket(action.serialize());
     }
 
 

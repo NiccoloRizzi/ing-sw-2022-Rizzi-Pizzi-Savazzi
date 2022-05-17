@@ -1,6 +1,7 @@
 package it.polimi.ingsw.messages;
 
 import it.polimi.ingsw.controller.MessageVisitor;
+import it.polimi.ingsw.server.MoveSerializer;
 
 public class SimilMotherNatureMesage implements Message{
 
@@ -29,5 +30,10 @@ public class SimilMotherNatureMesage implements Message{
     @Override
     public void accept(MessageVisitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public String serialize(){
+        return MoveSerializer.serialize(this);
     }
 }

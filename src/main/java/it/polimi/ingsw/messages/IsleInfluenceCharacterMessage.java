@@ -2,6 +2,7 @@ package it.polimi.ingsw.messages;
 
 import it.polimi.ingsw.controller.MessageVisitor;
 import it.polimi.ingsw.model.Colour;
+import it.polimi.ingsw.server.MoveSerializer;
 
 public class IsleInfluenceCharacterMessage implements Message{
 
@@ -42,5 +43,10 @@ public class IsleInfluenceCharacterMessage implements Message{
     @Override
     public void accept(MessageVisitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public String serialize(){
+        return MoveSerializer.serialize(this);
     }
 }
