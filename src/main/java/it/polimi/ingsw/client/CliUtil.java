@@ -75,9 +75,11 @@ public class CliUtil {
     }
 
     private final ModelView modelView;
+    private int myId;
 
-    public CliUtil(ModelView modelView) throws IOException {
+    public CliUtil(ModelView modelView, int myId) {
         this.modelView = modelView;
+        this.myId = myId;
     }
 
     // Move the player board on the first position of the array
@@ -86,10 +88,10 @@ public class CliUtil {
         ClientPlayer[] players = modelView.getPlayers();
         ClientBoard temp = boards[0];
         ClientPlayer Ptemp = players[0];
-        boards[0] = boards[modelView.getMyID()];
-        players[0] = players[modelView.getMyID()];
-        boards[modelView.getMyID()] = temp;
-        players[modelView.getMyID()] = Ptemp;
+        boards[0] = boards[myId];
+        players[0] = players[myId];
+        boards[myId] = temp;
+        players[myId] = Ptemp;
     }
 
     private Cell getStudCellType(Colour c) {
@@ -113,7 +115,7 @@ public class CliUtil {
         }
     }
 
-    public static void printCells(Cell[][] mtx){
+    public void printCells(Cell[][] mtx){
         for (int i = 0; i < mtx.length; i++) {
             for (int j = 0; j < mtx[0].length; j++) {
                 if(mtx[i][j].type != CellType.CHAR)
@@ -204,7 +206,7 @@ public class CliUtil {
         // Set professor
         row = 16;
         for(Colour c : modelView.getGameModel().getProfessors().keySet()){
-            if(modelView.getGameModel().getProfessors().get(c) == modelView.getMyID()){
+            if(modelView.getGameModel().getProfessors().get(c) == ID){
                 col = 1 + c.ordinal();
                 mtx[row][col] = getProfCellType(c);
             }
@@ -471,74 +473,19 @@ public class CliUtil {
         return mtx;
     }
 
-    public static void main(String[] args) throws IOException {
-        Client client = new Client(true);
-        View view = new View(client);
-        HashMap<Colour, Integer> entrance = new HashMap<>();
-        entrance.put(Colour.Dragons, 3);
-        entrance.put(Colour.Gnomes, 4);
-        entrance.put(Colour.Unicorns, 1);
-        entrance.put(Colour.Frogs, 2);
-        HashMap<Colour, Integer> tables = new HashMap<>();
-        tables.put(Colour.Fairies, 5);
-        tables.put(Colour.Frogs, 1);
-        ClientBoard clientBoard = new ClientBoard(0, Faction.Black, 8, tables, entrance);
-        ClientBoard clientBoard_2 = new ClientBoard(1, Faction.Black, 8, tables, entrance);
-        HashMap<Colour, Integer> professors = new HashMap<>();
-        professors.put(Colour.Frogs, 0);
-        professors.put(Colour.Fairies, 0);
-        ClientGameModel clientGameModel = new ClientGameModel(professors, 0, new ArrayList<>(12));
-        ArrayList<Player> players = new ArrayList<>();
-        players.add(new Player(1, "Federico"));
-        players.add(new Player(0, "Giacomo"));
-        players.get(0).createBoard(8);
-        players.get(1).createBoard(8);
-        view.setNickname("Federico");
-        view.visit(new StartMessage(players));
-        Integer[] a = {1, 3, 5};
-        Integer[] b = {1, 7};
-        Integer[] c = {5, 1};
-        Integer[] d = {1, 3, 9};
-        view.visit(new ClientPlayer(a, b, 5, "Federico", 1));
-        view.visit(new ClientPlayer(c, d, 0, "Giacomo", 0));
-        view.visit(clientBoard);
-        view.visit(clientBoard_2);
-        view.visit(clientGameModel);
-        view.visit(new ClientCharacter(0, CharactersEnum.ONE_STUD_TO_ISLE, 1, entrance));
-        view.visit(new ClientCharacter(1, CharactersEnum.REMOVE_3_STUD, 2));
-        view.visit(new ClientCharacter(2, CharactersEnum.PROHIBITED, 3));
-        view.getGameModel().getIsles().add(new ClientIsle(0, Faction.Black, entrance, 1, 1));
-        view.getGameModel().getIsles().add(new ClientIsle(1, Faction.White, tables, 0, 1));
-        view.getGameModel().getIsles().add(new ClientIsle(2, Faction.Black, entrance, 1, 1));
-        view.getGameModel().getIsles().add(new ClientIsle(3, Faction.White, entrance, 10, 1));
-        view.getGameModel().getIsles().add(new ClientIsle(4, Faction.Black, tables, 1, 1));
-        view.getGameModel().getIsles().add(new ClientIsle(5, Faction.Empty, entrance, 1, 1));
-        view.getGameModel().getIsles().add(new ClientIsle(6, Faction.Black, tables, 0, 1));
-        view.getGameModel().getIsles().add(new ClientIsle(7, Faction.Empty, entrance, 1, 1));
-        view.getGameModel().getIsles().add(new ClientIsle(8, Faction.Black, tables, 4, 1));
-        view.getGameModel().getIsles().add(new ClientIsle(9, Faction.Grey, entrance, 1, 1));
-        view.getGameModel().getIsles().add(new ClientIsle(10, Faction.Black, tables, 3, 5));
-        view.getGameModel().getIsles().add(new ClientIsle(11, Faction.Grey, entrance, 1, 1));
-        HashMap<Colour, Integer> cloudStuds = new HashMap<>();
-        cloudStuds.put(Colour.Dragons, 2);
-        cloudStuds.put(Colour.Gnomes, 1);
-        cloudStuds.put(Colour.Unicorns, 1);
-        view.visit(new ClientCloud(0, cloudStuds));
-        view.visit(new ClientCloud(1, cloudStuds));
-        CliUtil cli = new CliUtil(view);
-//        cli.initBoardDisposition();
-        Cell[][] islesMtx = cli.generateIsles();
-        Cell[][] boardsMtx = cli.generateBoards();
-        Cell[][] charactersMtx = cli.generateCharacters();
-        Cell[][] cloudsMtx = cli.generateClouds();
-        Cell[][] deckMtx = cli.generateDeck(view.getMyID());
-        Cell[][] usedAssistantMtx = cli.generateUsedAssistants(view.getMyID());
-        Cell[][] assistantsMtx = cli.unifyMtxNS(deckMtx, usedAssistantMtx);
-        Cell[][] boardPLusChar = cli.unifyMtxNS(boardsMtx, charactersMtx);
-        Cell[][] boardCharCloudMtx = cli.unifyMtxNS(boardPLusChar, cloudsMtx);
-        Cell[][] boardCharCloudAssMtx = cli.unifyMtxNS(boardCharCloudMtx, assistantsMtx);
-        Cell[][] game = cli.unifyMtxSD(boardCharCloudAssMtx, islesMtx);
-        System.out.println("My id " + view.getMyID());
-        CliUtil.printCells(game);
+    public Cell[][] generateGame(){
+        Cell[][] islesMtx = generateIsles();
+        Cell[][] boardsMtx = generateBoards();
+        Cell[][] charactersMtx = generateCharacters();
+        Cell[][] cloudsMtx = generateClouds();
+        Cell[][] deckMtx = generateDeck(myId);
+        Cell[][] usedAssistantMtx = generateUsedAssistants(myId);
+        Cell[][] assistantsMtx = unifyMtxNS(deckMtx, usedAssistantMtx);
+        Cell[][] boardPLusChar = unifyMtxNS(boardsMtx, charactersMtx);
+        Cell[][] boardCharCloudMtx = unifyMtxNS(boardPLusChar, cloudsMtx);
+        Cell[][] boardCharCloudAssMtx = unifyMtxNS(boardCharCloudMtx, assistantsMtx);
+        Cell[][] game = unifyMtxSD(boardCharCloudAssMtx, islesMtx);
+        return game;
     }
+
 }

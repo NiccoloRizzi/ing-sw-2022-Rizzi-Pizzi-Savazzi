@@ -12,6 +12,7 @@ public class Character extends Observable<ClientModel> {
 
     public Character(int ID,CharactersEnum character)
     {
+        this.ID = ID;
         this.card = character;
         this.price = character.getPrice();
     }

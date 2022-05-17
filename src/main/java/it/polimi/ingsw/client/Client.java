@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.clientModels.ClientModelDeSerializer;
 import it.polimi.ingsw.messages.*;
-import it.polimi.ingsw.model.Colour;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,28 +12,40 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {
-    private final Socket socket;
-    private final Scanner in;
-    private final PrintWriter out;
+    private Socket socket;
+    private Scanner in;
+    private PrintWriter out;
     private boolean isActive=true;
+    private int playersNumber;
     private View view;
-    private int pn;
     private boolean expert;
     private String nickname;
+    private int id;
 
 
-    public Client(String IP, int port) throws IOException {
+    public Client(View view) {
+        this.view = view;
+    }
+
+    public void startConnection(String IP, int port) throws IOException{
         socket = new Socket(IP, port);
         in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream());
+        try {
+            run();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void setOptions(String nickname, int nplayers, boolean expertMode){
+        this.nickname = nickname;
+        this.playersNumber = nplayers;
+        this.expert = expertMode;
     }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public void startView(){
-        view = new View(this);
     }
 
     public String getNickname(){
@@ -49,8 +60,8 @@ public class Client {
         this.expert = expert;
     }
 
-    public void setPn(int pn) {
-        this.pn = pn;
+    public void setPlayersNumber(int playersNumber) {
+        this.playersNumber = playersNumber;
     }
 
     public void setExpert(boolean expert) {
@@ -65,12 +76,12 @@ public class Client {
         isActive = active;
     }
     public int getPlayersNumber(){
-        return pn;
+        return playersNumber;
     }
     public Thread readFromSocket(){
         Thread t = new Thread(() -> {
             Gson gson = new Gson();
-            writeToSocket(MessageSerializer.serialize(new PlayerMessage(nickname,pn,expert)));
+            writeToSocket(MessageSerializer.serialize(new PlayerMessage(nickname, playersNumber,expert)));
             while (isActive) {
                 String read = in.nextLine();
                 JsonObject jo = gson.fromJson(read,JsonObject.class);
@@ -115,28 +126,13 @@ public class Client {
         }
     }
 
-    public void ChooseAssistant(int assistant){
-        AssistantChoiceMessage acm = new AssistantChoiceMessage(assistant-1, view.getMyID());
-        writeToSocket(MessageSerializer.serialize(acm));
+    public int getId() {
+        return id;
     }
 
-    public void MoveToIsle(Colour c, int isleid){
-        MoveStudentMessage msm = new MoveStudentMessage(view.getMyID(), c, isleid, false);
-        writeToSocket(MessageSerializer.serialize(msm));
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void MoveToTable(Colour c){
-        MoveStudentMessage msm = new MoveStudentMessage(view.getMyID(),c,0,true);
-        writeToSocket(MessageSerializer.serialize(msm));
-    }
 
-    public void ChooseCloud(int cloudid){
-        CloudChoiceMessage ccm = new CloudChoiceMessage(view.getMyID(),cloudid);
-        writeToSocket(MessageSerializer.serialize(ccm));
-    }
-
-    public void MoveMotherNature(int spaces){
-        MoveMotherNatureMessage movemnm = new MoveMotherNatureMessage(view.getMyID(),spaces);
-        writeToSocket(MessageSerializer.serialize(movemnm));
-    }
 }

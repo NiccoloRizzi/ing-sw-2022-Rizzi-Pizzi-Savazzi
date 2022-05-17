@@ -1,19 +1,19 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
-import it.polimi.ingsw.messages.PlayerMessage;
 import it.polimi.ingsw.model.Colour;
 
 import java.io.IOException;
 import java.util.Scanner;
 
 
-public class Cli{
-    private static View view;
+public class Cli extends View{
     private final static Scanner scanner = new Scanner(System.in);
     private static Client client;
-    
-    public static void main(String[] args){
+    private CliUtil cliUtil;
+    private boolean printing = false;
+
+
+    public void startCli(){
         int playersNumber=0;
         String players;
         String nickname;
@@ -55,28 +55,25 @@ public class Cli{
                 System.out.println("Rispondi con y(es) o n(o).");
             }
         }while(check);
-        try {
-            client = new Client("127.0.0.1", 12345);
-            client.setNickname(nickname);
-            client.setPn(playersNumber);
-            client.setExpert(expertMode);
-            client.startView();
-            new Thread(()-> {
-                try {
-                    client.run();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+        client = new Client(this);
+        client.setOptions(nickname,playersNumber,expertMode);
+        setupModel(client);
+        new Thread(()-> {
+            try {
+                client.startConnection("127.0.0.1",12345);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
         handleInput();
     }
 
-    public static void handleInput(){
+    public void startPrint(){
+        printing = true;
+        cliUtil = new CliUtil(getModelView(), client.getId());
+    }
+    public void handleInput(){
         String []command;
-        String cm;
         while(true){
             int param;
             command = scanner.nextLine().split(" ",5);
@@ -87,26 +84,31 @@ public class Cli{
                     break;
                 case "chooseassistant":
                     try {
-                        client.ChooseAssistant(Integer.parseInt(command[1]));
+                        super.ChooseAssistant(Integer.parseInt(command[1]));
                     }catch(NumberFormatException e){
                         System.out.println("Devi inserire un numero!");
                         }
                     break;
                 case "mvtotable":
-                    client.MoveToTable(Colour.values()[Integer.parseInt(command[1])]);
+                    MoveToTable(Colour.values()[Integer.parseInt(command[1])]);
                     break;
                 case "mvtoisle":
-                    client.MoveToIsle(Colour.values()[Integer.parseInt(command[1])],Integer.parseInt(command[2]));
+                    MoveToIsle(Colour.values()[Integer.parseInt(command[1])],Integer.parseInt(command[2]));
                     break;
                 case "cloud":
-                    client.ChooseCloud(Integer.parseInt(command[1]));
+                    ChooseCloud(Integer.parseInt(command[1]));
                     break;
                 case "movemn":
-                    client.MoveMotherNature(Integer.parseInt(command[1]));
+                    MoveMotherNature(Integer.parseInt(command[1]));
                     break;
 
             }
         }
+
+
+    }
+    public void refresh(){
+        if(printing)cliUtil.printCells(cliUtil.generateGame());
     }
 }
 
