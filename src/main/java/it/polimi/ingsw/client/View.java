@@ -68,7 +68,7 @@ public class View {
         refresh();
     }
     public synchronized void visit(TurnMessage turnMessage){
-        modelView.setTurn(turnMessage.getTurn());
+        modelView.setTurn(turnMessage);
         refresh();
     }
     public synchronized void visit(WinMessage winMessage) {

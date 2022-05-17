@@ -2,6 +2,7 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.clientModels.*;
 import it.polimi.ingsw.clientModels.Answers.StartMessage;
+import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 import it.polimi.ingsw.model.CharactersEnum;
 import it.polimi.ingsw.model.Colour;
 import it.polimi.ingsw.model.Faction;
@@ -41,7 +42,8 @@ public class CliUtil {
         WHITE("\u001b[97m"),
         YELLOW("\u001b[93m"),
         BLUE("\u001b[34m"),
-        BROWN("\u001b[33m");
+        BROWN("\u001b[33m"),
+        CLEAR("\u001b[33m");
 
         private final String value;
 
@@ -75,7 +77,7 @@ public class CliUtil {
     }
 
     private final ModelView modelView;
-    private int myId;
+    private final int myId;
 
     public CliUtil(ModelView modelView, int myId) {
         this.modelView = modelView;
@@ -123,7 +125,7 @@ public class CliUtil {
                 else
                     System.out.print(mtx[i][j].color.value + mtx[i][j].attribute);
             }
-            System.out.println();
+            System.out.println(CliColors.CLEAR);
         }
     }
 
@@ -179,9 +181,9 @@ public class CliUtil {
             Arrays.fill(chars, new Cell(CellType.NULL, CliColors.BLACK));
         }
         ClientBoard board = modelView.getBoards()[ID];
-        // NickName
-        addStringToMtx(mtx, 0, 1, modelView.getPlayers()[board.getPlayerID()].getNickname());
-
+        // Coins
+//        addStringToMtx(mtx, 0, 1, modelView.getPlayers()[board.getPlayerID()].getNickname());
+        addStringToMtx(mtx, 0, 1, "Coins: " + modelView.getPlayers()[board.getPlayerID()].getCoins());
         // Set entrance
         int row = 2, col = 1;
         for(Colour c : board.getEntrance().keySet()){
@@ -252,7 +254,7 @@ public class CliUtil {
         mtx[15][mtx[0].length - 1] = new Cell(CellType.BORDER_3S, CliColors.GREY);
         mtx[17][0] = new Cell(CellType.BORDER_3D, CliColors.GREY);
         mtx[17][mtx[0].length - 1] = new Cell(CellType.BORDER_3S, CliColors.GREY);
-        return mtx;
+        return unifyMtxNS(generateStringMtx(modelView.getPlayers()[board.getPlayerID()].getNickname()), mtx);
     }
     public Cell[][] generateBoards(){
         Cell[][] mtx = new Cell[0][0];
@@ -484,8 +486,10 @@ public class CliUtil {
         Cell[][] boardPLusChar = unifyMtxNS(boardsMtx, charactersMtx);
         Cell[][] boardCharCloudMtx = unifyMtxNS(boardPLusChar, cloudsMtx);
         Cell[][] boardCharCloudAssMtx = unifyMtxNS(boardCharCloudMtx, assistantsMtx);
-        Cell[][] game = unifyMtxSD(boardCharCloudAssMtx, islesMtx);
-        return game;
+        TurnMessage turnMessage = modelView.getTurn();
+        String currentNickname = modelView.getPlayers()[turnMessage.getPlayerId()].getNickname();
+        Cell[][] errorPlusTurnMtx = unifyMtxNS(generateStringMtx("Turno: " + turnMessage.getTurn() + "di " + currentNickname), generateStringMtx("Errore: " + modelView.getError()));
+        Cell[][] boardCharCloudAssIsleMtx = unifyMtxSD(boardCharCloudAssMtx, islesMtx);
+        return unifyMtxSD(errorPlusTurnMtx, boardCharCloudAssIsleMtx);
     }
-
 }

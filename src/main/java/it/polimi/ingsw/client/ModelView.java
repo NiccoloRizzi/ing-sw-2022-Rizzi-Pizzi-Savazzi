@@ -11,7 +11,15 @@ public class ModelView {
     private ClientCloud[] clouds;
     private ClientCharacter[] characters;
     private ErrorMessage.ErrorType error;
-    private TurnMessage.Turn turn;
+    private TurnMessage turn;
+
+    public ErrorMessage.ErrorType getError() {
+        return error;
+    }
+
+    public TurnMessage getTurn() {
+        return turn;
+    }
 
     public ModelView(int nplayers, boolean expertMode){
         if(expertMode){
@@ -45,7 +53,7 @@ public class ModelView {
         this.error = error;
     }
 
-    public void setTurn(TurnMessage.Turn turn){
+    public void setTurn(TurnMessage turn){
         this.turn = turn;
     }
 }
