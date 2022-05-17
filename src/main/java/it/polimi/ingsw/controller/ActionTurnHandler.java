@@ -158,9 +158,6 @@ public class ActionTurnHandler extends Observable<ClientModel> {
         this.currentPlayer = player.getID();
     }
 
-    public int getCurrentPlayer() {
-        return currentPlayer;
-    }
     public boolean isUsedCharacter() {
         return usedCharacter;
     }

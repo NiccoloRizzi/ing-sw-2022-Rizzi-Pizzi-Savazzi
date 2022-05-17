@@ -159,6 +159,11 @@ public class Player extends Observable<ClientModel> {
         notifyChange();
     }
 
+    public void boost()
+    {
+        getChosen().Boost();
+        notifyChange();
+    }
     public void notifyChange()
     {
         Integer[] used = usedCards.stream().map(x->x.getValue()).toArray(Integer[]::new);

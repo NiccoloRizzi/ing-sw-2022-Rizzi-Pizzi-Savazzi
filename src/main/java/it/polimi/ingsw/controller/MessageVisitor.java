@@ -106,9 +106,10 @@ public class MessageVisitor extends Observable<ClientModel> {
         Colour noColor = isleInfluenceCharacterMessage.getNoColour();
         if (game.isExpertMode())
         {
-            if(!game.getTurnHandler().isUsedCharacter()){
-                if (game.getCurrentPlayer() == playerId) {
-                    Player player = game.getGameModel().getPlayer(playerId);
+            if (game.getCurrentPlayer() == playerId) {
+                if(!game.getTurnHandler().isUsedCharacter()){
+
+                        Player player = game.getGameModel().getPlayer(playerId);
                     Character character = game.getGameModel().getCharacter(charId);
                     if(player.getCoins() >= character.getPrice()){
                         try {
@@ -133,10 +134,10 @@ public class MessageVisitor extends Observable<ClientModel> {
                     }
                 }
                 else {
-                    notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));;
+                    notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             }else {
-                notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
+                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));;
             }
         }
         else {
@@ -150,10 +151,10 @@ public class MessageVisitor extends Observable<ClientModel> {
         Colour stud = moveStudentCharacterMessage.getStudent();
         int tileId = moveStudentCharacterMessage.getTileID();
         if(game.isExpertMode()) {
-            if(!game.getTurnHandler().isUsedCharacter()){
-                if (game.getCurrentPlayer() == playerId) {
-                    CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(charId);
-                    Player player = game.getGameModel().getPlayer(playerId);
+            if (game.getCurrentPlayer() == playerId) {
+                CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(charId);
+                Player player = game.getGameModel().getPlayer(playerId);
+                if(!game.getTurnHandler().isUsedCharacter()){
                     if(player.getCoins() >= character.getPrice()){
                         try {
                             Isle isle = game.getGameModel().getIsle(tileId);
@@ -181,10 +182,10 @@ public class MessageVisitor extends Observable<ClientModel> {
                     }
 
                 } else {
-                    notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
+                    notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             }else{
-                notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
+                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
@@ -253,7 +254,7 @@ public class MessageVisitor extends Observable<ClientModel> {
             if (plus2MoveMnMessage.getPlayerID() == game.getCurrentPlayer()) {
                 if(!game.getTurnHandler().isUsedCharacter()) {
                     if (game.getGameModel().getPlayer(game.getCurrentPlayer()).getCoins() >= game.getGameModel().getCharacter(plus2MoveMnMessage.getCharacterID()).getPrice()) {
-                        game.getGameModel().getPlayer(game.getCurrentPlayer()).getChosen().Boost();
+                        game.getGameModel().getPlayer(game.getCurrentPlayer()).boost();
                         useCharacter(plus2MoveMnMessage.getCharacterID());
 
                     } else {
@@ -376,13 +377,13 @@ public class MessageVisitor extends Observable<ClientModel> {
                                 notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsEmptyError));
                             }
                         }
-                        useCharacter(move2StudCharacterMessage.getCharacterID());
                         for (Colour c : move2StudCharacterMessage.getStudFromTables()) {
                             game.getTurnHandler().checkProfessor(c);
                         }
                         for (Colour c : move2StudCharacterMessage.getStudFromBoard()) {
                             game.getTurnHandler().checkProfessor(c);
                         }
+                        useCharacter(move2StudCharacterMessage.getCharacterID());
                     } else {
                         notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
                     }

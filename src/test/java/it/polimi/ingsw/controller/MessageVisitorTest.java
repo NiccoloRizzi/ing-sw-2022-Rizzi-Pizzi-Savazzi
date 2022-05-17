@@ -245,6 +245,7 @@ class MessageVisitorTest {
         game.startActionTurn();
         for(int p = 0; p < playerNum; p++){
             game.createPlayer("p" + p);
+            game.getGameModel().getPlayer(p).createBoard((playerNum == 3)?6:8);
         }
 
         // Usefully variables
@@ -254,9 +255,6 @@ class MessageVisitorTest {
         HashMap<Colour, Player> professors = gameModel.getProfessors();
 
         // Setup test background
-        for(int i = 0; i < 3; i++){ gameModel.giveCoin(player_a);}
-        player_a.createBoard((playerNum == 3)?6:8);
-        player_b.createBoard((playerNum == 3)?6:8);
         player_a.assignFaction(FACTION);
         if(playerNum == 4){
             gameModel.getTeam(TEAM_ID).assignFaction(FACTION);
@@ -275,21 +273,33 @@ class MessageVisitorTest {
             assertEquals(3, isle.getInfluence(gameModel.getTeam(0), professors));
         }
 
+        TestObs obs = new TestObs();
+        game.addObserver(obs);
+
         // Test
         IsleInfluenceCharacterMessage message = new IsleInfluenceCharacterMessage(CHAR_ID,PLAYER_ID_A,ISLE_ID, COLOUR_A);
         MessageVisitor visitor = new MessageVisitor(game);
+        visitor.addObserver(obs);
+        message.accept(visitor);
+        assertEquals(ErrorMessage.ErrorType.NotEnoughCoinError,((ErrorMessage)obs.message).getError());
+        message.accept(visitor);
+        for(int i = 0; i < 3; i++){ gameModel.giveCoin(player_a);}
         message.accept(visitor);
         if(charType == CharactersEnum.PLUS_2_INFLUENCE){
             assertEquals(4, isle.getInfluence(player_a, professors));
             if(playerNum == 4){
                 assertEquals(5, isle.getInfluence(gameModel.getTeam(TEAM_ID), professors));
             }
+            assertEquals(CharactersEnum.PLUS_2_INFLUENCE,((ClientCharacter)obs.message).getCard());
+            assertEquals(CharactersEnum.PLUS_2_INFLUENCE.getPrice()+1,((ClientCharacter)obs.message).getPrice());
         }
         if(charType == CharactersEnum.NO_TOWER_INFLUENCE){
             assertEquals(1, isle.getInfluence(player_a, professors));
             if(playerNum == 1){
                 assertEquals(2, isle.getInfluence(gameModel.getTeam(TEAM_ID), professors));
             }
+            assertEquals(CharactersEnum.NO_TOWER_INFLUENCE,((ClientCharacter)obs.message).getCard());
+            assertEquals(CharactersEnum.NO_TOWER_INFLUENCE.getPrice()+1,((ClientCharacter)obs.message).getPrice());
 
         }
         if(charType == CharactersEnum.NO_COLOUR_INFLUENCE){
@@ -297,7 +307,15 @@ class MessageVisitorTest {
             if(playerNum == 4){
                 assertEquals(2, isle.getInfluence(gameModel.getTeam(TEAM_ID), professors));
             }
+            assertEquals(CharactersEnum.NO_COLOUR_INFLUENCE,((ClientCharacter)obs.message).getCard());
+            assertEquals(CharactersEnum.NO_COLOUR_INFLUENCE.getPrice()+1,((ClientCharacter)obs.message).getPrice());
         }
+
+        message.accept(visitor);
+        assertEquals(ErrorMessage.ErrorType.CharacterAlreadyUsedError,((ErrorMessage)obs.message).getError());
+        message = new IsleInfluenceCharacterMessage(CHAR_ID,(PLAYER_ID_A+1)%playerNum,ISLE_ID, COLOUR_A);
+        message.accept(visitor);
+        assertEquals(ErrorMessage.ErrorType.NotYourTurnError,((ErrorMessage)obs.message).getError());
     }
 
     @ParameterizedTest
@@ -316,7 +334,6 @@ class MessageVisitorTest {
         GameModel gameModel = game.getGameModel();
         game.createPlayer("p" + PLAYER_ID);
         game.startActionTurn();
-
         // Usefully variables
         Player player = gameModel.getPlayer(PLAYER_ID);
         CharacterStudents character = (CharacterStudents) gameModel.getCharacter(CHAR_ID);
@@ -324,7 +341,6 @@ class MessageVisitorTest {
 
         // Setup test background
         player.createBoard(8);
-        for(int i = 0; i < 3; i++){ gameModel.giveCoin(player); }
         for(int i = 0; i < 4; i++){
             for(Colour c : Colour.values()){
                 try{
@@ -352,9 +368,16 @@ class MessageVisitorTest {
         assertEquals(0, isle.getStudents(Colour.Frogs));
         assertEquals(4, charSize(character));
 
+        TestObs obs = new TestObs();
+        game.addObserver(obs);
+
         // Test
         MoveStudentCharacterMessage message = new MoveStudentCharacterMessage(PLAYER_ID, CHAR_ID, colour, ISLE_ID);
         MessageVisitor visitor = new MessageVisitor(game);
+        visitor.addObserver(obs);
+        message.accept(visitor);
+        assertEquals(ErrorMessage.ErrorType.NotEnoughCoinError,((ErrorMessage)obs.message).getError());
+        for(int i = 0; i < 3; i++){ gameModel.giveCoin(player); }
         message.accept(visitor);
         if(charType == CharactersEnum.ONE_STUD_TO_TABLES){
             assertEquals(119, gameModel.getBagSize());
@@ -364,6 +387,8 @@ class MessageVisitorTest {
             assertEquals(0, isle.getStudents(Colour.Fairies));
             assertEquals(0, isle.getStudents(Colour.Dragons));
             assertEquals(0, isle.getStudents(Colour.Frogs));
+            assertEquals(CharactersEnum.ONE_STUD_TO_TABLES,((ClientCharacter)obs.message).getCard());
+            assertEquals(CharactersEnum.ONE_STUD_TO_TABLES.getPrice()+1,((ClientCharacter)obs.message).getPrice());
         }
         if(charType == CharactersEnum.ONE_STUD_TO_ISLE){
             assertEquals(119, gameModel.getBagSize());
@@ -373,8 +398,16 @@ class MessageVisitorTest {
             assertEquals((colour==Colour.Fairies)?1:0, isle.getStudents(Colour.Fairies));
             assertEquals((colour==Colour.Dragons)?1:0, isle.getStudents(Colour.Dragons));
             assertEquals((colour==Colour.Frogs)?1:0, isle.getStudents(Colour.Frogs));
+            assertEquals(CharactersEnum.ONE_STUD_TO_ISLE,((ClientCharacter)obs.message).getCard());
+            assertEquals(CharactersEnum.ONE_STUD_TO_ISLE.getPrice()+1,((ClientCharacter)obs.message).getPrice());
         }
         assertEquals(4, charSize(character));
+        message.accept(visitor);
+        assertEquals(ErrorMessage.ErrorType.CharacterAlreadyUsedError,((ErrorMessage)obs.message).getError());
+        message = new MoveStudentCharacterMessage((PLAYER_ID+1)%PLAYER_NUM, CHAR_ID, colour, ISLE_ID);
+        message.accept(visitor);
+        assertEquals(ErrorMessage.ErrorType.NotYourTurnError,((ErrorMessage)obs.message).getError());
+
     }
 
     @ParameterizedTest
@@ -405,7 +438,6 @@ class MessageVisitorTest {
         Board boardB = playerB.getBoard();
 
         // Before test condition
-        for(int i = 0; i < 5; i++){ gameModel.giveCoin(playerA); }
         boardA.addToTable(colour);
         turn.setCurrentPlayer(playerA);
         game.setCurrentPlayer(playerA.getID());
@@ -420,15 +452,30 @@ class MessageVisitorTest {
         turn.checkProfessor(colour);
         assertEquals(playerB, gameModel.getProfessorOwner(colour).get());
 
+        TestObs obs = new TestObs();
+        game.addObserver(obs);
         // Test
         MessageVisitor visitor = new MessageVisitor(game);
+        visitor.addObserver(obs);
         turn.setCurrentPlayer(playerA);
         game.setCurrentPlayer(playerA.getID());
         StrategyProfessorMessage message = new StrategyProfessorMessage(CHAR_ID, PLAYER_ID_A);
         message.accept(visitor);
+        assertEquals(ErrorMessage.ErrorType.NotEnoughCoinError,((ErrorMessage)obs.message).getError());
+        for(int i = 0; i < 5; i++){ gameModel.giveCoin(playerA); }
+        message.accept(visitor);
+        assertEquals(CharactersEnum.PROFESSOR_CONTROL,((ClientCharacter)obs.message).getCard());
+        assertEquals(CharactersEnum.PROFESSOR_CONTROL.getPrice()+1,((ClientCharacter)obs.message).getPrice());
         boardA.addToTable(colour);
         turn.checkProfessor(colour);
         assertEquals(playerA, gameModel.getProfessorOwner(colour).get());
+
+        message.accept(visitor);
+        assertEquals(ErrorMessage.ErrorType.CharacterAlreadyUsedError,((ErrorMessage)obs.message).getError());
+        message = new StrategyProfessorMessage(CHAR_ID, (PLAYER_ID_A+1)%PLAYERS_NUM);
+        message.accept(visitor);
+        assertEquals(ErrorMessage.ErrorType.NotYourTurnError,((ErrorMessage)obs.message).getError());
+
         boardB.addToTable(colour);
         turn.setCurrentPlayer(playerB);
         game.setCurrentPlayer(playerB.getID());
@@ -463,7 +510,6 @@ class MessageVisitorTest {
         Isle isleS = gameModel.getIsle((ISLE_ID + 1) % 12);
 
         // Setting background
-        for(int i = 0; i < 7; i++){ gameModel.giveCoin(playerA); }
         playerA.assignFaction(Faction.Black);
         playerB.assignFaction(Faction.White);
         gameModel.setProfessor(Colour.Fairies, playerA);
@@ -473,10 +519,24 @@ class MessageVisitorTest {
         assertEquals(12, gameModel.getIsles().size());
         assertEquals(Faction.Empty, isle.getTower());
 
+        TestObs obs = new TestObs();
+        game.addObserver(obs);
+
         // Test
         MessageVisitor visitor = new MessageVisitor(game);
+        visitor.addObserver(obs);
         SimilMotherNatureMesage message = new SimilMotherNatureMesage(CHAR_ID, PLAYER_ID_A, ISLE_ID);
         message.accept(visitor);
+        assertEquals(ErrorMessage.ErrorType.NotEnoughCoinError,((ErrorMessage)obs.message).getError());
+
+        for(int i = 0; i < 7; i++){ gameModel.giveCoin(playerA); }
+        message.accept(visitor);
+
+
+
+        assertEquals(CharactersEnum.SIMIL_MN,((ClientCharacter)obs.message).getCard());
+        assertEquals(CharactersEnum.SIMIL_MN.getPrice()+1,((ClientCharacter)obs.message).getPrice());
+
         assertEquals(Faction.Empty, isle.getTower());
         assertEquals(12, gameModel.getIsles().size());
         isle.addStudent(Colour.Fairies);
@@ -485,6 +545,13 @@ class MessageVisitorTest {
         message.accept(visitor);
         assertEquals(Faction.Black, isle.getTower());
         assertEquals(10, gameModel.getIsles().size());
+
+        message.accept(visitor);
+        assertEquals(ErrorMessage.ErrorType.CharacterAlreadyUsedError,((ErrorMessage)obs.message).getError());
+        message = new SimilMotherNatureMesage(CHAR_ID, (PLAYER_ID_A+1)%PLAYERS_NUM, ISLE_ID);
+        message.accept(visitor);
+        assertEquals(ErrorMessage.ErrorType.NotYourTurnError,((ErrorMessage)obs.message).getError());
+
     }
 
     @Test
@@ -496,19 +563,39 @@ class MessageVisitorTest {
         game.setupGame();
         game.startActionTurn();
         game.getGameModel().setCharacter_DEBUG(0,CharactersEnum.PLUS_2_MN);
+
+        TestObs obs = new TestObs();
+        game.addObserver(obs);
+        messageVisitor.addObserver(obs);
+
         int player = game.getCurrentPlayer();
+        game.getGameModel().getPlayer(player).removeCoins(2);
+        messageVisitor.visit(new Plus2MoveMnMessage(0,player));
+        assertEquals(ErrorMessage.ErrorType.NotEnoughCoinError,((ErrorMessage)obs.message).getError());
+
+
         for(int i = 0; i < 5; i++) {
             game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
         }
+
         game.getGameModel().getPlayer(player).setChoosenAssistant(0);
         Assistant a = game.getGameModel().getPlayer(player).getChosen();
         int moves = a.getMn_moves() + a.getBoost();
         messageVisitor.visit(new Plus2MoveMnMessage(0,player));
         assertEquals(moves+2,a.getMn_moves()+a.getBoost());
         assertEquals(CharactersEnum.PLUS_2_MN.getPrice()+1,game.getGameModel().getCharacter(0).getPrice());
+        assertEquals(CharactersEnum.PLUS_2_MN,((ClientCharacter)obs.message).getCard());
+        assertEquals(CharactersEnum.PLUS_2_MN.getPrice()+1,((ClientCharacter)obs.message).getPrice());
 
 
-        assertEquals(6-CharactersEnum.PLUS_2_MN.getPrice(),game.getGameModel().getPlayer(player).getCoins());
+        messageVisitor.visit(new Plus2MoveMnMessage(0,player));
+        assertEquals(ErrorMessage.ErrorType.CharacterAlreadyUsedError,((ErrorMessage)obs.message).getError());
+        messageVisitor.visit(new Plus2MoveMnMessage(0,(player+1)%2));
+        assertEquals(ErrorMessage.ErrorType.NotYourTurnError,((ErrorMessage)obs.message).getError());
+
+
+        assertEquals(4-CharactersEnum.PLUS_2_MN.getPrice(),game.getGameModel().getPlayer(player).getCoins());
+
     }
 
     @Test
@@ -520,22 +607,45 @@ class MessageVisitorTest {
         game.setupGame();
         game.startActionTurn();
         game.getGameModel().setCharacter_DEBUG(0,CharactersEnum.PROHIBITED);
+
+        TestObs obs = new TestObs();
+        game.addObserver(obs);
+        messageVisitor.addObserver(obs);
+
         int player = game.getCurrentPlayer();
+
+        game.getGameModel().getPlayer(player).removeCoins(2);
+
+        int isle = new Random().nextInt(12);
+
+        messageVisitor.visit(new ProhibitedIsleCharacterMessage(0,player,isle));
+        assertEquals(ErrorMessage.ErrorType.NotEnoughCoinError,((ErrorMessage)obs.message).getError());
+
+
         for(int i = 0; i < 5; i++) {
             game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
         }
-        int isle = new Random().nextInt(12);
         assertFalse(game.getGameModel().getIsle(isle).removeProhibited());
         messageVisitor.visit(new ProhibitedIsleCharacterMessage(0,player,isle));
+
+        assertEquals(CharactersEnum.PROHIBITED,((ClientCharacter)obs.message).getCard());
+        assertEquals(CharactersEnum.PROHIBITED.getPrice()+1,((ClientCharacter)obs.message).getPrice());
+
         game.getTurnHandler().setUsedCharacter(false);
+        game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
         messageVisitor.visit(new ProhibitedIsleCharacterMessage(0,player,isle));
+
         assertEquals(2,game.getGameModel().getProhibited());
         assertTrue(game.getGameModel().getIsle(isle).removeProhibited());
         assertTrue(game.getGameModel().getIsle(isle).removeProhibited());
         assertFalse(game.getGameModel().getIsle(isle).removeProhibited());
 
+        messageVisitor.visit(new ProhibitedIsleCharacterMessage(0,player,isle));
+        assertEquals(ErrorMessage.ErrorType.CharacterAlreadyUsedError,((ErrorMessage)obs.message).getError());
+        messageVisitor.visit(new ProhibitedIsleCharacterMessage(0,(player+1)%2,isle));
+        assertEquals(ErrorMessage.ErrorType.NotYourTurnError,((ErrorMessage)obs.message).getError());
 
-       assertEquals(6-2*CharactersEnum.PROHIBITED.getPrice()-1,game.getGameModel().getPlayer(player).getCoins());
+        assertEquals(4-2*CharactersEnum.PROHIBITED.getPrice(),game.getGameModel().getPlayer(player).getCoins());
     }
 
     @Test
@@ -548,10 +658,13 @@ class MessageVisitorTest {
         game.setupGame();
         game.startActionTurn();
         game.getGameModel().setCharacter_DEBUG(0, CharactersEnum.EXCHANGE_3_STUD);
+
+        TestObs obs = new TestObs();
+        game.addObserver(obs);
+        messageVisitor.addObserver(obs);
+
         int player = game.getCurrentPlayer();
-        for(int i = 0; i < 5; i++) {
-            game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
-        }
+
         CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(0);
         character.addStudent(Colour.Gnomes);
         character.addStudent(Colour.Dragons);
@@ -575,8 +688,17 @@ class MessageVisitorTest {
             expectedC.put(c, character.getStudents(c));
         }
 
+        game.getGameModel().getPlayer(player).removeCoins(2);
+
         Colour studBoard[] = {Colour.Fairies, Colour.Frogs, Colour.Unicorns};
         Colour studChar[] = {Colour.Gnomes, Colour.Dragons, Colour.Gnomes};
+        messageVisitor.visit(new Move6StudCharacterMessage(0, player, studBoard, studChar));
+        assertEquals(ErrorMessage.ErrorType.NotEnoughCoinError,((ErrorMessage)obs.message).getError());
+
+        for(int i = 0; i < 5; i++) {
+            game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
+        }
+
         messageVisitor.visit(new Move6StudCharacterMessage(0, player, studBoard, studChar));
 
         assertEquals(expectedB.get(Colour.Dragons) + 1, board.getStudents(Colour.Dragons));
@@ -591,8 +713,16 @@ class MessageVisitorTest {
         assertEquals(expectedC.get(Colour.Unicorns) + 1, character.getStudents(Colour.Unicorns));
         assertEquals(expectedC.get(Colour.Fairies) + 1, character.getStudents(Colour.Fairies));
 
+        assertEquals(CharactersEnum.EXCHANGE_3_STUD,((ClientCharacter)obs.message).getCard());
+        assertEquals(CharactersEnum.EXCHANGE_3_STUD.getPrice()+1,((ClientCharacter)obs.message).getPrice());
 
-        assertEquals(6-CharactersEnum.EXCHANGE_3_STUD.getPrice(),game.getGameModel().getPlayer(player).getCoins());
+        messageVisitor.visit(new Move6StudCharacterMessage(0, player, studBoard, studChar));
+        assertEquals(ErrorMessage.ErrorType.CharacterAlreadyUsedError,((ErrorMessage)obs.message).getError());
+        messageVisitor.visit(new Move6StudCharacterMessage(0, (player+1)%3, studBoard, studChar));
+        assertEquals(ErrorMessage.ErrorType.NotYourTurnError,((ErrorMessage)obs.message).getError());
+
+
+        assertEquals(4-CharactersEnum.EXCHANGE_3_STUD.getPrice(),game.getGameModel().getPlayer(player).getCoins());
     }
 
     @Test
@@ -605,10 +735,13 @@ class MessageVisitorTest {
         game.setupGame();
         game.startActionTurn();
         game.getGameModel().setCharacter_DEBUG(0, CharactersEnum.EXCHANGE_2_STUD);
+
+        obs = new TestObs();
+        game.addObserver(obs);
+        messageVisitor.addObserver(obs);
+
         int player = game.getCurrentPlayer();
-        for(int i = 0; i < 5; i++) {
-            game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
-        }
+
         Board board = game.getGameModel().getPlayer(player).getBoard();
         for(Colour c: Colour.values()) {
             try {
@@ -635,6 +768,13 @@ class MessageVisitorTest {
         Colour[] studTables ={Colour.Dragons,Colour.Gnomes};
 
         messageVisitor.visit(new Move2StudCharacterMessage(0,player,studBoard,studTables));
+        assertEquals(ErrorMessage.ErrorType.NotEnoughCoinError,((ErrorMessage)obs.message).getError());
+
+        for(int i = 0; i < 5; i++) {
+            game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
+        }
+
+        messageVisitor.visit(new Move2StudCharacterMessage(0,player,studBoard,studTables));
 
         assertEquals(entrance.get(Colour.Dragons)+1,board.getStudents(Colour.Dragons));
         assertEquals(entrance.get(Colour.Gnomes)+1,board.getStudents(Colour.Gnomes));
@@ -645,6 +785,14 @@ class MessageVisitorTest {
         assertEquals(tables.get(Colour.Gnomes)-1,board.getTable(Colour.Gnomes));
         assertEquals(tables.get(Colour.Fairies)+1,board.getTable(Colour.Fairies));
         assertEquals(tables.get(Colour.Unicorns)+1,board.getTable(Colour.Unicorns));
+
+        assertEquals(CharactersEnum.EXCHANGE_2_STUD,((ClientCharacter)obs.message).getCard());
+        assertEquals(CharactersEnum.EXCHANGE_2_STUD.getPrice()+1,((ClientCharacter)obs.message).getPrice());
+
+        messageVisitor.visit(new Move2StudCharacterMessage(0,player,studBoard,studTables));
+        assertEquals(ErrorMessage.ErrorType.CharacterAlreadyUsedError,((ErrorMessage)obs.message).getError());
+        messageVisitor.visit(new Move2StudCharacterMessage(0,(player+1)%3,studBoard,studTables));
+        assertEquals(ErrorMessage.ErrorType.NotYourTurnError,((ErrorMessage)obs.message).getError());
 
 
         assertEquals(6-CharactersEnum.EXCHANGE_2_STUD.getPrice(),game.getGameModel().getPlayer(player).getCoins());
@@ -660,10 +808,13 @@ class MessageVisitorTest {
         game.setupGame();
         game.startActionTurn();
         game.getGameModel().setCharacter_DEBUG(0, CharactersEnum.REMOVE_3_STUD);
+
+        obs = new TestObs();
+        game.addObserver(obs);
+        messageVisitor.addObserver(obs);
+
         int player = game.getCurrentPlayer();
-        for(int i = 0; i < 5; i++) {
-            game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
-        }
+
         Colour colour = Colour.values()[(new Random()).nextInt(5)];
         HashMap<Player,Integer> playerStud = new HashMap<>();
         int i = 1;
@@ -678,11 +829,27 @@ class MessageVisitorTest {
         }
 
         messageVisitor.visit(new Remove3StudCharacterMessage(0,player,colour));
+        assertEquals(ErrorMessage.ErrorType.NotEnoughCoinError,((ErrorMessage)obs.message).getError());
+
+        for(int j = 0; j < 5; j++) {
+            game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
+        }
+
+        messageVisitor.visit(new Remove3StudCharacterMessage(0,player,colour));
 
         for(Player p: game.getGameModel().getPlayers())
         {
             assertEquals((playerStud.get(p)-3<0)?0:playerStud.get(p)-3,p.getBoard().getTable(colour));
         }
+        assertEquals(CharactersEnum.REMOVE_3_STUD,((ClientCharacter)obs.message).getCard());
+        assertEquals(CharactersEnum.REMOVE_3_STUD.getPrice()+1,((ClientCharacter)obs.message).getPrice());
+
+        messageVisitor.visit(new Remove3StudCharacterMessage(0,player,colour));
+        assertEquals(ErrorMessage.ErrorType.CharacterAlreadyUsedError,((ErrorMessage)obs.message).getError());
+        messageVisitor.visit(new Remove3StudCharacterMessage(0,(player+1)%3,colour));
+        assertEquals(ErrorMessage.ErrorType.NotYourTurnError,((ErrorMessage)obs.message).getError());
+
+
         assertEquals(6-CharactersEnum.REMOVE_3_STUD.getPrice(),game.getGameModel().getPlayer(player).getCoins());
     }
 }

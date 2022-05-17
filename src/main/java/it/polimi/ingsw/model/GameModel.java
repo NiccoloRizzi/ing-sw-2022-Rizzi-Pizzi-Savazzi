@@ -311,6 +311,12 @@ public class GameModel extends Observable<ClientModel> {
     public void useProhibited()
     {
         prohibited --;
+        notifyChange();
+    }
+
+    public void addProhibited()
+    {
+        prohibited++;
     }
 
     public void setUpCharacter()
@@ -382,7 +388,7 @@ public class GameModel extends Observable<ClientModel> {
         {
             tempIsles.add(i.getClientIsle());
         }
-        notify(new ClientGameModel(prof,motherNature,tempIsles));
+        notify(new ClientGameModel(prof,motherNature,tempIsles,prohibited));
     }
 
     public void sendFullModel()

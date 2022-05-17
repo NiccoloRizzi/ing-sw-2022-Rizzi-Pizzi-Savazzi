@@ -5,14 +5,11 @@ import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
 import it.polimi.ingsw.clientModels.Answers.StartMessage;
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 import it.polimi.ingsw.clientModels.Answers.WinMessage;
-import it.polimi.ingsw.messages.AssistantChoiceMessage;
-import it.polimi.ingsw.messages.CloudChoiceMessage;
-import it.polimi.ingsw.messages.MoveMotherNatureMessage;
-import it.polimi.ingsw.messages.MoveStudentMessage;
+import it.polimi.ingsw.messages.*;
 import it.polimi.ingsw.model.Colour;
-import it.polimi.ingsw.server.ModelSerializer;
+import it.polimi.ingsw.server.Observable;
 
-public class View {
+public class View extends Observable<Message> {
 
     private ModelView modelView;
     private boolean started = false;
@@ -29,9 +26,9 @@ public class View {
         return modelView;
     }
 
-    public synchronized void sendMessage(String messageToSend) {
-        client.writeToSocket(messageToSend);
-    }
+   /* public synchronized void sendMessage(String messageToSend) {
+        notify(messageToSend);
+    }*/
 
 
     public synchronized void visit(ClientBoard clientBoard){
@@ -86,28 +83,28 @@ public class View {
     public void ChooseAssistant(int assistant){
         if(assistant>0 && assistant<11) {
             AssistantChoiceMessage acm = new AssistantChoiceMessage(assistant - 1, client.getId());
-            client.writeToSocket(MessageSerializer.serialize(acm));
+            notify(acm);
         }
     }
 
     public void MoveToIsle(Colour c, int isleid){
         MoveStudentMessage msm = new MoveStudentMessage(client.getId(), c, isleid, false);
-        client.writeToSocket(MessageSerializer.serialize(msm));
+        notify(msm);
     }
 
     public void MoveToTable(Colour c){
         MoveStudentMessage msm = new MoveStudentMessage(client.getId(),c,0,true);
-        client.writeToSocket(MessageSerializer.serialize(msm));
+        notify(msm);
     }
 
     public void ChooseCloud(int cloudid){
         CloudChoiceMessage ccm = new CloudChoiceMessage(client.getId(), cloudid);
-        client.writeToSocket(MessageSerializer.serialize(ccm));
+        notify(ccm);
     }
 
     public void MoveMotherNature(int spaces){
         MoveMotherNatureMessage movemnm = new MoveMotherNatureMessage(client.getId(), spaces);
-        client.writeToSocket(MessageSerializer.serialize(movemnm));
+        notify(movemnm);
     }
 
     public void refresh(){
