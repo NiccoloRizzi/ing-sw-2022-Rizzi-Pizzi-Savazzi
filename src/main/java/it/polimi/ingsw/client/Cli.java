@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.model.Character;
+import it.polimi.ingsw.model.CharactersEnum;
 import it.polimi.ingsw.model.Colour;
 
 import java.io.IOException;
@@ -82,7 +84,7 @@ public class Cli extends View{
                     System.out.println("Comandi:\n" +
                              "moveStudent colour index: sposta lo studente del colore \"colour\" all'isola 'index'.");
                     break;
-                case "chooseassistant":
+                case "assistant":
                     try {
                         super.ChooseAssistant(Integer.parseInt(command[1]));
                     }catch(NumberFormatException e){
@@ -100,6 +102,9 @@ public class Cli extends View{
                     break;
                 case "movemn":
                     MoveMotherNature(Integer.parseInt(command[1]));
+                    break;
+                default:
+                    System.out.println("Comando errato");
                     break;
 
             }

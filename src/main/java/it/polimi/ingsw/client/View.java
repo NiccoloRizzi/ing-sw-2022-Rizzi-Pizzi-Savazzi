@@ -84,8 +84,10 @@ public class View {
 
     }
     public void ChooseAssistant(int assistant){
-        AssistantChoiceMessage acm = new AssistantChoiceMessage(assistant-1, client.getId());
-        client.writeToSocket(MessageSerializer.serialize(acm));
+        if(assistant>0 && assistant<11) {
+            AssistantChoiceMessage acm = new AssistantChoiceMessage(assistant - 1, client.getId());
+            client.writeToSocket(MessageSerializer.serialize(acm));
+        }
     }
 
     public void MoveToIsle(Colour c, int isleid){

@@ -2,6 +2,7 @@ package it.polimi.ingsw.clientModels;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
 import it.polimi.ingsw.clientModels.Answers.StartMessage;
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 
@@ -29,6 +30,8 @@ public class ClientModelDeSerializer {
                 return gson.fromJson(json, ClientCharacter.class);
             case "TurnMessage":
                 return gson.fromJson(json, TurnMessage.class);
+            case "ErrorMessage":
+                return gson.fromJson(json, ErrorMessage.class);
             default:
                 throw new NullPointerException();
         }

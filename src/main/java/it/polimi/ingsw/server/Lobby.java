@@ -77,6 +77,7 @@ public class Lobby {
         for(PlayerConnection player: players)
         {
             game.addObserver(player);
+            messageVisitor.addObserver(player);
         }
         game.sendInitialGame();
         StartMessage start = new StartMessage(game.getGameModel().getPlayers());
