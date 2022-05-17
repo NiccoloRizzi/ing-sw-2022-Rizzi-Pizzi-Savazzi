@@ -103,7 +103,7 @@ public class GameModel extends Observable<ClientModel> {
 
     public void moveMN(int moves) {
         motherNature = (motherNature + moves) % isles.size();
-        notifyChange();
+        //notifyChange();
     }
 
     public HashMap<Colour, Player> getProfessors(){

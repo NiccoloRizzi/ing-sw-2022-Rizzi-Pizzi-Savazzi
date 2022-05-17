@@ -1,11 +1,15 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.clientModels.*;
+import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
+import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 import it.polimi.ingsw.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.exceptions.PlayerOutOfBoundException;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 import it.polimi.ingsw.messages.*;
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.server.Observer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -23,6 +27,16 @@ class MessageVisitorTest {
 
     private Game game;
     private MessageVisitor mv;
+    private TestObs obs;
+
+    private class TestObs implements Observer<ClientModel> {
+        public ClientModel message;
+
+        @Override
+        public void update(ClientModel message) {
+            this.message = message;
+        }
+    }
 
     private static Stream<Arguments> argsA(){
         return Stream.of(
@@ -60,6 +74,8 @@ class MessageVisitorTest {
 
     public void setupGame(Phase phase, int playersNumber, boolean expertMode) throws PlayerOutOfBoundException {
         game = new Game(playersNumber, expertMode);
+        obs = new TestObs();
+        game.addObserver(obs);
         game.createPlayer("Alberto");
         game.createPlayer("Lorenzo");
         if(playersNumber>2) {
@@ -69,6 +85,7 @@ class MessageVisitorTest {
         }
         game.setupGame();
         mv = new MessageVisitor(game);
+        mv.addObserver(obs);
         for(int i=0; i<4;i++){
             AssistantChoiceMessage acm = new AssistantChoiceMessage(i,game.getPlanningOrder().get(i));
             mv.visit(acm);
@@ -107,8 +124,13 @@ class MessageVisitorTest {
         game.createPlayer("Paolo");
         game.setupGame();
         MessageVisitor mv = new MessageVisitor(game);
+        obs = new TestObs();
+        game.addObserver(obs);
+        mv.addObserver(obs);
+        game.sendInitialGame();
         ArrayList<Integer> order = (ArrayList<Integer>) game.getPlanningOrder().clone();
         for(int i=0; i<4;i++){
+            assertEquals(order.get(i),((TurnMessage)obs.message).getPlayerId());
             AssistantChoiceMessage acm = new AssistantChoiceMessage(i,game.getPlanningOrder().get(i));
             mv.visit(acm);
         }
@@ -131,6 +153,7 @@ class MessageVisitorTest {
             MoveStudentMessage msm = new MoveStudentMessage(playerId,student,0,false);
             mv.visit(msm);
             assertEquals(game.getGameModel().getIsle(0).getStudents(student),students+1);
+            assertEquals(students+1,((ClientIsle)obs.message).getStudents().get(student));
         }catch(TileOutOfBoundsException e){
             e.printStackTrace();
         }
@@ -138,25 +161,33 @@ class MessageVisitorTest {
         MoveStudentMessage msm = new MoveStudentMessage(playerId,student,0,true);
         mv.visit(msm);
         assertEquals(game.getGameModel().getPlayer(playerId).getBoard().getTable(student),1);
+        assertEquals(playerId,((ClientGameModel)obs.message).getProfessors().get(student));
         msm = new MoveStudentMessage(playerId,student,0,true);
         mv.visit(msm);
         assertEquals(game.getGameModel().getPlayer(playerId).getBoard().getTable(student),2);
         assertEquals(game.getTurnHandler().getStudentsToMove(),0);
         assertEquals(game.getTurnHandler().getPhase(),Phase.MOTHERNATURE);
+        assertEquals(TurnMessage.Turn.ACTION_MN,((TurnMessage)obs.message).getTurn());
 
-
+        msm = new MoveStudentMessage((playerId+1)%4,student,0,true);
+        mv.visit(msm);
+        assertEquals(ErrorMessage.ErrorType.NotYourTurnError,((ErrorMessage)obs.message).getError());
     }
 
     @Test
     void testVisitMotherNatureMessage() throws PlayerOutOfBoundException {
-                setupGame(Phase.MOTHERNATURE, 4, true);
-                Random rand = new Random();
-                int playerId = game.getCurrentPlayer();
-                int mn = game.getGameModel().getMotherNature();
-                int moves = rand.nextInt(game.getGameModel().getPlayer(playerId).getChosen().getMn_moves());
-                MoveMotherNatureMessage mmn = new MoveMotherNatureMessage(playerId, moves);
-                mv.visit(mmn);
-                assertEquals((mn + moves) % game.getGameModel().getIsles().size(), game.getGameModel().getMotherNature());
+        setupGame(Phase.MOTHERNATURE, 4, true);
+        Random rand = new Random();
+        int playerId = game.getCurrentPlayer();
+        int mn = game.getGameModel().getMotherNature();
+        int moves = rand.nextInt(game.getGameModel().getPlayer(playerId).getChosen().getMn_moves());
+        MoveMotherNatureMessage mmn = new MoveMotherNatureMessage(playerId, moves);
+        mv.visit(mmn);
+        assertEquals((mn + moves) % game.getGameModel().getIsles().size(), game.getGameModel().getMotherNature());
+        assertEquals(TurnMessage.Turn.ACTION_CLOUDS,((TurnMessage)obs.message).getTurn());
+        mmn = new MoveMotherNatureMessage((playerId+1)%4, moves);
+        mv.visit(mmn);
+        assertEquals(ErrorMessage.ErrorType.NotYourTurnError,((ErrorMessage)obs.message).getError());
     }
 
     @ParameterizedTest
@@ -164,13 +195,17 @@ class MessageVisitorTest {
     void testVisitCloudChoiceMessage(int cloudId) throws PlayerOutOfBoundException {
         setupGame(Phase.CLOUD,4,true);
         int playerId = game.getCurrentPlayer();
-        CloudChoiceMessage ccm = new CloudChoiceMessage(playerId,cloudId);
+        CloudChoiceMessage ccm = new CloudChoiceMessage((playerId+1)%4,cloudId);
+        mv.visit(ccm);
+        assertEquals(ErrorMessage.ErrorType.NotYourTurnError,((ErrorMessage)obs.message).getError());
+        ccm = new CloudChoiceMessage(playerId,cloudId);
         HashMap<Colour,Integer> students = new HashMap<>();
         try {
             for (Colour c : Colour.values()) {
                 students.put(c,game.getGameModel().getCloud(cloudId).getStudents(c)+game.getGameModel().getPlayer(playerId).getBoard().getStudents(c));
             }
             mv.visit(ccm);
+//            assertEquals(TurnMessage.Turn.ACTION_STUDENTS,((TurnMessage)obs.message).getTurn());
             for (Colour c : Colour.values()) {
                 assertEquals(0, game.getGameModel().getCloud(cloudId).getStudents(c));
                 assertEquals(students.get(c), game.getGameModel().getPlayer(playerId).getBoard().getStudents(c));

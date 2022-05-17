@@ -182,8 +182,8 @@ class GameTest {
             assertEquals(students.get(c),2);
         }
 
-        //assertEquals(TurnMessage.Turn.PLANNING,((TurnMessage)obs.message).getTurn());
-        //assertEquals(game.getCurrentPlayer(),((TurnMessage)obs.message).getPlayerId());
+ //       assertEquals(TurnMessage.Turn.PLANNING,((TurnMessage)obs.message).getTurn());
+ //       assertEquals(game.getCurrentPlayer(),((TurnMessage)obs.message).getPlayerId());
     }
 
 
