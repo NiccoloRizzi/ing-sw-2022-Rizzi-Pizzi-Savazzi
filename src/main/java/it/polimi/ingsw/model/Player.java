@@ -168,7 +168,7 @@ public class Player extends Observable<ClientModel> {
     {
         Integer[] used = usedCards.stream().map(x->x.getValue()).toArray(Integer[]::new);
         Integer[] intDeck = deck.stream().map(x->x.getValue()).toArray(Integer[]::new);
-        notify(new ClientPlayer(used,intDeck,coins,nickname,ID));
+        notify(new ClientPlayer(used,intDeck,coins,nickname,ID,(usedCards.size()>0 && getChosen().getBoost() == 2)?true:false));
     }
 
     @Override

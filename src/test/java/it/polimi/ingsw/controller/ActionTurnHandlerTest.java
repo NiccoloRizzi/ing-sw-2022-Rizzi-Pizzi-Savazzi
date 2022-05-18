@@ -61,7 +61,7 @@ class ActionTurnHandlerTest {
             assertEquals((initpos+6)%12,game.getGameModel().getMotherNature());
             assertEquals(Faction.White,game.getGameModel().getIsle((initpos+6)%12).getTower());
 
-            game.getGameModel().getIsle((initpos+7)%11).setProhibited();
+            game.getGameModel().getIsle((initpos+7)%12).setProhibited();
             game.getGameModel().useProhibited();
             game.getTurnHandler().moveMn(1);
             message = (TurnMessage)obs.message;

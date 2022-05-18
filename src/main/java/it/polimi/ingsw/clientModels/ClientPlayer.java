@@ -10,6 +10,7 @@ public class ClientPlayer implements ClientModel{
     private final int coins;
     private final String nickname;
     private final int id;
+    private final boolean boost;
 
     public Integer[] getUsedAssistants() {
         return usedAssistants;
@@ -31,13 +32,14 @@ public class ClientPlayer implements ClientModel{
         return id;
     }
 
-    public ClientPlayer(Integer[] usedAssistants, Integer[] deck, int coins, String nickname, int id)
+    public ClientPlayer(Integer[] usedAssistants, Integer[] deck, int coins, String nickname, int id, boolean boost)
     {
         this.usedAssistants = usedAssistants;
         this.deck = deck;
         this.coins = coins;
         this.nickname = nickname;
         this.id = id;
+        this.boost = boost;
     }
     @Override
     public void accept(View visitor) {
