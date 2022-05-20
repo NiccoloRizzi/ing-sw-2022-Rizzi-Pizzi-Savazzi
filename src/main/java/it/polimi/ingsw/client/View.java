@@ -16,7 +16,6 @@ public class View extends Observable<Message> {
     private Client client;
 
 
-
     public void setupModel(Client client){
         this.client = client;
         modelView = new ModelView(client.getPlayersNumber(), client.isExpert());

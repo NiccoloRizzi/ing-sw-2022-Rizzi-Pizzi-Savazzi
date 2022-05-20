@@ -134,8 +134,7 @@ public class Client {
         this.id = id;
     }
 
-    public void update(Message action){
-        writeToSocket(action.serialize());
+    public void update(Message action){ writeToSocket(action.serialize());
     }
 
 

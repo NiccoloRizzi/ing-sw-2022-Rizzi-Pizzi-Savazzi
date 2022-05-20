@@ -49,7 +49,7 @@ public class ActionTurnHandler extends Observable<ClientModel> {
             notify(new TurnMessage(currentPlayer, TurnMessage.Turn.ACTION_CLOUDS));
         }
         else{
-            notify(new ErrorMessage(ErrorMessage.ErrorType.MovesError));
+            notify(new ErrorMessage(currentPlayer,ErrorMessage.ErrorType.MovesError));
         }
     }
 
@@ -68,7 +68,7 @@ public class ActionTurnHandler extends Observable<ClientModel> {
                 }
             }
             else {
-                notify(new ErrorMessage(ErrorMessage.ErrorType.StudentError));
+                notify(new ErrorMessage(currentPlayer,ErrorMessage.ErrorType.StudentError));
             }
         }catch(StudentsOutOfBoundsException e){
             e.printStackTrace();
@@ -92,10 +92,10 @@ public class ActionTurnHandler extends Observable<ClientModel> {
                     }
                 }
                 else{
-                    notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsFullError));
+                    notify(new ErrorMessage(currentPlayer,ErrorMessage.ErrorType.TileIsFullError));
                 }
             }else{
-                notify(new ErrorMessage(ErrorMessage.ErrorType.StudentError));
+                notify(new ErrorMessage(currentPlayer,ErrorMessage.ErrorType.StudentError));
             }
 
 
@@ -109,7 +109,7 @@ public class ActionTurnHandler extends Observable<ClientModel> {
 
         try{
             if(gameModel.getCloud(cloudId).isEmpty()){
-                notify(new ErrorMessage(ErrorMessage.ErrorType.CloudError));
+                notify(new ErrorMessage(currentPlayer,ErrorMessage.ErrorType.CloudError));
             }
             else{
                 try {

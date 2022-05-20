@@ -7,10 +7,12 @@ import it.polimi.ingsw.server.ModelSerializer;
 
 public class ErrorMessage implements ClientModel {
 
+    private int id;
     private ErrorType error;
 
-    public ErrorMessage(ErrorType error)
+    public ErrorMessage(int id,ErrorType error)
     {
+        this.id = id;
         this.error = error;
     }
     @Override
@@ -37,7 +39,8 @@ public class ErrorMessage implements ClientModel {
         TileIsFullError,
         ProhibitedError,
         MovesError,
-        PlayerDisconnected
+        PlayerDisconnected,
+        NicknameTaken
     }
 
     @Override

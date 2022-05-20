@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
+
 import javax.crypto.spec.PSource;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -47,6 +49,7 @@ public class Server {
         synchronized (lobbies) {
             for (Lobby lobby : lobbies) {
                 if (lobby.getNicknames().contains(connection.getNickname())) {
+                    connection.update(new ErrorMessage(0, ErrorMessage.ErrorType.NicknameTaken));
                     System.out.println("Nickname already taken.");
                     connection.closeConnection();
                     uniqueNickname = false;

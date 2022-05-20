@@ -29,7 +29,7 @@ class GameModelTest{
 
     @Test
     void extractStudents() {
-        GameModel gm = new GameModel(2);
+        GameModel gm = new GameModel(2,true);
         HashMap<Colour, Integer> h= new HashMap<>();
         try {
             h = gm.extractStudents(68);
@@ -63,7 +63,7 @@ class GameModelTest{
     @Test
     void addCoins() {
         try {
-            GameModel gm = new GameModel(2);
+            GameModel gm = new GameModel(2,true);
             gm.removeCoin();
             assertEquals(gm.getCoins(), 19);
             gm.addCoins(1);
@@ -76,7 +76,7 @@ class GameModelTest{
     @ParameterizedTest
     @ValueSource(ints={-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12})
     void setGetMoveMN(int param) {
-        GameModel gm = new GameModel(2);
+        GameModel gm = new GameModel(2,true);
 //      TestObs obs = new TestObs();
 //      gm.addObserver(obs);
         if(param<12 && param>=0) {
@@ -94,7 +94,7 @@ class GameModelTest{
 
     @Test
     void getRandomStudent() {
-        GameModel gm = new GameModel(2);
+        GameModel gm = new GameModel(2,true);
         Colour s = Colour.Dragons;
         try{
             s = gm.extractRandomStudent();
@@ -109,7 +109,7 @@ class GameModelTest{
     @ParameterizedTest
     @ValueSource(ints={0,1,2,3,4})
     void addStudent(int i) {
-        GameModel gm = new GameModel(2);
+        GameModel gm = new GameModel(2,true);
         int start = gm.getStudents(Colour.values()[i]);
         gm.addStudent(Colour.values()[i]);
         assertEquals(start+1,gm.getStudents(Colour.values()[i]));
@@ -117,7 +117,7 @@ class GameModelTest{
 
     @Test
     void getSetProfessor() {
-        GameModel gm = new GameModel(2);
+        GameModel gm = new GameModel(2,true);
         Player p = new Player(0,"Guybrush");
         TestObs obs = new TestObs();
         gm.addObserver(obs);
@@ -131,7 +131,7 @@ class GameModelTest{
     @ParameterizedTest
     @ValueSource(ints={0,1,2,3,4,5,6,7,8,9,10,11})
     void joinIsleTest(int i) {
-        GameModel gm = new GameModel(2);
+        GameModel gm = new GameModel(2,true);
         TestObs obs = new TestObs();
         gm.addObserver(obs);
         Isle isle = new Isle(-1);
