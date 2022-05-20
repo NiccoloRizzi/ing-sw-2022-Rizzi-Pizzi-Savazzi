@@ -10,7 +10,8 @@ public class CliModel {
     CliEntity clouds;
     CliEntity assistants;
     CliEntity otherPlayerAss;
-    CliEntity turnAndErrors;
+    CliEntity turn;
+    CliEntity errors;
     CliEntity fullCli;
 
     /**
@@ -22,7 +23,10 @@ public class CliModel {
         characters = new CliEntity();
         clouds = new CliEntity();
         assistants = new CliEntity();
-        turnAndErrors = new CliEntity();
+        turn = new CliEntity();
+        errors = new CliEntity();
+        fullCli = new CliEntity();
+        otherPlayerAss = new CliEntity();
     }
 
     /**
@@ -80,12 +84,23 @@ public class CliModel {
     }
 
     /**
-     * Sets turn and errors entity.
+     * Sets turn entity.
      *
-     * @param turnAndErrors the turn and errors entity
+     * @param turn the turn and errors entity
      */
-    public void setTurnAndErrors(CliEntity turnAndErrors) {
-        this.turnAndErrors = turnAndErrors;
+
+    public void setTurn(CliEntity turn) {
+        this.turn = turn;
+    }
+
+    /**
+     * Sets errors entity.
+     *
+     * @param errors the turn and errors entity
+     */
+
+    public void setErrors(CliEntity errors) {
+        this.errors = errors;
     }
 
     /**
@@ -152,12 +167,21 @@ public class CliModel {
     }
 
     /**
-     * Gets turn and errors entity
+     * Gets turn entity
      *
      * @return the turn and errors entity
      */
-    public CliEntity getTurnAndErrors() {
-        return turnAndErrors;
+    public CliEntity getTurn() {
+        return turn;
+    }
+
+    /**
+     * Gets errors entity
+     *
+     * @return the turn and errors entity
+     */
+    public CliEntity getErrors() {
+        return errors;
     }
 
     /**

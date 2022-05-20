@@ -45,9 +45,14 @@ public interface CliBuilder {
     void setOtherPlayersAss();
 
     /**
-     * Create a CliEntity that show current turn and errors if present
+     * Create a CliEntity that show current turn
      */
-    void setTurnAndError();
+    void setTurn();
+
+    /**
+     * Create a CliEntity that show current and errors if present
+     */
+    void setErrors();
 
     /**
      * Comprensive function that calls the sets functions that the concrete builder want to use
