@@ -1,18 +1,33 @@
-package it.polimi.ingsw.client;
+package it.polimi.ingsw.client.cli;
 
-import it.polimi.ingsw.model.Character;
-import it.polimi.ingsw.model.CharactersEnum;
+import it.polimi.ingsw.client.Client;
+import it.polimi.ingsw.client.View;
 import it.polimi.ingsw.model.Colour;
 
 import java.io.IOException;
 import java.util.Scanner;
 
 
-public class Cli extends View{
+public class Cli extends View {
     private final static Scanner scanner = new Scanner(System.in);
     private static Client client;
-    private CliUtil cliUtil;
+    private CliBuilder cliSetter;
     private boolean printing = false;
+
+
+    public void fastStart(){
+        client = new Client(this);
+        client.setOptions(scanner.nextLine(),2,true);
+        setupModel(client);
+        new Thread(()-> {
+            try {
+                client.startConnection("127.0.0.1",12345);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        handleInput();
+    }
 
 
     public void startCli(){
@@ -72,7 +87,7 @@ public class Cli extends View{
 
     public void startPrint(){
         printing = true;
-        cliUtil = new CliUtil(getModelView(), client.getId());
+        cliSetter = new CliSetter(getModelView(), client.getId());
     }
     public void handleInput(){
         String []command;
@@ -109,11 +124,19 @@ public class Cli extends View{
 
             }
         }
-
-
     }
+
+    public void constructCli(){
+        cliSetter.setAllCli();
+        cliSetter.composeCLi();
+    }
+
     public void refresh(){
-        if(printing)cliUtil.printCells(cliUtil.generateGame());
+        if(printing){
+            constructCli();
+            CliModel cli = cliSetter.getCli();
+            cli.print();
+        }
     }
 }
 
