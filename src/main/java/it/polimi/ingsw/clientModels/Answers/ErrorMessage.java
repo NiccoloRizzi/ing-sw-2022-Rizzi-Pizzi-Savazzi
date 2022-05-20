@@ -39,7 +39,8 @@ public class ErrorMessage implements ClientModel {
         TileIsFullError,
         ProhibitedError,
         MovesError,
-        PlayerDisconnected
+        PlayerDisconnected,
+        NicknameTaken
     }
 
     @Override
