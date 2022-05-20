@@ -136,6 +136,10 @@ public class Cli extends View {
             constructCli();
             CliModel cli = cliSetter.getCli();
             cli.print();
+        }else{
+            cliSetter.setErrors();
+            cliSetter.composeCLi();
+            cliSetter.getCli().print();
         }
     }
 }

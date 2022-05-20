@@ -118,8 +118,26 @@ public class CliSetter implements CliBuilder{
         cli.setOtherPlayerAss(otherString.bottomStick(others));
     }
 
+//    @Override
+//    public void setTurnAndError() {
+//        TurnMessage turn = modelView.getTurn();
+//        CliEntity eTurn;
+//        if(turn.getPlayerId() == myId){
+//            eTurn = new CliEntities.CliString("E' il tuo turno!");
+//        }else{
+//            eTurn = new CliEntities.CliString("E' il turno di " + modelView.getPlayers()[turn.getPlayerId()].getNickname());
+//        }
+//        ErrorMessage.ErrorType error = modelView.getError();
+//        CliEntity eError = new CliEntities.CliString("Attenzione! " + error);
+//        if(error != null){
+//            cli.setTurnAndErrors(eTurn.bottomStick(eError));
+//        }else{
+//            cli.setTurnAndErrors(eTurn);
+//        }
+//    }
+
     @Override
-    public void setTurnAndError() {
+    public void setTurn() {
         TurnMessage turn = modelView.getTurn();
         CliEntity eTurn;
         if(turn.getPlayerId() == myId){
@@ -127,12 +145,15 @@ public class CliSetter implements CliBuilder{
         }else{
             eTurn = new CliEntities.CliString("E' il turno di " + modelView.getPlayers()[turn.getPlayerId()].getNickname());
         }
+        cli.setTurn(eTurn);
+    }
+
+    @Override
+    public void setErrors() {
         ErrorMessage.ErrorType error = modelView.getError();
         CliEntity eError = new CliEntities.CliString("Attenzione! " + error);
         if(error != null){
-            cli.setTurnAndErrors(eTurn.bottomStick(eError));
-        }else{
-            cli.setTurnAndErrors(eTurn);
+            cli.setErrors(eError);
         }
     }
 
@@ -142,7 +163,8 @@ public class CliSetter implements CliBuilder{
         setIsles();
         setCharacter();
         setClouds();
-        setTurnAndError();
+        setTurn();
+        setErrors();
         setOtherPlayersAss();
     }
 
@@ -154,7 +176,8 @@ public class CliSetter implements CliBuilder{
                 .bottomStick(cli.getOtherPlayerAss())
                 .bottomStick(cli.getCharacters())
                 .rightStick(cli.getIsles())
-                .bottomStick(cli.getTurnAndErrors()));
+                .bottomStick(cli.getTurn())
+                .bottomStick(cli.getErrors()));
     }
 
     public CliModel getCli(){
