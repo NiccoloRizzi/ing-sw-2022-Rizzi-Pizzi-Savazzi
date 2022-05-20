@@ -32,7 +32,7 @@ public class Game extends Observable<ClientModel> {
 
     public Game(int playersNumber, boolean expertMode){
         this.playersNumber= playersNumber;
-        gameModel = new GameModel(playersNumber);
+        gameModel = new GameModel(playersNumber,expertMode);
         this.expertMode = expertMode;
         turn = new ActionTurnHandler(gameModel);
     }
@@ -179,7 +179,8 @@ public class Game extends Observable<ClientModel> {
         for(int i=0;i<playersNumber;i++){
             planningOrder.add((currentPlayer+i)%playersNumber);
         }
-        gameModel.setUpCharacter();
+        if(expertMode)
+            gameModel.setUpCharacter();
         planningPhase = true;
     }
 

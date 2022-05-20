@@ -48,7 +48,7 @@ public class MessageVisitor extends Observable<ClientModel> {
             if(!player.hasUsed(id)) {
                 if (player.getDeck().size() > 1) {
                     if(game.alreadyUsed(id)){
-                        notify(new ErrorMessage(ErrorMessage.ErrorType.AssistantOtherPlayerError));
+                        notify(new ErrorMessage(game.getCurrentPlayer(),ErrorMessage.ErrorType.AssistantOtherPlayerError));
                     }
                     else{
                         player.setChoosenAssistant(id);
@@ -57,11 +57,11 @@ public class MessageVisitor extends Observable<ClientModel> {
                 }
             }
             else{
-                notify(new ErrorMessage(ErrorMessage.ErrorType.AssistantAlreadyChosenError));
+                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.AssistantAlreadyChosenError));
             }
 
         }else{
-            notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
+            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
         }
 
     }
@@ -77,7 +77,7 @@ public class MessageVisitor extends Observable<ClientModel> {
                     game.getTurnHandler().moveStudentToIsle(student,isle);
                 }
             }else{
-                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
             }
     }
     public void visit(MoveMotherNatureMessage moveMotherNatureMessage){
@@ -86,7 +86,7 @@ public class MessageVisitor extends Observable<ClientModel> {
             game.checkEndTowerIsle();
         }
         else{
-            notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
+            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
         }
     }
     public void visit(CloudChoiceMessage cloudChoiceMessage){
@@ -95,7 +95,7 @@ public class MessageVisitor extends Observable<ClientModel> {
             game.nextPlayer();
         }
         else{
-            notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
+            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
         }
     }
     public void visit(IsleInfluenceCharacterMessage isleInfluenceCharacterMessage) {
@@ -127,21 +127,21 @@ public class MessageVisitor extends Observable<ClientModel> {
                             useCharacter(charId);
                         } catch (TileOutOfBoundsException e) {
                             e.printStackTrace();
-                            notify(new ErrorMessage(ErrorMessage.ErrorType.IsleError));
+                            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.IsleError));
                         }
                     }else{
-                        notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
+                        notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
                 }
                 else {
-                    notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
+                    notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             }else {
-                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));;
+                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));;
             }
         }
         else {
-            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
+            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
         }
     }
     public void visit(MoveStudentCharacterMessage moveStudentCharacterMessage){
@@ -172,24 +172,24 @@ public class MessageVisitor extends Observable<ClientModel> {
                             useCharacter(charId);
                         } catch (TileOutOfBoundsException e) {
                             e.printStackTrace();
-                            notify(new ErrorMessage(ErrorMessage.ErrorType.IsleError));
+                            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.IsleError));
                         } catch (StudentsOutOfBoundsException e) {
                             e.printStackTrace();
-                            notify(new ErrorMessage(ErrorMessage.ErrorType.StudentError));
+                            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.StudentError));
                         }
                     }else{
-                        notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
+                        notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
 
                 } else {
-                    notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
+                    notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             }else{
-                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
-            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
+            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
         }
     }
     public void visit(StrategyProfessorMessage strategyProfessorMessage){
@@ -206,17 +206,17 @@ public class MessageVisitor extends Observable<ClientModel> {
                         handler.setProfessorStrategy(new ModifiedCheckProfessorStrategy());
                         useCharacter(charId);
                     }else{
-                        notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
+                        notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                     }
                 }else{
-                    notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
+                    notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotEnoughCoinError));
                 }
             } else {
-                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
-            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
+            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
         }
     }
     public void visit(SimilMotherNatureMesage similMotherNatureMesage){
@@ -235,17 +235,17 @@ public class MessageVisitor extends Observable<ClientModel> {
                         handler.checkIsleJoin(isleId);
                         useCharacter(charId);
                     }else{
-                        notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
+                        notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
                 }else{
-                    notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
+                    notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             } else {
-                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
-            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
+            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
         }
     }
     public void visit(Plus2MoveMnMessage plus2MoveMnMessage){
@@ -258,16 +258,16 @@ public class MessageVisitor extends Observable<ClientModel> {
                         useCharacter(plus2MoveMnMessage.getCharacterID());
 
                     } else {
-                        notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
+                        notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
                 }else{
-                    notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
+                    notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             } else {
-                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }  else {
-            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
+            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
         }
     }
     public void visit(ProhibitedIsleCharacterMessage prohibitedIsleCharacterMessage){
@@ -282,23 +282,23 @@ public class MessageVisitor extends Observable<ClientModel> {
                                 game.getGameModel().useProhibited();
                                 useCharacter(prohibitedIsleCharacterMessage.getCharacterID());
                             } catch (TileOutOfBoundsException e) {
-                                notify(new ErrorMessage(ErrorMessage.ErrorType.IsleError));
+                                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.IsleError));
                             }
                         } else {
-                            notify(new ErrorMessage(ErrorMessage.ErrorType.ProhibitedError));
+                            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.ProhibitedError));
                         }
                     } else {
-                        notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
+                        notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
                 }else{
-                    notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
+                    notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             } else {
-                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
-            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
+            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
         }
     }
     public void visit(Move6StudCharacterMessage move6StudCharacterMessage){
@@ -313,7 +313,7 @@ public class MessageVisitor extends Observable<ClientModel> {
                         try {
                             board.removeStudent(c);
                         } catch (StudentsOutOfBoundsException e) {
-                            notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsEmptyError));
+                            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsEmptyError));
                         }
                         character.addStudent(c);
                     }
@@ -321,27 +321,27 @@ public class MessageVisitor extends Observable<ClientModel> {
                         try {
                             board.addToEntrance(c);
                         } catch (StudentsOutOfBoundsException e) {
-                            notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsFullError));
+                            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsFullError));
                         }
                         try {
                             character.removeStudent(c);
                         } catch (StudentsOutOfBoundsException e) {
-                            notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsEmptyError));
+                            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsEmptyError));
                         }
                     }
                     useCharacter(move6StudCharacterMessage.getCharacterID());
                 } else {
-                    notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
+                    notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotEnoughCoinError));
                 }
             }else {
-                    notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
+                    notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
             }
             } else {
-                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
-            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
+            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
         }
     }
 
@@ -356,12 +356,12 @@ public class MessageVisitor extends Observable<ClientModel> {
                             try {
                                 board.removeStudent(c);
                             } catch (StudentsOutOfBoundsException e) {
-                                notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsEmptyError));
+                                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsEmptyError));
                             }
                             try {
                                 board.addToTable(c);
                             } catch (StudentsOutOfBoundsException e) {
-                                notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsFullError));
+                                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsFullError));
                             }
 
                         }
@@ -369,12 +369,12 @@ public class MessageVisitor extends Observable<ClientModel> {
                             try {
                                 board.addToEntrance(c);
                             } catch (StudentsOutOfBoundsException e) {
-                                notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsFullError));
+                                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsFullError));
                             }
                             try {
                                 board.removeFromTable(c);
                             } catch (StudentsOutOfBoundsException e) {
-                                notify(new ErrorMessage(ErrorMessage.ErrorType.TileIsEmptyError));
+                                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsEmptyError));
                             }
                         }
                         for (Colour c : move2StudCharacterMessage.getStudFromTables()) {
@@ -385,17 +385,17 @@ public class MessageVisitor extends Observable<ClientModel> {
                         }
                         useCharacter(move2StudCharacterMessage.getCharacterID());
                     } else {
-                        notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
+                        notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
                 }else{
-                    notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
+                    notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             } else {
-                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
-            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
+            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
         }
     }
     public void visit(Remove3StudCharacterMessage remove3StudCharacterMessage){
@@ -415,17 +415,17 @@ public class MessageVisitor extends Observable<ClientModel> {
                         useCharacter(remove3StudCharacterMessage.getCharacterID());
                         answer = "Player" + game.getGameModel().getPlayer(game.getCurrentPlayer()).getNickname() + "used character to remove 3 student";
                     } else {
-                        notify(new ErrorMessage(ErrorMessage.ErrorType.NotEnoughCoinError));
+                        notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
                 }else{
-                    notify(new ErrorMessage(ErrorMessage.ErrorType.CharacterAlreadyUsedError));
+                    notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             } else {
-                notify(new ErrorMessage(ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
-            notify(new ErrorMessage(ErrorMessage.ErrorType.NormalModeError));
+            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
         }
     }
 }

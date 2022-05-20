@@ -23,9 +23,10 @@ public class GameModel extends Observable<ClientModel> {
     private ArrayList<Team> teams;
     private final ArrayList<Character> activeCharacters;
     int prohibited;
-
-    public GameModel(int numOfPlayers) {
+    boolean expertMode;
+    public GameModel(int numOfPlayers, boolean expertMode) {
         this.numOfPlayers = numOfPlayers;
+        this.expertMode = expertMode;
         unusedCoins = 20;
         prohibited = 4;
         motherNature = (new Random()).nextInt(12);
@@ -35,22 +36,21 @@ public class GameModel extends Observable<ClientModel> {
         isles = new ArrayList<>();
         generateIsle();
         clouds = new ArrayList<>();
-        for(int i= 0; i < numOfPlayers; i++)
-        {
+        for (int i = 0; i < numOfPlayers; i++) {
             clouds.add(new Cloud(i));
         }
 
         activeCharacters = new ArrayList<>();
         professors = new HashMap<>();
-
-        final int[] sorted = new Random().ints(0, 12).distinct().limit(3).toArray();
-        for (int i = 0; i < 3; i++) {
-            CharactersEnum character = CharactersEnum.values()[sorted[i]];
-            if (character==CharactersEnum.ONE_STUD_TO_ISLE||character==CharactersEnum.ONE_STUD_TO_TABLES||character==CharactersEnum.EXCHANGE_3_STUD){
-                activeCharacters.add(new CharacterStudents(i,character));
+        if (expertMode){
+            final int[] sorted = new Random().ints(0, 12).distinct().limit(3).toArray();
+            for (int i = 0; i < 3; i++) {
+                CharactersEnum character = CharactersEnum.values()[sorted[i]];
+                if (character == CharactersEnum.ONE_STUD_TO_ISLE || character == CharactersEnum.ONE_STUD_TO_TABLES || character == CharactersEnum.EXCHANGE_3_STUD) {
+                    activeCharacters.add(new CharacterStudents(i, character));
+                } else
+                    activeCharacters.add(new Character(i, character));
             }
-            else
-                activeCharacters.add(new Character(i,character));
         }
 
         if(numOfPlayers==4){
@@ -401,8 +401,10 @@ public class GameModel extends Observable<ClientModel> {
             p.notifyChange();
             p.getBoard().notifyChange();
         }
-        for(Character c: activeCharacters){
-            c.notifyChange();
+        if(expertMode) {
+            for (Character c : activeCharacters) {
+                c.notifyChange();
+            }
         }
     }
 }
