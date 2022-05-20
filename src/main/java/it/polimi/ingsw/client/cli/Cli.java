@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.View;
+import it.polimi.ingsw.messages.PlayerMessage;
 import it.polimi.ingsw.model.Colour;
 
 import java.io.IOException;
@@ -10,32 +11,24 @@ import java.util.Scanner;
 
 public class Cli extends View {
     private final static Scanner scanner = new Scanner(System.in);
-    private static Client client;
     private CliBuilder cliSetter;
     private boolean printing = false;
 
 
-    public void fastStart(){
-        client = new Client(this);
-        client.setOptions(scanner.nextLine(),2,true);
-        setupModel(client);
-        new Thread(()-> {
-            try {
-                client.startConnection("127.0.0.1",12345);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
-        handleInput();
-    }
 
-
-    public void startCli(){
+    public void start(){
         int playersNumber=0;
+        String ip;
+        int port;
         String players;
         String nickname;
         boolean expertMode=false;
         boolean check = true;
+        System.out.println("A quale ip vuoi connetterti?");
+        ip = scanner.nextLine();
+        System.out.println("A quale porta?");
+        port = Integer.parseInt(scanner.nextLine());
+        notifyConnection(ip,port);
         do {
             System.out.println("Ciao! Come ti vuoi chiamare?");
             nickname = scanner.nextLine();
@@ -72,22 +65,13 @@ public class Cli extends View {
                 System.out.println("Rispondi con y(es) o n(o).");
             }
         }while(check);
-        client = new Client(this);
-        client.setOptions(nickname,playersNumber,expertMode);
-        setupModel(client);
-        new Thread(()-> {
-            try {
-                client.startConnection("127.0.0.1",12345);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        sendPlayerInfo(nickname,playersNumber,expertMode);
         handleInput();
     }
 
     public void startPrint(){
         printing = true;
-        cliSetter = new CliSetter(getModelView(), client.getId());
+        cliSetter = new CliSetter(getModelView());
     }
     public void handleInput(){
         String []command;

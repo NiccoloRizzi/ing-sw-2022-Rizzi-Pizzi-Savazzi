@@ -4,7 +4,6 @@ public class PlayerMessage {
     private final String nickname;
     private final int playersNumber;
     private final boolean expertMode;
-    int player;
 
     public PlayerMessage(String nickname, int playersNumber, boolean expertMode){
         this.nickname = nickname;

@@ -5,13 +5,15 @@ import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 
 public class ModelView {
-    private ClientPlayer[] players;
+    private final ClientPlayer[] players;
     private ClientGameModel gameModel;
-    private ClientBoard[] boards;
-    private ClientCloud[] clouds;
+    private final ClientBoard[] boards;
+    private final ClientCloud[] clouds;
     private ClientCharacter[] characters;
     private ErrorMessage.ErrorType error;
     private TurnMessage turn;
+    private final String nickname;
+    private int myId;
 
     public ErrorMessage.ErrorType getError() {
         return error;
@@ -21,7 +23,8 @@ public class ModelView {
         return turn;
     }
 
-    public ModelView(int nplayers, boolean expertMode){
+    public ModelView(String nickname, int nplayers, boolean expertMode){
+        this.nickname = nickname;
         if(expertMode){
             characters = new ClientCharacter[3];
         }
@@ -53,8 +56,20 @@ public class ModelView {
         this.error = error;
     }
 
+    public int getMyId() {
+        return myId;
+    }
+
+    public void setMyId(int myId) {
+        this.myId = myId;
+    }
+
     public void setTurn(TurnMessage turn){
         this.turn = turn;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 }
 

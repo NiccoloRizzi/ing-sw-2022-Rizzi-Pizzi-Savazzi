@@ -69,14 +69,20 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
         out.flush();
     }
 
-    public synchronized void closeConnection(){
-        try{
+    public synchronized void disconnect(){
+        lobby.deregister(this);
+    }
+
+
+    public void closeConnection(){
+        active=false;
+        try {
             socket.close();
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        active = false;
     }
+
     public void connectionChecker(){
         Gson gson = new Gson();
         String json;
@@ -89,7 +95,7 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
                 TimeUnit.SECONDS.sleep(10);
                 if (!verified) {
                     System.out.println(nickname + " disconnected.");
-                    closeConnection();
+                    disconnect();
                 }
                 TimeUnit.SECONDS.sleep(10);
             }catch(InterruptedException e){
@@ -112,23 +118,14 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
                 numOfPlayers = message.get("playersNumber").getAsInt();
                 expertMode = message.get("expertMode").getAsBoolean();
                 server.addToLobby(this);
+                new Thread(()->connectionChecker()).start();
             }
-            synchronized (lobby) {
-                while (!lobby.isStarted()) {
-                    try {
-                        lobby.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            new Thread(()->connectionChecker()).start();
             while(isActive()){
                 read = in.nextLine();
                 message = gson.fromJson(read,JsonObject.class);
                 if(message.get("type").getAsString().equals("pong")) {
                     verified = true;
-                }else {
+                }else if(lobby.isStarted()) {
                     Message actionMessage = MoveSerializer.deserialize(read);
                     actionMessage.accept(mv);
                 }
@@ -139,6 +136,8 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
         }
 
     }
+
+
 
     @Override
     public void update(ClientModel message) {

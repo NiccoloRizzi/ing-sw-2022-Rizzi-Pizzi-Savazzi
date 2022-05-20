@@ -11,27 +11,23 @@ import java.util.HashMap;
 
 public class StartMessage implements ClientModel {
     int playerNumbers;
-    HashMap<String, Tuple> players;
+    HashMap<String, Integer> players;
 
     public StartMessage(ArrayList<Player> players) {
         this.playerNumbers = players.size();
         this.players = new HashMap<>();
         for(Player p: players){
-            this.players.put(p.getNickname(), new Tuple(p.getID(), p.getBoard().getFaction()));
+            this.players.put(p.getNickname(),p.getID());
         }
     }
 
-    public Tuple getPlayer(String nickname){
+    public int getId(String nickname){
         return players.get(nickname);
     }
 
     public int getPlayerNumbers() {
         return playerNumbers;
     }
-
-//    public HashMap<String, Tuple> getPlayers() {
-//        return players;
-//    }
 
     public void accept(View view){
         view.visit(this);
@@ -42,21 +38,4 @@ public class StartMessage implements ClientModel {
         return ModelSerializer.serialize(this);
     }
 
-    public class Tuple{
-        int id;
-        Faction faction;
-
-        public Tuple(int id, Faction faction) {
-            this.id = id;
-            this.faction = faction;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public Faction getFaction() {
-            return faction;
-        }
-    }
 }

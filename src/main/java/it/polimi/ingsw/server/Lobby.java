@@ -98,7 +98,7 @@ public class Lobby {
     {
         for(PlayerConnection p: players){
             if(!p.equals(player))
-             player.update(new ErrorMessage(players.indexOf(player), ErrorMessage.ErrorType.PlayerDisconnected));
+             p.update(new ErrorMessage(players.indexOf(player), ErrorMessage.ErrorType.PlayerDisconnected));
         }
         closeLobby();
     }

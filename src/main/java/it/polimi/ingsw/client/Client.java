@@ -5,13 +5,14 @@ import com.google.gson.JsonObject;
 import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.clientModels.ClientModelDeSerializer;
 import it.polimi.ingsw.messages.*;
-
+import it.polimi.ingsw.server.Observer;
+import it.polimi.ingsw.client.cli.Cli;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client {
+public class Client implements Observer<JsonObject>{
     private Socket socket;
     private Scanner in;
     private PrintWriter out;
@@ -21,11 +22,7 @@ public class Client {
     private boolean expert;
     private String nickname;
     private int id;
-
-
-    public Client(View view) {
-        this.view = view;
-    }
+    private static Gson gson = new Gson();
 
     public void startConnection(String IP, int port) throws IOException{
         socket = new Socket(IP, port);
@@ -38,11 +35,6 @@ public class Client {
         }
     }
 
-    public void setOptions(String nickname, int nplayers, boolean expertMode){
-        this.nickname = nickname;
-        this.playersNumber = nplayers;
-        this.expert = expertMode;
-    }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
@@ -52,12 +44,10 @@ public class Client {
         return nickname;
     }
 
-    public Client(boolean expert){
-        socket = null;
-        in = null;
-        out = null;
-        view = null;
-        this.expert = expert;
+    public Client(boolean cli){
+        if(cli){
+            startCli();
+        }
     }
 
     public void setPlayersNumber(int playersNumber) {
@@ -80,8 +70,6 @@ public class Client {
     }
     public Thread readFromSocket(){
         Thread t = new Thread(() -> {
-            Gson gson = new Gson();
-            writeToSocket(MessageSerializer.serialize(new PlayerMessage(nickname, playersNumber,expert)));
             while (isActive) {
                 String read = in.nextLine();
                 JsonObject jo = gson.fromJson(read,JsonObject.class);
@@ -91,7 +79,6 @@ public class Client {
                     writeToSocket(answer.toString());
                 }
                 else {
-                    //System.out.println(read);
                     ClientModel model = ClientModelDeSerializer.deserialize(read);
                     model.accept(view);
                 }
@@ -111,6 +98,12 @@ public class Client {
             out.flush();
         });
         t.start();
+    }
+
+    public void startCli(){
+        this.view = new Cli();
+        view.addObserver(this);
+        view.start();
     }
 
     public void run() throws IOException {
@@ -134,8 +127,26 @@ public class Client {
         this.id = id;
     }
 
-    public void update(Message action){ writeToSocket(action.serialize());
+    public void update(JsonObject command) {
+        Gson gson = new Gson();
+        JsonObject jo = gson.fromJson(command,JsonObject.class);
+        if(jo.get("command").getAsString().equals("message")){
+            writeToSocket(command.toString());
+        }
+        else if(jo.get("command").getAsString().equals("connect")){
+                new Thread ( () ->
+                {
+                    try {
+                        startConnection(jo.get("ip").getAsString(),jo.get("port").getAsInt());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+        }
     }
+
+
+
 
 
 }

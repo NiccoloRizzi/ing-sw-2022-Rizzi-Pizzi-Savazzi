@@ -17,11 +17,10 @@ public class CliSetter implements CliBuilder{
      * Instantiates a new CliSetter.
      *
      * @param modelView the ModelView
-     * @param myId      the client/player id
      */
-    public CliSetter(ModelView modelView, int myId){
+    public CliSetter(ModelView modelView){
         this.modelView = modelView;
-        this.myId = myId;
+        this.myId = modelView.getMyId();
         this.reset();
     }
 

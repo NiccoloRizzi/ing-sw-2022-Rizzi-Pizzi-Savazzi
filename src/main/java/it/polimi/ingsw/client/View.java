@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import it.polimi.ingsw.clientModels.*;
 import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
 import it.polimi.ingsw.clientModels.Answers.StartMessage;
@@ -7,19 +9,14 @@ import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 import it.polimi.ingsw.clientModels.Answers.WinMessage;
 import it.polimi.ingsw.messages.*;
 import it.polimi.ingsw.model.Colour;
+import it.polimi.ingsw.server.MoveSerializer;
 import it.polimi.ingsw.server.Observable;
 
-public class View extends Observable<Message> {
+public abstract class View extends Observable<JsonObject> {
 
     private ModelView modelView;
     private boolean started = false;
-    private Client client;
-
-
-    public void setupModel(Client client){
-        this.client = client;
-        modelView = new ModelView(client.getPlayersNumber(), client.isExpert());
-    }
+    static Gson gson = new Gson();
 
     public ModelView getModelView() {
         return modelView;
@@ -72,41 +69,64 @@ public class View extends Observable<Message> {
     }
 
     public synchronized void visit(StartMessage startMessage){
-       client.setId(startMessage.getPlayer(client.getNickname()).getId());
+        System.out.println(startMessage);
+
+       modelView.setMyId(startMessage.getId(modelView.getNickname()));
        startPrint();
-        refresh();
+       refresh();
     }
     public void startPrint(){
 
     }
     public void ChooseAssistant(int assistant){
         if(assistant>0 && assistant<11) {
-            AssistantChoiceMessage acm = new AssistantChoiceMessage(assistant - 1, client.getId());
-            notify(acm);
+            AssistantChoiceMessage acm = new AssistantChoiceMessage(assistant - 1, modelView.getMyId());
+            notifyClient(acm.serialize());
         }
     }
 
     public void MoveToIsle(Colour c, int isleid){
-        MoveStudentMessage msm = new MoveStudentMessage(client.getId(), c, isleid, false);
-        notify(msm);
+        MoveStudentMessage msm = new MoveStudentMessage(modelView.getMyId(), c, isleid, false);
+        notifyClient(msm.serialize());
     }
 
     public void MoveToTable(Colour c){
-        MoveStudentMessage msm = new MoveStudentMessage(client.getId(),c,0,true);
-        notify(msm);
+        MoveStudentMessage msm = new MoveStudentMessage(modelView.getMyId(),c,0,true);
+        notifyClient(msm.serialize());
     }
 
     public void ChooseCloud(int cloudid){
-        CloudChoiceMessage ccm = new CloudChoiceMessage(client.getId(), cloudid);
-        notify(ccm);
+        CloudChoiceMessage ccm = new CloudChoiceMessage(modelView.getMyId(), cloudid);
+        notifyClient(ccm.serialize());
     }
 
     public void MoveMotherNature(int spaces){
-        MoveMotherNatureMessage movemnm = new MoveMotherNatureMessage(client.getId(), spaces);
-        notify(movemnm);
+        MoveMotherNatureMessage movemnm = new MoveMotherNatureMessage(modelView.getMyId(), spaces);
+        notifyClient(movemnm.serialize());
     }
 
-    public void refresh(){
-
+    public void sendPlayerInfo(String nickname, int nplayers, boolean expertMode){
+        modelView = new ModelView(nickname,nplayers,expertMode);
+        PlayerMessage pm = new PlayerMessage(nickname,nplayers,expertMode);
+        notifyClient(MessageSerializer.serialize(pm));
     }
+
+    public void notifyClient(String message){
+        JsonObject jo = gson.fromJson(message,JsonObject.class);
+        jo.addProperty("command","message");
+        notify(jo);
+    }
+
+    public void notifyConnection(String ip, int port){
+        JsonObject jo = new JsonObject();
+        jo.addProperty("ip",ip);
+        jo.addProperty("port",port);
+        jo.addProperty("command","connect");
+        notify(jo);
+    }
+
+
+
+    public abstract void start();
+    public abstract void refresh();
 }

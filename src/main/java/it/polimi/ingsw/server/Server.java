@@ -50,7 +50,6 @@ public class Server {
             for (Lobby lobby : lobbies) {
                 if (lobby.getNicknames().contains(connection.getNickname())) {
                     connection.update(new ErrorMessage(0, ErrorMessage.ErrorType.NicknameTaken));
-                    System.out.println("Nickname already taken.");
                     connection.closeConnection();
                     uniqueNickname = false;
                 }
