@@ -84,6 +84,8 @@ public class ActionTurnHandler extends Observable<ClientModel> {
                 if(!player.getBoard().isTableFull(student)) {
                     player.getBoard().removeStudent(student);
                     player.getBoard().addToTable(student);
+                    if(player.getBoard().checkCoin(student))
+                        gameModel.giveCoin(player);
                     checkProfessor(student);
                     studentsToMove --;
                     if(studentsToMove  == 0) {

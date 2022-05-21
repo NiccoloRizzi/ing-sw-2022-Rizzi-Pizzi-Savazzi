@@ -66,12 +66,12 @@ public class Cli extends View {
             }
         }while(check);
         sendPlayerInfo(nickname,playersNumber,expertMode);
+        cliSetter = new CliSetter(getModelView());
         handleInput();
     }
 
     public void startPrint(){
         printing = true;
-        cliSetter = new CliSetter(getModelView());
     }
     public void handleInput(){
         String []command;

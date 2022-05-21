@@ -57,8 +57,14 @@ public abstract class View extends Observable<JsonObject> {
         refresh();
     }
     public synchronized void visit(ErrorMessage errorMessage){
-        modelView.setError(errorMessage.getError());
-        refresh();
+        if(errorMessage.getError()== ErrorMessage.ErrorType.PlayerDisconnected){
+            modelView.setError(errorMessage.getError());
+            refresh();
+        }
+        else if(errorMessage.getId()==modelView.getMyId()) {
+            modelView.setError(errorMessage.getError());
+            refresh();
+        }
     }
     public synchronized void visit(TurnMessage turnMessage){
         modelView.setTurn(turnMessage);

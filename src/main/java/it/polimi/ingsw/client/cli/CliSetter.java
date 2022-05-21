@@ -11,7 +11,6 @@ public class CliSetter implements CliBuilder{
 
     CliModel cli;
     private final ModelView modelView;
-    private final int myId;
 
     /**
      * Instantiates a new CliSetter.
@@ -20,7 +19,6 @@ public class CliSetter implements CliBuilder{
      */
     public CliSetter(ModelView modelView){
         this.modelView = modelView;
-        this.myId = modelView.getMyId();
         this.reset();
     }
 
@@ -28,6 +26,8 @@ public class CliSetter implements CliBuilder{
     public void reset() {
         cli = new CliModel();
     }
+
+
 
     @Override
     public void setBoards() {
@@ -78,13 +78,13 @@ public class CliSetter implements CliBuilder{
     public void setAssistants() {
         CliEntity deck = new CliEntity();
         CliEntity deckString = new CliEntities.CliString("I tuoi assistenti");
-        for(int i = 0; i < modelView.getPlayers()[myId].getDeck().length; i++){
-            deck = deck.rightStick(new CliEntities.CliAssistant(modelView, i, true, myId));
+        for(int i = 0; i < modelView.getPlayers()[modelView.getMyId()].getDeck().length; i++){
+            deck = deck.rightStick(new CliEntities.CliAssistant(modelView, i, true, modelView.getMyId()));
         }
         CliEntity usedString = new CliEntities.CliString("Assistenti usati");
         CliEntity used = new CliEntity();
-        for(int i = 0; i < modelView.getPlayers()[myId].getUsedAssistants().length; i++){
-            used = used.rightStick(new CliEntities.CliAssistant(modelView, i, false, myId));
+        for(int i = 0; i < modelView.getPlayers()[modelView.getMyId()].getUsedAssistants().length; i++){
+            used = used.rightStick(new CliEntities.CliAssistant(modelView, i, false, modelView.getMyId()));
         }
         cli.setAssistants(deckString
                 .bottomStick(deck)
@@ -105,7 +105,7 @@ public class CliSetter implements CliBuilder{
         CliEntity otherString = new CliEntities.CliString("Assistenti degli altri giocatori");
         CliEntity others = new CliEntity();
         for(ClientPlayer p : modelView.getPlayers()){
-            if(p.getId() != myId){
+            if(p.getId() != modelView.getMyId()){
                 if(p.getUsedAssistants().length > 0){
                     others = others.rightStick(
                             new CliEntities.CliString(p.getNickname())
@@ -139,7 +139,7 @@ public class CliSetter implements CliBuilder{
     public void setTurn() {
         TurnMessage turn = modelView.getTurn();
         CliEntity eTurn;
-        if(turn.getPlayerId() == myId){
+        if(turn.getPlayerId() == modelView.getMyId()){
             eTurn = new CliEntities.CliString("E' il tuo turno!");
         }else{
             eTurn = new CliEntities.CliString("E' il turno di " + modelView.getPlayers()[turn.getPlayerId()].getNickname());

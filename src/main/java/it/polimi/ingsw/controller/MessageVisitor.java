@@ -61,7 +61,7 @@ public class MessageVisitor extends Observable<ClientModel> {
             }
 
         }else{
-            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
+            notify(new ErrorMessage(assistantChoiceMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
         }
 
     }
@@ -77,7 +77,7 @@ public class MessageVisitor extends Observable<ClientModel> {
                     game.getTurnHandler().moveStudentToIsle(student,isle);
                 }
             }else{
-                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(moveStudentMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
             }
     }
     public void visit(MoveMotherNatureMessage moveMotherNatureMessage){
@@ -86,7 +86,7 @@ public class MessageVisitor extends Observable<ClientModel> {
             game.checkEndTowerIsle();
         }
         else{
-            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
+            notify(new ErrorMessage(moveMotherNatureMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
         }
     }
     public void visit(CloudChoiceMessage cloudChoiceMessage){
@@ -95,7 +95,7 @@ public class MessageVisitor extends Observable<ClientModel> {
             game.nextPlayer();
         }
         else{
-            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
+            notify(new ErrorMessage(cloudChoiceMessage.getPlayerId(), ErrorMessage.ErrorType.NotYourTurnError));
         }
     }
     public void visit(IsleInfluenceCharacterMessage isleInfluenceCharacterMessage) {
@@ -137,7 +137,7 @@ public class MessageVisitor extends Observable<ClientModel> {
                     notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             }else {
-                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));;
+                notify(new ErrorMessage(isleInfluenceCharacterMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));;
             }
         }
         else {
@@ -185,7 +185,7 @@ public class MessageVisitor extends Observable<ClientModel> {
                     notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             }else{
-                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(moveStudentCharacterMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
@@ -212,7 +212,7 @@ public class MessageVisitor extends Observable<ClientModel> {
                     notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotEnoughCoinError));
                 }
             } else {
-                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(strategyProfessorMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
@@ -241,7 +241,7 @@ public class MessageVisitor extends Observable<ClientModel> {
                     notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             } else {
-                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(similMotherNatureMesage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
@@ -264,7 +264,7 @@ public class MessageVisitor extends Observable<ClientModel> {
                     notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             } else {
-                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(plus2MoveMnMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }  else {
             notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
@@ -294,7 +294,7 @@ public class MessageVisitor extends Observable<ClientModel> {
                     notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             } else {
-                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(prohibitedIsleCharacterMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
@@ -337,7 +337,7 @@ public class MessageVisitor extends Observable<ClientModel> {
                     notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
             }
             } else {
-                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(move6StudCharacterMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
@@ -391,7 +391,7 @@ public class MessageVisitor extends Observable<ClientModel> {
                     notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             } else {
-                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(move2StudCharacterMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
@@ -421,7 +421,7 @@ public class MessageVisitor extends Observable<ClientModel> {
                     notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             } else {
-                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotYourTurnError));
+                notify(new ErrorMessage(remove3StudCharacterMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {

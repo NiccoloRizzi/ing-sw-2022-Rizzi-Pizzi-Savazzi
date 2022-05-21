@@ -25,6 +25,8 @@ public class ErrorMessage implements ClientModel {
         return error;
     }
 
+    public int getId(){return id;}
+
     public enum ErrorType {
         NotYourTurnError,
         NotEnoughCoinError,
