@@ -277,7 +277,7 @@ class MessageVisitorTest {
         game.addObserver(obs);
 
         // Test
-        IsleInfluenceCharacterMessage message = new IsleInfluenceCharacterMessage(CHAR_ID,PLAYER_ID_A,ISLE_ID, COLOUR_A);
+        IsleInfluenceCharacterMessage message = new IsleInfluenceCharacterMessage(CHAR_ID,PLAYER_ID_A, COLOUR_A);
         MessageVisitor visitor = new MessageVisitor(game);
         visitor.addObserver(obs);
         message.accept(visitor);
@@ -313,7 +313,7 @@ class MessageVisitorTest {
 
         message.accept(visitor);
         assertEquals(ErrorMessage.ErrorType.CharacterAlreadyUsedError,((ErrorMessage)obs.message).getError());
-        message = new IsleInfluenceCharacterMessage(CHAR_ID,(PLAYER_ID_A+1)%playerNum,ISLE_ID, COLOUR_A);
+        message = new IsleInfluenceCharacterMessage(CHAR_ID,(PLAYER_ID_A+1)%playerNum, COLOUR_A);
         message.accept(visitor);
         assertEquals(ErrorMessage.ErrorType.NotYourTurnError,((ErrorMessage)obs.message).getError());
     }
@@ -766,7 +766,6 @@ class MessageVisitorTest {
 
         Colour[] studBoard ={Colour.Fairies,Colour.Unicorns};
         Colour[] studTables ={Colour.Dragons,Colour.Gnomes};
-
         messageVisitor.visit(new Move2StudCharacterMessage(0,player,studBoard,studTables));
         assertEquals(ErrorMessage.ErrorType.NotEnoughCoinError,((ErrorMessage)obs.message).getError());
 

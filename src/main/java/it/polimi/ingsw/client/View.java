@@ -8,6 +8,7 @@ import it.polimi.ingsw.clientModels.Answers.StartMessage;
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 import it.polimi.ingsw.clientModels.Answers.WinMessage;
 import it.polimi.ingsw.messages.*;
+import it.polimi.ingsw.model.CharactersEnum;
 import it.polimi.ingsw.model.Colour;
 import it.polimi.ingsw.server.MoveSerializer;
 import it.polimi.ingsw.server.Observable;
@@ -15,7 +16,6 @@ import it.polimi.ingsw.server.Observable;
 public abstract class View extends Observable<JsonObject> {
 
     private ModelView modelView;
-    private boolean started = false;
     static Gson gson = new Gson();
 
     public ModelView getModelView() {
@@ -109,6 +109,60 @@ public abstract class View extends Observable<JsonObject> {
     public void MoveMotherNature(int spaces){
         MoveMotherNatureMessage movemnm = new MoveMotherNatureMessage(modelView.getMyId(), spaces);
         notifyClient(movemnm.serialize());
+    }
+
+    public void remove3Stud(int charpos, Colour c){
+        Remove3StudCharacterMessage r3s = new Remove3StudCharacterMessage(charpos, modelView.getMyId(),c);
+        notifyClient(r3s.serialize());
+    }
+
+    public void charStudToIsle(int charpos, Colour student, int isle){
+        MoveStudentCharacterMessage mscm = new MoveStudentCharacterMessage(modelView.getMyId(), charpos, student,isle );
+        notifyClient(mscm.serialize());
+    }
+
+    public void charStudToTable(int charpos, Colour student){
+        MoveStudentCharacterMessage mscm = new MoveStudentCharacterMessage(modelView.getMyId(), charpos, student,0);
+        notifyClient(mscm.serialize());
+    }
+
+
+    public void similMn(int charpos, int isle){
+        SimilMotherNatureMesage smm = new SimilMotherNatureMesage(charpos, modelView.getMyId(), isle);
+        notifyClient(smm.serialize());
+    }
+
+    public void useInfluenceCharacter(int charpos){
+        IsleInfluenceCharacterMessage iicm = new IsleInfluenceCharacterMessage(charpos, modelView.getMyId());
+        notifyClient(iicm.serialize());
+    }
+
+    public void prohibit(int charpos, int isle){
+        ProhibitedIsleCharacterMessage pm = new ProhibitedIsleCharacterMessage(charpos, modelView.getMyId(), isle);
+        notifyClient(pm.serialize());
+    }
+
+    public void professorControl(int charpos){
+        StrategyProfessorMessage strategyProfessorMessage = new StrategyProfessorMessage(charpos, modelView.getMyId());
+        notifyClient(strategyProfessorMessage.serialize());
+    }
+
+    public void motherNBoost(int charpos){
+        Plus2MoveMnMessage plus = new Plus2MoveMnMessage(charpos, modelView.getMyId());
+        notifyClient(plus.serialize());
+    }
+
+    public void noColourInfluence(int charpos, Colour ignored){
+        IsleInfluenceCharacterMessage icm = new IsleInfluenceCharacterMessage(charpos, modelView.getMyId(),ignored);
+    }
+    public void exchange2Students(int charpos, Colour[] fromBoard, Colour[] fromtables){
+        Move2StudCharacterMessage m2m = new Move2StudCharacterMessage(charpos,modelView.getMyId(),fromBoard,fromtables);
+        notifyClient(m2m.serialize());
+    }
+
+    public void exchange3Students(int charpos, Colour[] fromBoard, Colour[] fromChar ){
+        Move6StudCharacterMessage m3m = new Move6StudCharacterMessage(charpos, modelView.getMyId(), fromBoard,fromChar);
+        notifyClient(m3m.serialize());
     }
 
     public void sendPlayerInfo(String nickname, int nplayers, boolean expertMode){

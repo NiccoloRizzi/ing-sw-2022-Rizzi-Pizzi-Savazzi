@@ -51,6 +51,13 @@ public class ActionTurnHandler extends Observable<ClientModel> {
         else{
             notify(new ErrorMessage(currentPlayer,ErrorMessage.ErrorType.MovesError));
         }
+        setInfStrategy(new DefaultInfStrategy());
+    }
+
+    public void setInfStrategy(influenceStrategy strategy){
+        for(Isle isle : gameModel.getIsles()){
+            isle.setInfStrategy(strategy);
+        }
     }
 
     public void moveStudentToIsle(Colour student, int isle){

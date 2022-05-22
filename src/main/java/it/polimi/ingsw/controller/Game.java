@@ -21,14 +21,14 @@ public class Game extends Observable<ClientModel> {
 
     private final static int MAX_N_ISLES = 12;
 
-    private GameModel gameModel; // WHEN TO INITIALIZE???
-    private ActionTurnHandler turn;
+    private final GameModel gameModel; // WHEN TO INITIALIZE???
+    private final ActionTurnHandler turn;
     private boolean planningPhase;
-    private int playersNumber;
+    private final int playersNumber;
     private ArrayList<Integer> planningOrder;
     private ArrayList<Integer> actionOrder;
     private int currentPlayer;
-    private boolean expertMode;
+    private final boolean expertMode;
 
     public Game(int playersNumber, boolean expertMode){
         this.playersNumber= playersNumber;
@@ -96,6 +96,7 @@ public class Game extends Observable<ClientModel> {
     }
 
     public void startActionTurn(){
+        planningPhase=false;
        turn.setupActionTurnHandler(currentPlayer, playersNumber);
     }
 
