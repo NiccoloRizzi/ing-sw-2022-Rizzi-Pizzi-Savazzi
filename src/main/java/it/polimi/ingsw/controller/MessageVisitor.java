@@ -109,7 +109,7 @@ public class MessageVisitor extends Observable<ClientModel> {
             if (game.getCurrentPlayer() == playerId) {
                 if(!game.getTurnHandler().isUsedCharacter()){
 
-                        Player player = game.getGameModel().getPlayer(playerId);
+                    Player player = game.getGameModel().getPlayer(playerId);
                     Character character = game.getGameModel().getCharacter(charId);
                     if(player.getCoins() >= character.getPrice()){
                         try {

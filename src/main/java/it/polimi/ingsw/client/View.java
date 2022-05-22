@@ -115,6 +115,7 @@ public abstract class View extends Observable<JsonObject> {
         modelView = new ModelView(nickname,nplayers,expertMode);
         PlayerMessage pm = new PlayerMessage(nickname,nplayers,expertMode);
         notifyClient(MessageSerializer.serialize(pm));
+        System.out.println("sending...");
     }
 
     public void notifyClient(String message){
@@ -124,6 +125,7 @@ public abstract class View extends Observable<JsonObject> {
     }
 
     public void notifyConnection(String ip, int port){
+        System.out.println("sending...");
         JsonObject jo = new JsonObject();
         jo.addProperty("ip",ip);
         jo.addProperty("port",port);
