@@ -100,35 +100,28 @@ public class MessageVisitor extends Observable<ClientModel> {
     }
     public void visit(IsleInfluenceCharacterMessage isleInfluenceCharacterMessage) {
         String answer;
-        int isleId = isleInfluenceCharacterMessage.getIsleID();
         int playerId = isleInfluenceCharacterMessage.getPlayerID();
         int charId = isleInfluenceCharacterMessage.getCharacterID();
         Colour noColor = isleInfluenceCharacterMessage.getNoColour();
         if (game.isExpertMode())
         {
-            if (game.getCurrentPlayer() == playerId) {
+            if (game.getCurrentPlayer() == playerId && !game.isPlanning()) {
                 if(!game.getTurnHandler().isUsedCharacter()){
 
                         Player player = game.getGameModel().getPlayer(playerId);
                     Character character = game.getGameModel().getCharacter(charId);
                     if(player.getCoins() >= character.getPrice()){
-                        try {
-                            Isle isle = game.getGameModel().getIsle(isleId);
                             switch (character.getCard()) {
                                 case NO_TOWER_INFLUENCE:
-                                    isle.setInfStrategy(new noTowersStrategy());
+                                    game.getTurnHandler().setInfStrategy(new noTowersStrategy());
                                     break;
                                 case PLUS_2_INFLUENCE:
-                                    isle.setInfStrategy(new PlusInfStrategy());
+                                    game.getTurnHandler().setInfStrategy(new PlusInfStrategy());
                                     break;
                                 case NO_COLOUR_INFLUENCE:
-                                    isle.setInfStrategy(new NoColourStrategy(noColor));
+                                    game.getTurnHandler().setInfStrategy(new NoColourStrategy(isleInfluenceCharacterMessage.getNoColour()));
                             }
                             useCharacter(charId);
-                        } catch (TileOutOfBoundsException e) {
-                            e.printStackTrace();
-                            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.IsleError));
-                        }
                     }else{
                         notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
@@ -137,7 +130,7 @@ public class MessageVisitor extends Observable<ClientModel> {
                     notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.CharacterAlreadyUsedError));
                 }
             }else {
-                notify(new ErrorMessage(isleInfluenceCharacterMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));;
+                notify(new ErrorMessage(isleInfluenceCharacterMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
             }
         }
         else {
@@ -151,18 +144,18 @@ public class MessageVisitor extends Observable<ClientModel> {
         Colour stud = moveStudentCharacterMessage.getStudent();
         int tileId = moveStudentCharacterMessage.getTileID();
         if(game.isExpertMode()) {
-            if (game.getCurrentPlayer() == playerId) {
+            if (game.getCurrentPlayer() == playerId && !game.isPlanning()) {
                 CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(charId);
                 Player player = game.getGameModel().getPlayer(playerId);
                 if(!game.getTurnHandler().isUsedCharacter()){
                     if(player.getCoins() >= character.getPrice()){
                         try {
-                            Isle isle = game.getGameModel().getIsle(tileId);
                             Board board = game.getGameModel().getPlayer(playerId).getBoard();
                             character.removeStudent(stud);
                             character.addStudent(game.getGameModel().extractRandomStudent());
                             switch (character.getCard()) {
                                 case ONE_STUD_TO_ISLE:
+                                    Isle isle = game.getGameModel().getIsle(tileId);
                                     isle.addStudent(stud);
                                     break;
                                 case ONE_STUD_TO_TABLES:
@@ -197,7 +190,7 @@ public class MessageVisitor extends Observable<ClientModel> {
         int playerId = strategyProfessorMessage.getPlayerID();
         int charId = strategyProfessorMessage.getCharacterID();
         if(game.isExpertMode()) {
-            if (game.getCurrentPlayer() == playerId) {
+            if (game.getCurrentPlayer() == playerId && !game.isPlanning()) {
                 Character character = game.getGameModel().getCharacter(charId);
                 Player player = game.getGameModel().getPlayer(playerId);
                 if(player.getCoins() >= character.getPrice()){
@@ -225,7 +218,7 @@ public class MessageVisitor extends Observable<ClientModel> {
         int charId = similMotherNatureMesage.getCharacterID();
         int isleId = similMotherNatureMesage.getIsleID();
         if(game.isExpertMode()) {
-            if (game.getCurrentPlayer() == playerId) {
+            if (game.getCurrentPlayer() == playerId && !game.isPlanning()) {
                 ActionTurnHandler handler = game.getTurnHandler();
                 if(!handler.isUsedCharacter()){
                     Character character = game.getGameModel().getCharacter(charId);
@@ -251,7 +244,7 @@ public class MessageVisitor extends Observable<ClientModel> {
     public void visit(Plus2MoveMnMessage plus2MoveMnMessage){
         String answer;
         if (game.isExpertMode()) {
-            if (plus2MoveMnMessage.getPlayerID() == game.getCurrentPlayer()) {
+            if (plus2MoveMnMessage.getPlayerID() == game.getCurrentPlayer() && !game.isPlanning()) {
                 if(!game.getTurnHandler().isUsedCharacter()) {
                     if (game.getGameModel().getPlayer(game.getCurrentPlayer()).getCoins() >= game.getGameModel().getCharacter(plus2MoveMnMessage.getCharacterID()).getPrice()) {
                         game.getGameModel().getPlayer(game.getCurrentPlayer()).boost();
@@ -273,7 +266,7 @@ public class MessageVisitor extends Observable<ClientModel> {
     public void visit(ProhibitedIsleCharacterMessage prohibitedIsleCharacterMessage){
         String answer;
         if(game.isExpertMode()) {
-            if (prohibitedIsleCharacterMessage.getPlayerID() == game.getCurrentPlayer()) {
+            if (prohibitedIsleCharacterMessage.getPlayerID() == game.getCurrentPlayer() && !game.isPlanning()) {
                 if(!game.getTurnHandler().isUsedCharacter()) {
                     if (game.getGameModel().getPlayer(game.getCurrentPlayer()).getCoins() >= game.getGameModel().getCharacter(prohibitedIsleCharacterMessage.getCharacterID()).getPrice()) {
                         if (game.getGameModel().getProhibited() > 0) {
@@ -304,7 +297,7 @@ public class MessageVisitor extends Observable<ClientModel> {
     public void visit(Move6StudCharacterMessage move6StudCharacterMessage){
         String answer;
         if(game.isExpertMode()) {
-            if (move6StudCharacterMessage.getPlayerID() == game.getCurrentPlayer()) {
+            if (move6StudCharacterMessage.getPlayerID() == game.getCurrentPlayer() && !game.isPlanning()) {
                 if(!game.getTurnHandler().isUsedCharacter()){
                 if (game.getGameModel().getPlayer(game.getCurrentPlayer()).getCoins() >= game.getGameModel().getCharacter(move6StudCharacterMessage.getCharacterID()).getPrice()) {
                     CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(move6StudCharacterMessage.getCharacterID());
@@ -348,7 +341,7 @@ public class MessageVisitor extends Observable<ClientModel> {
     public void visit(Move2StudCharacterMessage move2StudCharacterMessage){
         String answer;
         if(game.isExpertMode()) {
-            if (move2StudCharacterMessage.getPlayerID() == game.getCurrentPlayer()) {
+            if (move2StudCharacterMessage.getPlayerID() == game.getCurrentPlayer() && !game.isPlanning()) {
                 if(!game.getTurnHandler().isUsedCharacter()) {
                     if (game.getGameModel().getPlayer(game.getCurrentPlayer()).getCoins() >= game.getGameModel().getCharacter(move2StudCharacterMessage.getCharacterID()).getPrice()) {
                         Board board = game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard();
@@ -401,7 +394,7 @@ public class MessageVisitor extends Observable<ClientModel> {
     public void visit(Remove3StudCharacterMessage remove3StudCharacterMessage){
         String answer;
         if(game.isExpertMode()) {
-            if (remove3StudCharacterMessage.getPlayerID() == game.getCurrentPlayer()) {
+            if (remove3StudCharacterMessage.getPlayerID() == game.getCurrentPlayer() && !game.isPlanning()) {
                 if(!game.getTurnHandler().isUsedCharacter()) {
                     if (game.getGameModel().getPlayer(game.getCurrentPlayer()).getCoins() >= game.getGameModel().getCharacter(remove3StudCharacterMessage.getCharacterID()).getPrice()) {
                         for (Player p : game.getGameModel().getPlayers()) {

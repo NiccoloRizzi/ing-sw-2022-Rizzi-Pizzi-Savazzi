@@ -8,20 +8,17 @@ public class IsleInfluenceCharacterMessage implements Message{
 
     private final int characterId;
     private final int playerId;
-    private final int isleIndex;
     private Colour noColour;
 
-    public IsleInfluenceCharacterMessage(int characterId, int playerId, int isleIndex, Colour noColour) {
+    public IsleInfluenceCharacterMessage(int characterId, int playerId,  Colour noColour) {
         this.characterId = characterId;
         this.playerId = playerId;
-        this.isleIndex = isleIndex;
         this.noColour = noColour;
     }
 
-    public IsleInfluenceCharacterMessage(int characterId, int playerId, int isleIndex) {
+    public IsleInfluenceCharacterMessage(int characterId, int playerId) {
         this.characterId = characterId;
         this.playerId = playerId;
-        this.isleIndex = isleIndex;
     }
 
     public int getCharacterID() {
@@ -32,9 +29,6 @@ public class IsleInfluenceCharacterMessage implements Message{
         return playerId;
     }
 
-    public int getIsleID() {
-        return isleIndex;
-    }
 
     public Colour getNoColour() {
         return noColour;
