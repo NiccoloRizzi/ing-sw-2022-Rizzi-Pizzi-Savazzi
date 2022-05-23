@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public class ActionTurnHandler extends Observable<ClientModel> {
     private int currentPlayer;
-    private GameModel gameModel;
+    private final GameModel gameModel;
     private int studentsToMove;
     private CheckProfessorStrategy professorStrategy;
     private CheckTowerStrategy checkTowerStrategy;
@@ -64,7 +64,7 @@ public class ActionTurnHandler extends Observable<ClientModel> {
         Player player = gameModel.getPlayer(currentPlayer);
         try{
             if(player.getBoard().getStudents(student)>0){
-                if(isle < gameModel.getIsles().size()) {
+                if(isle < gameModel.getIsles().size() && isle>=0) {
                     player.getBoard().removeStudent(student);
                     gameModel.getIsle(isle).addStudent(student);
                     studentsToMove --;
@@ -72,6 +72,9 @@ public class ActionTurnHandler extends Observable<ClientModel> {
                         phase = Phase.MOTHERNATURE;
                         notify(new TurnMessage(currentPlayer, TurnMessage.Turn.ACTION_MN));
                     }
+                }
+                else{
+                    notify(new ErrorMessage(currentPlayer,ErrorMessage.ErrorType.IsleError));
                 }
             }
             else {
@@ -117,14 +120,17 @@ public class ActionTurnHandler extends Observable<ClientModel> {
     public void moveFromCloud(int cloudId){
 
         try{
-            if(gameModel.getCloud(cloudId).isEmpty()){
+            if(cloudId >=0 && cloudId<=gameModel.getClouds().size())
                 notify(new ErrorMessage(currentPlayer,ErrorMessage.ErrorType.CloudError));
-            }
-            else{
-                try {
-                    gameModel.getPlayer(currentPlayer).getBoard().addStudents(gameModel.getCloud(cloudId).empty());
-                }catch(TileOutOfBoundsException e){
-                    e.printStackTrace();
+            else {
+                if (gameModel.getCloud(cloudId).isEmpty()) {
+                    notify(new ErrorMessage(currentPlayer, ErrorMessage.ErrorType.CloudError));
+                } else {
+                    try {
+                        gameModel.getPlayer(currentPlayer).getBoard().addStudents(gameModel.getCloud(cloudId).empty());
+                    } catch (TileOutOfBoundsException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

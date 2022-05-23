@@ -209,6 +209,7 @@ public class Game extends Observable<ClientModel> {
                 .collect(Collectors.toCollection(ArrayList<Integer>::new));
 
         int first = actionOrder.get(0);
+        planningOrder.set(0,first);
         for(int i=1;i<playersNumber;i++){
             planningOrder.set(i,(first+i)%playersNumber);
         }

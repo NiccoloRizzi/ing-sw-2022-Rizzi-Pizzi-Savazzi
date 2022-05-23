@@ -173,6 +173,7 @@ public abstract class View extends Observable<JsonObject> {
     }
 
     public void notifyClient(String message){
+        modelView.setError(null);
         JsonObject jo = gson.fromJson(message,JsonObject.class);
         jo.addProperty("command","message");
         notify(jo);
