@@ -286,6 +286,7 @@ public class GameModel extends Observable<ClientModel> {
                 isles.remove(0);
                 isles.add(temp);
                 isle --;
+                motherNature = isles.size()-1;
             }
         }
         if(isles.get(isle).getTower().equals(isles.get((isle==0)?isles.size()-1:isle-1).getTower()) && !isles.get(isle).getTower().equals(Faction.Empty)) {
@@ -295,10 +296,12 @@ public class GameModel extends Observable<ClientModel> {
                 isles.remove(isle);
                 isles.remove(isle-1);
                 isles.add(isle-1,temp);
+                motherNature = isles.size()-1;
             }else{
                 isles.remove(isles.size()-1);
                 isles.remove(0);
                 isles.add(0,temp);
+                motherNature= 0;
             }
         }
         notifyChange();

@@ -8,9 +8,7 @@ import it.polimi.ingsw.clientModels.Answers.StartMessage;
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 import it.polimi.ingsw.clientModels.Answers.WinMessage;
 import it.polimi.ingsw.messages.*;
-import it.polimi.ingsw.model.CharactersEnum;
 import it.polimi.ingsw.model.Colour;
-import it.polimi.ingsw.server.MoveSerializer;
 import it.polimi.ingsw.server.Observable;
 
 public abstract class View extends Observable<JsonObject> {

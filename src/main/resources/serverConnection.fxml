@@ -1,34 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.GUI.ViewGui">
+
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="25.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.GUI.ViewGui">
    <children>
-      <Label layoutX="98.0" layoutY="14.0" text="Server Connection">
+      <Label alignment="CENTER" text="Server Connection" textFill="#130d8c">
          <font>
-            <Font size="50.0" />
+            <Font name="Comic Sans MS" size="50.0" />
          </font>
       </Label>
-      <Label layoutX="204.0" layoutY="169.0" text="IP:">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <TextField fx:id="serverIP" layoutX="226.0" layoutY="172.0" />
-      <Label layoutX="183.0" layoutY="200.0" text="Port:">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <TextField fx:id="serverPort" layoutX="227.0" layoutY="203.0" />
-      <Button fx:id="connectionButton" layoutX="249.0" layoutY="253.0" mnemonicParsing="false" onAction="#connect" text="Connect">
+      <HBox alignment="CENTER" prefWidth="200.0">
+         <children>
+            <Label text="IP:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="serverIP" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefWidth="200.0">
+         <children>
+            <Label text="Port:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="serverPort" />
+         </children>
+         <padding>
+            <Insets right="18.0" />
+         </padding>
+      </HBox>
+      <Button fx:id="connectionButton" mnemonicParsing="false" onAction="#connect" text="Connect">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
    </children>
-</AnchorPane>
+</VBox>
