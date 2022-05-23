@@ -117,24 +117,6 @@ public class CliSetter implements CliBuilder{
         cli.setOtherPlayerAss(otherString.bottomStick(others));
     }
 
-//    @Override
-//    public void setTurnAndError() {
-//        TurnMessage turn = modelView.getTurn();
-//        CliEntity eTurn;
-//        if(turn.getPlayerId() == myId){
-//            eTurn = new CliEntities.CliString("E' il tuo turno!");
-//        }else{
-//            eTurn = new CliEntities.CliString("E' il turno di " + modelView.getPlayers()[turn.getPlayerId()].getNickname());
-//        }
-//        ErrorMessage.ErrorType error = modelView.getError();
-//        CliEntity eError = new CliEntities.CliString("Attenzione! " + error);
-//        if(error != null){
-//            cli.setTurnAndErrors(eTurn.bottomStick(eError));
-//        }else{
-//            cli.setTurnAndErrors(eTurn);
-//        }
-//    }
-
     @Override
     public void setTurn() {
         TurnMessage turn = modelView.getTurn();
@@ -150,8 +132,8 @@ public class CliSetter implements CliBuilder{
     @Override
     public void setErrors() {
         ErrorMessage.ErrorType error = modelView.getError();
-        CliEntity eError = new CliEntities.CliString("Attenzione! " + error);
         if(error != null){
+            CliEntity eError = new CliEntities.CliString("Attenzione! " + error.getErrorMsg());
             cli.setErrors(eError);
         }
     }

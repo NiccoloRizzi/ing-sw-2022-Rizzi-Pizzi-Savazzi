@@ -227,6 +227,7 @@ public class MessageVisitor extends Observable<ClientModel> {
                         handler.checkTower(isleId);
                         handler.checkIsleJoin(isleId);
                         useCharacter(charId);
+                        game.checkEndTowerIsle();
                     }else{
                         notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
