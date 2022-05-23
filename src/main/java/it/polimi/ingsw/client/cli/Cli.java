@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.cli;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.View;
 import it.polimi.ingsw.messages.PlayerMessage;
+import it.polimi.ingsw.model.CharactersEnum;
 import it.polimi.ingsw.model.Colour;
 
 import java.io.IOException;
@@ -81,31 +82,125 @@ public class Cli extends View {
             switch(command[0]){
                 case "help":
                     System.out.println("Comandi:\n" +
-                             "moveStudent colour index: sposta lo studente del colore \"colour\" all'isola 'index'.");
+                            "moveStudent colour index: sposta lo studente del colore \"colour\" all'isola 'index'.");
                     break;
                 case "assistant":
                     try {
                         super.ChooseAssistant(Integer.parseInt(command[1]));
                     }catch(NumberFormatException e){
                         System.out.println("Devi inserire un numero!");
-                        }
+                    }
                     break;
                 case "mvtotable":
-                    MoveToTable(Colour.values()[Integer.parseInt(command[1])]);
+                    if(command.length==2)
+                        MoveToTable(Colour.values()[Integer.parseInt(command[1])]);
                     break;
                 case "mvtoisle":
-                    MoveToIsle(Colour.values()[Integer.parseInt(command[1])],Integer.parseInt(command[2]));
+                    if(command.length==3)
+                        MoveToIsle(Colour.values()[Integer.parseInt(command[1])],Integer.parseInt(command[2])-1);
                     break;
                 case "cloud":
-                    ChooseCloud(Integer.parseInt(command[1]));
+                    if(command.length==2)
+                        ChooseCloud(Integer.parseInt(command[1])-1);
                     break;
                 case "movemn":
-                    MoveMotherNature(Integer.parseInt(command[1]));
+                    if(command.length==2)
+                        MoveMotherNature(Integer.parseInt(command[1]));
+                    break;
+                case "colours":
+                    System.out.println("0: Red (Dragons)\n1: Violet (Fairies)\n2: Green (Frogs)\n3: Yellow (Gnomes)\n4: Blue (Unicorns)");
+                    break;
+                case "usecharacter":
+                    handleCharacter(command);
                     break;
                 default:
                     System.out.println("Comando errato");
                     break;
 
+            }
+        }
+    }
+
+    public void handleCharacter(String []command){
+        String []params;
+        int param;
+        int []intParams = new int[5];
+        int number;
+        Colour []fromBoard;
+        if(command.length>1) {
+            int charpos = Integer.parseInt(command[1]);
+            CharactersEnum character = getModelView().getCharacters()[charpos].getCard();
+            switch(character){
+                case SIMIL_MN:
+                    System.out.println("Inserisci su che isola vuoi effettuare il calcolo dell'influenza:");
+                    param = Integer.parseInt(scanner.nextLine());
+                    if(param>=0 && param<=12)
+                        similMn(charpos,param);
+                    break;
+                case ONE_STUD_TO_ISLE:
+                    System.out.println("Inserisci studente da spostare e isola su cui metterlo:");
+                    params = scanner.nextLine().split(" ",2);
+                    charStudToIsle(charpos,Colour.values()[Integer.parseInt(params[0])],Integer.parseInt(params[1]));
+                    break;
+                case NO_TOWER_INFLUENCE,PLUS_2_INFLUENCE:
+                    useInfluenceCharacter(charpos);
+                    break;
+                case NO_COLOUR_INFLUENCE:
+                    System.out.println("Scegli il colore da ignorare per il calcolo dell'influenza:");
+                    param = Integer.parseInt(scanner.nextLine());
+                    if(param>=0 && param<=4)
+                        noColourInfluence(charpos,Colour.values()[param]);
+                    break;
+                case PLUS_2_MN:
+                    motherNBoost(charpos);
+                    break;
+                case EXCHANGE_2_STUD:
+                    System.out.println("Quanti studenti  vuoi spostare? (Da 1 a 2)");
+                    number = Integer.parseInt(scanner.nextLine());
+                    fromBoard = new Colour[number];
+                    Colour[] fromTables = new Colour[number];
+                    for(int i=0; i<number;i++) {
+                        System.out.println("Scegli gli studenti da scambiare fra sala e ingresso: (\"coloreDaSala coloreDaIngresso)");
+                        params = scanner.nextLine().split(" ", 2);
+                        fromBoard[i] = Colour.values()[Integer.parseInt(params[0])];
+                        fromTables[i] = Colour.values()[Integer.parseInt(params[1])];
+                    }
+                    exchange3Students(charpos,fromBoard,fromTables);
+                    break;
+                case EXCHANGE_3_STUD:
+                    System.out.println("Quanti studenti  vuoi spostare? (Da 1 a 3)");
+                    number = Integer.parseInt(scanner.nextLine());
+                    fromBoard = new Colour[number];
+                    Colour[] fromChar = new Colour[number];
+                    for(int i=0; i<number;i++) {
+                        System.out.println("Scegli gli studenti da scambiare fra sala e personaggio: (\"coloreDaSala coloreDaPersonaggio)");
+                        params = scanner.nextLine().split(" ", 2);
+                        fromBoard[i] = Colour.values()[Integer.parseInt(params[0])];
+                        fromChar[i] = Colour.values()[Integer.parseInt(params[1])];
+                    }
+                    exchange3Students(charpos,fromBoard,fromChar);
+                    break;
+                case ONE_STUD_TO_TABLES:
+                    System.out.println("Scegli il colore dello studente da spostare da questa carta alla tua sala:");
+                    param = Integer.parseInt(scanner.nextLine());
+                    if(param>=0 && param<=5)
+                        charStudToTable(charpos,Colour.values()[param]);
+                    break;
+                case PROFESSOR_CONTROL:
+                    professorControl(charpos);
+                    break;
+                case PROHIBITED:
+                    System.out.println("Scegli l'isola su cui vuoi aggiungere un divieto:");
+                    param = Integer.parseInt(scanner.nextLine());
+                    if(param>=0 && param<=12)
+                        prohibit(charpos,param);
+                    break;
+                case REMOVE_3_STUD:
+                    System.out.println("Scegli il colore dei 3 studenti da far rimuovere:");
+                    param = Integer.parseInt(scanner.nextLine());
+                    if(param>=0 && param<=5)
+                        remove3Stud(charpos,Colour.values()[param]);
+                    break;
             }
         }
     }
