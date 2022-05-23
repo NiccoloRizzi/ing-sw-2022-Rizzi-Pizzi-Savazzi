@@ -205,7 +205,6 @@ class MessageVisitorTest {
                 students.put(c,game.getGameModel().getCloud(cloudId).getStudents(c)+game.getGameModel().getPlayer(playerId).getBoard().getStudents(c));
             }
             mv.visit(ccm);
-//            assertEquals(TurnMessage.Turn.ACTION_STUDENTS,((TurnMessage)obs.message).getTurn());
             for (Colour c : Colour.values()) {
                 assertEquals(0, game.getGameModel().getCloud(cloudId).getStudents(c));
                 assertEquals(students.get(c), game.getGameModel().getPlayer(playerId).getBoard().getStudents(c));

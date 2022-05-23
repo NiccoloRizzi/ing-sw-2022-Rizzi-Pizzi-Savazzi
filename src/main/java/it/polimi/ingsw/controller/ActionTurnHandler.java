@@ -120,7 +120,7 @@ public class ActionTurnHandler extends Observable<ClientModel> {
     public void moveFromCloud(int cloudId){
 
         try{
-            if(cloudId >=0 && cloudId<=gameModel.getClouds().size())
+            if(cloudId <0 || cloudId>=gameModel.getClouds().size())
                 notify(new ErrorMessage(currentPlayer,ErrorMessage.ErrorType.CloudError));
             else {
                 if (gameModel.getCloud(cloudId).isEmpty()) {
