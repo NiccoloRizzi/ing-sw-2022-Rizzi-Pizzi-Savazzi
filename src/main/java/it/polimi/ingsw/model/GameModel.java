@@ -51,6 +51,7 @@ public class GameModel extends Observable<ClientModel> {
                 } else
                     activeCharacters.add(new Character(i, character));
             }
+            activeCharacters.set(0, new Character(0, CharactersEnum.PROHIBITED));
         }
 
         if(numOfPlayers==4){

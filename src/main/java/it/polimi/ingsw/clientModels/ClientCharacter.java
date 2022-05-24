@@ -11,7 +11,7 @@ public class ClientCharacter implements ClientModel{
 
     int ID;
     private final CharactersEnum card;
-    private int price;
+    private final int price;
     private final HashMap<Colour, Integer> students;
 
     public ClientCharacter(int ID, CharactersEnum card, int price)

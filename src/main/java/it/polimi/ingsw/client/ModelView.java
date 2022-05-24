@@ -14,6 +14,7 @@ public class ModelView {
     private TurnMessage turn;
     private final String nickname;
     private int myId;
+    private boolean isExpert;
 
     public ErrorMessage.ErrorType getError() {
         return error;
@@ -23,8 +24,13 @@ public class ModelView {
         return turn;
     }
 
+    public boolean isExpert() {
+        return isExpert;
+    }
+
     public ModelView(String nickname, int nplayers, boolean expertMode){
         this.nickname = nickname;
+        this.isExpert = expertMode;
         if(expertMode){
             characters = new ClientCharacter[3];
         }

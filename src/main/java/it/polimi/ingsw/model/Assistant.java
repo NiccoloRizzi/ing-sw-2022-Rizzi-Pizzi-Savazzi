@@ -23,4 +23,19 @@ public class Assistant {
     public int getBoost(){ return boost;}
 
     public void Boost(){ boost = 2;}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Assistant assistant = (Assistant) o;
+
+        return value == assistant.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return value;
+    }
 }

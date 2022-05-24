@@ -14,10 +14,20 @@ public class TurnMessage implements ClientModel {
     }
 
     public enum Turn{
-        PLANNING,
-        ACTION_STUDENTS,
-        ACTION_MN,
-        ACTION_CLOUDS
+        PLANNING("Pianificazione, scelta assistente"),
+        ACTION_STUDENTS("Azione, spostamento studenti"),
+        ACTION_MN("Azione, spostamento madre natura"),
+        ACTION_CLOUDS("Azione, scelta della nuvola");
+
+        private final String turnMsg;
+
+        Turn(String value) {
+            this.turnMsg = value;
+        }
+
+        public String getTurnMsg() {
+            return turnMsg;
+        }
     }
 
     public void accept(View visitor)

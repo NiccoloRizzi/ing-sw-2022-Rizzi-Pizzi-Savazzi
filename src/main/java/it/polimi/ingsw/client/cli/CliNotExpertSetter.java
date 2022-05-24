@@ -4,12 +4,10 @@ import it.polimi.ingsw.client.ModelView;
 import it.polimi.ingsw.clientModels.*;
 import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
-import it.polimi.ingsw.model.CharactersEnum;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class CliSetter implements CliBuilder{
+public class CliNotExpertSetter implements CliBuilder{
 
     CliModel cli;
     private final ModelView modelView;
@@ -19,7 +17,7 @@ public class CliSetter implements CliBuilder{
      *
      * @param modelView the ModelView
      */
-    public CliSetter(ModelView modelView){
+    public CliNotExpertSetter(ModelView modelView){
         this.modelView = modelView;
         this.reset();
     }
@@ -57,11 +55,6 @@ public class CliSetter implements CliBuilder{
 
     @Override
     public void setCharacter(int usedCharacter) {
-        CliEntity characters = new CliEntity();
-        for(ClientCharacter character : modelView.getCharacters()){
-            characters = characters.rightStick(new CliEntities.CliCharacter(modelView, character.getID(), usedCharacter == character.getID()));
-        }
-        cli.setCharacters(characters);
     }
 
     @Override
@@ -142,15 +135,9 @@ public class CliSetter implements CliBuilder{
     }
 
     public void setAllCli(){
-        setBoards(true);
+        setBoards(false);
         setAssistants();
-        setIsles(
-                Arrays.stream(modelView.getCharacters())
-                .anyMatch(c -> c.getCard() == CharactersEnum.PROHIBITED)
-        );
-        setCharacter(
-                0
-        );
+        setIsles(false);
         setClouds();
         setTurn();
         setErrors();
