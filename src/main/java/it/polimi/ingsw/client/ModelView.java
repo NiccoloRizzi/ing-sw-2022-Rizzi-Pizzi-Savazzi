@@ -10,11 +10,12 @@ public class ModelView {
     private final ClientBoard[] boards;
     private final ClientCloud[] clouds;
     private ClientCharacter[] characters;
+    private Integer currentCharacter;
     private ErrorMessage.ErrorType error;
     private TurnMessage turn;
     private final String nickname;
     private int myId;
-    private boolean isExpert;
+    private final boolean isExpert;
 
     public ErrorMessage.ErrorType getError() {
         return error;
@@ -22,6 +23,14 @@ public class ModelView {
 
     public TurnMessage getTurn() {
         return turn;
+    }
+
+    public Integer getCurrentCharacter() {
+        return currentCharacter;
+    }
+
+    public void setCurrentCharacter(Integer currentCharacter) {
+        this.currentCharacter = currentCharacter;
     }
 
     public boolean isExpert() {
@@ -37,6 +46,7 @@ public class ModelView {
         players = new ClientPlayer[nplayers];
         boards = new ClientBoard[nplayers];
         clouds = new ClientCloud[nplayers];
+        currentCharacter = null;
     }
     public synchronized ClientGameModel getGameModel() {
         return gameModel;

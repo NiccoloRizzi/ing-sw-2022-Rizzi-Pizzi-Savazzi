@@ -201,10 +201,13 @@ public class CliEntities {
          */
         public CliAssistant(ModelView modelView, int ID, boolean isDeck, int playerID){
             Integer assistant;
+            boolean isBoosted = false;
             if(isDeck){
                 assistant = modelView.getPlayers()[playerID].getDeck()[ID];
             }else{
                 assistant = modelView.getPlayers()[playerID].getUsedAssistants()[ID];
+                int lastPos = modelView.getPlayers()[playerID].getUsedAssistants().length - 1;
+                isBoosted = modelView.getPlayers()[playerID].isBoost() && ID == lastPos;
             }
             final int ROWS = 4;
             final int COLS = 5;
@@ -213,18 +216,19 @@ public class CliEntities {
                 Arrays.fill(cols, new Cell(CellType.NULL, CliColors.BLACK));
             }
             // Borders
+            CliColors borderColor = (isBoosted)?CliColors.BLUE:CliColors.GREY;
             for(int i = 0; i < ROWS; i++){
-                mtx[i][0] = new Cell(CellType.BORDER_V, CliColors.GREY);
-                mtx[i][COLS - 1] = new Cell(CellType.BORDER_V, CliColors.GREY);
+                mtx[i][0] = new Cell(CellType.BORDER_V, borderColor);
+                mtx[i][COLS - 1] = new Cell(CellType.BORDER_V, borderColor);
             }
             for(int i = 0; i < COLS; i++){
-                mtx[0][i] = new Cell(CellType.BORDER_O, CliColors.GREY);
-                mtx[ROWS - 1][i] = new Cell(CellType.BORDER_O, CliColors.GREY);
+                mtx[0][i] = new Cell(CellType.BORDER_O, borderColor);
+                mtx[ROWS - 1][i] = new Cell(CellType.BORDER_O, borderColor);
             }
-            mtx[0][0] = new Cell(CellType.BORDER_NO, CliColors.GREY);
-            mtx[0][COLS - 1] = new Cell(CellType.BORDER_NE, CliColors.GREY);
-            mtx[ROWS - 1][0] = new Cell(CellType.BORDER_SO, CliColors.GREY);
-            mtx[ROWS - 1][COLS - 1] = new Cell(CellType.BORDER_SE, CliColors.GREY);
+            mtx[0][0] = new Cell(CellType.BORDER_NO, borderColor);
+            mtx[0][COLS - 1] = new Cell(CellType.BORDER_NE, borderColor);
+            mtx[ROWS - 1][0] = new Cell(CellType.BORDER_SO, borderColor);
+            mtx[ROWS - 1][COLS - 1] = new Cell(CellType.BORDER_SE, borderColor);
             // Assistant info
             addStringToMtx(1, 1, "Value: " + (assistant + 1));
             addStringToMtx(2, 1, "Mn: " + ((assistant+2)/2));

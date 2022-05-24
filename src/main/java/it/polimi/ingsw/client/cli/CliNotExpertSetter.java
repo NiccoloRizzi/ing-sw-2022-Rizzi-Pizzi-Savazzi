@@ -27,8 +27,6 @@ public class CliNotExpertSetter implements CliBuilder{
         cli = new CliModel();
     }
 
-
-
     @Override
     public void setBoards(boolean isExpert) {
         CliEntity boards = new CliEntity();
@@ -54,7 +52,7 @@ public class CliNotExpertSetter implements CliBuilder{
     }
 
     @Override
-    public void setCharacter(int usedCharacter) {
+    public void setCharacter(Integer usedCharacter) {
     }
 
     @Override

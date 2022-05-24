@@ -33,7 +33,7 @@ public class Player extends Observable<ClientModel> {
         coins = 0;
         deck = new ArrayList<>();
         for(int i = 0; i < N_ASSISTANT; i++){
-            deck.add(new Assistant(i, (i)/2));
+            deck.add(new Assistant(i, (i + 2)/2));
         }
         usedCards = new ArrayList<>();
     }

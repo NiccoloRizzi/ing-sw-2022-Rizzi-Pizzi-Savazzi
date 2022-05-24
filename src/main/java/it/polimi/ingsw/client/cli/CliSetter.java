@@ -56,10 +56,10 @@ public class CliSetter implements CliBuilder{
     }
 
     @Override
-    public void setCharacter(int usedCharacter) {
+    public void setCharacter(Integer usedCharacter) {
         CliEntity characters = new CliEntity();
         for(ClientCharacter character : modelView.getCharacters()){
-            characters = characters.rightStick(new CliEntities.CliCharacter(modelView, character.getID(), usedCharacter == character.getID()));
+            characters = characters.rightStick(new CliEntities.CliCharacter(modelView, character.getID(), usedCharacter != null && usedCharacter == character.getID()));
         }
         cli.setCharacters(characters);
     }
@@ -72,7 +72,6 @@ public class CliSetter implements CliBuilder{
         }
         cli.setClouds(clouds);
     }
-
     /**
      * Create a CliEntity that represents all the player's assistants, both the ones in the deck and the used
      */
@@ -85,7 +84,7 @@ public class CliSetter implements CliBuilder{
         }
         CliEntity usedString = new CliEntities.CliString("Assistenti usati");
         CliEntity used = new CliEntity();
-        for(int i = 0; i < modelView.getPlayers()[modelView.getMyId()].getUsedAssistants().length; i++){
+        for(int i = modelView.getPlayers()[modelView.getMyId()].getUsedAssistants().length - 1; i >= 0 ; i--){
             used = used.rightStick(new CliEntities.CliAssistant(modelView, i, false, modelView.getMyId()));
         }
         cli.setAssistants(deckString
@@ -94,7 +93,6 @@ public class CliSetter implements CliBuilder{
                 .bottomStick(used));
 
     }
-
     /**
      * Create a CliEntity that represents all the used assistants (not used in this builder)
      */
@@ -148,9 +146,7 @@ public class CliSetter implements CliBuilder{
                 Arrays.stream(modelView.getCharacters())
                 .anyMatch(c -> c.getCard() == CharactersEnum.PROHIBITED)
         );
-        setCharacter(
-                0
-        );
+        setCharacter(modelView.getCurrentCharacter());
         setClouds();
         setTurn();
         setErrors();

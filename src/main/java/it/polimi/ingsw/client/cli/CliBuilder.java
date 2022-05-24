@@ -21,8 +21,9 @@ public interface CliBuilder {
 
     /**
      * Create a CliEntity that represents all the active characters
+     * @param usedCharacter
      */
-    void setCharacter(int usedCharacter);
+    void setCharacter(Integer usedCharacter);
 
     /**
      * Create a CliEntity that represents all the clouds
