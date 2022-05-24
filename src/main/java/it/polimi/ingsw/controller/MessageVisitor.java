@@ -91,7 +91,7 @@ public class MessageVisitor extends Observable<ClientModel> {
     }
     public void visit(CloudChoiceMessage cloudChoiceMessage){
         if(game.getCurrentPlayer()==cloudChoiceMessage.getPlayerId() && game.getTurnHandler().getPhase()==Phase.CLOUD){
-            game.getTurnHandler().moveFromCloud(cloudChoiceMessage.getCloudID());
+            if(game.getTurnHandler().moveFromCloud(cloudChoiceMessage.getCloudID()))
             game.nextPlayer();
         }
         else{

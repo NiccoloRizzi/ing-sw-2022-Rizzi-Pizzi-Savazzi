@@ -111,7 +111,7 @@ public class Game extends Observable<ClientModel> {
     public boolean alreadyUsed(int assistantId){
         ArrayList<Player> players = gameModel.getPlayers();
         for (int i = 0; i < planningOrder.indexOf(currentPlayer); i++) {
-            if (players.get(planningOrder.get(i)).getChosen().getValue() == assistantId+1) {
+            if (players.get(planningOrder.get(i)).getChosen().getValue() == assistantId) {
                 return true;
             }
         }
@@ -233,6 +233,7 @@ public class Game extends Observable<ClientModel> {
             if(currentPlayer==actionOrder.get(actionOrder.size()-1)){
                 currentPlayer = planningOrder.get(0);
                 planningPhase = true;
+                gameModel.fillClouds();
                 if(!checkEndStudentAssistant())
                     notify(new TurnMessage(currentPlayer, TurnMessage.Turn.PLANNING));
             }

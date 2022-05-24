@@ -80,49 +80,54 @@ public class Cli extends View {
         while(true){
             int param;
             command = scanner.nextLine().split(" ",5);
-            switch(command[0]){
-                case "help":
-                    System.out.println("Comandi:\n" +
-                            "moveStudent colour index: sposta lo studente del colore \"colour\" all'isola 'index'.");
-                    break;
-                case "assistant":
-                    try {
-                        super.ChooseAssistant(Integer.parseInt(command[1]));
-                    }catch(NumberFormatException e){
-                        System.out.println("Devi inserire un numero!");
-                    }
-                    break;
-                case "mvtotable":
-                    if(command.length==2)
-                        MoveToTable(Colour.values()[Integer.parseInt(command[1])]);
-                    break;
-                case "mvtoisle":
-                    if(command.length==3)
-                        MoveToIsle(Colour.values()[Integer.parseInt(command[1])],Integer.parseInt(command[2])-1);
-                    break;
-                case "cloud":
-                    if(command.length==2)
-                        ChooseCloud(Integer.parseInt(command[1])-1);
-                    break;
-                case "movemn":
-                    if(command.length==2)
-                        MoveMotherNature(Integer.parseInt(command[1]));
-                    break;
-                case "colours":
-                    System.out.println("0: Red (Dragons)\n1: Violet (Fairies)\n2: Green (Frogs)\n3: Yellow (Gnomes)\n4: Blue (Unicorns)");
-                    break;
-                case "usecharacter":
-                    handleCharacter(command);
-                    break;
-                default:
-                    System.out.println("Comando errato");
-                    break;
+            try {
+                switch (command[0]) {
+                    case "help":
+                        System.out.println("Comandi:\n" +
+                                "moveStudent colour index: sposta lo studente del colore \"colour\" all'isola 'index'.");
+                        break;
+                    case "assistant":
+                        try {
+                            super.ChooseAssistant(Integer.parseInt(command[1]));
+                        } catch (NumberFormatException e) {
+                            System.out.println("Devi inserire un numero!");
+                        }
+                        break;
+                    case "mvtotable":
+                        if (command.length == 2)
+                            MoveToTable(Colour.values()[Integer.parseInt(command[1])]);
+                        break;
+                    case "mvtoisle":
+                        if (command.length == 3)
+                            MoveToIsle(Colour.values()[Integer.parseInt(command[1])], Integer.parseInt(command[2]) - 1);
+                        break;
+                    case "cloud":
+                        if (command.length == 2)
+                            ChooseCloud(Integer.parseInt(command[1]) - 1);
+                        break;
+                    case "movemn":
+                        if (command.length == 2)
+                            MoveMotherNature(Integer.parseInt(command[1]));
+                        break;
+                    case "colours":
+                        System.out.println("0: Red (Dragons)\n1: Violet (Fairies)\n2: Green (Frogs)\n3: Yellow (Gnomes)\n4: Blue (Unicorns)");
+                        break;
+                    case "usecharacter":
+                        handleCharacter(command);
+                        break;
+                    default:
+                        System.out.println("Comando errato");
+                        break;
+                }
+                }catch(Exception e){
+                    System.out.println("Errore nella formattazione del comando.");
+                }
 
             }
         }
-    }
 
-    public void handleCharacter(String []command){
+
+    public void handleCharacter(String []command) throws Exception{
         String []params;
         int param;
         int []intParams = new int[5];
@@ -162,7 +167,7 @@ public class Cli extends View {
                         fromBoard[i] = Colour.values()[Integer.parseInt(params[0])];
                         fromTables[i] = Colour.values()[Integer.parseInt(params[1])];
                     }
-                    exchange3Students(charpos, fromBoard, fromTables);
+                    exchange2Students(charpos, fromBoard, fromTables);
                 }
                 case EXCHANGE_3_STUD -> {
                     System.out.println("Quanti studenti  vuoi spostare? (Da 1 a 3)");

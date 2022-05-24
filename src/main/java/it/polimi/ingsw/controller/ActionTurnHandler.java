@@ -117,14 +117,17 @@ public class ActionTurnHandler extends Observable<ClientModel> {
 
     }
 
-    public void moveFromCloud(int cloudId){
+    public boolean moveFromCloud(int cloudId){
 
         try{
-            if(cloudId <0 || cloudId>=gameModel.getClouds().size())
-                notify(new ErrorMessage(currentPlayer,ErrorMessage.ErrorType.CloudError));
+            if(cloudId <0 || cloudId>=gameModel.getClouds().size()) {
+                notify(new ErrorMessage(currentPlayer, ErrorMessage.ErrorType.CloudError));
+                return false;
+            }
             else {
                 if (gameModel.getCloud(cloudId).isEmpty()) {
                     notify(new ErrorMessage(currentPlayer, ErrorMessage.ErrorType.CloudError));
+                    return false;
                 } else {
                     try {
                         gameModel.getPlayer(currentPlayer).getBoard().addStudents(gameModel.getCloud(cloudId).empty());
@@ -137,6 +140,7 @@ public class ActionTurnHandler extends Observable<ClientModel> {
         catch(TileOutOfBoundsException e){
             e.printStackTrace();
         }
+        return true;
     }
 
     public void checkIsleJoin(int index)

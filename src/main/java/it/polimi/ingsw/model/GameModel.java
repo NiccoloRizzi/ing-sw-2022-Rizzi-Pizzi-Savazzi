@@ -51,7 +51,6 @@ public class GameModel extends Observable<ClientModel> {
                 } else
                     activeCharacters.add(new Character(i, character));
             }
-            activeCharacters.set(0, new Character(0, CharactersEnum.PROHIBITED));
         }
 
         if(numOfPlayers==4){
@@ -95,7 +94,7 @@ public class GameModel extends Observable<ClientModel> {
             for (int i = 0; i < num; i++) {
                 Colour extracted = extractRandomStudent();
 
-                    extractedStud.put(extracted, extractedStud.get(extracted) + 1);
+                extractedStud.put(extracted, extractedStud.get(extracted) + 1);
             }
             return extractedStud;
         }
@@ -109,6 +108,16 @@ public class GameModel extends Observable<ClientModel> {
 
     public HashMap<Colour, Player> getProfessors(){
         return professors;
+    }
+
+    public void fillClouds(){
+        for(Cloud c: clouds){
+            try {
+                c.addStudents(extractStudents((numOfPlayers%2==0)?3:4));
+            } catch (StudentsOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public boolean checkEmptyBag() {
