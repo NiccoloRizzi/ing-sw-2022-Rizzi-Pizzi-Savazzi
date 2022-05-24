@@ -77,7 +77,7 @@ public abstract class View extends Observable<JsonObject> {
 
        modelView.setMyId(startMessage.getId(modelView.getNickname()));
        startPrint();
-       refresh();
+       startGame();
     }
     public void startPrint(){
 
@@ -168,6 +168,8 @@ public abstract class View extends Observable<JsonObject> {
         PlayerMessage pm = new PlayerMessage(nickname,nplayers,expertMode);
         notifyClient(MessageSerializer.serialize(pm));
         System.out.println("sending...");
+        System.out.println(modelView);
+        System.out.println(this);
     }
 
     public void notifyClient(String message){
@@ -189,5 +191,6 @@ public abstract class View extends Observable<JsonObject> {
 
 
     public abstract void start();
+    public abstract void startGame();
     public abstract void refresh();
 }

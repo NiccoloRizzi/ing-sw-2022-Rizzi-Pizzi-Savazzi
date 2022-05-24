@@ -2,13 +2,10 @@ package it.polimi.ingsw.client;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import it.polimi.ingsw.client.GUI.ViewGui;
 import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.clientModels.ClientModelDeSerializer;
-import it.polimi.ingsw.messages.*;
 import it.polimi.ingsw.server.Observer;
 import it.polimi.ingsw.client.cli.Cli;
-import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,7 +16,7 @@ public class Client implements Observer<JsonObject>{
     private Socket socket;
     private Scanner in;
     private PrintWriter out;
-    private boolean isActive=true;
+    private boolean isActive=false;
     private int playersNumber;
     private View view;
     private boolean expert;
@@ -31,6 +28,7 @@ public class Client implements Observer<JsonObject>{
         socket = new Socket(IP, port);
         in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream());
+        isActive = true;
         try {
             run();
         }catch (IOException e){
@@ -154,5 +152,16 @@ public class Client implements Observer<JsonObject>{
         }
     }
 
-
+    public void close()
+    {
+        if(isActive) {
+            isActive = false;
+            in.close();
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

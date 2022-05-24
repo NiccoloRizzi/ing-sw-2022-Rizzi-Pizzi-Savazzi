@@ -67,6 +67,10 @@ public class Cli extends View {
         cliBuilder = (getModelView().isExpert())?new CliSetter(getModelView()):new CliNotExpertSetter(getModelView());
         handleInput();
     }
+    @Override
+    public void startGame(){
+        refresh();
+    }
 
     public void startPrint(){
         printing = true;
