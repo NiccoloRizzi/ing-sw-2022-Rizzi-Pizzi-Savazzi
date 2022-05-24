@@ -32,6 +32,10 @@ public class ClientPlayer implements ClientModel{
         return id;
     }
 
+    public boolean isBoost() {
+        return boost;
+    }
+
     public ClientPlayer(Integer[] usedAssistants, Integer[] deck, int coins, String nickname, int id, boolean boost)
     {
         this.usedAssistants = usedAssistants;

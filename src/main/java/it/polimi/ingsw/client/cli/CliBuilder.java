@@ -12,17 +12,18 @@ public interface CliBuilder {
     /**
      * Create a CliEntity that represents all the boards
      */
-    void setBoards();
+    void setBoards(boolean isExpert);
 
     /**
      * Create a CliEntity that represents all the isles
      */
-    void setIsles();
+    void setIsles(boolean isProhibitedPresent);
 
     /**
      * Create a CliEntity that represents all the active characters
+     * @param usedCharacter
      */
-    void setCharacter();
+    void setCharacter(Integer usedCharacter);
 
     /**
      * Create a CliEntity that represents all the clouds

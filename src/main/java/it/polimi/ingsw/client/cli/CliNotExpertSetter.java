@@ -4,12 +4,10 @@ import it.polimi.ingsw.client.ModelView;
 import it.polimi.ingsw.clientModels.*;
 import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
-import it.polimi.ingsw.model.CharactersEnum;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class CliSetter implements CliBuilder{
+public class CliNotExpertSetter implements CliBuilder{
 
     CliModel cli;
     private final ModelView modelView;
@@ -19,7 +17,7 @@ public class CliSetter implements CliBuilder{
      *
      * @param modelView the ModelView
      */
-    public CliSetter(ModelView modelView){
+    public CliNotExpertSetter(ModelView modelView){
         this.modelView = modelView;
         this.reset();
     }
@@ -28,8 +26,6 @@ public class CliSetter implements CliBuilder{
     public void reset() {
         cli = new CliModel();
     }
-
-
 
     @Override
     public void setBoards(boolean isExpert) {
@@ -57,11 +53,6 @@ public class CliSetter implements CliBuilder{
 
     @Override
     public void setCharacter(Integer usedCharacter) {
-        CliEntity characters = new CliEntity();
-        for(ClientCharacter character : modelView.getCharacters()){
-            characters = characters.rightStick(new CliEntities.CliCharacter(modelView, character.getID(), usedCharacter != null && usedCharacter == character.getID()));
-        }
-        cli.setCharacters(characters);
     }
 
     @Override
@@ -72,6 +63,7 @@ public class CliSetter implements CliBuilder{
         }
         cli.setClouds(clouds);
     }
+
     /**
      * Create a CliEntity that represents all the player's assistants, both the ones in the deck and the used
      */
@@ -84,7 +76,7 @@ public class CliSetter implements CliBuilder{
         }
         CliEntity usedString = new CliEntities.CliString("Assistenti usati");
         CliEntity used = new CliEntity();
-        for(int i = modelView.getPlayers()[modelView.getMyId()].getUsedAssistants().length - 1; i >= 0 ; i--){
+        for(int i = 0; i < modelView.getPlayers()[modelView.getMyId()].getUsedAssistants().length; i++){
             used = used.rightStick(new CliEntities.CliAssistant(modelView, i, false, modelView.getMyId()));
         }
         cli.setAssistants(deckString
@@ -93,6 +85,7 @@ public class CliSetter implements CliBuilder{
                 .bottomStick(used));
 
     }
+
     /**
      * Create a CliEntity that represents all the used assistants (not used in this builder)
      */
@@ -140,13 +133,9 @@ public class CliSetter implements CliBuilder{
     }
 
     public void setAllCli(){
-        setBoards(true);
+        setBoards(false);
         setAssistants();
-        setIsles(
-                Arrays.stream(modelView.getCharacters())
-                .anyMatch(c -> c.getCard() == CharactersEnum.PROHIBITED)
-        );
-        setCharacter(modelView.getCurrentCharacter());
+        setIsles(false);
         setClouds();
         setTurn();
         setErrors();

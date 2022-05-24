@@ -33,7 +33,7 @@ public class Player extends Observable<ClientModel> {
         coins = 0;
         deck = new ArrayList<>();
         for(int i = 0; i < N_ASSISTANT; i++){
-            deck.add(new Assistant(i+1, (i+2)/2));
+            deck.add(new Assistant(i, (i + 2)/2));
         }
         usedCards = new ArrayList<>();
     }
@@ -52,7 +52,7 @@ public class Player extends Observable<ClientModel> {
     /**@param i is the index of the array of the assistants
      * @throws IndexOutOfBoundsException if i is not a valid value**/
     public void setChoosenAssistant(int i) throws IndexOutOfBoundsException{
-        usedCards.add(deck.remove(i)); // Maybe i had to add some controll on the remove...XD
+        usedCards.add(deck.remove(deck.indexOf(new Assistant(i,(i+2)/2)))); // Maybe i had to add some controll on the remove...XD SURE...
         notifyChange();
     }
 

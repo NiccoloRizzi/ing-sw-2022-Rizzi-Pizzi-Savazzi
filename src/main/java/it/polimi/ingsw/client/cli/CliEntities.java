@@ -25,7 +25,7 @@ public class CliEntities {
          * @param modelView the model view
          * @param ID        the id of the player owner of the board
          */
-        public CliBoard(ModelView modelView, int ID){
+        public CliBoard(ModelView modelView, int ID, boolean isExpert){
             // Init
             mtx = new Cell[22][7];
             for (Cell[] chars : mtx) {
@@ -33,7 +33,9 @@ public class CliEntities {
             }
             ClientBoard board = modelView.getBoards()[ID];
             addStringToMtx(0, 1, modelView.getPlayers()[board.getPlayerID()].getNickname());
-            addStringToMtx(1, 1, "Coins: " + modelView.getPlayers()[board.getPlayerID()].getCoins());
+            if(isExpert){
+                addStringToMtx(1, 1, "Coins: " + modelView.getPlayers()[board.getPlayerID()].getCoins());
+            }
             // Set entrance
             int row = 3, col = 1;
             for(Colour c : board.getEntrance().keySet()){
@@ -67,10 +69,10 @@ public class CliEntities {
             row = 19;
             col = 1;
             for(int i = 0; i < board.getTowers(); i++){
-                switch (board.getFaction()){
-                    case Black: mtx[row][col] = new Cell(CellType.TOWER, CliColors.BLACK); break;
-                    case White: mtx[row][col] = new Cell(CellType.TOWER, CliColors.WHITE); break;
-                    case Grey: mtx[row][col] = new Cell(CellType.TOWER, CliColors.GREY); break;
+                switch (board.getFaction()) {
+                    case Black -> mtx[row][col] = new Cell(CellType.TOWER, CliColors.BLACK);
+                    case White -> mtx[row][col] = new Cell(CellType.TOWER, CliColors.WHITE);
+                    case Grey -> mtx[row][col] = new Cell(CellType.TOWER, CliColors.GREY);
                 }
                 col++;
                 if(col == 5){
@@ -117,7 +119,7 @@ public class CliEntities {
          * @param modelView the model view
          * @param ID        the id of the isle
          */
-        public CliIsle(ModelView modelView, int ID){
+        public CliIsle(ModelView modelView, int ID, boolean isProhibitedPresent){
             ClientIsle isle = modelView.getGameModel().getIsles().get(ID);
             Faction faction = isle.getControlling();
             HashMap<Colour, Integer> students = isle.getStudents();
@@ -151,18 +153,20 @@ public class CliEntities {
             // Isle id
             addStringToMtx(1, 1, "Isola: " + (ID + 1));
             // Towers
-            switch (faction){
-                case Grey:
+            switch (faction) {
+                case Grey -> {
                     mtx[2][1] = new Cell(CellType.TOWER, CliColors.GREY);
                     addStringToMtx(2, 2, "" + size);
-                    break;
-                case White: mtx[2][1] = new Cell(CellType.TOWER, CliColors.WHITE);
+                }
+                case White -> {
+                    mtx[2][1] = new Cell(CellType.TOWER, CliColors.WHITE);
                     addStringToMtx(2, 2, "" + size);
-                    break;
-                case Black: mtx[2][1] = new Cell(CellType.TOWER, CliColors.BLACK);
+                }
+                case Black -> {
+                    mtx[2][1] = new Cell(CellType.TOWER, CliColors.BLACK);
                     addStringToMtx(2, 2, "" + size);
-                    break;
-                default: mtx[2][1] = new Cell(CellType.NULL, CliColors.BLACK);
+                }
+                default -> mtx[2][1] = new Cell(CellType.NULL, CliColors.BLACK);
             }
             // Students
             for(Colour c : Colour.values()){
@@ -170,10 +174,13 @@ public class CliEntities {
                 addStringToMtx(c.ordinal() + 4, 2, "" + ((students.get(c) != null)?students.get(c):"0"));
             }
             // Prohibited
-            mtx[10][1] = new Cell(CellType.PRHOIBITED, CliColors.RED);
-            addStringToMtx(10, 2, "" + prohibited);
+            if(isProhibitedPresent){
+                mtx[10][1] = new Cell(CellType.PRHOIBITED, CliColors.RED);
+                addStringToMtx(10, 2, "" + prohibited);
+            }
             // Mn
-            if(modelView.getGameModel().getMotherNature() == isle.getId()){
+            int mnPos = modelView.getGameModel().getMotherNature();
+            if(mnPos == ID){
                 mtx[11][1] = new Cell(CellType.MN, CliColors.BROWN);
                 addStringToMtx(11, 2, "Mother Nature");
             }
@@ -194,10 +201,13 @@ public class CliEntities {
          */
         public CliAssistant(ModelView modelView, int ID, boolean isDeck, int playerID){
             Integer assistant;
+            boolean isBoosted = false;
             if(isDeck){
                 assistant = modelView.getPlayers()[playerID].getDeck()[ID];
             }else{
                 assistant = modelView.getPlayers()[playerID].getUsedAssistants()[ID];
+                int lastPos = modelView.getPlayers()[playerID].getUsedAssistants().length - 1;
+                isBoosted = modelView.getPlayers()[playerID].isBoost() && ID == lastPos;
             }
             final int ROWS = 4;
             final int COLS = 5;
@@ -206,21 +216,22 @@ public class CliEntities {
                 Arrays.fill(cols, new Cell(CellType.NULL, CliColors.BLACK));
             }
             // Borders
+            CliColors borderColor = (isBoosted)?CliColors.BLUE:CliColors.GREY;
             for(int i = 0; i < ROWS; i++){
-                mtx[i][0] = new Cell(CellType.BORDER_V, CliColors.GREY);
-                mtx[i][COLS - 1] = new Cell(CellType.BORDER_V, CliColors.GREY);
+                mtx[i][0] = new Cell(CellType.BORDER_V, borderColor);
+                mtx[i][COLS - 1] = new Cell(CellType.BORDER_V, borderColor);
             }
             for(int i = 0; i < COLS; i++){
-                mtx[0][i] = new Cell(CellType.BORDER_O, CliColors.GREY);
-                mtx[ROWS - 1][i] = new Cell(CellType.BORDER_O, CliColors.GREY);
+                mtx[0][i] = new Cell(CellType.BORDER_O, borderColor);
+                mtx[ROWS - 1][i] = new Cell(CellType.BORDER_O, borderColor);
             }
-            mtx[0][0] = new Cell(CellType.BORDER_NO, CliColors.GREY);
-            mtx[0][COLS - 1] = new Cell(CellType.BORDER_NE, CliColors.GREY);
-            mtx[ROWS - 1][0] = new Cell(CellType.BORDER_SO, CliColors.GREY);
-            mtx[ROWS - 1][COLS - 1] = new Cell(CellType.BORDER_SE, CliColors.GREY);
+            mtx[0][0] = new Cell(CellType.BORDER_NO, borderColor);
+            mtx[0][COLS - 1] = new Cell(CellType.BORDER_NE, borderColor);
+            mtx[ROWS - 1][0] = new Cell(CellType.BORDER_SO, borderColor);
+            mtx[ROWS - 1][COLS - 1] = new Cell(CellType.BORDER_SE, borderColor);
             // Assistant info
-            addStringToMtx(1, 1, "Value: " + (assistant));
-            addStringToMtx(2, 1, "Mn: " + ((assistant+1)/2));
+            addStringToMtx(1, 1, "Value: " + (assistant + 1));
+            addStringToMtx(2, 1, "Mn: " + ((assistant+2)/2));
         }
     }
 
@@ -234,7 +245,7 @@ public class CliEntities {
          * @param modelView the model view
          * @param ID        the id of the used characters
          */
-        public CliCharacter(ModelView modelView, int ID){
+        public CliCharacter(ModelView modelView, int ID, boolean isUsed){
             ClientCharacter character = modelView.getCharacters()[ID];
             int id = character.getID();
             int price = character.getPrice();
@@ -246,18 +257,19 @@ public class CliEntities {
                 Arrays.fill(cols, new Cell(CellType.NULL, CliColors.BLACK));
             }
             // Borders
+            CliColors borderColor = (isUsed)?CliColors.YELLOW:CliColors.GREY;
             for(int i = 0; i < ROWS; i++){
-                mtx[i][0] = new Cell(CellType.BORDER_V, CliColors.GREY);
-                mtx[i][COLS - 1] = new Cell(CellType.BORDER_V, CliColors.GREY);
+                mtx[i][0] = new Cell(CellType.BORDER_V, borderColor);
+                mtx[i][COLS - 1] = new Cell(CellType.BORDER_V, borderColor);
             }
             for(int i = 0; i < COLS; i++){
-                mtx[0][i] = new Cell(CellType.BORDER_O, CliColors.GREY);
-                mtx[ROWS - 1][i] = new Cell(CellType.BORDER_O, CliColors.GREY);
+                mtx[0][i] = new Cell(CellType.BORDER_O, borderColor);
+                mtx[ROWS - 1][i] = new Cell(CellType.BORDER_O, borderColor);
             }
-            mtx[0][0] = new Cell(CellType.BORDER_NO, CliColors.GREY);
-            mtx[0][COLS - 1] = new Cell(CellType.BORDER_NE, CliColors.GREY);
-            mtx[ROWS - 1][0] = new Cell(CellType.BORDER_SO, CliColors.GREY);
-            mtx[ROWS - 1][COLS - 1] = new Cell(CellType.BORDER_SE, CliColors.GREY);
+            mtx[0][0] = new Cell(CellType.BORDER_NO, borderColor);
+            mtx[0][COLS - 1] = new Cell(CellType.BORDER_NE, borderColor);
+            mtx[ROWS - 1][0] = new Cell(CellType.BORDER_SO, borderColor);
+            mtx[ROWS - 1][COLS - 1] = new Cell(CellType.BORDER_SE, borderColor);
             // Character id
             addStringToMtx(1, 1, "" + character.getCard());
             addStringToMtx(2, 1, "Price " + price);
@@ -267,8 +279,6 @@ public class CliEntities {
                     mtx[c.ordinal() + 3][1] = getStudCellType(c);
                     addStringToMtx(c.ordinal() + 3, 2, "" + students.get(c));
                 }
-            }else{
-                addStringToMtx(3, 1, "No students");
             }
         }
     }

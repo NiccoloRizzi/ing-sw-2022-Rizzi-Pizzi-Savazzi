@@ -28,9 +28,9 @@ public class ErrorMessage implements ClientModel {
     public int getId(){return id;}
 
     public enum ErrorType {
-        NotYourTurnError("Non è il tuo turno"),
+        NotYourTurnError("Non è il momento giusto per fare questa azione"),
         NotEnoughCoinError("Non hai abbastanza monete"),
-        CloudError("La nuvola è già stata scelta"),
+        CloudError("La nuvola è già stata scelta o non è valida"),
         AssistantOtherPlayerError("L'assistente è già stato scelto da un altro giocatore"),
         AssistantAlreadyChosenError("Hai già usato questo assistente"),
         CharacterAlreadyUsedError("Hai già usato un personaggio in questo turno"),

@@ -52,6 +52,7 @@ public abstract class View extends Observable<JsonObject> {
     }
     public synchronized void visit(ClientCharacter character){
         modelView.getCharacters()[character.getID()] = character;
+        getModelView().setCurrentCharacter(character.getID());
         refresh();
     }
     public synchronized void visit(ErrorMessage errorMessage){
@@ -66,19 +67,22 @@ public abstract class View extends Observable<JsonObject> {
     }
     public synchronized void visit(TurnMessage turnMessage){
         modelView.setTurn(turnMessage);
+        if(turnMessage.getTurn() == TurnMessage.Turn.ACTION_STUDENTS){
+            modelView.setCurrentCharacter(null);
+        }
         refresh();
     }
     public synchronized void visit(WinMessage winMessage) {
 
     }
-
     public synchronized void visit(StartMessage startMessage){
         System.out.println(startMessage);
-
-       modelView.setMyId(startMessage.getId(modelView.getNickname()));
-       startPrint();
-       startGame();
+        modelView.setMyId(startMessage.getId(modelView.getNickname()));
+        startPrint();
+        getModelView().setCurrentCharacter(null);
+        startGame();
     }
+
     public void startPrint(){
 
     }
@@ -88,68 +92,54 @@ public abstract class View extends Observable<JsonObject> {
             notifyClient(acm.serialize());
         }
     }
-
     public void MoveToIsle(Colour c, int isleid){
         MoveStudentMessage msm = new MoveStudentMessage(modelView.getMyId(), c, isleid, false);
         notifyClient(msm.serialize());
     }
-
     public void MoveToTable(Colour c){
         MoveStudentMessage msm = new MoveStudentMessage(modelView.getMyId(),c,0,true);
         notifyClient(msm.serialize());
     }
-
     public void ChooseCloud(int cloudid){
         CloudChoiceMessage ccm = new CloudChoiceMessage(modelView.getMyId(), cloudid);
         notifyClient(ccm.serialize());
     }
-
     public void MoveMotherNature(int spaces){
         MoveMotherNatureMessage movemnm = new MoveMotherNatureMessage(modelView.getMyId(), spaces);
         notifyClient(movemnm.serialize());
     }
-
     public void remove3Stud(int charpos, Colour c){
         Remove3StudCharacterMessage r3s = new Remove3StudCharacterMessage(charpos, modelView.getMyId(),c);
         notifyClient(r3s.serialize());
     }
-
     public void charStudToIsle(int charpos, Colour student, int isle){
         MoveStudentCharacterMessage mscm = new MoveStudentCharacterMessage(modelView.getMyId(), charpos, student,isle );
         notifyClient(mscm.serialize());
     }
-
     public void charStudToTable(int charpos, Colour student){
         MoveStudentCharacterMessage mscm = new MoveStudentCharacterMessage(modelView.getMyId(), charpos, student,0);
         notifyClient(mscm.serialize());
     }
-
-
     public void similMn(int charpos, int isle){
         SimilMotherNatureMesage smm = new SimilMotherNatureMesage(charpos, modelView.getMyId(), isle);
         notifyClient(smm.serialize());
     }
-
     public void useInfluenceCharacter(int charpos){
         IsleInfluenceCharacterMessage iicm = new IsleInfluenceCharacterMessage(charpos, modelView.getMyId());
         notifyClient(iicm.serialize());
     }
-
     public void prohibit(int charpos, int isle){
         ProhibitedIsleCharacterMessage pm = new ProhibitedIsleCharacterMessage(charpos, modelView.getMyId(), isle);
         notifyClient(pm.serialize());
     }
-
     public void professorControl(int charpos){
         StrategyProfessorMessage strategyProfessorMessage = new StrategyProfessorMessage(charpos, modelView.getMyId());
         notifyClient(strategyProfessorMessage.serialize());
     }
-
     public void motherNBoost(int charpos){
         Plus2MoveMnMessage plus = new Plus2MoveMnMessage(charpos, modelView.getMyId());
         notifyClient(plus.serialize());
     }
-
     public void noColourInfluence(int charpos, Colour ignored){
         IsleInfluenceCharacterMessage icm = new IsleInfluenceCharacterMessage(charpos, modelView.getMyId(),ignored);
     }
@@ -157,12 +147,10 @@ public abstract class View extends Observable<JsonObject> {
         Move2StudCharacterMessage m2m = new Move2StudCharacterMessage(charpos,modelView.getMyId(),fromBoard,fromtables);
         notifyClient(m2m.serialize());
     }
-
     public void exchange3Students(int charpos, Colour[] fromBoard, Colour[] fromChar ){
         Move6StudCharacterMessage m3m = new Move6StudCharacterMessage(charpos, modelView.getMyId(), fromBoard,fromChar);
         notifyClient(m3m.serialize());
     }
-
     public void sendPlayerInfo(String nickname, int nplayers, boolean expertMode){
         modelView = new ModelView(nickname,nplayers,expertMode);
         PlayerMessage pm = new PlayerMessage(nickname,nplayers,expertMode);
@@ -171,14 +159,12 @@ public abstract class View extends Observable<JsonObject> {
         System.out.println(modelView);
         System.out.println(this);
     }
-
     public void notifyClient(String message){
         modelView.setError(null);
         JsonObject jo = gson.fromJson(message,JsonObject.class);
         jo.addProperty("command","message");
         notify(jo);
     }
-
     public void notifyConnection(String ip, int port){
         System.out.println("sending...");
         JsonObject jo = new JsonObject();
@@ -187,8 +173,6 @@ public abstract class View extends Observable<JsonObject> {
         jo.addProperty("command","connect");
         notify(jo);
     }
-
-
 
     public abstract void start();
     public abstract void startGame();
