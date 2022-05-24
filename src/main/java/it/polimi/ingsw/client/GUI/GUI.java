@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.Client;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -23,6 +24,8 @@ public class GUI extends Application{
         loader1.setLocation(getClass().getResource("/waitingServer.fxml"));
         stage.setScene(new Scene(loader1.load()));
         stage.setTitle("Eryantis");
+        stage.setFullScreen(true);
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/images\\Moneta_base.png")));
         ViewGUI view = loader1.getController();
         view.setStage(stage);
         client.setView(view);
@@ -34,6 +37,7 @@ public class GUI extends Application{
         loader2.setLocation(getClass().getResource("/serverConnection.fxml"));
         connectionStage.setScene(new Scene(loader2.load()));
         connectionStage.setTitle("connection to server");
+        connectionStage.getIcons().add(new Image(getClass().getResourceAsStream("/images\\Moneta_base.png")));
         connectionStage.alwaysOnTopProperty();
         ((ConnectionController)loader2.getController()).setView(view);
         connectionStage.initModality(Modality.APPLICATION_MODAL);

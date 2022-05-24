@@ -297,7 +297,7 @@ public class GameModel extends Observable<ClientModel> {
                 isles.remove(isle);
                 isles.remove(isle-1);
                 isles.add(isle-1,temp);
-                motherNature = isles.size()-1;
+                motherNature = isle-1;
             }else{
                 isles.remove(isles.size()-1);
                 isles.remove(0);

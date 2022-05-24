@@ -28,6 +28,7 @@ public class ViewGUI extends View {
                     try {
                         Parent root = loader.load();
                         stage.setScene(new Scene(root));
+                        stage.setFullScreen(true);
                         stage.show();
                     }catch (IOException e){
                         e.printStackTrace();
