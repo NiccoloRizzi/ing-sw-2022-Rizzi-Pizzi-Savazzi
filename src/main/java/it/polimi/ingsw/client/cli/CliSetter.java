@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.CharactersEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class CliSetter implements CliBuilder{
 
@@ -56,10 +57,10 @@ public class CliSetter implements CliBuilder{
     }
 
     @Override
-    public void setCharacter(Integer usedCharacter) {
+    public void setCharacter(Optional<Integer> usedCharacter) {
         CliEntity characters = new CliEntity();
         for(ClientCharacter character : modelView.getCharacters()){
-            characters = characters.rightStick(new CliEntities.CliCharacter(modelView, character.getID(), usedCharacter != null && usedCharacter == character.getID()));
+            characters = characters.rightStick(new CliEntities.CliCharacter(modelView, character.getID(), usedCharacter.isPresent() && usedCharacter.get() == character.getID()));
         }
         cli.setCharacters(characters);
     }
@@ -104,15 +105,21 @@ public class CliSetter implements CliBuilder{
     public void setOtherPlayersAss() {
         CliEntity otherString = new CliEntities.CliString("Assistenti degli altri giocatori");
         CliEntity others = new CliEntity();
-        for(ClientPlayer p : modelView.getPlayers()){
-            if(p.getId() != modelView.getMyId()){
-                if(p.getUsedAssistants().length > 0){
+//        for(ClientPlayer p : modelView.getPlayers()){
+//            if(p.getId() != modelView.getMyId()){
+//                if(p.getUsedAssistants().length > 0){
+//                    others = others.rightStick(
+//                            new CliEntities.CliString(p.getNickname())
+//                                    .bottomStick(new CliEntities.CliAssistant(modelView, p.getUsedAssistants().length - 1, false, p.getId()))
+//                    );
+//                }
+//            }
+//        }
+        for(ClientPlayer player : modelView.getOtherPlayerAss().keySet()){
                     others = others.rightStick(
-                            new CliEntities.CliString(p.getNickname())
-                                    .bottomStick(new CliEntities.CliAssistant(modelView, p.getUsedAssistants().length - 1, false, p.getId()))
+                            new CliEntities.CliString(player.getNickname())
+                                    .bottomStick(new CliEntities.CliAssistant(modelView, modelView.getOtherPlayerAss().get(player), false, player.getId()))
                     );
-                }
-            }
         }
         cli.setOtherPlayerAss(otherString.bottomStick(others));
     }

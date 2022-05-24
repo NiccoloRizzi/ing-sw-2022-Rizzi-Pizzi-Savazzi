@@ -54,4 +54,19 @@ public class ClientPlayer implements ClientModel{
     public String serialize(){
         return ModelSerializer.serialize(this);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ClientPlayer that = (ClientPlayer) o;
+
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }

@@ -4,38 +4,23 @@ import it.polimi.ingsw.clientModels.*;
 import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 public class ModelView {
     private final ClientPlayer[] players;
     private ClientGameModel gameModel;
     private final ClientBoard[] boards;
     private final ClientCloud[] clouds;
     private ClientCharacter[] characters;
-    private Integer currentCharacter;
+    private Optional<Integer> currentCharacter;
+    private Map<ClientPlayer, Integer> otherPlayerAss;
     private ErrorMessage.ErrorType error;
     private TurnMessage turn;
     private final String nickname;
     private int myId;
     private final boolean isExpert;
-
-    public ErrorMessage.ErrorType getError() {
-        return error;
-    }
-
-    public TurnMessage getTurn() {
-        return turn;
-    }
-
-    public Integer getCurrentCharacter() {
-        return currentCharacter;
-    }
-
-    public void setCurrentCharacter(Integer currentCharacter) {
-        this.currentCharacter = currentCharacter;
-    }
-
-    public boolean isExpert() {
-        return isExpert;
-    }
 
     public ModelView(String nickname, int nplayers, boolean expertMode){
         this.nickname = nickname;
@@ -46,7 +31,21 @@ public class ModelView {
         players = new ClientPlayer[nplayers];
         boards = new ClientBoard[nplayers];
         clouds = new ClientCloud[nplayers];
-        currentCharacter = null;
+        currentCharacter = Optional.empty();
+        otherPlayerAss = new HashMap<>();
+    }
+
+    public ErrorMessage.ErrorType getError() {
+        return error;
+    }
+    public TurnMessage getTurn() {
+        return turn;
+    }
+    public Optional<Integer> getCurrentCharacter() {
+        return currentCharacter;
+    }
+    public boolean isExpert() {
+        return isExpert;
     }
     public synchronized ClientGameModel getGameModel() {
         return gameModel;
@@ -63,29 +62,33 @@ public class ModelView {
     public synchronized ClientCharacter[] getCharacters() {
         return characters;
     }
+    public int getMyId() {
+        return myId;
+    }
+    public String getNickname() {
+        return nickname;
+    }
+    public Map<ClientPlayer, Integer> getOtherPlayerAss() {
+        return otherPlayerAss;
+    }
 
     public void setGameModel(ClientGameModel gameModel) {
         this.gameModel = gameModel;
     }
-
+    public void setCurrentCharacter(Optional<Integer> currentCharacter) {
+        this.currentCharacter = currentCharacter;
+    }
     public void setError(ErrorMessage.ErrorType error) {
         this.error = error;
     }
-
-    public int getMyId() {
-        return myId;
-    }
-
     public void setMyId(int myId) {
         this.myId = myId;
     }
-
     public void setTurn(TurnMessage turn){
         this.turn = turn;
     }
-
-    public String getNickname() {
-        return nickname;
+    public void setOtherPlayerAss(Map<ClientPlayer, Integer> otherPlayerAss) {
+        this.otherPlayerAss = otherPlayerAss;
     }
 }
 

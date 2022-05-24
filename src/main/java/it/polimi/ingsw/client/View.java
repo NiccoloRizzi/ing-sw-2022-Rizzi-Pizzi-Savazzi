@@ -11,6 +11,10 @@ import it.polimi.ingsw.messages.*;
 import it.polimi.ingsw.model.Colour;
 import it.polimi.ingsw.server.Observable;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 public abstract class View extends Observable<JsonObject> {
 
     private ModelView modelView;
@@ -41,6 +45,14 @@ public abstract class View extends Observable<JsonObject> {
     }
     public synchronized void visit(ClientPlayer clientPLayer){
         modelView.getPlayers()[clientPLayer.getId()]=clientPLayer;
+        if(clientPLayer.getUsedAssistants().length > 0){
+            Map<ClientPlayer, Integer> otherPLayerAss = modelView.getOtherPlayerAss();
+            int usedAssLength = clientPLayer.getUsedAssistants().length;
+            if(clientPLayer.getId() != getModelView().getMyId()){
+                otherPLayerAss.put(clientPLayer, usedAssLength - 1);
+            }
+            modelView.setOtherPlayerAss(otherPLayerAss);
+        }
     }
     public synchronized void visit(ClientGameModel clientGameModel){
         modelView.setGameModel(clientGameModel);
@@ -52,7 +64,7 @@ public abstract class View extends Observable<JsonObject> {
     }
     public synchronized void visit(ClientCharacter character){
         modelView.getCharacters()[character.getID()] = character;
-        getModelView().setCurrentCharacter(character.getID());
+        getModelView().setCurrentCharacter(Optional.of(character.getID()));
         refresh();
     }
     public synchronized void visit(ErrorMessage errorMessage){
@@ -66,10 +78,13 @@ public abstract class View extends Observable<JsonObject> {
         }
     }
     public synchronized void visit(TurnMessage turnMessage){
-        modelView.setTurn(turnMessage);
         if(turnMessage.getTurn() == TurnMessage.Turn.ACTION_STUDENTS){
-            modelView.setCurrentCharacter(null);
+            modelView.setCurrentCharacter(Optional.empty());
         }
+        if(modelView.getTurn() != null && turnMessage.getTurn() == TurnMessage.Turn.PLANNING && modelView.getTurn().getTurn() == TurnMessage.Turn.ACTION_CLOUDS){
+            modelView.setOtherPlayerAss(new HashMap<>());
+        }
+        modelView.setTurn(turnMessage);
         refresh();
     }
     public synchronized void visit(WinMessage winMessage) {
@@ -79,7 +94,7 @@ public abstract class View extends Observable<JsonObject> {
         System.out.println(startMessage);
         modelView.setMyId(startMessage.getId(modelView.getNickname()));
         startPrint();
-        getModelView().setCurrentCharacter(null);
+        getModelView().setCurrentCharacter(Optional.empty());
         startGame();
     }
 

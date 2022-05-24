@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client.cli;
 
+import java.util.Optional;
+
 /**
  * The interface Cli builder.
  */
@@ -23,7 +25,7 @@ public interface CliBuilder {
      * Create a CliEntity that represents all the active characters
      * @param usedCharacter
      */
-    void setCharacter(Integer usedCharacter);
+    void setCharacter(Optional<Integer> usedCharacter);
 
     /**
      * Create a CliEntity that represents all the clouds

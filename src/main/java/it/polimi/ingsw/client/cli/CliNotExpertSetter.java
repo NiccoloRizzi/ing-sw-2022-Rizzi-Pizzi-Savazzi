@@ -6,6 +6,7 @@ import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class CliNotExpertSetter implements CliBuilder{
 
@@ -52,7 +53,7 @@ public class CliNotExpertSetter implements CliBuilder{
     }
 
     @Override
-    public void setCharacter(Integer usedCharacter) {
+    public void setCharacter(Optional<Integer> usedCharacter) {
     }
 
     @Override
