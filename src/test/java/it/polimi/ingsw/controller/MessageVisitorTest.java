@@ -135,7 +135,7 @@ class MessageVisitorTest {
             mv.visit(acm);
         }
         for(int i=0; i<4;i++){
-            assertEquals(game.getGameModel().getPlayer(order.get(i)).getChosen().getValue()-1,i);
+            assertEquals(game.getGameModel().getPlayer(order.get(i)).getChosen().getValue(),i);
         }
     }
 

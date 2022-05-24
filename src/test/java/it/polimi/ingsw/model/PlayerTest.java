@@ -27,7 +27,7 @@ class PlayerTest {
         assertThrowsExactly(IndexOutOfBoundsException.class, ()->{p.getChosen();});
         p.setChoosenAssistant(param);
         assertNotNull(p.getChosen());
-        assertEquals(param+1, p.getChosen().getValue());
+        assertEquals(param, p.getChosen().getValue());
         assertEquals((param+2)/2, p.getChosen().getMn_moves());
     }
 
