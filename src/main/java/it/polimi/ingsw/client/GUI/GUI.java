@@ -1,32 +1,54 @@
 package it.polimi.ingsw.client.GUI;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.View;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
 
 public class GUI extends Application{
 
+    private Client client;
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        Client client = new Client(false);
-        loader.setLocation(getClass().getResource("/serverConnection.fxml"));
-        stage.setScene(new Scene(loader.load()));
+        FXMLLoader loader1 = new FXMLLoader();
+        client = new Client(false);
+        loader1.setLocation(getClass().getResource("/waitingServer.fxml"));
+        stage.setScene(new Scene(loader1.load()));
         stage.setTitle("Eryantis");
-        ViewGui view = loader.getController();
+        ViewGUI view = loader1.getController();
+        view.setStage(stage);
         client.setView(view);
-
         stage.show();
+        stage.setOnCloseRequest(event-> {event.consume();exit(stage);});
+
+        FXMLLoader loader2 = new FXMLLoader();
+        Stage connectionStage = new Stage();
+        loader2.setLocation(getClass().getResource("/serverConnection.fxml"));
+        connectionStage.setScene(new Scene(loader2.load()));
+        connectionStage.setTitle("connection to server");
+        connectionStage.alwaysOnTopProperty();
+        ((ConnectionController)loader2.getController()).setView(view);
+        connectionStage.initModality(Modality.APPLICATION_MODAL);
+        connectionStage.setOnCloseRequest(event-> {event.consume();exitConnection(connectionStage,stage);});
+        connectionStage.show();
+    }
+
+    public void exit(Stage stage){
+        client.close();
+        stage.close();
+    }
+
+    public void exitConnection(Stage stage1,Stage stage2){
+        client.close();
+        stage1.close();
+        stage2.close();
     }
 }

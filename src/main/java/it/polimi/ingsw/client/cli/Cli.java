@@ -70,6 +70,10 @@ public class Cli extends View {
         cliSetter = new CliSetter(getModelView());
         handleInput();
     }
+    @Override
+    public void startGame(){
+        refresh();
+    }
 
     public void startPrint(){
         printing = true;

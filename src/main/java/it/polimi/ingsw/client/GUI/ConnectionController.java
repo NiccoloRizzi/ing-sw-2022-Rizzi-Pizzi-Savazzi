@@ -12,7 +12,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ViewGui extends View {
+public class ConnectionController{
+    View view;
     @FXML
     TextField serverIP;
     @FXML
@@ -26,6 +27,10 @@ public class ViewGui extends View {
     @FXML
     CheckBox expert;
 
+    public void setView(View view)
+    {
+        this.view = view;
+    }
     public void connect(ActionEvent e) throws IOException
     {
         String ip = serverIP.getText();
@@ -33,7 +38,7 @@ public class ViewGui extends View {
         String port = serverPort.getText();
         System.out.println(port);
 
-        notifyConnection(ip,Integer.parseInt(port));
+        view.notifyConnection(ip,Integer.parseInt(port));
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/playerInfo.fxml"));
         loader.setController(this);
         Parent root = loader.load();
@@ -54,14 +59,7 @@ public class ViewGui extends View {
         System.out.println(nick);
         System.out.println(numOfplayers);
         System.out.println(mode);
-        sendPlayerInfo(nick,numOfplayers,mode);
-    }
-    @Override
-    public void start() {
-
-    }
-
-    @Override
-    public void refresh() {
+        view.sendPlayerInfo(nick,numOfplayers,mode);
+        ((Stage)((Node)e.getSource()).getScene().getWindow()).close();
     }
 }
