@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -21,11 +22,14 @@ public class GUI extends Application{
     public void start(Stage stage) throws IOException {
         FXMLLoader loader1 = new FXMLLoader();
         client = new Client(false);
-        loader1.setLocation(getClass().getResource("/waitingServer.fxml"));
-        stage.setScene(new Scene(loader1.load()));
+        loader1.setLocation(getClass().getResource("/gameView.fxml"));
         stage.setTitle("Eryantis");
+        stage.setMaximized(true);
         stage.setFullScreen(true);
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/images\\Moneta_base.png")));
+        stage.setScene(new Scene(loader1.load()));
+        System.out.println(stage.getHeight());
+        System.out.println(stage.getWidth());
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/images\\logo.png")));
         ViewGUI view = loader1.getController();
         view.setStage(stage);
         client.setView(view);
@@ -35,9 +39,11 @@ public class GUI extends Application{
         FXMLLoader loader2 = new FXMLLoader();
         Stage connectionStage = new Stage();
         loader2.setLocation(getClass().getResource("/serverConnection.fxml"));
-        connectionStage.setScene(new Scene(loader2.load()));
+        Scene scene = new Scene(loader2.load());
+        ((VBox)scene.getRoot()).setBackground(new Background(new BackgroundImage(new Image("/images\\background1.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+        connectionStage.setScene(scene);
         connectionStage.setTitle("connection to server");
-        connectionStage.getIcons().add(new Image(getClass().getResourceAsStream("/images\\Moneta_base.png")));
+        connectionStage.getIcons().add(new Image(getClass().getResourceAsStream("/images\\logo.png")));
         connectionStage.alwaysOnTopProperty();
         ((ConnectionController)loader2.getController()).setView(view);
         connectionStage.initModality(Modality.APPLICATION_MODAL);
