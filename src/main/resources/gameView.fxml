@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -12,174 +13,480 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="320.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="320.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="200.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="200.0" vgrow="SOMETIMES" />
-  </rowConstraints>
+<AnchorPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.GUI.ViewGUI">
    <children>
-      <HBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="800.0" spacing="15.0" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+      <GridPane alignment="CENTER" gridLinesVisible="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="160.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="160.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="160.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="160.0" vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
-            <ImageView fitHeight="200.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-               <image>
-                  <Image url="@images/Assistente%20(1).png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="200.0" fitWidth="697.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/PLANCIA%20GIOCO_2.png" />
-               </image>
-            </ImageView>
-            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="100.0">
+            <HBox fx:id="player1" alignment="CENTER" maxHeight="-Infinity" prefHeight="210.0" spacing="15.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <children>
-                  <Label layoutX="5.0" layoutY="14.0" prefWidth="90.0" text="NickName" textAlignment="CENTER">
+                  <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="150.0">
+                     <children>
+                        <ImageView fitHeight="124.0" fitWidth="81.0" layoutX="35.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/Moneta_base.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="53.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1.0" prefWidth="150.0" text="1" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="30.0" />
+                           </font>
+                        </Label>
+                        <Button layoutX="1.0" layoutY="121.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Choose Assistant" />
+                        <Label fx:id="nickname1" alignment="CENTER" contentDisplay="CENTER" layoutY="14.0" prefWidth="150.0" text="NickName" textAlignment="CENTER">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Pane>
+                  <Pane fx:id="ChosenAssistant1" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="120.0">
+                     <HBox.margin>
+                        <Insets bottom="10.0" />
+                     </HBox.margin>
+                  </Pane>
+                  <Pane fx:id="board1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="347.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="150.0" prefWidth="347.0" snapToPixel="false">
+                           <children>
+                              <GridPane fx:id="entrance1" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="55.0" snapToPixel="false">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="9.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="19.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                  <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                  <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="18.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                              </GridPane>
+                              <GridPane fx:id="tables1" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="209.0" snapToPixel="false">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="11.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="17.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="15.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="4.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="19.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                  <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="18.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                              </GridPane>
+                              <GridPane fx:id="towers1">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+                  <HBox fx:id="characters" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" visible="false" />
+               </children>
+            </HBox>
+            <HBox fx:id="player2" alignment="CENTER" maxHeight="-Infinity" prefHeight="210.0" spacing="15.0" visible="false" GridPane.columnIndex="1">
+               <children>
+                  <Pane fx:id="board2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="347.0" rotate="180.0">
+                     <children>
+                        <HBox fx:id="board11" alignment="CENTER" prefHeight="150.0" prefWidth="347.0" snapToPixel="false">
+                           <children>
+                              <GridPane fx:id="entrance11" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="55.0" snapToPixel="false">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="9.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="19.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="18.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                              <GridPane fx:id="tables11" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="209.0" snapToPixel="false">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="11.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="17.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="15.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="4.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="19.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="18.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                              <GridPane fx:id="towers11">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="ChosenAssistant2" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="120.0">
+                     <HBox.margin>
+                        <Insets bottom="10.0" />
+                     </HBox.margin>
+                  </Pane>
+                  <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="150.0">
+                     <children>
+                        <ImageView fitHeight="124.0" fitWidth="81.0" layoutX="35.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/Moneta_base.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="53.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1.0" prefWidth="150.0" text="1" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="30.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="nickname2" alignment="CENTER" contentDisplay="CENTER" layoutY="14.0" prefWidth="150.0" text="NickName" textAlignment="CENTER">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Pane>
+               </children>
+            </HBox>
+            <HBox fx:id="player3" alignment="CENTER" maxHeight="-Infinity" prefHeight="160.0" rotate="90.0" spacing="15.0" translateX="-220.0" visible="false" GridPane.rowIndex="1">
+               <children>
+                  <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="110.0" prefWidth="100.0" rotate="-90.0">
+                     <children>
+                        <ImageView fitHeight="124.0" fitWidth="81.0" layoutX="10.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/Moneta_base.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="53.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1.0" prefWidth="100.0" text="1" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="30.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="nickname3" alignment="CENTER" contentDisplay="CENTER" layoutY="14.0" prefWidth="100.0" text="NickName" textAlignment="CENTER">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Pane>
+                  <Pane fx:id="ChosenAssistant3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="120.0">
+                     <HBox.margin>
+                        <Insets bottom="10.0" />
+                     </HBox.margin>
+                  </Pane>
+                  <Pane fx:id="board3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="347.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="150.0" prefWidth="347.0" snapToPixel="false">
+                           <children>
+                              <GridPane fx:id="entrance12" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="55.0" snapToPixel="false">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="9.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="19.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="18.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                              <GridPane fx:id="tables12" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="209.0" snapToPixel="false">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="11.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="17.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="15.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="4.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="19.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="18.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                              <GridPane fx:id="towers12">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+               </children>
+            </HBox>
+            <HBox fx:id="player4" alignment="CENTER" maxHeight="-Infinity" prefHeight="160.0" rotate="-90.0" spacing="15.0" translateX="-220.0" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <children>
+                  <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="100.0" rotate="90.0">
+                     <children>
+                        <ImageView fitHeight="124.0" fitWidth="81.0" layoutX="10.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/Moneta_base.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="53.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1.0" prefWidth="100.0" text="1" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="30.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="nickname4" alignment="CENTER" contentDisplay="CENTER" layoutY="14.0" prefWidth="100.0" text="NickName" textAlignment="CENTER">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Pane>
+                  <Pane fx:id="ChosenAssistant4" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="120.0">
+                     <HBox.margin>
+                        <Insets bottom="10.0" />
+                     </HBox.margin>
+                  </Pane>
+                  <Pane fx:id="board4" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="347.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="150.0" prefWidth="347.0" snapToPixel="false">
+                           <children>
+                              <GridPane fx:id="entrance13" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="55.0" snapToPixel="false">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="9.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="19.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="18.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                              <GridPane fx:id="tables13" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="209.0" snapToPixel="false">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="11.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="17.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="15.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="4.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="19.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="13.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="18.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                              <GridPane fx:id="towers13">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+               </children>
+            </HBox>
+            <AnchorPane fx:id="center" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <Label fx:id="waiting" alignment="CENTER" layoutX="495.0" layoutY="343.0" text="Waiting for  other players ..." textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <ImageView fitHeight="124.0" fitWidth="81.0" layoutX="9.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/Moneta_base.png" />
-                     </image>
-                  </ImageView>
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutY="78.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1.0" prefWidth="100.0" text="1" textAlignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="30.0" />
+                        <Font size="50.0" />
                      </font>
                   </Label>
                </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </Pane>
+            </AnchorPane>
          </children>
-      </HBox>
-      <Button mnemonicParsing="false" prefHeight="51.0" prefWidth="200.0" text="Choose Assistant" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
-      <HBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="800.0" spacing="15.0">
-         <children>
-            <ImageView fitHeight="200.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-               <image>
-                  <Image url="@images/Assistente%20(1).png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="200.0" fitWidth="697.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/PLANCIA%20GIOCO_2.png" />
-               </image>
-            </ImageView>
-            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Label layoutX="5.0" layoutY="14.0" prefWidth="90.0" text="NickName" textAlignment="CENTER">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <ImageView fitHeight="124.0" fitWidth="81.0" layoutX="9.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/Moneta_base.png" />
-                     </image>
-                  </ImageView>
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutY="78.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1.0" prefWidth="100.0" text="1" textAlignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="30.0" />
-                     </font>
-                  </Label>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </Pane>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="800.0" spacing="15.0" GridPane.columnIndex="2">
-         <children>
-            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Label layoutX="5.0" layoutY="14.0" prefWidth="90.0" text="NickName" textAlignment="CENTER">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <ImageView fitHeight="124.0" fitWidth="81.0" layoutX="9.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/Moneta_base.png" />
-                     </image>
-                  </ImageView>
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutY="78.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1.0" prefWidth="100.0" text="1" textAlignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="30.0" />
-                     </font>
-                  </Label>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </Pane>
-            <ImageView fitHeight="200.0" fitWidth="697.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/PLANCIA%20GIOCO_2.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="200.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-               <image>
-                  <Image url="@images/Assistente%20(1).png" />
-               </image>
-            </ImageView>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="800.0" spacing="15.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
-         <children>
-            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Label layoutX="5.0" layoutY="14.0" prefWidth="90.0" text="NickName" textAlignment="CENTER">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <ImageView fitHeight="124.0" fitWidth="81.0" layoutX="9.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/Moneta_base.png" />
-                     </image>
-                  </ImageView>
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutY="78.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1.0" prefWidth="100.0" text="1" textAlignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="30.0" />
-                     </font>
-                  </Label>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </Pane>
-            <ImageView fitHeight="200.0" fitWidth="697.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/PLANCIA%20GIOCO_2.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="200.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-               <image>
-                  <Image url="@images/Assistente%20(1).png" />
-               </image>
-            </ImageView>
-         </children>
-      </HBox>
+      </GridPane>
    </children>
-</GridPane>
+</AnchorPane>

@@ -8,13 +8,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="25.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.GUI.ConnectionController">
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="600.0" spacing="25.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.GUI.ConnectionController">
    <children>
       <Label alignment="CENTER" text="Server Connection" textFill="#130d8c">
          <font>
             <Font name="Comic Sans MS" size="50.0" />
          </font>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </Label>
       <HBox alignment="CENTER" prefWidth="200.0">
          <children>
