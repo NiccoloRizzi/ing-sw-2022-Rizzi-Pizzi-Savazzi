@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 
 public class Cli extends View {
+
     private final static Scanner scanner = new Scanner(System.in);
     private CliBuilder cliBuilder;
     private boolean printing = false;
@@ -77,54 +78,58 @@ public class Cli extends View {
     }
     public void handleInput(){
         String []command;
-        while(true){
+        while(getModelView().getWin() == null){
             int param;
             command = scanner.nextLine().split(" ",5);
-            try {
-                switch (command[0]) {
-                    case "help":
-                        System.out.println("Comandi:\n" +
-                                "moveStudent colour index: sposta lo studente del colore \"colour\" all'isola 'index'.");
-                        break;
-                    case "assistant":
-                        try {
-                            super.ChooseAssistant(Integer.parseInt(command[1]));
-                        } catch (NumberFormatException e) {
-                            System.out.println("Devi inserire un numero!");
-                        }
-                        break;
-                    case "mvtotable":
-                        if (command.length == 2)
-                            MoveToTable(Colour.values()[Integer.parseInt(command[1])]);
-                        break;
-                    case "mvtoisle":
-                        if (command.length == 3)
-                            MoveToIsle(Colour.values()[Integer.parseInt(command[1])], Integer.parseInt(command[2]) - 1);
-                        break;
-                    case "cloud":
-                        if (command.length == 2)
-                            ChooseCloud(Integer.parseInt(command[1]) - 1);
-                        break;
-                    case "movemn":
-                        if (command.length == 2)
-                            MoveMotherNature(Integer.parseInt(command[1]));
-                        break;
-                    case "colours":
-                        System.out.println("0: Red (Dragons)\n1: Violet (Fairies)\n2: Green (Frogs)\n3: Yellow (Gnomes)\n4: Blue (Unicorns)");
-                        break;
-                    case "usecharacter":
-                        handleCharacter(command);
-                        break;
-                    default:
-                        System.out.println("Comando errato");
-                        break;
-                }
+            if(getModelView().getWin() == null){
+                try {
+                    switch (command[0]) {
+                        case "help":
+                            System.out.println("Comandi:\n" +
+                                    "moveStudent colour index: sposta lo studente del colore \"colour\" all'isola 'index'.");
+                            break;
+                        case "assistant":
+                            try {
+                                super.ChooseAssistant(Integer.parseInt(command[1]));
+                            } catch (NumberFormatException e) {
+                                System.out.println("Devi inserire un numero!");
+                            }
+                            break;
+                        case "mvtotable":
+                            if (command.length == 2)
+                                MoveToTable(Colour.values()[Integer.parseInt(command[1])]);
+                            break;
+                        case "mvtoisle":
+                            if (command.length == 3)
+                                MoveToIsle(Colour.values()[Integer.parseInt(command[1])], Integer.parseInt(command[2]) - 1);
+                            break;
+                        case "cloud":
+                            if (command.length == 2)
+                                ChooseCloud(Integer.parseInt(command[1]) - 1);
+                            break;
+                        case "movemn":
+                            if (command.length == 2)
+                                MoveMotherNature(Integer.parseInt(command[1]));
+                            break;
+                        case "colours":
+                            System.out.println("0: Red (Dragons)\n1: Violet (Fairies)\n2: Green (Frogs)\n3: Yellow (Gnomes)\n4: Blue (Unicorns)");
+                            break;
+                        case "usecharacter":
+                            handleCharacter(command);
+                            break;
+                        default:
+                            System.out.println("Comando errato");
+                            break;
+                    }
                 }catch(Exception e){
                     System.out.println("Errore nella formattazione del comando.");
                 }
 
+            }else{
+                System.out.println("Premi qualsiasi per chiudere");
             }
         }
+    }
 
 
     public void handleCharacter(String []command) throws Exception{

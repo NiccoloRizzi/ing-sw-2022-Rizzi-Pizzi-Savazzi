@@ -19,7 +19,6 @@ public abstract class View extends Observable<JsonObject> {
 
     private ModelView modelView;
     static Gson gson = new Gson();
-
     public ModelView getModelView() {
         return modelView;
     }
@@ -88,7 +87,12 @@ public abstract class View extends Observable<JsonObject> {
         refresh();
     }
     public synchronized void visit(WinMessage winMessage) {
-
+        System.out.println(winMessage.serialize());
+        modelView.setWin(winMessage);
+        refresh();
+        WinDisconnection winDisconnection = new WinDisconnection(modelView.getMyId());
+        notifyClient(MessageSerializer.serialize(winDisconnection));
+        notifyDisconnection();
     }
     public synchronized void visit(StartMessage startMessage){
         System.out.println(startMessage);
@@ -188,6 +192,13 @@ public abstract class View extends Observable<JsonObject> {
         jo.addProperty("command","connect");
         notify(jo);
     }
+    public void notifyDisconnection(){
+        JsonObject jo = new JsonObject();
+        jo.addProperty("command","disconnect");
+        notify(jo);
+    }
+
+
 
     public abstract void start();
     public abstract void startGame();

@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.ModelView;
 import it.polimi.ingsw.clientModels.*;
 import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
+import it.polimi.ingsw.clientModels.Answers.WinMessage;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -133,6 +134,18 @@ public class CliNotExpertSetter implements CliBuilder{
         }
     }
 
+    @Override
+    public void setWin() {
+        WinMessage winMessage = modelView.getWin();
+        CliEntity win;
+        if(winMessage.isDraw()){
+            win = new CliEntities.CliString("E' un pareggio!!!");
+        }else{
+            win = new CliEntities.CliString(modelView.getPlayers()[winMessage.getId()].getNickname() + " ha vinto!!!");
+        }
+        cli.setWin(win);
+    }
+
     public void setAllCli(){
         setBoards(false);
         setAssistants();
@@ -141,6 +154,7 @@ public class CliNotExpertSetter implements CliBuilder{
         setTurn();
         setErrors();
         setOtherPlayersAss();
+        setWin();
     }
 
     @Override
@@ -152,7 +166,8 @@ public class CliNotExpertSetter implements CliBuilder{
                 .bottomStick(cli.getCharacters())
                 .rightStick(cli.getIsles())
                 .bottomStick(cli.getTurn())
-                .bottomStick(cli.getErrors()));
+                .bottomStick(cli.getErrors())
+                .bottomStick(cli.getWin()));
     }
 
     public CliModel getCli(){

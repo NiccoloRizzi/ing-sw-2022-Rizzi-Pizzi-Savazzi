@@ -57,6 +57,8 @@ public interface CliBuilder {
      */
     void setErrors();
 
+    void setWin();
+
     /**
      * Comprensive function that calls the sets functions that the concrete builder want to use
      */

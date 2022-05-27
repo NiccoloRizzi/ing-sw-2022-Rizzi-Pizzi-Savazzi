@@ -12,6 +12,7 @@ public class CliModel {
     CliEntity otherPlayerAss;
     CliEntity turn;
     CliEntity errors;
+    CliEntity win;
     CliEntity fullCli;
 
     /**
@@ -27,6 +28,7 @@ public class CliModel {
         errors = new CliEntity();
         fullCli = new CliEntity();
         otherPlayerAss = new CliEntity();
+        win = new CliEntity();
     }
 
     /**
@@ -101,6 +103,10 @@ public class CliModel {
 
     public void setErrors(CliEntity errors) {
         this.errors = errors;
+    }
+
+    public void setWin(CliEntity win) {
+        this.win = win;
     }
 
     /**
@@ -182,6 +188,10 @@ public class CliModel {
      */
     public CliEntity getErrors() {
         return errors;
+    }
+
+    public CliEntity getWin() {
+        return win;
     }
 
     /**
