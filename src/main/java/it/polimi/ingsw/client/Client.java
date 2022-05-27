@@ -29,11 +29,8 @@ public class Client implements Observer<JsonObject>{
         in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream());
         isActive = true;
-        try {
-            run();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+        // Run();
+        readFromSocket();
     }
 
 
@@ -74,24 +71,27 @@ public class Client implements Observer<JsonObject>{
     public int getPlayersNumber(){
         return playersNumber;
     }
-    public Thread readFromSocket(){
+
+    public void readFromSocket(){
         Thread t = new Thread(() -> {
             while (isActive) {
-                String read = in.nextLine();
-                JsonObject jo = gson.fromJson(read,JsonObject.class);
-                if(jo.get("type").getAsString().equals("ping")){
-                    JsonObject answer = new JsonObject();
-                    answer.addProperty("type","pong");
-                    writeToSocket(answer.toString());
-                }
-                else {
-                    ClientModel model = ClientModelDeSerializer.deserialize(read);
-                    model.accept(view);
+                if(in.hasNext()){
+                    String read = in.nextLine();
+                    JsonObject jo = gson.fromJson(read,JsonObject.class);
+                    if(jo.get("type").getAsString().equals("ping")){
+                        JsonObject answer = new JsonObject();
+                        answer.addProperty("type","pong");
+                        writeToSocket(answer.toString());
+                    }
+                    else {
+                        System.out.println(read);
+                        ClientModel model = ClientModelDeSerializer.deserialize(read);
+                        model.accept(view);
+                    }
                 }
             }
         });
         t.start();
-        return t;
     }
 
     public boolean isExpert() {
@@ -112,18 +112,20 @@ public class Client implements Observer<JsonObject>{
         view.start();
     }
 
-    public void run() throws IOException {
-        try {
-            Thread readThread = readFromSocket();
-            readThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }finally {
-            socket.getInputStream().close();
-            socket.getOutputStream().close();
-            socket.close();
-        }
-    }
+//    public void run() throws IOException {
+//        try {
+//            Thread readThread = readFromSocket();
+//            readThread.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }finally {
+//            if(!socket.isClosed()){
+//                socket.getInputStream().close();
+//                socket.getOutputStream().close();
+//                socket.close();
+//            }
+//        }
+//    }
 
     public int getId() {
         return id;
@@ -140,25 +142,32 @@ public class Client implements Observer<JsonObject>{
         if(jo.get("command").getAsString().equals("message")){
             writeToSocket(command.toString());
         }
-        else if(jo.get("command").getAsString().equals("connect")){
-                new Thread ( () ->
-                {
-                    try {
-                        startConnection(jo.get("ip").getAsString(),jo.get("port").getAsInt());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
+        else {
+            if (jo.get("command").getAsString().equals("connect")) {
+                    new Thread(() ->
+                    {
+                        try {
+                            startConnection(jo.get("ip").getAsString(), jo.get("port").getAsInt());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
+            }
+            if(jo.get("command").getAsString().equals("disconnect")){
+                close();
+            }
         }
     }
 
     public void close()
     {
-        if(isActive) {
+        if(isActive && !socket.isClosed()) {
             isActive = false;
             in.close();
+            out.close();
             try {
                 socket.close();
+                System.out.println("Client closed");
             } catch (IOException e) {
                 e.printStackTrace();
             }

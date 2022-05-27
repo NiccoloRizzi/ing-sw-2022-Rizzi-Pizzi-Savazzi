@@ -1,7 +1,7 @@
 package it.polimi.ingsw.messages;
 
+import it.polimi.ingsw.client.MessageSerializer;
 import it.polimi.ingsw.controller.MessageVisitor;
-import it.polimi.ingsw.server.MoveSerializer;
 
 public class ProhibitedIsleCharacterMessage implements Message{
 
@@ -33,6 +33,6 @@ public class ProhibitedIsleCharacterMessage implements Message{
 
     @Override
     public String serialize(){
-        return MoveSerializer.serialize(this);
+        return MessageSerializer.serialize(this);
     }
 }

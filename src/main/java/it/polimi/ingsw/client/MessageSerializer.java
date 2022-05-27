@@ -105,4 +105,11 @@ public class MessageSerializer {
         jsonObject.addProperty("type","PlayerMessage");
         return jsonObject.toString();
     }
+
+    public static String serialize(WinDisconnection message){
+        String json = gson.toJson(message);
+        JsonObject jsonObject = gson.fromJson(json,JsonObject.class);
+        jsonObject.addProperty("type","WinDisconnection");
+        return jsonObject.toString();
+    }
 }

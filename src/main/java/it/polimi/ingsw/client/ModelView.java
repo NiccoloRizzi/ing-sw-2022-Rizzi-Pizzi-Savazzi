@@ -3,6 +3,7 @@ package it.polimi.ingsw.client;
 import it.polimi.ingsw.clientModels.*;
 import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
+import it.polimi.ingsw.clientModels.Answers.WinMessage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,7 @@ public class ModelView {
     private Map<ClientPlayer, Integer> otherPlayerAss;
     private ErrorMessage.ErrorType error;
     private TurnMessage turn;
+    private WinMessage win;
     private final String nickname;
     private int myId;
     private final boolean isExpert;
@@ -71,7 +73,13 @@ public class ModelView {
     public Map<ClientPlayer, Integer> getOtherPlayerAss() {
         return otherPlayerAss;
     }
+    public WinMessage getWin() {
+        return win;
+    }
 
+    public void setWin(WinMessage win) {
+        this.win = win;
+    }
     public void setGameModel(ClientGameModel gameModel) {
         this.gameModel = gameModel;
     }

@@ -5,12 +5,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.controller.MessageVisitor;
-import it.polimi.ingsw.exceptions.EmptyMessageException;
 import it.polimi.ingsw.messages.Message;
+import it.polimi.ingsw.messages.PlayerMessage;
+import it.polimi.ingsw.messages.WinDisconnection;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -108,26 +108,40 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
         String read;
         Scanner in;
         int i=0;
+        Gson gson = new Gson();
         try{
             in = new Scanner(socket.getInputStream());
             read = in.nextLine();
-            Gson gson = new Gson();
-            JsonObject message = gson.fromJson(read, JsonObject.class);
-            if(message.get("type").getAsString().equals("PlayerMessage")) {
-                nickname = message.get("nickname").getAsString();
-                numOfPlayers = message.get("playersNumber").getAsInt();
-                expertMode = message.get("expertMode").getAsBoolean();
+            try{
+                PlayerMessage playerMessage = MoveDeserializer.deserializePlayerMessage(read);
+                nickname = playerMessage.getNickname();
+                numOfPlayers = playerMessage.getPlayersNumber();
+                expertMode = playerMessage.isExpertMode();
                 server.addToLobby(this);
-                new Thread(()->connectionChecker()).start();
-            }
+                new Thread(this::connectionChecker).start();
+            }catch (IllegalArgumentException ignored){}
+//            Gson gson = new Gson();
+//            JsonObject message = gson.fromJson(read, JsonObject.class);
+//            if(message.get("type").getAsString().equals("PlayerMessage")) {
+//                nickname = message.get("nickname").getAsString();
+//                numOfPlayers = message.get("playersNumber").getAsInt();
+//                expertMode = message.get("expertMode").getAsBoolean();
+//                server.addToLobby(this);
+//                new Thread(()->connectionChecker()).start();
+//            }
             while(isActive()){
                 read = in.nextLine();
-                message = gson.fromJson(read,JsonObject.class);
+                JsonObject message = gson.fromJson(read,JsonObject.class);
                 if(message.get("type").getAsString().equals("pong")) {
                     verified = true;
                 }else if(lobby.isStarted()) {
-                    Message actionMessage = MoveSerializer.deserialize(read);
-                    actionMessage.accept(mv);
+                    Message actionMessage = MoveDeserializer.deserialize(read);
+                    if(actionMessage != null) {
+                        actionMessage.accept(mv);
+                    } else {
+                        WinDisconnection winDisconnection = MoveDeserializer.deserializeWinDisconnection(read);
+                        // TODO
+                    }
                 }
             }
             closeConnection();
