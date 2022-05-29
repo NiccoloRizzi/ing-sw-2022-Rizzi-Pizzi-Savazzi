@@ -1,25 +1,30 @@
 package it.polimi.ingsw.client.GUI;
 
 import it.polimi.ingsw.client.View;
+import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 import it.polimi.ingsw.clientModels.ClientBoard;
 import it.polimi.ingsw.model.CharactersEnum;
 import it.polimi.ingsw.model.Colour;
 import it.polimi.ingsw.model.Faction;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
-
-
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Random;
 
 import static java.lang.Math.*;
@@ -27,7 +32,7 @@ import static java.lang.Math.*;
 public class ViewGUI extends View {
     Stage stage;
     @FXML
-    Label nickname1,nickname2, nickname3,nickname4,money1,money2,money3,money4,waiting;
+    Label nickname1,nickname2, nickname3,nickname4,money1,money2,money3,money4,waiting,turn,phase;
     @FXML
     HBox player1,player2,player3,player4,characters;
     @FXML
@@ -43,6 +48,10 @@ public class ViewGUI extends View {
     ArrayList<Pane> character;
     ArrayList<Pane> students1,students2,students3,students4;
     Boolean started = false;
+    Popup assistant;
+    Optional<Pane> selectedStudent;
+    
+    int myID;
 
     int[] image;
     public void setStage(Stage stage) {
@@ -53,12 +62,14 @@ public class ViewGUI extends View {
     @Override
     public void startGame(){
         image = new Random().ints(0,3).limit(12).toArray();
+        myID=getModelView().getMyId();
         Platform.runLater(
                 () -> {
                     waiting.setVisible(false);
                 }
         );
         createPlayers();
+        createAssistant();
         started=true;
         refresh();
     }
@@ -69,6 +80,7 @@ public class ViewGUI extends View {
             refreshCharacters();
             refreshBoard();
             refreshPlayer();
+            refreshTurn();
             showTiles();
         }
     }
@@ -84,19 +96,19 @@ public class ViewGUI extends View {
                 board1.setBackground(new Background(new BackgroundImage(new Image("/images\\board.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
 
                 player2.setVisible(true);
-                nickname2.setText(getModelView().getPlayers()[(getModelView().getMyId() + 1) % getModelView().getPlayers().length].getNickname());
+                nickname2.setText(getModelView().getPlayers()[(myID + 1) % getModelView().getPlayers().length].getNickname());
                 nickname2.setVisible(true);
                 board2.setBackground(new Background(new BackgroundImage(new Image("/images\\board.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
 
                 if (getModelView().getPlayers().length >= 3) {
                     player3.setVisible(true);
-                    nickname3.setText(getModelView().getPlayers()[(getModelView().getMyId() + 2) % getModelView().getPlayers().length].getNickname());
+                    nickname3.setText(getModelView().getPlayers()[(myID + 2) % getModelView().getPlayers().length].getNickname());
                     board3.setBackground(new Background(new BackgroundImage(new Image("/images\\board.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                 }
 
                 if (getModelView().getPlayers().length == 4) {
                     player4.setVisible(true);
-                    nickname4.setText(getModelView().getPlayers()[(getModelView().getMyId() + 3) % getModelView().getPlayers().length].getNickname());
+                    nickname4.setText(getModelView().getPlayers()[(myID + 3) % getModelView().getPlayers().length].getNickname());
                     board4.setBackground(new Background(new BackgroundImage(new Image("/images\\board.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                 }
 
@@ -109,7 +121,7 @@ public class ViewGUI extends View {
     public void createBoards(){
         Pane pane;
         students1=new ArrayList<>();
-        System.out.println(entrance1.getRowCount());
+
         for(int i = 0; i< 9;i++) {
             pane = new Pane();
             pane.setPrefWidth(13);
@@ -188,6 +200,7 @@ public class ViewGUI extends View {
                         tile.setMinWidth(100);
                         tile.setMinHeight(100);
                         tile.setBackground(new Background(new BackgroundImage(new Image("/images\\isle"+image[i]+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        tile.setOnMouseClicked(mouseEvent -> {selectIsle(mouseEvent);});
                         isles.add(tile);
                         center.getChildren().add(isles.get(i));
                         isles.get(i).setLayoutX((center.getWidth()/2)+(center.getWidth()/3)*cos(rotation*i)-50);
@@ -218,27 +231,28 @@ public class ViewGUI extends View {
                         {
                             student = new StackPane();
                             student.setAlignment(Pos.CENTER);
-                            student.setMinHeight(20);
-                            student.setMinWidth(20);
-                            student.setPrefHeight(20);
-                            student.setPrefWidth(20);
-                            student.setMaxHeight(20);
-                            student.setMaxWidth(20);
+                            student.setMinHeight(40);
+                            student.setMinWidth(40);
+                            student.setPrefHeight(40);
+                            student.setPrefWidth(40);
+                            student.setMaxHeight(40);
+                            student.setMaxWidth(40);
                             student.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\tower_"+getModelView().getGameModel().getIsles().get(i).getControlling() +".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                             num = new Label(((Integer)getModelView().getGameModel().getIsles().get(i).getSize()).toString());
-                            num.setMaxHeight(20);
-                            num.setMaxWidth(20);
-                            num.setPrefHeight(20);
-                            num.setPrefWidth(20);
-                            num.setMinHeight(20);
-                            num.setMinWidth(20);
+                            num.setMaxHeight(36);
+                            num.setMaxWidth(36);
+                            num.setPrefHeight(36);
+                            num.setPrefWidth(36);
+                            num.setMinHeight(36);
+                            num.setMinWidth(36);
                             num.setFont(Font.font("System", FontWeight.BOLD, FontPosture.REGULAR,12.0));
+                            num.setTextFill((getModelView().getGameModel().getIsles().get(i).getControlling() == Faction.Black)? Paint.valueOf("white"):Paint.valueOf("white"));
                             student.getChildren().add(num);
                             num.setAlignment(Pos.CENTER);
                             num.setTextAlignment(TextAlignment.CENTER);
                             tile.getChildren().add(student);
-                            tile.setTopAnchor(student,50.0-10);
-                            tile.setRightAnchor(student,50.0-10);
+                            tile.setTopAnchor(student,50.0-18);
+                            tile.setRightAnchor(student,50.0-18);
                         }
                     }
                     student = new StackPane();
@@ -266,6 +280,7 @@ public class ViewGUI extends View {
                         clouds.get(i).setPrefHeight(80);
                         clouds.get(i).setMinWidth(80);
                         clouds.get(i).setMinHeight(80);
+                        clouds.get(i).setOnMouseClicked(mouseEvent -> {selectCloud(mouseEvent);});
                         center.getChildren().add(i,clouds.get(i));
                         clouds.get(i).setLayoutX((center.getWidth()/2)+(center.getHeight()/6)*cos(rotation*i)-40);
                         clouds.get(i).setLayoutY((center.getHeight()/2)+(center.getHeight()/6)*sin(rotation*i)-40);
@@ -330,6 +345,18 @@ public class ViewGUI extends View {
                 }
             }
         }
+    }
+
+    public void refreshTurn()
+    {
+        Platform.runLater(
+            ()-> {
+                turn.setText("Turn of " + getModelView().getPlayers()[getModelView().getTurn().getPlayerId()].getNickname());
+                phase.setText("Phase: " + getModelView().getTurn().getTurn().getTurnMsg());
+                turn.setVisible(true);
+                phase.setVisible(true);
+            }
+        );
     }
 
     public void refreshCharacters() {
@@ -406,19 +433,25 @@ public class ViewGUI extends View {
                 int j = 0;
                 for(ClientBoard b: getModelView().getBoards())
                 {
-                    if(b.getPlayerID() == getModelView().getMyId())
+                    if(b.getPlayerID() == myID)
                     {
                         board = b;
                     }
                 }
+                for(Pane p: students1)
+                {
+                    p.setBackground(null);
+                    p.setOnMouseClicked(null);
+                }
                 for(Colour c: Colour.values())
                 {
                     for(int i = 0; i < board.getEntrance().get(c);i++){
+                        students1.get(j).setUserData(c);
+                        students1.get(j).setOnMouseClicked(mouseEvent-> {selectEntranceStudent(mouseEvent);});
                         students1.get(j).setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_"+ c.toString()+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                         j++;
                     }
-                    System.out.println(entrance1.getRowCount());
-                }
+                 }
                 tables1.getChildren().clear();
                 for(Colour c: Colour.values()) {
                     for (int i = 0; i < board.getTables().get(c); i++) {
@@ -433,7 +466,7 @@ public class ViewGUI extends View {
 
                         tables1.add(pane, 1 + 2 * i, 1 + 2 * c.ordinal());
                     }
-                    if (getModelView().getGameModel().getProfessors().containsKey(c)&&getModelView().getGameModel().getProfessors().get(c) == getModelView().getMyId()) {
+                    if (getModelView().getGameModel().getProfessors().containsKey(c)&&getModelView().getGameModel().getProfessors().get(c) == myID) {
                         pane = new Pane();
                         pane.setMinHeight(13);
                         pane.setMinWidth(13);
@@ -446,7 +479,7 @@ public class ViewGUI extends View {
                     }
                 }
 
-                tables1.getChildren().clear();
+                towers1.getChildren().clear();
                 for(int i =0; i<board.getTowers();i++)
                 {
                     pane = new Pane();
@@ -466,7 +499,7 @@ public class ViewGUI extends View {
 
                 j = 0;
                 for (ClientBoard b : getModelView().getBoards()) {
-                    if (b.getPlayerID() == (getModelView().getMyId() + 1) % getModelView().getPlayers().length) {
+                    if (b.getPlayerID() == (myID + 1) % getModelView().getPlayers().length) {
                         board = b;
                     }
                 }
@@ -490,7 +523,7 @@ public class ViewGUI extends View {
 
                         tables2.add(pane, 1 + 2 * i, 1 + 2 * c.ordinal());
                     }
-                    if (getModelView().getGameModel().getProfessors().containsKey(c) && getModelView().getGameModel().getProfessors().get(c) == (getModelView().getMyId() + 1) % getModelView().getPlayers().length) {
+                    if (getModelView().getGameModel().getProfessors().containsKey(c) && getModelView().getGameModel().getProfessors().get(c) == (myID + 1) % getModelView().getPlayers().length) {
                         pane = new Pane();
                         pane.setMinHeight(13);
                         pane.setMinWidth(13);
@@ -503,7 +536,7 @@ public class ViewGUI extends View {
                     }
                 }
 
-                tables2.getChildren().clear();
+                towers2.getChildren().clear();
                 for(int i =0; i<board.getTowers();i++)
                 {
 
@@ -525,7 +558,7 @@ public class ViewGUI extends View {
                 if (getModelView().getPlayers().length >= 3) {
                     j = 0;
                     for (ClientBoard b : getModelView().getBoards()) {
-                        if (b.getPlayerID() == (getModelView().getMyId() + 1) % getModelView().getPlayers().length) {
+                        if (b.getPlayerID() == (myID + 1) % getModelView().getPlayers().length) {
                             board = b;
                         }
                     }
@@ -557,7 +590,7 @@ public class ViewGUI extends View {
 
                             tables3.add(pane, 1 + 2 * i, 1 + 2 * c.ordinal());
                         }
-                        if (getModelView().getGameModel().getProfessors().containsKey(c) && getModelView().getGameModel().getProfessors().get(c) == (getModelView().getMyId() + 2) % getModelView().getPlayers().length) {
+                        if (getModelView().getGameModel().getProfessors().containsKey(c) && getModelView().getGameModel().getProfessors().get(c) == (myID + 2) % getModelView().getPlayers().length) {
                             pane = new Pane();
                             pane.setMinHeight(13);
                             pane.setMinWidth(13);
@@ -570,7 +603,7 @@ public class ViewGUI extends View {
                         }
                     }
 
-                    tables3.getChildren().clear();
+                    towers3.getChildren().clear();
                     for(int i =0; i<board.getTowers();i++)
                     {
                         pane = new Pane();
@@ -591,7 +624,7 @@ public class ViewGUI extends View {
                 if (getModelView().getPlayers().length == 4) {
                     j = 0;
                     for (ClientBoard b : getModelView().getBoards()) {
-                        if (b.getPlayerID() == (getModelView().getMyId() + 1) % getModelView().getPlayers().length) {
+                        if (b.getPlayerID() == (myID + 1) % getModelView().getPlayers().length) {
                             board = b;
                         }
                     }
@@ -615,7 +648,7 @@ public class ViewGUI extends View {
 
                             tables4.add(pane, 1 + 2 * i, 1 + 2 * c.ordinal());
                         }
-                        if ( getModelView().getGameModel().getProfessors().containsKey(c) && getModelView().getGameModel().getProfessors().get(c) == (getModelView().getMyId() + 3) % getModelView().getPlayers().length) {
+                        if ( getModelView().getGameModel().getProfessors().containsKey(c) && getModelView().getGameModel().getProfessors().get(c) == (myID + 3) % getModelView().getPlayers().length) {
                             pane = new Pane();
                             pane.setMinHeight(13);
                             pane.setMinWidth(13);
@@ -628,7 +661,7 @@ public class ViewGUI extends View {
                         }
                     }
 
-                    tables4.getChildren().clear();
+                    towers4.getChildren().clear();
                     for(int i =0; i<board.getTowers();i++)
                     {
                         pane = new Pane();
@@ -653,39 +686,127 @@ public class ViewGUI extends View {
     public void refreshPlayer() {
         Platform.runLater(
             ()-> {
-                money1.setText(((Integer) getModelView().getPlayers()[getModelView().getMyId()].getCoins()).toString());
-                if (getModelView().getPlayers()[getModelView().getMyId()].getUsedAssistants().length > 0) {
-                    ChosenAssistant1.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\assistente"+getModelView().getPlayers()[getModelView().getMyId()].getUsedAssistants()[getModelView().getPlayers()[getModelView().getMyId()].getUsedAssistants().length-1]+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                money1.setText(((Integer) getModelView().getPlayers()[myID].getCoins()).toString());
+                if (getModelView().getPlayers()[myID].getUsedAssistants().length > 0) {
+                    ChosenAssistant1.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\assistente"+(getModelView().getPlayers()[myID].getUsedAssistants()[getModelView().getPlayers()[myID].getUsedAssistants().length-1]+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                 } else {
-                    ChosenAssistant1.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\mago"+(getModelView().getMyId()+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                    ChosenAssistant1.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\mago"+(myID+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                 }
 
-                money2.setText(((Integer) getModelView().getPlayers()[(getModelView().getMyId() + 1) % getModelView().getPlayers().length].getCoins()).toString());
-                if (getModelView().getPlayers()[(getModelView().getMyId() + 1) % getModelView().getPlayers().length].getUsedAssistants().length > 0) {
-                    ChosenAssistant2.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\assistente"+getModelView().getPlayers()[(getModelView().getMyId() + 1) % getModelView().getPlayers().length].getUsedAssistants()[getModelView().getPlayers()[(getModelView().getMyId() + 1) % getModelView().getPlayers().length].getUsedAssistants().length-1]+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                money2.setText(((Integer) getModelView().getPlayers()[(myID + 1) % getModelView().getPlayers().length].getCoins()).toString());
+                if (getModelView().getPlayers()[(myID + 1) % getModelView().getPlayers().length].getUsedAssistants().length > 0) {
+                    ChosenAssistant2.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\assistente"+(getModelView().getPlayers()[(myID + 1) % getModelView().getPlayers().length].getUsedAssistants()[getModelView().getPlayers()[(myID + 1) % getModelView().getPlayers().length].getUsedAssistants().length-1]+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                 } else {
-                    ChosenAssistant2.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\mago"+((getModelView().getMyId() + 1)%getModelView().getPlayers().length+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                    ChosenAssistant2.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\mago"+((myID + 1)%getModelView().getPlayers().length+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                 }
 
 
                 if (getModelView().getPlayers().length >= 3) {
-                    money3.setText(((Integer) getModelView().getPlayers()[(getModelView().getMyId() + 2) % getModelView().getPlayers().length].getCoins()).toString());
-                    if (getModelView().getPlayers()[(getModelView().getMyId() + 2) % getModelView().getPlayers().length].getUsedAssistants().length > 0) {
-                        ChosenAssistant3.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\assistente" + getModelView().getPlayers()[(getModelView().getMyId() + 2) % getModelView().getPlayers().length].getUsedAssistants()[getModelView().getPlayers()[(getModelView().getMyId() + 2) % getModelView().getPlayers().length].getUsedAssistants().length - 1] + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                    money3.setText(((Integer) getModelView().getPlayers()[(myID + 2) % getModelView().getPlayers().length].getCoins()).toString());
+                    if (getModelView().getPlayers()[(myID + 2) % getModelView().getPlayers().length].getUsedAssistants().length > 0) {
+                        ChosenAssistant3.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\assistente" + (getModelView().getPlayers()[(myID + 2) % getModelView().getPlayers().length].getUsedAssistants()[getModelView().getPlayers()[(myID + 2) % getModelView().getPlayers().length].getUsedAssistants().length - 1]+1)+ ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                     } else {
-                        ChosenAssistant3.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\mago" + ((getModelView().getMyId() + 2) % getModelView().getPlayers().length+1) + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        ChosenAssistant3.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\mago" + ((myID + 2) % getModelView().getPlayers().length+1) + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                     }
                 }
 
                 if (getModelView().getPlayers().length == 4) {
-                    money4.setText(((Integer) getModelView().getPlayers()[(getModelView().getMyId() + 3) % getModelView().getPlayers().length].getCoins()).toString());
-                    if (getModelView().getPlayers()[(getModelView().getMyId() + 3) % getModelView().getPlayers().length].getUsedAssistants().length > 0) {
-                        ChosenAssistant4.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\assistente"+getModelView().getPlayers()[(getModelView().getMyId() + 3) % getModelView().getPlayers().length].getUsedAssistants()[getModelView().getPlayers()[(getModelView().getMyId() + 3) % getModelView().getPlayers().length].getUsedAssistants().length-1]+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                    money4.setText(((Integer) getModelView().getPlayers()[(myID + 3) % getModelView().getPlayers().length].getCoins()).toString());
+                    if (getModelView().getPlayers()[(myID + 3) % getModelView().getPlayers().length].getUsedAssistants().length > 0) {
+                        ChosenAssistant4.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\assistente"+(getModelView().getPlayers()[(myID + 3) % getModelView().getPlayers().length].getUsedAssistants()[getModelView().getPlayers()[(myID + 3) % getModelView().getPlayers().length].getUsedAssistants().length-1]+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                     } else {
-                        ChosenAssistant4.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\mago"+((getModelView().getMyId() + 3) % getModelView().getPlayers().length+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        ChosenAssistant4.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\mago"+((myID + 3) % getModelView().getPlayers().length+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                     }
                 }
             }
         );
+    }
+
+    public void createAssistant()
+    {
+        Platform.runLater(
+            ()-> {
+                assistant = new Popup();
+                HBox box = new HBox();
+                box.setVisible(true);
+                box.setSpacing(10);
+                assistant.getContent().add(box);
+                assistant.setHeight(200);
+                assistant.setWidth(1000);
+                box.setAlignment(Pos.CENTER);
+//                assistant.setAnchorX(stage.getScene().getWidth()/ 2);
+//                assistant.setAnchorY(stage.getScene().getHeight()/ 2);
+                assistant.hide();
+            }
+        );
+    }
+
+    public void showAssistant(ActionEvent e)
+    {
+        HBox box = (HBox) assistant.getContent().get(0);
+        Pane pane;
+        box.getChildren().clear();
+        for(int i = 0; i<getModelView().getPlayers()[myID].getDeck().length;i++)
+        {
+            pane = new Pane();
+            pane.setMaxHeight(200);
+            pane.setMaxWidth(100);
+            pane.setPrefHeight(200);
+            pane.setMinHeight(150);
+            pane.setMinWidth(137);
+            pane.setVisible(true);
+            pane.setOnMouseClicked(mouseEvent ->{chooseAssistant(mouseEvent);});
+            pane.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\assistente"+(getModelView().getPlayers()[myID].getDeck()[i]+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+            box.getChildren().add(pane);
+        }
+        assistant.sizeToScene();
+        assistant.setX(stage.getScene().getWidth()/2 -(137+10)*getModelView().getPlayers()[myID].getDeck().length/2);
+        assistant.setY(stage.getScene().getHeight()/2 - assistant.getHeight());
+        assistant.show(stage);
+    }
+    public void chooseAssistant(MouseEvent e){
+        int chosen = ((HBox)assistant.getContent().get(0)).getChildren().indexOf((Pane)e.getSource())+1;
+        System.out.println(chosen);
+        ChooseAssistant(chosen);
+        assistant.hide();
+    }
+
+    public void selectEntranceStudent(MouseEvent e){
+        int sum = 0;
+        System.out.println("student");
+        selectedStudent = Optional.of((Pane)e.getSource());
+    }
+
+    public void selectIsle(MouseEvent e)
+    {
+        System.out.println("isle");
+        if(!selectedStudent.isEmpty()){
+            MoveToIsle(((Colour)selectedStudent.get().getUserData()),isles.indexOf((Pane)e.getSource()));
+            selectedStudent.get().setBackground(null);
+            selectedStudent.get().setOnMouseClicked(null);
+            selectedStudent = Optional.empty();
+        }
+        if(getModelView().getTurn().getTurn() == TurnMessage.Turn.ACTION_MN)
+        {
+            int moves = isles.indexOf((Pane)e.getSource())-getModelView().getGameModel().getMotherNature();
+            System.out.println(moves);
+            System.out.println((moves<0)?getModelView().getGameModel().getIsles().size()+moves:moves);
+            MoveMotherNature((moves<0)?getModelView().getGameModel().getIsles().size()-moves:moves);
+        }
+    }
+
+    public void selectTable(MouseEvent e)
+    {
+        System.out.println("table");
+        if(!selectedStudent.isEmpty()){
+            MoveToTable(((Colour)selectedStudent.get().getUserData()));
+            selectedStudent.get().setBackground(null);
+            selectedStudent.get().setOnMouseClicked(null);
+            selectedStudent = Optional.empty();
+        }
+    }
+    public void selectCloud(MouseEvent e)
+    {
+        ChooseCloud(clouds.indexOf((Pane)e.getSource()));
     }
 }
