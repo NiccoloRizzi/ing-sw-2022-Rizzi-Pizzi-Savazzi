@@ -15,6 +15,7 @@ public class GUI extends Application{
 
     private Client client;
     public static void main(String[] args) {
+        System.setProperty("prism.allowhidpi", "false");
         launch(args);
     }
 
@@ -25,7 +26,7 @@ public class GUI extends Application{
         loader1.setLocation(getClass().getResource("/gameView.fxml"));
         stage.setTitle("Eryantis");
         stage.setMaximized(true);
-        stage.setFullScreen(true);
+        //stage.setFullScreen(true);
         stage.setScene(new Scene(loader1.load()));
         System.out.println(stage.getHeight());
         System.out.println(stage.getWidth());

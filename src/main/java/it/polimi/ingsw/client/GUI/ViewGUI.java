@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.GUI;
 
 import it.polimi.ingsw.client.View;
+import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 import it.polimi.ingsw.clientModels.ClientBoard;
 import it.polimi.ingsw.model.CharactersEnum;
@@ -8,8 +9,12 @@ import it.polimi.ingsw.model.Colour;
 import it.polimi.ingsw.model.Faction;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -23,6 +28,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
@@ -48,6 +55,7 @@ public class ViewGUI extends View {
     ArrayList<Pane> character;
     ArrayList<Pane> students1,students2,students3,students4;
     Boolean started = false;
+    Boolean ended = false;
     Popup assistant;
     Optional<Pane> selectedStudent;
     
@@ -82,6 +90,8 @@ public class ViewGUI extends View {
             refreshPlayer();
             refreshTurn();
             showTiles();
+            showErrors();
+            showWinner();
         }
     }
 
@@ -756,6 +766,7 @@ public class ViewGUI extends View {
             pane.setMinWidth(137);
             pane.setVisible(true);
             pane.setOnMouseClicked(mouseEvent ->{chooseAssistant(mouseEvent);});
+            pane.setUserData(getModelView().getPlayers()[myID].getDeck()[i]);
             pane.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\assistente"+(getModelView().getPlayers()[myID].getDeck()[i]+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
             box.getChildren().add(pane);
         }
@@ -765,9 +776,9 @@ public class ViewGUI extends View {
         assistant.show(stage);
     }
     public void chooseAssistant(MouseEvent e){
-        int chosen = ((HBox)assistant.getContent().get(0)).getChildren().indexOf((Pane)e.getSource())+1;
+        int chosen = (int)((Pane)e.getSource()).getUserData();
         System.out.println(chosen);
-        ChooseAssistant(chosen);
+        ChooseAssistant(chosen+1);
         assistant.hide();
     }
 
@@ -786,12 +797,12 @@ public class ViewGUI extends View {
             selectedStudent.get().setOnMouseClicked(null);
             selectedStudent = Optional.empty();
         }
-        if(getModelView().getTurn().getTurn() == TurnMessage.Turn.ACTION_MN)
+        else if(getModelView().getTurn().getTurn() == TurnMessage.Turn.ACTION_MN)
         {
             int moves = isles.indexOf((Pane)e.getSource())-getModelView().getGameModel().getMotherNature();
             System.out.println(moves);
             System.out.println((moves<0)?getModelView().getGameModel().getIsles().size()+moves:moves);
-            MoveMotherNature((moves<0)?getModelView().getGameModel().getIsles().size()-moves:moves);
+            MoveMotherNature((moves<0)?getModelView().getGameModel().getIsles().size()+moves:moves);
         }
     }
 
@@ -808,5 +819,56 @@ public class ViewGUI extends View {
     public void selectCloud(MouseEvent e)
     {
         ChooseCloud(clouds.indexOf((Pane)e.getSource()));
+    }
+
+    public void showErrors ()
+    {
+        Platform.runLater(
+            ()-> {
+                if (getModelView().getError() != null) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle(getModelView().getError().toString());
+                    alert.setContentText(getModelView().getError().getErrorMsg());
+                    alert.showAndWait();
+                    if(getModelView().getError() == ErrorMessage.ErrorType.PlayerDisconnected)
+                    {
+                        Event.fireEvent(stage,new WindowEvent(stage,WindowEvent.WINDOW_CLOSE_REQUEST));
+                    }
+                }
+            }
+        );
+    }
+    public void showWinner() {
+        Platform.runLater(
+            () -> {
+                if (getModelView().getWin() != null&&!ended) {
+                    Stage winStage = new Stage();
+                    StackPane pane = new StackPane();
+                    pane.setPrefHeight(200);
+                    pane.setPrefWidth(400);
+                    Label winner = new Label();
+                    if (getModelView().getWin().isDraw()) {
+                        winner.setText("Draw");
+                    } else {
+                        if (getModelView().getPlayers().length < 4) {
+                            winner.setText(getModelView().getPlayers()[getModelView().getWin().getId()].getNickname() + " has won!");
+                        } else {
+                            winner.setText(getModelView().getPlayers()[getModelView().getWin().getId()].getNickname() + " and " + getModelView().getPlayers()[(getModelView().getWin().getId() + 2) % 4].getNickname() + " have won!");
+                        }
+                    }
+                    pane.getChildren().add(winner);
+                    pane.setAlignment(winner,Pos.CENTER);
+                    Scene scene = new Scene(pane);
+                    winStage.setScene(scene);
+                    winStage.show();
+                    ended = true;
+                    winStage.setOnCloseRequest(windowEvent -> {
+                        windowEvent.consume();
+                        Event.fireEvent(stage, new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+                        winStage.close();
+                    });
+                }
+            }
+        );
     }
 }

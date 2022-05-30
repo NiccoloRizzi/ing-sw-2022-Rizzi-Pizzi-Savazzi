@@ -147,8 +147,11 @@ public class Player extends Observable<ClientModel> {
 
     public boolean hasUsed(int assistantId){
         for(Assistant a: usedCards){
-            if(a.getValue()==assistantId+1)
+            if(a.getValue()==assistantId) {
+                System.out.println(a.getValue());
+                System.out.println(assistantId + 1);
                 return true;
+            }
         }
         return false;
     }

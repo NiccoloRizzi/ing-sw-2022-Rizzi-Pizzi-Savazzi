@@ -75,7 +75,7 @@
                   </Pane>
                   <Pane fx:id="ChosenAssistant1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="103.0">
                      <HBox.margin>
-                        <Insets bottom="10.0" />
+                        <Insets />
                      </HBox.margin>
                   </Pane>
                   <Pane fx:id="board1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="347.0">
@@ -257,7 +257,7 @@
                   </Pane>
                   <Pane fx:id="ChosenAssistant2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="103.0">
                      <HBox.margin>
-                        <Insets bottom="10.0" />
+                        <Insets />
                      </HBox.margin>
                   </Pane>
                   <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="150.0">
@@ -310,7 +310,7 @@
                   </Pane>
                   <Pane fx:id="ChosenAssistant3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="103.0">
                      <HBox.margin>
-                        <Insets bottom="10.0" />
+                        <Insets />
                      </HBox.margin>
                   </Pane>
                   <Pane fx:id="board3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="347.0">
@@ -427,7 +427,7 @@
                   </Pane>
                   <Pane fx:id="ChosenAssistant4" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="103.0">
                      <HBox.margin>
-                        <Insets bottom="10.0" />
+                        <Insets />
                      </HBox.margin>
                   </Pane>
                   <Pane fx:id="board4" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="347.0">
