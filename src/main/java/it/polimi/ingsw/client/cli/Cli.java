@@ -91,7 +91,7 @@ public class Cli extends View {
                     MoveToTable(Colour.values()[Integer.parseInt(command.split(" ")[1])]);
                 else if(command.matches("mvtoisle "+"[0-4] "+"(1?[0-2]|[0-9])")) {
                     Colour colour = Colour.values()[Integer.parseInt(command.split(" ")[1])];
-                    int isleid = Integer.parseInt(command.split(" ")[2]);
+                    int isleid = Integer.parseInt(command.split(" ")[2])-1;
                     MoveToIsle(colour,isleid);
                 }
                 else if(command.matches("cloud "+"[0-4]")) {
@@ -213,6 +213,8 @@ public class Cli extends View {
         }
 
     public void refresh(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
         if(printing){
             cliBuilder.setAllCli();
         }else{
