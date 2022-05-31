@@ -41,7 +41,7 @@ public class ActionTurnHandler extends Observable<ClientModel> {
     public void moveMn(int moves){
         Assistant a = gameModel.getPlayers().get(currentPlayer).getChosen();
 
-        if(moves<=a.getMn_moves()+a.getBoost() && moves>=0){
+        if(moves<=a.getMn_moves()+a.getBoost() && moves>0){
             gameModel.moveMN(moves);
             checkTower(gameModel.getMotherNature());
             checkIsleJoin(gameModel.getMotherNature());

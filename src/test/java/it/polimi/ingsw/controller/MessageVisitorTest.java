@@ -19,6 +19,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -180,7 +181,8 @@ class MessageVisitorTest {
         Random rand = new Random();
         int playerId = game.getCurrentPlayer();
         int mn = game.getGameModel().getMotherNature();
-        int moves = rand.nextInt(game.getGameModel().getPlayer(playerId).getChosen().getMn_moves());
+        int maxmoves  = game.getGameModel().getPlayer(playerId).getChosen().getMn_moves();
+        int moves = ThreadLocalRandom.current().nextInt(1, maxmoves + 1);
         MoveMotherNatureMessage mmn = new MoveMotherNatureMessage(playerId, moves);
         mv.visit(mmn);
         assertEquals((mn + moves) % game.getGameModel().getIsles().size(), game.getGameModel().getMotherNature());

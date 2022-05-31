@@ -46,21 +46,22 @@ public class MessageVisitor extends Observable<ClientModel> {
             Player player = players.get(playerID);
             int id = assistantChoiceMessage.getAssistantID();
             if(!player.hasUsed(id)) {
-                if (player.getDeck().size() > 1) {
-                    if(game.alreadyUsed(id)){
+                    if(game.alreadyUsed(id) && player.getDeck().size()>1){
                         notify(new ErrorMessage(game.getCurrentPlayer(),ErrorMessage.ErrorType.AssistantOtherPlayerError));
                     }
                     else{
                         player.setChoosenAssistant(id);
                         game.nextPlayer();
                     }
-                }
-            } else{
+            }
+            else{
                 notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.AssistantAlreadyChosenError));
             }
+
         }else{
             notify(new ErrorMessage(assistantChoiceMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
         }
+
     }
     public void visit(MoveStudentMessage moveStudentMessage){
             int playerID = moveStudentMessage.getPlayerID();
@@ -97,7 +98,6 @@ public class MessageVisitor extends Observable<ClientModel> {
     }
     public void visit(IsleInfluenceCharacterMessage isleInfluenceCharacterMessage) {
         String answer;
-        System.out.println("visit");
         int playerId = isleInfluenceCharacterMessage.getPlayerID();
         int charId = isleInfluenceCharacterMessage.getCharacterID();
         Colour noColor = isleInfluenceCharacterMessage.getNoColour();
@@ -397,10 +397,12 @@ public class MessageVisitor extends Observable<ClientModel> {
                 if(!game.getTurnHandler().isUsedCharacter()) {
                     if (game.getGameModel().getPlayer(game.getCurrentPlayer()).getCoins() >= game.getGameModel().getCharacter(remove3StudCharacterMessage.getCharacterID()).getPrice()) {
                         for (Player p : game.getGameModel().getPlayers()) {
-                            for (int i = 0; i < 3; i++) {
+                            int removed = Math.min(3,p.getBoard().getTable(remove3StudCharacterMessage.getColour()));
+                            for (int i = 0; i < removed; i++) {
                                 try {
                                     p.getBoard().removeFromTable(remove3StudCharacterMessage.getColour());
-                                } catch (StudentsOutOfBoundsException ignored) {
+                                } catch (StudentsOutOfBoundsException e) {
+                                    e.printStackTrace();
                                 }
                             }
                         }
