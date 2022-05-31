@@ -15,7 +15,7 @@ public class GUI extends Application{
 
     private Client client;
     public static void main(String[] args) {
-        System.setProperty("prism.allowhidpi", "false");
+        //System.setProperty("prism.allowhidpi", "false");
         launch(args);
     }
 
@@ -27,7 +27,9 @@ public class GUI extends Application{
         stage.setTitle("Eryantis");
         stage.setMaximized(true);
         //stage.setFullScreen(true);
-        stage.setScene(new Scene(loader1.load()));
+        AnchorPane root = loader1.load();
+        root.setBackground(new Background(new BackgroundImage(new Image("/images\\background.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+        stage.setScene(new Scene(root));
         System.out.println(stage.getHeight());
         System.out.println(stage.getWidth());
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/images\\logo.png")));
@@ -53,12 +55,12 @@ public class GUI extends Application{
     }
 
     public void exit(Stage stage){
-        client.close();
+        new Thread(()->{client.close();}).start();
         stage.close();
     }
 
     public void exitConnection(Stage stage1,Stage stage2){
-        client.close();
+        new Thread(()->{client.close();}).start();
         stage1.close();
         stage2.close();
     }

@@ -18,6 +18,7 @@ public class noTowersStrategy implements influenceStrategy{
 //                }
 //            }
 //        }
+        System.out.println(p.getNickname()+"  "+influence);
        return influence;
     }
 

@@ -131,6 +131,7 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
 //            }
             while(isActive()){
                 read = in.nextLine();
+                System.out.println(read);
                 JsonObject message = gson.fromJson(read,JsonObject.class);
                 if(message.get("type").getAsString().equals("pong")) {
                     verified = true;

@@ -110,7 +110,7 @@ public class IsleTest extends TestCase {
     @Test
     public void testGetInfluencePlusInf() {
         Isle isle = new Isle(0);
-        isle.setInfStrategy(new PlusInfStrategy());
+        isle.setInfStrategy(new PlusInfStrategy(1));
         isle.setTower(Faction.Black);
         HashMap<Colour,Integer> s = new HashMap<Colour,Integer>();
         int[] numStudent = {1,2,3,4,5};

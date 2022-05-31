@@ -25,7 +25,7 @@ public class MessageSerializer {
     public static String serialize(IsleInfluenceCharacterMessage message){
         String json = gson.toJson(message);
         JsonObject jsonObject = gson.fromJson(json,JsonObject.class);
-        jsonObject.addProperty("type","IsleInfluenceMessage");
+        jsonObject.addProperty("type","IsleInfluenceCharacterMessage");
         return jsonObject.toString();
     }
 

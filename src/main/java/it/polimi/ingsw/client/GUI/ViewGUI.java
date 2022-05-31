@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -26,10 +27,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
@@ -56,8 +59,10 @@ public class ViewGUI extends View {
     ArrayList<Pane> students1,students2,students3,students4;
     Boolean started = false;
     Boolean ended = false;
-    Popup assistant;
+    Boolean error = false;
+    Popup assistant,colourPopup;
     Optional<Pane> selectedStudent;
+    Optional<Integer> charIndex;
     
     int myID;
 
@@ -70,6 +75,8 @@ public class ViewGUI extends View {
     @Override
     public void startGame(){
         image = new Random().ints(0,3).limit(12).toArray();
+        selectedStudent = Optional.empty();
+        charIndex =Optional.empty();
         myID=getModelView().getMyId();
         Platform.runLater(
                 () -> {
@@ -85,14 +92,15 @@ public class ViewGUI extends View {
     @Override
     public void refresh() {
         if(started) {
-            refreshCharacters();
+            if(getModelView().isExpert())
+                refreshCharacters();
             refreshBoard();
             refreshPlayer();
             refreshTurn();
             showTiles();
-            showErrors();
             showWinner();
         }
+        showErrors();
     }
 
 
@@ -122,7 +130,8 @@ public class ViewGUI extends View {
                     board4.setBackground(new Background(new BackgroundImage(new Image("/images\\board.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                 }
 
-                createCharacters();
+                if(getModelView().isExpert())
+                    createCharacters();
                 createBoards();
             }
         );
@@ -256,7 +265,7 @@ public class ViewGUI extends View {
                             num.setMinHeight(36);
                             num.setMinWidth(36);
                             num.setFont(Font.font("System", FontWeight.BOLD, FontPosture.REGULAR,12.0));
-                            num.setTextFill((getModelView().getGameModel().getIsles().get(i).getControlling() == Faction.Black)? Paint.valueOf("white"):Paint.valueOf("white"));
+                            num.setTextFill((getModelView().getGameModel().getIsles().get(i).getControlling() == Faction.Black)? Paint.valueOf("white"):Paint.valueOf("black"));
                             student.getChildren().add(num);
                             num.setAlignment(Pos.CENTER);
                             num.setTextAlignment(TextAlignment.CENTER);
@@ -336,6 +345,7 @@ public class ViewGUI extends View {
                 character.get(i).setMinWidth(99);
                 character.get(i).setMaxHeight(150);
                 character.get(i).setMaxWidth(99);
+                character.get(i).setOnMouseClicked(mouseEvent -> selectCharacter(mouseEvent));
                 ((StackPane) character.get(i)).setAlignment(Pos.CENTER);
                 character.get(i).setBackground(new Background(new BackgroundImage(new Image("/images\\personaggi\\" + getModelView().getCharacters()[i].getCard().toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                 character.get(i).getChildren().add(new GridPane());
@@ -348,7 +358,7 @@ public class ViewGUI extends View {
                 ((GridPane) character.get(i).getChildren().get(0)).setMinHeight(character.get(i).getHeight() / 2);
                 ((GridPane) character.get(i).getChildren().get(0)).setHgap(20);
                 ((GridPane) character.get(i).getChildren().get(0)).setVgap(30);
-                ((GridPane) character.get(i).getChildren().get(0)).setGridLinesVisible(true);
+                //((GridPane) character.get(i).getChildren().get(0)).setGridLinesVisible(true);
                 for (int j = 0; j < 3; j++) {
                     ((GridPane) character.get(i).getChildren().get(0)).addColumn(j);
                     ((GridPane) character.get(i).getChildren().get(0)).addRow(j);
@@ -396,6 +406,8 @@ public class ViewGUI extends View {
                                 pane.setMaxHeight(20);
                                 pane.setPrefWidth(20);
                                 pane.setPrefHeight(20);
+                                pane.setUserData(c);
+                                pane.setOnMouseClicked(mouseEvent -> selectCharacterStudent(mouseEvent));
                                 pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                                 ((GridPane) character.get(i).getChildren().get(0)).add(pane, column, row);
                                 if (column == 2) {
@@ -779,6 +791,7 @@ public class ViewGUI extends View {
         int chosen = (int)((Pane)e.getSource()).getUserData();
         System.out.println(chosen);
         ChooseAssistant(chosen+1);
+        error= false;
         assistant.hide();
     }
 
@@ -788,21 +801,44 @@ public class ViewGUI extends View {
         selectedStudent = Optional.of((Pane)e.getSource());
     }
 
+    public void selectCharacterStudent(MouseEvent e)
+    {
+        System.out.println("selected student");
+        System.out.println(charIndex.get());
+        System.out.println(character.indexOf((((Pane)e.getSource()).getParent()).getParent()));
+        if(charIndex.isPresent() && charIndex.get()==character.indexOf((((Pane)e.getSource()).getParent()).getParent()))
+        {
+            if(getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.ONE_STUD_TO_TABLES || getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.ONE_STUD_TO_ISLE)
+                selectedStudent = Optional.of(((Pane)e.getSource()));
+        }
+    }
     public void selectIsle(MouseEvent e)
     {
         System.out.println("isle");
-        if(!selectedStudent.isEmpty()){
-            MoveToIsle(((Colour)selectedStudent.get().getUserData()),isles.indexOf((Pane)e.getSource()));
-            selectedStudent.get().setBackground(null);
-            selectedStudent.get().setOnMouseClicked(null);
-            selectedStudent = Optional.empty();
+        if(selectedStudent.isPresent()){
+            if(charIndex.isPresent()&&getModelView().getCharacters()[charIndex.get()].getCard()==CharactersEnum.ONE_STUD_TO_ISLE)
+            {
+                charStudToIsle(charIndex.get(),((Colour)selectedStudent.get().getUserData()), isles.indexOf((Pane) e.getSource()));
+                selectedStudent.get().setBackground(null);
+                selectedStudent.get().setOnMouseClicked(null);
+                selectedStudent = Optional.empty();
+                charIndex = Optional.empty();
+                error= false;
+            }else {
+                MoveToIsle(((Colour) selectedStudent.get().getUserData()), isles.indexOf((Pane) e.getSource()));
+                selectedStudent.get().setBackground(null);
+                selectedStudent.get().setOnMouseClicked(null);
+                selectedStudent = Optional.empty();
+                error = false;
+            }
         }
-        else if(getModelView().getTurn().getTurn() == TurnMessage.Turn.ACTION_MN)
+        else if(getModelView().getTurn().getTurn() == TurnMessage.Turn.ACTION_MN&&charIndex.isEmpty())
         {
             int moves = isles.indexOf((Pane)e.getSource())-getModelView().getGameModel().getMotherNature();
             System.out.println(moves);
             System.out.println((moves<0)?getModelView().getGameModel().getIsles().size()+moves:moves);
             MoveMotherNature((moves<0)?getModelView().getGameModel().getIsles().size()+moves:moves);
+            error= false;
         }
     }
 
@@ -810,22 +846,35 @@ public class ViewGUI extends View {
     {
         System.out.println("table");
         if(!selectedStudent.isEmpty()){
-            MoveToTable(((Colour)selectedStudent.get().getUserData()));
-            selectedStudent.get().setBackground(null);
-            selectedStudent.get().setOnMouseClicked(null);
-            selectedStudent = Optional.empty();
+            if(charIndex.isPresent()&&getModelView().getCharacters()[charIndex.get()].getCard()==CharactersEnum.ONE_STUD_TO_TABLES)
+            {
+                charStudToTable(charIndex.get(),((Colour)selectedStudent.get().getUserData()));
+                selectedStudent.get().setBackground(null);
+                selectedStudent.get().setOnMouseClicked(null);
+                selectedStudent = Optional.empty();
+                charIndex = Optional.empty();
+                error= false;
+            }
+            else {
+                MoveToTable(((Colour) selectedStudent.get().getUserData()));
+                selectedStudent.get().setBackground(null);
+                selectedStudent.get().setOnMouseClicked(null);
+                selectedStudent = Optional.empty();
+                error = false;
+            }
         }
     }
     public void selectCloud(MouseEvent e)
     {
         ChooseCloud(clouds.indexOf((Pane)e.getSource()));
+        error= false;
     }
 
     public void showErrors ()
     {
         Platform.runLater(
             ()-> {
-                if (getModelView().getError() != null) {
+                if (getModelView().getError() != null&&!error) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle(getModelView().getError().toString());
                     alert.setContentText(getModelView().getError().getErrorMsg());
@@ -834,9 +883,112 @@ public class ViewGUI extends View {
                     {
                         Event.fireEvent(stage,new WindowEvent(stage,WindowEvent.WINDOW_CLOSE_REQUEST));
                     }
+                    if(getModelView().getError() == ErrorMessage.ErrorType.NicknameTaken)
+                    {
+                        try {
+                            restartConnection();
+                        }catch(IOException e){
+                            e.printStackTrace();
+                        }
+                    }
+                    error = true;
                 }
             }
         );
+    }
+
+    public void selectCharacter(MouseEvent e)
+    {
+        if(getModelView().getCurrentCharacter().isEmpty()) {
+            charIndex = Optional.of(character.indexOf((Pane) e.getSource()));
+            System.out.println("character: "+charIndex.get());
+            if (getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.PLUS_2_INFLUENCE || getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.NO_TOWER_INFLUENCE) {
+                useInfluenceCharacter(charIndex.get());
+                System.out.println(getModelView().getCharacters()[charIndex.get()].getCard());
+                charIndex = Optional.empty();
+            }
+            else if (getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.PLUS_2_MN) {
+                motherNBoost(charIndex.get());
+                charIndex = Optional.empty();
+            }
+            else if (getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.REMOVE_3_STUD || getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.NO_COLOUR_INFLUENCE)
+            {
+                showColourChoice();
+            }
+        }
+    }
+
+    public void showColourChoice()
+    {
+        Platform.runLater(
+                ()->{
+                        colourPopup = new Popup();
+                        VBox box = new VBox();
+                        box.setPrefHeight(300);
+                        box.setPrefWidth(600);
+                        box.setSpacing(20);
+                        colourPopup.getContent().add(box);
+                        Label instruction = new Label("Select the colour to remove");
+                        instruction.setFont(Font.font("System", FontWeight.BOLD, FontPosture.REGULAR,40.0));
+                        box.getChildren().add(instruction);
+                        box.setAlignment(Pos.CENTER);
+                        HBox colors = new HBox();
+                        colors.setSpacing(20);
+                        box.getChildren().add(colors);
+                        Pane pane;
+                        for(Colour c: Colour.values())
+                        {
+                            pane = new Pane();
+                            pane.setMinWidth(100);
+                            pane.setMinHeight(100);
+                            pane.setMaxWidth(100);
+                            pane.setMaxHeight(100);
+                            pane.setPrefWidth(100);
+                            pane.setPrefHeight(100);
+                            pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_"+c +".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                            pane.setUserData(c);
+                            pane.setOnMouseClicked(mouseEvent -> selectColour(mouseEvent));
+                            colors.getChildren().add(pane);
+                        }
+                    colourPopup.setX(stage.getScene().getWidth()/2 -(120*5)/2);
+                    colourPopup.setY(stage.getScene().getHeight()/2-300);
+                    colourPopup.show(stage);
+                }
+        );
+    }
+
+    public void selectColour(MouseEvent e)
+    {
+        System.out.println((Colour) ((Pane) e.getSource()).getUserData());
+        if(charIndex.isPresent()) {
+            if(getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.REMOVE_3_STUD) {
+                remove3Stud(charIndex.get(), (Colour) ((Pane) e.getSource()).getUserData());
+                System.out.println(1);
+            }
+            if(getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.NO_COLOUR_INFLUENCE) {
+                noColourInfluence(charIndex.get(), (Colour) ((Pane) e.getSource()).getUserData());
+                System.out.println(2);
+            }
+            colourPopup.hide();
+            charIndex = Optional.empty();
+        }
+    }
+
+    public void restartConnection() throws IOException
+    {
+        FXMLLoader loader2 = new FXMLLoader();
+        Stage connectionStage = new Stage();
+        loader2.setLocation(getClass().getResource("/serverConnection.fxml"));
+        Scene scene = new Scene(loader2.load());
+        ((VBox)scene.getRoot()).setBackground(new Background(new BackgroundImage(new Image("/images\\background1.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+        connectionStage.setScene(scene);
+        connectionStage.setTitle("connection to server");
+        connectionStage.getIcons().add(new Image(getClass().getResourceAsStream("/images\\logo.png")));
+        connectionStage.alwaysOnTopProperty();
+        ((ConnectionController)loader2.getController()).setView(this);
+        connectionStage.initModality(Modality.APPLICATION_MODAL);
+        connectionStage.setOnCloseRequest(event-> {event.consume();connectionStage.close();});
+        connectionStage.show();
     }
     public void showWinner() {
         Platform.runLater(

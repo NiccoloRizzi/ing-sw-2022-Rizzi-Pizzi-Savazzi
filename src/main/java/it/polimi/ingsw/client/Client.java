@@ -90,6 +90,7 @@ public class Client implements Observer<JsonObject>{
                     }
                 }
             }
+            System.out.println("closed");
         });
         t.start();
     }

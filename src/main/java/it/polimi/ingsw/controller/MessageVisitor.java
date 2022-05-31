@@ -55,15 +55,12 @@ public class MessageVisitor extends Observable<ClientModel> {
                         game.nextPlayer();
                     }
                 }
-            }
-            else{
+            } else{
                 notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.AssistantAlreadyChosenError));
             }
-
         }else{
             notify(new ErrorMessage(assistantChoiceMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
         }
-
     }
     public void visit(MoveStudentMessage moveStudentMessage){
             int playerID = moveStudentMessage.getPlayerID();
@@ -100,6 +97,7 @@ public class MessageVisitor extends Observable<ClientModel> {
     }
     public void visit(IsleInfluenceCharacterMessage isleInfluenceCharacterMessage) {
         String answer;
+        System.out.println("visit");
         int playerId = isleInfluenceCharacterMessage.getPlayerID();
         int charId = isleInfluenceCharacterMessage.getCharacterID();
         Colour noColor = isleInfluenceCharacterMessage.getNoColour();
@@ -116,7 +114,7 @@ public class MessageVisitor extends Observable<ClientModel> {
                                     game.getTurnHandler().setInfStrategy(new noTowersStrategy());
                                     break;
                                 case PLUS_2_INFLUENCE:
-                                    game.getTurnHandler().setInfStrategy(new PlusInfStrategy());
+                                    game.getTurnHandler().setInfStrategy(new PlusInfStrategy(playerId));
                                     break;
                                 case NO_COLOUR_INFLUENCE:
                                     game.getTurnHandler().setInfStrategy(new NoColourStrategy(isleInfluenceCharacterMessage.getNoColour()));

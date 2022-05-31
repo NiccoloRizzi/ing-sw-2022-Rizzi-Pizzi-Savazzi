@@ -29,8 +29,9 @@ public class Character extends Observable<ClientModel> {
         if(!used){
             price++;
             used=true;
-            notifyChange();
         }
+        System.out.println(card);
+        notifyChange();
     }
 
     public boolean getUsed()

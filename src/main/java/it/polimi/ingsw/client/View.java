@@ -161,6 +161,7 @@ public abstract class View extends Observable<JsonObject> {
     }
     public void noColourInfluence(int charpos, Colour ignored){
         IsleInfluenceCharacterMessage icm = new IsleInfluenceCharacterMessage(charpos, modelView.getMyId(),ignored);
+        notifyClient(icm.serialize());
     }
     public void exchange2Students(int charpos, Colour[] fromBoard, Colour[] fromtables){
         Move2StudCharacterMessage m2m = new Move2StudCharacterMessage(charpos,modelView.getMyId(),fromBoard,fromtables);
