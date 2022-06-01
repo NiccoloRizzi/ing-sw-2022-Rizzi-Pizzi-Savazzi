@@ -112,12 +112,12 @@ public class IsleTest extends TestCase {
         Isle isle = new Isle(0);
         isle.setInfStrategy(new PlusInfStrategy(1));
         isle.setTower(Faction.Black);
-        HashMap<Colour,Integer> s = new HashMap<Colour,Integer>();
+        HashMap<Colour,Integer> s = new HashMap<>();
         int[] numStudent = {1,2,3,4,5};
         for(Colour c:Colour.values())
                 s.put(c,numStudent[c.ordinal()]);
         isle.addStudents(s);
-        HashMap<Colour,Player> professors = new HashMap<Colour,Player>();
+        HashMap<Colour,Player> professors = new HashMap<>();
         Player p1 = new Player(1,"pippo");
         p1.createBoard(9);
         p1.assignFaction(Faction.Black);
@@ -136,9 +136,9 @@ public class IsleTest extends TestCase {
         professors.put(Colour.Frogs,p2);
         professors.put(Colour.Fairies,p2);
         professors.put(Colour.Unicorns,p3);
-        assertEquals(numStudent[Colour.Gnomes.ordinal()]+numStudent[Colour.Dragons.ordinal()]+3,isle.getInfluence(p1,professors));
-        assertEquals(numStudent[Colour.Frogs.ordinal()]+numStudent[Colour.Fairies.ordinal()]+2,isle.getInfluence(p2,professors));
-        assertEquals(numStudent[Colour.Unicorns.ordinal()]+numStudent[Colour.Gnomes.ordinal()]+numStudent[Colour.Dragons.ordinal()]+3,isle.getInfluence(t,professors));
+        assertEquals(numStudent[Colour.Gnomes.ordinal()]+numStudent[Colour.Dragons.ordinal()]+1+2,isle.getInfluence(p1,professors));
+        assertEquals(numStudent[Colour.Frogs.ordinal()]+numStudent[Colour.Fairies.ordinal()],isle.getInfluence(p2,professors));
+        assertEquals(numStudent[Colour.Unicorns.ordinal()]+numStudent[Colour.Gnomes.ordinal()]+numStudent[Colour.Dragons.ordinal()]+1+2,isle.getInfluence(t,professors));
     }
 
     @Test
