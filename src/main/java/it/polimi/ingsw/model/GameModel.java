@@ -11,19 +11,35 @@ import java.util.Random;
 import it.polimi.ingsw.server.Observable;
 import it.polimi.ingsw.server.Observer;
 
+/**
+ * The class representing the main game board with its components
+ */
 public class GameModel extends Observable<ClientModel> {
     private int unusedCoins;
     private int motherNature;
     private final int numOfPlayers;
     private final HashMap<Colour, Integer> bag;
     private final ArrayList<Player> players;
+    /**
+     * An hashmap associating the colour of a professor and the player who owns it
+     */
     protected HashMap<Colour, Player> professors;
     private final ArrayList<Isle> isles;
     private final ArrayList<Cloud> clouds;
     private ArrayList<Team> teams;
     private final ArrayList<Character> activeCharacters;
+    /**
+     * The number of isles that can still be prohibited.
+     */
     int prohibited;
     boolean expertMode;
+
+    /**
+     * Instantiates a new Game model, creating all the elements of the game board.
+     *
+     * @param numOfPlayers The number of players in the game
+     * @param expertMode   True if playing in expert mode
+     */
     public GameModel(int numOfPlayers, boolean expertMode) {
         this.numOfPlayers = numOfPlayers;
         this.expertMode = expertMode;
@@ -68,6 +84,9 @@ public class GameModel extends Observable<ClientModel> {
         return num;
     }
 
+    /**
+     * Generates the students bag by adding 24 (26 minus the 2 of each colour added to the isles) students of each colour.
+     */
     private void generateBag() {
         for (Colour c : Colour.values()) {
             //it only generates 24 students for each colour (instead of 26)
@@ -81,10 +100,22 @@ public class GameModel extends Observable<ClientModel> {
             isles.add(new Isle(i));
     }
 
+    /**
+     * Gets the index of the isle where mother nature is positioned
+     *
+     * @return the index of the isle where mother nature is positioned
+     */
     public int getMotherNature() {
         return motherNature;
     }
 
+    /**
+     * Randomly extracts a given number of students.
+     *
+     * @param num The number of students to be randomly extracted
+     * @return An hashmap containing the extracted students
+     * @throws StudentsOutOfBoundsException when trying to extract more students than the bag contains
+     */
     public HashMap<Colour, Integer> extractStudents(int num) throws StudentsOutOfBoundsException{
         HashMap<Colour, Integer> extractedStud = new HashMap<>();
         for (Colour c : Colour.values()) {
@@ -101,15 +132,28 @@ public class GameModel extends Observable<ClientModel> {
         return null;
     }
 
+    /**
+     * Moves mother nature by the number of isles given in input
+     *
+     * @param moves the number of isles to move mothernature
+     */
     public void moveMN(int moves) {
         motherNature = (motherNature + moves) % isles.size();
         //notifyChange();
     }
 
+    /**
+     * Gets the professors owned by players
+     *
+     * @return the hashMap containing the professors owned by a player
+     */
     public HashMap<Colour, Player> getProfessors(){
         return professors;
     }
 
+    /**
+     * Randomly fills the clouds
+     */
     public void fillClouds(){
         for(Cloud c: clouds){
             try {
@@ -120,6 +164,11 @@ public class GameModel extends Observable<ClientModel> {
         }
     }
 
+    /**
+     * Checks if the bag is empty
+     *
+     * @return whether the bag is empty
+     */
     public boolean checkEmptyBag() {
         int size = 0;
         for (Colour c : Colour.values()) {
@@ -128,6 +177,11 @@ public class GameModel extends Observable<ClientModel> {
         return size <= 0;
     }
 
+    /**
+     * Gets bag size
+     *
+     * @return the number of students contained in bag
+     */
     public int getBagSize(){
         int total=0;
         for(Colour c: Colour.values()){
@@ -136,14 +190,30 @@ public class GameModel extends Observable<ClientModel> {
         return total;
     }
 
+    /**
+     * Gets teams
+     *
+     * @return the teams arraylist
+     */
     public ArrayList<Team> getTeams(){
         return teams;
     }
 
+    /**
+     * Gets players.
+     *
+     * @return the players
+     */
     public ArrayList<Player> getPlayers() {
         return players;
     }
 
+    /**
+     * Gets a particular player
+     *
+     * @param playerID The id of the player to return
+     * @return The player with that id
+     */
     public Player getPlayer(int playerID) {
         for (Player p : players) {
             if (p.getID() == playerID) {
@@ -153,14 +223,31 @@ public class GameModel extends Observable<ClientModel> {
         return null;
     }
 
+    /**
+     * Gets clouds.
+     *
+     * @return the arraylist of clouds
+     */
     public ArrayList<Cloud> getClouds() {
         return clouds;
     }
 
+    /**
+     * Gets isles.
+     *
+     * @return the arraylist of isles
+     */
     public ArrayList<Isle> getIsles() {
         return isles;
     }
 
+    /**
+     * Gets a particular isle
+     *
+     * @param isleID the id of the isle to get
+     * @return the isle associated with the id
+     * @throws TileOutOfBoundsException when given an invalid id
+     */
     public Isle getIsle(int isleID) throws TileOutOfBoundsException {
         if (isleID >= 0 && isleID < isles.size()) {
             return isles.get(isleID);
@@ -168,6 +255,13 @@ public class GameModel extends Observable<ClientModel> {
         throw new TileOutOfBoundsException();
     }
 
+    /**
+     * Gets cloud.
+     *
+     * @param cloudID the cloud id
+     * @return the cloud
+     * @throws TileOutOfBoundsException the tile out of bounds exception
+     */
     public Cloud getCloud(int cloudID) throws TileOutOfBoundsException {
         if (cloudID >= 0 && cloudID < clouds.size()) {
             return clouds.get(cloudID);
@@ -176,6 +270,12 @@ public class GameModel extends Observable<ClientModel> {
     }
 
 
+    /**
+     * Gets a particular team.
+     *
+     * @param teamID the id of the team to recover
+     * @return the team associated with that id
+     */
     public Team getTeam(int teamID) {
         // FOR EXCEPTION
         if (teamID >= 0 && teamID < teams.size()) {
@@ -184,10 +284,21 @@ public class GameModel extends Observable<ClientModel> {
         return null;
     }
 
+    /**
+     * Gets the number of coins that can still be given to players
+     *
+     * @return the number of coins that can still be given to players
+     */
     public int getCoins() {
         return unusedCoins;
     }
 
+    /**
+     * Adds a given number of coins to the gameboard
+     *
+     * @param numCoins The number of coins to add
+     * @throws NotEnoughCoinsException when the number of coins to add is incompatible with game coin limits
+     */
     public void addCoins(int numCoins) throws NotEnoughCoinsException {
         if (numCoins >= 0 && numCoins + unusedCoins <= 20)
             this.unusedCoins += numCoins;
@@ -197,6 +308,11 @@ public class GameModel extends Observable<ClientModel> {
 
     }
 
+    /**
+     * Removes a coin from the gameboard
+     *
+     * @throws NotEnoughCoinsException when the number of coins to remove is incompatible with game coin limits
+     */
     public void removeCoin() throws NotEnoughCoinsException {
         if (unusedCoins > 0)
             unusedCoins--;
@@ -205,6 +321,12 @@ public class GameModel extends Observable<ClientModel> {
         }
     }
 
+    /**
+     * Sets mother n pos.
+     *
+     * @param isleID the isle id
+     * @throws TileOutOfBoundsException the tile out of bounds exception
+     */
     public void setMotherNPos(int isleID) throws TileOutOfBoundsException {
         if (isleID <= 11 && isleID >= 0) {
             this.motherNature = isleID;
@@ -214,10 +336,23 @@ public class GameModel extends Observable<ClientModel> {
             throw new TileOutOfBoundsException();
     }
 
-    public int getStudents(Colour c) {
-        return bag.get(c);
+    /**
+     * Gets The number of students in the bag of a particular colour
+     *
+     * @param colour The colour of the students whose number in the bag is inquired
+     * @return The number of students in the bag of a particular colour
+     */
+    public int getStudents(Colour colour) {
+        return bag.get(colour);
     }
 
+    /**
+     * Adds a player to the game board
+     *
+     * @param id       the id that will be assigned to the player
+     * @param nickname the nickname chosen by the player
+     * @throws PlayerOutOfBoundException when adding more players than the player limit chosen during match creation
+     */
     public void addPlayer(int id, String nickname) throws PlayerOutOfBoundException{
         if (players.size() < numOfPlayers){
             Player p = new Player(id, nickname);
@@ -229,6 +364,12 @@ public class GameModel extends Observable<ClientModel> {
         }
     }
 
+    /**
+     * Sets a particular character among one the three usable ones
+     *
+     * @param pos The position (between 0 and 2) of the character to set
+     * @param character The particular character to set
+     */
     public void setCharacter_DEBUG(int pos, CharactersEnum character){
         if (character==CharactersEnum.ONE_STUD_TO_ISLE || character==CharactersEnum.ONE_STUD_TO_TABLES || character==CharactersEnum.EXCHANGE_3_STUD)
             activeCharacters.set(pos, new CharacterStudents(pos,character));
@@ -236,6 +377,12 @@ public class GameModel extends Observable<ClientModel> {
             activeCharacters.set(pos, new Character(pos,character));
     }
 
+    /**
+     * Extract a student of a particular colour from the bag
+     *
+     * @return The colour of the student to extract
+     * @throws StudentsOutOfBoundsException When the bag is empty
+     */
     public Colour extractRandomStudent() throws StudentsOutOfBoundsException{
         Random rand = new Random();
         int selected = rand.nextInt(getBagSize());
@@ -251,35 +398,69 @@ public class GameModel extends Observable<ClientModel> {
         throw new StudentsOutOfBoundsException();
     }
 
+    /**
+     * Adds students to the bag
+     *
+     * @param students The hashmap containing the students to add
+     */
     public void addStudents(HashMap<Colour, Integer> students){
         for(Colour c: students.keySet()){
             bag.replace(c,students.get(c)+bag.get(c));
         }
     }
 
+    /**
+     * Adds a student of a particular colour to the bag
+     *
+     * @param student The colour of the student to be added to the bag
+     */
     public void addStudent(Colour student){
         bag.replace(student, bag.get(student)+1);
     }
 
-    public Optional<Player> getProfessorOwner (Colour c)
+    /**
+     * Gets the player who owns a professor, if it owned by someone (optional)
+     *
+     * @param colour the colour of the professor whose owner is inquired
+     * @return the optional of a player owning the professor
+     */
+    public Optional<Player> getProfessorOwner (Colour colour)
     {
-        if(professors.containsKey(c)){
-            return Optional.of(professors.get(c));
+        if(professors.containsKey(colour)){
+            return Optional.of(professors.get(colour));
         }
         else return Optional.empty();
     }
 
-    public void setProfessor(Colour c, Player p)
+    /**
+     * Sets the player owner of a professor
+     *
+     * @param colour The colour of the professor whose owner is being set
+     * @param player The player that will be set as owner as the professor
+     */
+    public void setProfessor(Colour colour, Player player)
     {
-        professors.put(c, p);
+        professors.put(colour, player);
         notifyChange();
     }
 
+    /**
+     * Gets a particular character among the active ones
+     *
+     * @param id the id of the character to get
+     * @return the character
+     */
     public Character getCharacter (int id)
     {
         return activeCharacters.get(id);
     }
 
+    /**
+     * Checks if an isle can be joint with adjacent ones and if possible joins them
+     *
+     * @param isle the id of the isle to check
+     * @throws TileOutOfBoundsException when the index of the isle isn't valid
+     */
     public void joinIsle(int isle) throws TileOutOfBoundsException
     {
         if(isle<0 || isle>=isles.size())
@@ -317,22 +498,37 @@ public class GameModel extends Observable<ClientModel> {
         notifyChange();
     }
 
+    /**
+     * Gets the number of prohibitions still available
+     *
+     * @return the number of prohibitions still available
+     */
     public int getProhibited()
     {
         return prohibited;
     }
+
+    /**
+     * Reduces prohibited number by one
+     */
     public void useProhibited()
     {
         prohibited --;
         notifyChange();
     }
 
+    /**
+     * Adds a prohibited
+     */
     public void addProhibited()
     {
         prohibited++;
     }
 
-    public void setUpCharacter()
+    /**
+     * Creates the three characters usable for the current game
+     */
+    public void setUpCharacters()
     {
         for (int i = 0; i < 3; i++) {
             CharactersEnum character = getCharacter(i).getCard();
@@ -360,14 +556,18 @@ public class GameModel extends Observable<ClientModel> {
         }
     }
 
-    public void giveCoin(Player p){
+    /**
+     * Gives a coin to a player
+     *
+     * @param player The player to whom to give the coin
+     */
+    public void giveCoin(Player player){
         String answer = null;
         try{
             removeCoin();
-            getPlayer(p.getID()).addCoin();
+            getPlayer(player.getID()).addCoin();
         } catch (NotEnoughCoinsException e) {
             e.printStackTrace();
-            answer = "Available coins finished";
         }
     }
 
@@ -389,6 +589,9 @@ public class GameModel extends Observable<ClientModel> {
         }
     }
 
+    /**
+     * Notifies changed professors owners and isles to the observers
+     */
     public void notifyChange()
     {
         HashMap<Colour,Integer> prof = new HashMap<>();
@@ -404,6 +607,9 @@ public class GameModel extends Observable<ClientModel> {
         notify(new ClientGameModel(prof,motherNature,tempIsles,prohibited));
     }
 
+    /**
+     * Notifies the full model to the observer
+     */
     public void sendFullModel()
     {
         notifyChange();
