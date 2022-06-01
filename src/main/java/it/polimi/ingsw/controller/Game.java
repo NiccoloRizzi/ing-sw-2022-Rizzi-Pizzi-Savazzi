@@ -181,7 +181,7 @@ public class Game extends Observable<ClientModel> {
             planningOrder.add((currentPlayer+i)%playersNumber);
         }
         if(expertMode)
-            gameModel.setUpCharacter();
+            gameModel.setUpCharacters();
         planningPhase = true;
     }
 
