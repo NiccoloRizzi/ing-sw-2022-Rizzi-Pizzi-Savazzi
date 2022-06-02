@@ -69,12 +69,12 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
         out.flush();
     }
 
-    public synchronized void disconnect(){
-        lobby.deregister(this);
-    }
 
 
     public void closeConnection(){
+        JsonObject disconnected = new JsonObject();
+        disconnected.addProperty("type","disconnect");
+        send(disconnected.toString());
         active=false;
         try {
             socket.close();
@@ -95,7 +95,7 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
                 TimeUnit.SECONDS.sleep(10);
                 if (!verified) {
                     System.out.println(nickname + " disconnected.");
-                    disconnect();
+                    lobby.deregister(this);
                 }
                 TimeUnit.SECONDS.sleep(10);
             }catch(InterruptedException e){
@@ -137,21 +137,14 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
                     verified = true;
                 }else if(lobby.isStarted()) {
                     Message actionMessage = MoveDeserializer.deserialize(read);
-                    if(actionMessage != null) {
-                        actionMessage.accept(mv);
-                    } else {
-                        WinDisconnection winDisconnection = MoveDeserializer.deserializeWinDisconnection(read);
-                        // TODO
-                    }
+                    actionMessage.accept(mv);
                 }
             }
-            closeConnection();
         }catch(IOException e){
             e.printStackTrace();
         }
 
     }
-
 
 
     @Override
