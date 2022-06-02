@@ -82,8 +82,9 @@ public class Client implements Observer<JsonObject>{
                         JsonObject answer = new JsonObject();
                         answer.addProperty("type","pong");
                         writeToSocket(answer.toString());
-                    }
-                    else {
+                    } else if (jo.get("type").getAsString().equals("disconnect")) {
+                        isActive = false;
+                    } else {
                         System.out.println(read);
                         ClientModel model = ClientModelDeSerializer.deserialize(read);
                         model.accept(view);

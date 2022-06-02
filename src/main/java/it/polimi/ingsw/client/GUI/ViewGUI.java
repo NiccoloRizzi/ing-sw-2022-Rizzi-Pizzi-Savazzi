@@ -89,20 +89,29 @@ public class ViewGUI extends View {
         createPlayers();
         createAssistant();
         started=true;
-        refresh();
+        refresh(0);
     }
 
     @Override
-    public void refresh() {
+    public void refresh(int index) {
         if(started) {
-            if(getModelView().isExpert())
-                refreshCharacters();
-            refreshBoard();
-            refreshPlayer();
-            refreshTurn();
-            showTiles();
-            showWinner();
+            switch (index) {
+                case 0 -> {
+                    if (getModelView().isExpert())
+                        refreshCharacters();
+                    refreshBoard();
+                    refreshPlayer();
+                    refreshTurn();
+                    showTiles();
+                }
+                case 1 -> refreshPlayer();
+                case 2 -> refreshBoard();
+                case 3 -> showTiles();
+                case 4 -> refreshCharacters();
+                case 5 -> refreshTurn();
+            }
         }
+        showWinner();
         showErrors();
     }
 
@@ -1109,9 +1118,12 @@ public class ViewGUI extends View {
             () -> {
                 if (getModelView().getWin() != null&&!ended) {
                     Stage winStage = new Stage();
+                    winStage.getIcons().add(new Image(getClass().getResourceAsStream("/images\\logo.png")));
+                    winStage.setTitle("game over");
                     StackPane pane = new StackPane();
-                    pane.setPrefHeight(200);
-                    pane.setPrefWidth(400);
+                    pane.setPrefHeight(360);
+                    pane.setPrefWidth(640);
+                    pane.setBackground(new Background(new BackgroundImage(new Image("/images\\background.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                     Label winner = new Label();
                     if (getModelView().getWin().isDraw()) {
                         winner.setText("Draw");
@@ -1122,6 +1134,8 @@ public class ViewGUI extends View {
                             winner.setText(getModelView().getPlayers()[getModelView().getWin().getId()].getNickname() + " and " + getModelView().getPlayers()[(getModelView().getWin().getId() + 2) % 4].getNickname() + " have won!");
                         }
                     }
+                    winner.setFont(Font.font("System", FontWeight.BOLD, FontPosture.REGULAR,60.0));
+                    winner.setTextFill(Color.rgb(255,215,0));
                     pane.getChildren().add(winner);
                     pane.setAlignment(winner,Pos.CENTER);
                     Scene scene = new Scene(pane);

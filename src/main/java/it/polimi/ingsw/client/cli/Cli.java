@@ -70,7 +70,7 @@ public class Cli extends View {
     }
     @Override
     public void startGame(){
-        refresh();
+        refresh(0);
     }
 
     public void startPrint(){
@@ -212,7 +212,7 @@ public class Cli extends View {
             }
         }
 
-    public void refresh(){
+    public void refresh(int index){
         System.out.print("\033[H\033[2J");
         System.out.flush();
         if(printing){
