@@ -8,7 +8,7 @@ public enum CharactersEnum {
     PROHIBITED(2),
     NO_TOWER_INFLUENCE(3),
     EXCHANGE_3_STUD(1),
-    EXCHANGE_2_STUD(2),
+    EXCHANGE_2_STUD(1),
     PLUS_2_INFLUENCE(2),
     ONE_STUD_TO_TABLES(2),
     REMOVE_3_STUD(2),
