@@ -767,8 +767,7 @@ class MessageVisitorTest {
 
         Colour[] studBoard ={Colour.Fairies,Colour.Unicorns};
         Colour[] studTables ={Colour.Dragons,Colour.Gnomes};
-        messageVisitor.visit(new Move2StudCharacterMessage(0,player,studBoard,studTables));
-        assertEquals(ErrorMessage.ErrorType.NotEnoughCoinError,((ErrorMessage)obs.message).getError());
+
 
         for(int i = 0; i < 5; i++) {
             game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
