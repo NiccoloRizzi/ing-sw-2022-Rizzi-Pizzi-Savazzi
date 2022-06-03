@@ -651,79 +651,82 @@ class MessageVisitorTest {
 
     @Test
     void testVisitMove6StudCharacterMessage() throws TileOutOfBoundsException, PlayerOutOfBoundException {
-        Game game = new Game(3, true);
-        MessageVisitor messageVisitor = new MessageVisitor(game);
-        game.createPlayer("A");
-        game.createPlayer("B");
-        game.createPlayer("C");
-        game.setupGame();
-        game.startActionTurn();
-        game.getGameModel().setCharacter_DEBUG(0, CharactersEnum.EXCHANGE_3_STUD);
+            Game game = new Game(3, true);
+            MessageVisitor messageVisitor = new MessageVisitor(game);
+            game.createPlayer("A");
+            game.createPlayer("B");
+            game.createPlayer("C");
+            game.setupGame();
+            game.startActionTurn();
+            game.getGameModel().setCharacter_DEBUG(0, CharactersEnum.EXCHANGE_3_STUD);
 
-        TestObs obs = new TestObs();
-        game.addObserver(obs);
-        messageVisitor.addObserver(obs);
+            TestObs obs = new TestObs();
+            game.addObserver(obs);
+            messageVisitor.addObserver(obs);
 
-        int player = game.getCurrentPlayer();
+            int player = game.getCurrentPlayer();
 
-        CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(0);
-        character.addStudent(Colour.Gnomes);
-        character.addStudent(Colour.Dragons);
-        character.addStudent(Colour.Gnomes);
+            CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(0);
+            character.addStudent(Colour.Gnomes);
+            character.addStudent(Colour.Dragons);
+            character.addStudent(Colour.Gnomes);
 
-        Board board = game.getGameModel().getPlayer(player).getBoard();
-        for(Colour c: Colour.values())
-        {
-            try {
-                board.removeStudent(c);
-            }catch(StudentsOutOfBoundsException e){}
-        }
-        board.addStudent(Colour.Fairies);
-        board.addStudent(Colour.Frogs);
-        board.addStudent(Colour.Unicorns);
+            Board board = game.getGameModel().getPlayer(player).getBoard();
+            for (Colour c : Colour.values()) {
+                try {
+                    int toRemove = board.getStudents(c);
+                    for(int i=0; i<toRemove;i++)
+                        board.removeStudent(c);
+                } catch (StudentsOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
+            }
+            board.addStudent(Colour.Fairies);
+            board.addStudent(Colour.Frogs);
+            board.addStudent(Colour.Unicorns);
 
-        HashMap<Colour, Integer> expectedB = new HashMap<>();
-        HashMap<Colour, Integer> expectedC = new HashMap<>();
-        for (Colour c : Colour.values()) {
-            expectedB.put(c, board.getStudents(c));
-            expectedC.put(c, character.getStudents(c));
-        }
+            HashMap<Colour, Integer> expectedB = new HashMap<>();
+            HashMap<Colour, Integer> expectedC = new HashMap<>();
+            for (Colour c : Colour.values()) {
+                expectedB.put(c, board.getStudents(c));
+                expectedC.put(c, character.getStudents(c));
+            }
 
-        game.getGameModel().getPlayer(player).removeCoins(2);
+            game.getGameModel().getPlayer(player).removeCoins(2);
 
-        Colour studBoard[] = {Colour.Fairies, Colour.Frogs, Colour.Unicorns};
-        Colour studChar[] = {Colour.Gnomes, Colour.Dragons, Colour.Gnomes};
-        messageVisitor.visit(new Move6StudCharacterMessage(0, player, studBoard, studChar));
-        assertEquals(ErrorMessage.ErrorType.NotEnoughCoinError,((ErrorMessage)obs.message).getError());
+            Colour studBoard[] = {Colour.Fairies, Colour.Frogs, Colour.Unicorns};
+            Colour studChar[] = {Colour.Gnomes, Colour.Dragons, Colour.Gnomes};
+            messageVisitor.visit(new Move6StudCharacterMessage(0, player, studBoard, studChar));
+            assertEquals(ErrorMessage.ErrorType.NotEnoughCoinError, ((ErrorMessage) obs.message).getError());
 
-        for(int i = 0; i < 5; i++) {
-            game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
-        }
+            for (int i = 0; i < 5; i++) {
+                game.getGameModel().giveCoin(game.getGameModel().getPlayer(player));
+            }
 
-        messageVisitor.visit(new Move6StudCharacterMessage(0, player, studBoard, studChar));
+            messageVisitor.visit(new Move6StudCharacterMessage(0, player, studBoard, studChar));
 
-        assertEquals(expectedB.get(Colour.Dragons) + 1, board.getStudents(Colour.Dragons));
-        assertEquals(expectedB.get(Colour.Gnomes) + 2, board.getStudents(Colour.Gnomes));
-        assertEquals(expectedB.get(Colour.Frogs) - 1, board.getStudents(Colour.Frogs));
-        assertEquals(expectedB.get(Colour.Unicorns) - 1, board.getStudents(Colour.Unicorns));
-        assertEquals(expectedB.get(Colour.Fairies) - 1, board.getStudents(Colour.Fairies));
+            assertEquals(expectedB.get(Colour.Dragons) + 1, board.getStudents(Colour.Dragons));
+            assertEquals(expectedB.get(Colour.Gnomes) + 2, board.getStudents(Colour.Gnomes));
+            assertEquals(expectedB.get(Colour.Frogs) - 1, board.getStudents(Colour.Frogs));
+            assertEquals(expectedB.get(Colour.Unicorns) - 1, board.getStudents(Colour.Unicorns));
+            assertEquals(expectedB.get(Colour.Fairies) - 1, board.getStudents(Colour.Fairies));
 
-        assertEquals(expectedC.get(Colour.Dragons) - 1, character.getStudents(Colour.Dragons));
-        assertEquals(expectedC.get(Colour.Gnomes) - 2, character.getStudents(Colour.Gnomes));
-        assertEquals(expectedC.get(Colour.Frogs) + 1, character.getStudents(Colour.Frogs));
-        assertEquals(expectedC.get(Colour.Unicorns) + 1, character.getStudents(Colour.Unicorns));
-        assertEquals(expectedC.get(Colour.Fairies) + 1, character.getStudents(Colour.Fairies));
+            assertEquals(expectedC.get(Colour.Dragons) - 1, character.getStudents(Colour.Dragons));
+            assertEquals(expectedC.get(Colour.Gnomes) - 2, character.getStudents(Colour.Gnomes));
+            assertEquals(expectedC.get(Colour.Frogs) + 1, character.getStudents(Colour.Frogs));
+            assertEquals(expectedC.get(Colour.Unicorns) + 1, character.getStudents(Colour.Unicorns));
+            assertEquals(expectedC.get(Colour.Fairies) + 1, character.getStudents(Colour.Fairies));
 
-        assertEquals(CharactersEnum.EXCHANGE_3_STUD,((ClientCharacter)obs.message).getCard());
-        assertEquals(CharactersEnum.EXCHANGE_3_STUD.getPrice()+1,((ClientCharacter)obs.message).getPrice());
+            assertEquals(CharactersEnum.EXCHANGE_3_STUD, ((ClientCharacter) obs.message).getCard());
+            assertEquals(CharactersEnum.EXCHANGE_3_STUD.getPrice() + 1, ((ClientCharacter) obs.message).getPrice());
 
-        messageVisitor.visit(new Move6StudCharacterMessage(0, player, studBoard, studChar));
-        assertEquals(ErrorMessage.ErrorType.CharacterAlreadyUsedError,((ErrorMessage)obs.message).getError());
-        messageVisitor.visit(new Move6StudCharacterMessage(0, (player+1)%3, studBoard, studChar));
-        assertEquals(ErrorMessage.ErrorType.NotYourTurnError,((ErrorMessage)obs.message).getError());
+            messageVisitor.visit(new Move6StudCharacterMessage(0, player, studBoard, studChar));
+            assertEquals(ErrorMessage.ErrorType.CharacterAlreadyUsedError, ((ErrorMessage) obs.message).getError());
+            messageVisitor.visit(new Move6StudCharacterMessage(0, (player + 1) % 3, studBoard, studChar));
+            assertEquals(ErrorMessage.ErrorType.NotYourTurnError, ((ErrorMessage) obs.message).getError());
 
 
-        assertEquals(4-CharactersEnum.EXCHANGE_3_STUD.getPrice(),game.getGameModel().getPlayer(player).getCoins());
+            assertEquals(4 - CharactersEnum.EXCHANGE_3_STUD.getPrice(), game.getGameModel().getPlayer(player).getCoins());
     }
 
     @Test
