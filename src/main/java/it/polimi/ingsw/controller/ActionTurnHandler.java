@@ -31,7 +31,7 @@ public class ActionTurnHandler extends Observable<ClientModel> {
 
     public void setupActionTurnHandler(int currentPlayer,int numOfPlayers){
         this.currentPlayer = currentPlayer;
-        studentsToMove = 3;
+        studentsToMove = (numOfPlayers == 3)?4:3;
         phase = Phase.STUDENTS;
         professorStrategy= new DefaultCheckProfessorStrategy();
         checkTowerStrategy = (numOfPlayers == 4)? new TeamCheckTowerStrategy() : new PlayerCheckTowerStrategy();
