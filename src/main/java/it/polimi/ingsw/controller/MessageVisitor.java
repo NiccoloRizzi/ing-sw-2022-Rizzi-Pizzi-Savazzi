@@ -90,7 +90,7 @@ public class MessageVisitor extends Observable<ClientModel> {
     public void visit(CloudChoiceMessage cloudChoiceMessage){
         if(game.getCurrentPlayer()==cloudChoiceMessage.getPlayerId() && game.getTurnHandler().getPhase()==Phase.CLOUD){
             if(game.getTurnHandler().moveFromCloud(cloudChoiceMessage.getCloudID()))
-            game.nextPlayer();
+                game.nextPlayer();
         }
         else{
             notify(new ErrorMessage(cloudChoiceMessage.getPlayerId(), ErrorMessage.ErrorType.NotYourTurnError));

@@ -233,9 +233,10 @@ public class Game extends Observable<ClientModel> {
             if(currentPlayer==actionOrder.get(actionOrder.size()-1)){
                 currentPlayer = planningOrder.get(0);
                 planningPhase = true;
-                gameModel.fillClouds();
-                if(!checkEndStudentAssistant())
+                if(!checkEndStudentAssistant()) {
+                    gameModel.fillClouds();
                     notify(new TurnMessage(currentPlayer, TurnMessage.Turn.PLANNING));
+                }
             }
             else {
                 currentPlayer = actionOrder.get(actionOrder.indexOf(currentPlayer) + 1);

@@ -78,6 +78,7 @@ public class Client implements Observer<JsonObject>{
                 if(in.hasNext()){
                     String read = in.nextLine();
                     JsonObject jo = gson.fromJson(read,JsonObject.class);
+                    System.out.println(read);
                     if(jo.get("type").getAsString().equals("ping")){
                         JsonObject answer = new JsonObject();
                         answer.addProperty("type","pong");
