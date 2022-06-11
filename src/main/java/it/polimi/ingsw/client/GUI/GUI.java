@@ -45,6 +45,7 @@ public class GUI extends Application{
         Scene scene = new Scene(loader2.load());
         ((VBox)scene.getRoot()).setBackground(new Background(new BackgroundImage(new Image("/images\\background1.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
         connectionStage.setScene(scene);
+        connectionStage.setResizable(false);
         connectionStage.setTitle("connection to server");
         connectionStage.getIcons().add(new Image(getClass().getResourceAsStream("/images\\logo.png")));
         connectionStage.alwaysOnTopProperty();

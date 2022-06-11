@@ -42,7 +42,8 @@ public class ErrorMessage implements ClientModel {
         ProhibitedError("Non puoi più mettere tessere divieto perché sono finite"),
         MovesError("Le tue mosse devono essere coerenti con la carta assistente scelta"),
         PlayerDisconnected("Un giocatore si è disconnesso"),
-        NicknameTaken("Nickname già preso");
+        NicknameTaken("Nickname già preso"),
+        WrongStudentNumber("Il numero di studenti selezionati è sbagliato");
 
         private final String errorMsg;
 

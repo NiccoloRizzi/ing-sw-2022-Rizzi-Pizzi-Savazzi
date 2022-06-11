@@ -138,12 +138,18 @@ public class CliNotExpertSetter implements CliBuilder{
     public void setWin() {
         WinMessage winMessage = modelView.getWin();
         CliEntity win;
-        if(winMessage.isDraw()){
-            win = new CliEntities.CliString("E' un pareggio!!!");
-        }else{
-            win = new CliEntities.CliString(modelView.getPlayers()[winMessage.getId()].getNickname() + " ha vinto!!!");
+        if(winMessage != null){
+            if(winMessage.isDraw()){
+                win = new CliEntities.CliString("E' un pareggio!!!");
+            }else{
+                if(winMessage.getId() == modelView.getMyId()){
+                    win = new CliEntities.CliString("Hai vinto!!!");
+                }else{
+                    win = new CliEntities.CliString(modelView.getPlayers()[winMessage.getId()].getNickname() + " ha vinto!!!");
+                }
+            }
+            cli.setWin(win);
         }
-        cli.setWin(win);
     }
 
     public void setAllCli(){

@@ -301,27 +301,31 @@ public class MessageVisitor extends Observable<ClientModel> {
                 if (game.getGameModel().getPlayer(game.getCurrentPlayer()).getCoins() >= game.getGameModel().getCharacter(move6StudCharacterMessage.getCharacterID()).getPrice()) {
                     CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(move6StudCharacterMessage.getCharacterID());
                     Board board = game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard();
-                    for (Colour c : move6StudCharacterMessage.getStudFromBoard()) {
-                        try {
-                            board.removeStudent(c);
-                        } catch (StudentsOutOfBoundsException e) {
-                            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsEmptyError));
+                    if(move6StudCharacterMessage.getStudFromBoard().length == 3 && move6StudCharacterMessage.getStudsFromChar().length == 3) {
+                        for (Colour c : move6StudCharacterMessage.getStudFromBoard()) {
+                            try {
+                                board.removeStudent(c);
+                            } catch (StudentsOutOfBoundsException e) {
+                                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsEmptyError));
+                            }
+                            character.addStudent(c);
                         }
-                        character.addStudent(c);
+                        for (Colour c : move6StudCharacterMessage.getStudsFromChar()) {
+                            try {
+                                board.addToEntrance(c);
+                            } catch (StudentsOutOfBoundsException e) {
+                                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsFullError));
+                            }
+                            try {
+                                character.removeStudent(c);
+                            } catch (StudentsOutOfBoundsException e) {
+                                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsEmptyError));
+                            }
+                        }
+                        useCharacter(move6StudCharacterMessage.getCharacterID());
+                    }else{
+                        notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.WrongStudentNumber));
                     }
-                    for (Colour c : move6StudCharacterMessage.getStudsFromChar()) {
-                        try {
-                            board.addToEntrance(c);
-                        } catch (StudentsOutOfBoundsException e) {
-                            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsFullError));
-                        }
-                        try {
-                            character.removeStudent(c);
-                        } catch (StudentsOutOfBoundsException e) {
-                            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsEmptyError));
-                        }
-                    }
-                    useCharacter(move6StudCharacterMessage.getCharacterID());
                 } else {
                     notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotEnoughCoinError));
                 }
@@ -344,38 +348,42 @@ public class MessageVisitor extends Observable<ClientModel> {
                 if(!game.getTurnHandler().isUsedCharacter()) {
                     if (game.getGameModel().getPlayer(game.getCurrentPlayer()).getCoins() >= game.getGameModel().getCharacter(move2StudCharacterMessage.getCharacterID()).getPrice()) {
                         Board board = game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard();
-                        for (Colour c : move2StudCharacterMessage.getStudFromBoard()) {
-                            try {
-                                board.removeStudent(c);
-                            } catch (StudentsOutOfBoundsException e) {
-                                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsEmptyError));
-                            }
-                            try {
-                                board.addToTable(c);
-                            } catch (StudentsOutOfBoundsException e) {
-                                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsFullError));
-                            }
+                        if(move2StudCharacterMessage.getStudFromBoard().length == move2StudCharacterMessage.getStudFromTables().length && move2StudCharacterMessage.getStudFromBoard().length <= 2) {
+                            for (Colour c : move2StudCharacterMessage.getStudFromBoard()) {
+                                try {
+                                    board.removeStudent(c);
+                                } catch (StudentsOutOfBoundsException e) {
+                                    notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsEmptyError));
+                                }
+                                try {
+                                    board.addToTable(c);
+                                } catch (StudentsOutOfBoundsException e) {
+                                    notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsFullError));
+                                }
 
-                        }
-                        for (Colour c : move2StudCharacterMessage.getStudFromTables()) {
-                            try {
-                                board.addToEntrance(c);
-                            } catch (StudentsOutOfBoundsException e) {
-                                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsFullError));
                             }
-                            try {
-                                board.removeFromTable(c);
-                            } catch (StudentsOutOfBoundsException e) {
-                                notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsEmptyError));
+                            for (Colour c : move2StudCharacterMessage.getStudFromTables()) {
+                                try {
+                                    board.addToEntrance(c);
+                                } catch (StudentsOutOfBoundsException e) {
+                                    notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsFullError));
+                                }
+                                try {
+                                    board.removeFromTable(c);
+                                } catch (StudentsOutOfBoundsException e) {
+                                    notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.TileIsEmptyError));
+                                }
                             }
+                            for (Colour c : move2StudCharacterMessage.getStudFromTables()) {
+                                game.getTurnHandler().checkProfessor(c);
+                            }
+                            for (Colour c : move2StudCharacterMessage.getStudFromBoard()) {
+                                game.getTurnHandler().checkProfessor(c);
+                            }
+                            useCharacter(move2StudCharacterMessage.getCharacterID());
+                        }else{
+                            notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.WrongStudentNumber));
                         }
-                        for (Colour c : move2StudCharacterMessage.getStudFromTables()) {
-                            game.getTurnHandler().checkProfessor(c);
-                        }
-                        for (Colour c : move2StudCharacterMessage.getStudFromBoard()) {
-                            game.getTurnHandler().checkProfessor(c);
-                        }
-                        useCharacter(move2StudCharacterMessage.getCharacterID());
                     } else {
                         notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotEnoughCoinError));
                     }

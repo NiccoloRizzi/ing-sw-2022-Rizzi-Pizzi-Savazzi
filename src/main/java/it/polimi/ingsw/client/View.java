@@ -30,7 +30,7 @@ public abstract class View extends Observable<JsonObject> {
 
     public synchronized void visit(ClientBoard clientBoard){
         modelView.getBoards()[clientBoard.getPlayerID()] = clientBoard;
-        refresh();
+        refresh(2);
     }
     public synchronized void visit(ClientIsle clientIsle){
         ClientGameModel clientGameModel = modelView.getGameModel();
@@ -40,7 +40,7 @@ public abstract class View extends Observable<JsonObject> {
                 break;
             }
         }
-        refresh();
+        refresh(3);
     }
     public synchronized void visit(ClientPlayer clientPLayer){
         modelView.getPlayers()[clientPLayer.getId()]=clientPLayer;
@@ -52,28 +52,29 @@ public abstract class View extends Observable<JsonObject> {
             }
             modelView.setOtherPlayerAss(otherPLayerAss);
         }
+        refresh(1);
     }
     public synchronized void visit(ClientGameModel clientGameModel){
         modelView.setGameModel(clientGameModel);
-        refresh();
+        refresh(0);
     }
     public synchronized void visit(ClientCloud clientCloud){
         modelView.getClouds()[clientCloud.getId()] = clientCloud;
-        refresh();
+        refresh(3);
     }
     public synchronized void visit(ClientCharacter character){
         modelView.getCharacters()[character.getID()] = character;
         getModelView().setCurrentCharacter(Optional.of(character.getID()));
-        refresh();
+        refresh(4);
     }
     public synchronized void visit(ErrorMessage errorMessage){
         if(errorMessage.getError()== ErrorMessage.ErrorType.PlayerDisconnected){
             modelView.setError(errorMessage.getError());
-            refresh();
+            refresh(6);
         }
         else if(errorMessage.getId()==modelView.getMyId()) {
             modelView.setError(errorMessage.getError());
-            refresh();
+            refresh(6);
         }
     }
     public synchronized void visit(TurnMessage turnMessage){
@@ -84,12 +85,12 @@ public abstract class View extends Observable<JsonObject> {
             modelView.setOtherPlayerAss(new HashMap<>());
         }
         modelView.setTurn(turnMessage);
-        refresh();
+        refresh(5);
     }
     public synchronized void visit(WinMessage winMessage) {
         System.out.println(winMessage.serialize());
         modelView.setWin(winMessage);
-        refresh();
+        refresh(6);
         WinDisconnection winDisconnection = new WinDisconnection(modelView.getMyId());
         notifyClient(MessageSerializer.serialize(winDisconnection));
         notifyDisconnection();
@@ -203,5 +204,5 @@ public abstract class View extends Observable<JsonObject> {
 
     public abstract void start();
     public abstract void startGame();
-    public abstract void refresh();
+    public abstract void refresh(int index);
 }
