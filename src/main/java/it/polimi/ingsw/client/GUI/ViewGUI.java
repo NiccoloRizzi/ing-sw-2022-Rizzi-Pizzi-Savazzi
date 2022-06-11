@@ -631,7 +631,7 @@ public class ViewGUI extends View {
                 if (getModelView().getPlayers().length >= 3) {
                     j = 0;
                     for (ClientBoard b : getModelView().getBoards()) {
-                        if (b.getPlayerID() == (myID + 1) % getModelView().getPlayers().length) {
+                        if (b.getPlayerID() == (myID + 2) % getModelView().getPlayers().length) {
                             board = b;
                         }
                     }
@@ -697,7 +697,7 @@ public class ViewGUI extends View {
                 if (getModelView().getPlayers().length == 4) {
                     j = 0;
                     for (ClientBoard b : getModelView().getBoards()) {
-                        if (b.getPlayerID() == (myID + 1) % getModelView().getPlayers().length) {
+                        if (b.getPlayerID() == (myID + 3) % getModelView().getPlayers().length) {
                             board = b;
                         }
                     }
@@ -816,6 +816,7 @@ public class ViewGUI extends View {
 
     public void showAssistant(ActionEvent e)
     {
+
         HBox box = (HBox) assistant.getContent().get(0);
         Pane pane;
         box.getChildren().clear();
