@@ -155,9 +155,11 @@ public class GameModel extends Observable<ClientModel> {
      * Randomly fills the clouds
      */
     public void fillClouds(){
+        int nToExtract = (numOfPlayers%2==0)?3:4;
+        if(getBagSize() >= nToExtract*numOfPlayers)
         for(Cloud c: clouds){
             try {
-                c.addStudents(extractStudents((numOfPlayers%2==0)?3:4));
+                c.addStudents(extractStudents(nToExtract));
             } catch (StudentsOutOfBoundsException e) {
                 e.printStackTrace();
             }

@@ -52,7 +52,8 @@ public class Game extends Observable<ClientModel> {
                         p.getBoard().getTowers() == gameModel.getPlayers().stream()
                                 .map(n -> n.getBoard().getTowers())
                                 .min(Integer::compareTo)
-                                .get() && p.getID()!= winner.getID()
+                                .get()
+                        && p.getID()!= winner.getID()
                 ))
                 .max(Comparator.comparingInt(a -> gameModel.numberOfProfessors(a)));
         if(check.isPresent() && winner.getBoard().getTowers() == check.get().getBoard().getTowers() && gameModel.numberOfProfessors(winner) == gameModel.numberOfProfessors(check.get())){

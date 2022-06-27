@@ -86,6 +86,14 @@ public class ViewGUI extends View {
                     waiting.setVisible(false);
                 }
         );
+        board1.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        board2.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        board3.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        board4.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        ChosenAssistant1.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        ChosenAssistant2.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        ChosenAssistant3.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        ChosenAssistant4.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         createPlayers();
         createAssistant();
         started=true;
@@ -155,10 +163,10 @@ public class ViewGUI extends View {
 
         for(int i = 0; i< 9;i++) {
             pane = new Pane();
-            pane.setPrefWidth(13);
-            pane.setPrefHeight(13);
-            pane.setMaxWidth(13);
-            pane.setMaxHeight(13);
+            pane.setPrefWidth(14);
+            pane.setPrefHeight(14);
+            pane.setMaxWidth(14);
+            pane.setMaxHeight(14);
             students1.add(pane);
             if (i < 4) {
                 entrance1.add(pane, 1, 3 + (2 * i));
@@ -171,10 +179,10 @@ public class ViewGUI extends View {
         students2= new ArrayList<>();
         for(int i = 0; i< 9;i++) {
             pane = new Pane();
-            pane.setPrefWidth(18);
-            pane.setPrefHeight(18);
-            pane.setMaxWidth(18);
-            pane.setMaxHeight(18);
+            pane.setPrefWidth(14);
+            pane.setPrefHeight(14);
+            pane.setMaxWidth(14);
+            pane.setMaxHeight(14);
             students2.add(pane);
             if (i < 4)
                 entrance2.add(pane, 1, 3 + 2 * i);
@@ -185,10 +193,10 @@ public class ViewGUI extends View {
             students3 = new ArrayList<>();
             for (int i = 0; i < 9; i++) {
                 pane = new Pane();
-                pane.setPrefWidth(13);
-                pane.setPrefHeight(13);
-                pane.setMaxWidth(13);
-                pane.setMaxHeight(13);
+                pane.setPrefWidth(14);
+                pane.setPrefHeight(14);
+                pane.setMaxWidth(14);
+                pane.setMaxHeight(14);
                 students3.add(pane);
                 if (i < 4)
                     entrance3.add(pane, 1, 3 + 2 * i);
@@ -200,10 +208,10 @@ public class ViewGUI extends View {
             students4 = new ArrayList<>();
             for (int i = 0; i < 9; i++) {
                 pane = new Pane();
-                pane.setPrefWidth(13);
-                pane.setPrefHeight(13);
-                pane.setMaxWidth(13);
-                pane.setMaxHeight(13);
+                pane.setPrefWidth(14);
+                pane.setPrefHeight(14);
+                pane.setMaxWidth(14);
+                pane.setMaxHeight(14);
                 students4.add(pane);
                 if (i < 4)
                     entrance4.add(pane, 1, 3 + 2 * i);
@@ -383,6 +391,7 @@ public class ViewGUI extends View {
                 character.get(i).setMinWidth(99);
                 character.get(i).setMaxHeight(150);
                 character.get(i).setMaxWidth(99);
+                character.get(i).setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
                 character.get(i).setOnMouseClicked(mouseEvent -> selectCharacter(mouseEvent));
                 ((StackPane) character.get(i)).setAlignment(Pos.CENTER);
                 character.get(i).setBackground(new Background(new BackgroundImage(new Image("/images\\personaggi\\" + getModelView().getCharacters()[i].getCard().toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
@@ -412,6 +421,7 @@ public class ViewGUI extends View {
                 event.consume();
                 checkExchange2();
             });
+            player1.setTranslateX(40);
         }
     }
 
@@ -419,8 +429,9 @@ public class ViewGUI extends View {
     {
         Platform.runLater(
             ()-> {
-                turn.setText("Turn of " + getModelView().getPlayers()[getModelView().getTurn().getPlayerId()].getNickname());
-                phase.setText("Phase: " + getModelView().getTurn().getTurn().getTurnMsg());
+                String turnmessage = (getModelView().getTurn().getPlayerId()==getModelView().getMyId())? "It's your turn" : getModelView().getPlayers()[getModelView().getTurn().getPlayerId()].getNickname();
+                turn.setText("Turn of:\n " + turnmessage);
+                phase.setText("Phase:\n " + getModelView().getTurn().getTurn().getTurnMsg());
                 turn.setVisible(true);
                 phase.setVisible(true);
             }
@@ -517,6 +528,7 @@ public class ViewGUI extends View {
                 for(Colour c: Colour.values())
                 {
                     for(int i = 0; i < board.getEntrance().get(c);i++){
+                        System.out.println("i:"+i+" j:"+j+" c:"+c.toString());
                         students1.get(j).setUserData(c);
                         students1.get(j).setOnMouseClicked(mouseEvent-> {selectEntranceStudent(mouseEvent);});
                         students1.get(j).setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_"+ c.toString()+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
@@ -527,12 +539,12 @@ public class ViewGUI extends View {
                 for(Colour c: Colour.values()) {
                     for (int i = 0; i < board.getTables().get(c); i++) {
                         pane = new Pane();
-                        pane.setMinHeight(13);
-                        pane.setMinWidth(13);
-                        pane.setPrefHeight(13);
-                        pane.setPrefWidth(13);
-                        pane.setMaxHeight(13);
-                        pane.setMaxWidth(13);
+                        pane.setMinHeight(14);
+                        pane.setMinWidth(14);
+                        pane.setPrefHeight(14);
+                        pane.setPrefWidth(14);
+                        pane.setMaxHeight(14);
+                        pane.setMaxWidth(14);
                         pane.setUserData(c);
                         pane.setOnMouseClicked(mouseEvent -> selectTableStudent(mouseEvent));
                         pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
@@ -541,12 +553,13 @@ public class ViewGUI extends View {
                     }
                     if (getModelView().getGameModel().getProfessors().containsKey(c)&&getModelView().getGameModel().getProfessors().get(c) == myID) {
                         pane = new Pane();
-                        pane.setMinHeight(13);
-                        pane.setMinWidth(13);
-                        pane.setPrefHeight(13);
-                        pane.setPrefWidth(13);
-                        pane.setMaxHeight(13);
-                        pane.setMaxWidth(13);
+                        pane.setMinHeight(18);
+                        pane.setMinWidth(18);
+                        pane.setPrefHeight(18);
+                        pane.setPrefWidth(18);
+                        pane.setMaxHeight(18);
+                        pane.setMaxWidth(18);
+                        pane.setRotate(90.0);
                         pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\professor_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                         tables1.add(pane, 21, 1 + 2 * c.ordinal());
                     }
@@ -582,28 +595,33 @@ public class ViewGUI extends View {
                         j++;
                     }
                 }
+                for (; j <9 ; j++ )
+                {
+                    students2.get(j).setBackground(null);
+                }
                 tables2.getChildren().clear();
                 for (Colour c : Colour.values()) {
                     for (int i = 0; i < board.getTables().get(c); i++) {
                         pane = new Pane();
-                        pane.setMinHeight(13);
-                        pane.setMinWidth(13);
-                        pane.setPrefHeight(13);
-                        pane.setPrefWidth(13);
-                        pane.setMaxHeight(13);
-                        pane.setMaxWidth(13);
+                        pane.setMinHeight(14);
+                        pane.setMinWidth(14);
+                        pane.setPrefHeight(14);
+                        pane.setPrefWidth(14);
+                        pane.setMaxHeight(14);
+                        pane.setMaxWidth(14);
                         pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
 
                         tables2.add(pane, 1 + 2 * i, 1 + 2 * c.ordinal());
                     }
                     if (getModelView().getGameModel().getProfessors().containsKey(c) && getModelView().getGameModel().getProfessors().get(c) == (myID + 1) % getModelView().getPlayers().length) {
                         pane = new Pane();
-                        pane.setMinHeight(13);
-                        pane.setMinWidth(13);
-                        pane.setPrefHeight(13);
-                        pane.setPrefWidth(13);
-                        pane.setMaxHeight(13);
-                        pane.setMaxWidth(13);
+                        pane.setMinHeight(18);
+                        pane.setMinWidth(18);
+                        pane.setPrefHeight(18);
+                        pane.setPrefWidth(18);
+                        pane.setMaxHeight(18);
+                        pane.setMaxWidth(18);
+                        pane.setRotate(90.0);
                         pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\professor_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                         tables2.add(pane, 21, 1 + 2 * c.ordinal());
                     }
@@ -641,36 +659,41 @@ public class ViewGUI extends View {
                             j++;
                         }
                     }
+                    for (; j <9 ; j++ )
+                    {
+                        students3.get(j).setBackground(null);
+                    }
                     tables3.getChildren().clear();
                     for (Colour c : Colour.values()) {
                         pane = new Pane();
-                        pane.setMinHeight(13);
-                        pane.setMinWidth(13);
-                        pane.setPrefHeight(13);
-                        pane.setPrefWidth(13);
-                        pane.setMaxHeight(13);
-                        pane.setMaxWidth(13);
+                        pane.setMinHeight(14);
+                        pane.setMinWidth(14);
+                        pane.setPrefHeight(14);
+                        pane.setPrefWidth(14);
+                        pane.setMaxHeight(14);
+                        pane.setMaxWidth(14);
                         pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                         for (int i = 0; i < board.getTables().get(c); i++) {
                             pane = new Pane();
-                            pane.setMinHeight(13);
-                            pane.setMinWidth(13);
-                            pane.setPrefHeight(13);
-                            pane.setPrefWidth(13);
-                            pane.setMaxHeight(13);
-                            pane.setMaxWidth(13);
+                            pane.setMinHeight(14);
+                            pane.setMinWidth(14);
+                            pane.setPrefHeight(14);
+                            pane.setPrefWidth(14);
+                            pane.setMaxHeight(14);
+                            pane.setMaxWidth(14);
                             pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
 
                             tables3.add(pane, 1 + 2 * i, 1 + 2 * c.ordinal());
                         }
                         if (getModelView().getGameModel().getProfessors().containsKey(c) && getModelView().getGameModel().getProfessors().get(c) == (myID + 2) % getModelView().getPlayers().length) {
                             pane = new Pane();
-                            pane.setMinHeight(13);
-                            pane.setMinWidth(13);
-                            pane.setPrefHeight(13);
-                            pane.setPrefWidth(13);
-                            pane.setMaxHeight(13);
-                            pane.setMaxWidth(13);
+                            pane.setMinHeight(18);
+                            pane.setMinWidth(18);
+                            pane.setPrefHeight(18);
+                            pane.setPrefWidth(18);
+                            pane.setMaxHeight(18);
+                            pane.setMaxWidth(18);
+                            pane.setRotate(90.0);
                             pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\professor_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                             tables3.add(pane, 21, 1 + 2 * c.ordinal());
                         }
@@ -707,28 +730,33 @@ public class ViewGUI extends View {
                             j++;
                         }
                     }
+                    for (; j <9 ; j++ )
+                    {
+                        students2.get(j).setBackground(null);
+                    }
                     tables4.getChildren().clear();
                     for (Colour c : Colour.values()) {
                         for (int i = 0; i < board.getTables().get(c); i++) {
                             pane = new Pane();
-                            pane.setMinHeight(13);
-                            pane.setMinWidth(13);
-                            pane.setPrefHeight(13);
-                            pane.setPrefWidth(13);
-                            pane.setMaxHeight(13);
-                            pane.setMaxWidth(13);
+                            pane.setMinHeight(14);
+                            pane.setMinWidth(14);
+                            pane.setPrefHeight(14);
+                            pane.setPrefWidth(14);
+                            pane.setMaxHeight(14);
+                            pane.setMaxWidth(14);
                             pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
 
                             tables4.add(pane, 1 + 2 * i, 1 + 2 * c.ordinal());
                         }
                         if ( getModelView().getGameModel().getProfessors().containsKey(c) && getModelView().getGameModel().getProfessors().get(c) == (myID + 3) % getModelView().getPlayers().length) {
                             pane = new Pane();
-                            pane.setMinHeight(13);
-                            pane.setMinWidth(13);
-                            pane.setPrefHeight(13);
-                            pane.setPrefWidth(13);
-                            pane.setMaxHeight(13);
-                            pane.setMaxWidth(13);
+                            pane.setMinHeight(18);
+                            pane.setMinWidth(18);
+                            pane.setPrefHeight(18);
+                            pane.setPrefWidth(18);
+                            pane.setMaxHeight(18);
+                            pane.setMaxWidth(18);
+                            pane.setRotate(90.0);
                             pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\professor_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                             tables4.add(pane, 21, 1 + 2 * c.ordinal());
                         }
@@ -828,6 +856,7 @@ public class ViewGUI extends View {
             pane.setPrefHeight(200);
             pane.setMinHeight(150);
             pane.setMinWidth(137);
+            pane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             pane.setVisible(true);
             pane.setOnMouseClicked(mouseEvent ->{chooseAssistant(mouseEvent);});
             pane.setUserData(getModelView().getPlayers()[myID].getDeck()[i]);
@@ -837,6 +866,7 @@ public class ViewGUI extends View {
         assistant.sizeToScene();
         assistant.setX(stage.getScene().getWidth()/2 -(137+10)*getModelView().getPlayers()[myID].getDeck().length/2);
         assistant.setY(stage.getScene().getHeight()/2 - assistant.getHeight());
+        assistant.setAutoHide(true);
         assistant.show(stage);
     }
     public void chooseAssistant(MouseEvent e){
@@ -1021,7 +1051,7 @@ public class ViewGUI extends View {
 
     public void checkExchange2()
     {
-        if(to.size() == from.size())
+        if(to.size() == from.size() && to.size() > 0)
         {
             exchange2Students(charIndex.get(),to.toArray(Colour[]::new),from.toArray(Colour[]::new));
             charIndex = Optional.empty();
@@ -1034,7 +1064,7 @@ public class ViewGUI extends View {
                 ()-> {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("ExchangeStudentError");
-                    alert.setContentText("the number of student to exchange between the table and the entrance is not correct");
+                    alert.setContentText("the number of student to exchange between the table and the entrance is not correct or the number of selected student is 0");
                     to = new ArrayList<>();
                     from = new ArrayList<>();
                     alert.showAndWait();
