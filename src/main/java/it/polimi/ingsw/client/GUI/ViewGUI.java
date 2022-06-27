@@ -123,23 +123,23 @@ public class ViewGUI extends View {
                 nickname1.setText(getModelView().getNickname());
                 nickname1.setVisible(true);
                // chooseAssistantB.setVisible(true);
-                board1.setBackground(new Background(new BackgroundImage(new Image("/images\\board.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                board1.setBackground(new Background(new BackgroundImage(new Image("images/board.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
 
                 player2.setVisible(true);
                 nickname2.setText(getModelView().getPlayers()[(myID + 1) % getModelView().getPlayers().length].getNickname());
                 nickname2.setVisible(true);
-                board2.setBackground(new Background(new BackgroundImage(new Image("/images\\board.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                board2.setBackground(new Background(new BackgroundImage(new Image("images/board.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
 
                 if (getModelView().getPlayers().length >= 3) {
                     player3.setVisible(true);
                     nickname3.setText(getModelView().getPlayers()[(myID + 2) % getModelView().getPlayers().length].getNickname());
-                    board3.setBackground(new Background(new BackgroundImage(new Image("/images\\board.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                    board3.setBackground(new Background(new BackgroundImage(new Image("images/board.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                 }
 
                 if (getModelView().getPlayers().length == 4) {
                     player4.setVisible(true);
                     nickname4.setText(getModelView().getPlayers()[(myID + 3) % getModelView().getPlayers().length].getNickname());
-                    board4.setBackground(new Background(new BackgroundImage(new Image("/images\\board.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                    board4.setBackground(new Background(new BackgroundImage(new Image("images/board.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                 }
 
                 if(getModelView().isExpert())
@@ -230,7 +230,7 @@ public class ViewGUI extends View {
                         tile.setPrefHeight(100);
                         tile.setMinWidth(100);
                         tile.setMinHeight(100);
-                        tile.setBackground(new Background(new BackgroundImage(new Image("/images\\isle"+image[i]+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        tile.setBackground(new Background(new BackgroundImage(new Image("images/isle"+image[i]+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                         tile.setOnMouseClicked(mouseEvent -> {selectIsle(mouseEvent);});
                         isles.add(tile);
                         center.getChildren().add(isles.get(i));
@@ -245,7 +245,7 @@ public class ViewGUI extends View {
                             student.setPrefWidth(20);
                             student.setMaxHeight(20);
                             student.setMaxWidth(20);
-                            student.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_"+ c.toString()+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                            student.setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_"+ c.toString()+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                             student.setAlignment(Pos.CENTER);
                             num = new Label(getModelView().getGameModel().getIsles().get(i).getStudents().get(c).toString());
                             num.setMaxHeight(20);
@@ -268,7 +268,7 @@ public class ViewGUI extends View {
                             student.setPrefWidth(40);
                             student.setMaxHeight(40);
                             student.setMaxWidth(40);
-                            student.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\tower_"+getModelView().getGameModel().getIsles().get(i).getControlling() +".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                            student.setBackground(new Background(new BackgroundImage(new Image("images/pedine/tower_"+getModelView().getGameModel().getIsles().get(i).getControlling() +".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                             num = new Label(((Integer)getModelView().getGameModel().getIsles().get(i).getSize()).toString());
                             num.setMaxHeight(36);
                             num.setMaxWidth(36);
@@ -295,7 +295,7 @@ public class ViewGUI extends View {
                             student.setPrefWidth(30);
                             student.setMaxHeight(30);
                             student.setMaxWidth(30);
-                            student.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\prohibited.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                            student.setBackground(new Background(new BackgroundImage(new Image("images/pedine/prohibited.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                             num = new Label(((Integer)getModelView().getGameModel().getIsles().get(i).getProhibited()).toString());
                             num.setMaxHeight(30);
                             num.setMaxWidth(30);
@@ -319,7 +319,7 @@ public class ViewGUI extends View {
                     student.setPrefWidth(28);
                     student.setMaxHeight(28);
                     student.setMaxWidth(28);
-                    student.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\MotherNature.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                    student.setBackground(new Background(new BackgroundImage(new Image("images/pedine/MotherNature.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                     isles.get(getModelView().getGameModel().getMotherNature()).getChildren().add(student);
                     ((AnchorPane)isles.get(getModelView().getGameModel().getMotherNature())).setTopAnchor(student,0.0);
                     ((AnchorPane)isles.get(getModelView().getGameModel().getMotherNature())).setLeftAnchor(student,50.0-14);
@@ -341,7 +341,7 @@ public class ViewGUI extends View {
                         center.getChildren().add(i,clouds.get(i));
                         clouds.get(i).setLayoutX((center.getWidth()/2)+(center.getHeight()/6)*cos(rotation*i)-40);
                         clouds.get(i).setLayoutY((center.getHeight()/2)+(center.getHeight()/6)*sin(rotation*i)-40);
-                        clouds.get(i).setBackground(new Background(new BackgroundImage(new Image("/images\\cloud1.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        clouds.get(i).setBackground(new Background(new BackgroundImage(new Image("images/cloud1.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                         for(Colour c:Colour.values())
                         {
                             student = new StackPane();
@@ -351,7 +351,7 @@ public class ViewGUI extends View {
                             student.setPrefWidth(20);
                             student.setMaxHeight(20);
                             student.setMaxWidth(20);
-                            student.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_"+ c.toString()+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                            student.setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_"+ c.toString()+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                             student.setAlignment(Pos.CENTER);
                             num = new Label(getModelView().getClouds()[i].getStudents().get(c).toString());
                             num.setMaxHeight(20);
@@ -385,7 +385,7 @@ public class ViewGUI extends View {
                 character.get(i).setMaxWidth(99);
                 character.get(i).setOnMouseClicked(mouseEvent -> selectCharacter(mouseEvent));
                 ((StackPane) character.get(i)).setAlignment(Pos.CENTER);
-                character.get(i).setBackground(new Background(new BackgroundImage(new Image("/images\\personaggi\\" + getModelView().getCharacters()[i].getCard().toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                character.get(i).setBackground(new Background(new BackgroundImage(new Image("images/personaggi/" + getModelView().getCharacters()[i].getCard().toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                 character.get(i).getChildren().add(new GridPane());
                 ((GridPane) character.get(i).getChildren().get(0)).setAlignment(Pos.BOTTOM_CENTER);
                 ((GridPane) character.get(i).getChildren().get(0)).setMinWidth(character.get(i).getWidth());
@@ -439,7 +439,7 @@ public class ViewGUI extends View {
                         pane.setMaxHeight(35);
                         pane.setPrefWidth(35);
                         pane.setPrefHeight(35);
-                        pane.setBackground(new Background(new BackgroundImage(new Image("/images\\Moneta_base.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        pane.setBackground(new Background(new BackgroundImage(new Image("images/Moneta_base.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                         character.get(i).getChildren().add(pane);
                         ((StackPane)character.get(i)).setAlignment(pane,Pos.TOP_CENTER);
                     }
@@ -457,7 +457,7 @@ public class ViewGUI extends View {
                                 pane.setPrefHeight(20);
                                 pane.setUserData(c);
                                 pane.setOnMouseClicked(mouseEvent -> selectCharacterStudent(mouseEvent));
-                                pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                                pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                                 ((GridPane) character.get(i).getChildren().get(0)).add(pane, column, row);
                                 if (column == 2) {
                                     column = 0;
@@ -481,7 +481,7 @@ public class ViewGUI extends View {
                             pane.setMaxHeight(20);
                             pane.setPrefWidth(20);
                             pane.setPrefHeight(20);
-                            pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\prohibited.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                            pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/prohibited.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                             ((GridPane) character.get(i).getChildren().get(0)).add(pane, column, row);
                             if (column == 2) {
                                 column = 0;
@@ -519,7 +519,7 @@ public class ViewGUI extends View {
                     for(int i = 0; i < board.getEntrance().get(c);i++){
                         students1.get(j).setUserData(c);
                         students1.get(j).setOnMouseClicked(mouseEvent-> {selectEntranceStudent(mouseEvent);});
-                        students1.get(j).setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_"+ c.toString()+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        students1.get(j).setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_"+ c.toString()+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                         j++;
                     }
                  }
@@ -535,7 +535,7 @@ public class ViewGUI extends View {
                         pane.setMaxWidth(13);
                         pane.setUserData(c);
                         pane.setOnMouseClicked(mouseEvent -> selectTableStudent(mouseEvent));
-                        pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
 
                         tables1.add(pane, 1 + 2 * i, 1 + 2 * c.ordinal());
                     }
@@ -547,7 +547,7 @@ public class ViewGUI extends View {
                         pane.setPrefWidth(13);
                         pane.setMaxHeight(13);
                         pane.setMaxWidth(13);
-                        pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\professor_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/professor_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                         tables1.add(pane, 21, 1 + 2 * c.ordinal());
                     }
                 }
@@ -562,7 +562,7 @@ public class ViewGUI extends View {
                     pane.setPrefWidth(20);
                     pane.setMaxHeight(20);
                     pane.setMaxWidth(20);
-                    pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\tower_" + board.getFaction() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                    pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/tower_" + board.getFaction() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
 
                     if(i<4)
                         towers1.add(pane,1,i+1);
@@ -578,7 +578,7 @@ public class ViewGUI extends View {
                 }
                 for (Colour c : Colour.values()) {
                     for (int i = 0; i < board.getEntrance().get(c); i++) {
-                        students2.get(j).setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        students2.get(j).setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                         j++;
                     }
                 }
@@ -592,7 +592,7 @@ public class ViewGUI extends View {
                         pane.setPrefWidth(13);
                         pane.setMaxHeight(13);
                         pane.setMaxWidth(13);
-                        pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
 
                         tables2.add(pane, 1 + 2 * i, 1 + 2 * c.ordinal());
                     }
@@ -604,7 +604,7 @@ public class ViewGUI extends View {
                         pane.setPrefWidth(13);
                         pane.setMaxHeight(13);
                         pane.setMaxWidth(13);
-                        pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\professor_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/professor_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                         tables2.add(pane, 21, 1 + 2 * c.ordinal());
                     }
                 }
@@ -620,7 +620,7 @@ public class ViewGUI extends View {
                     pane.setPrefWidth(20);
                     pane.setMaxHeight(20);
                     pane.setMaxWidth(20);
-                    pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\tower_" + board.getFaction() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                    pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/tower_" + board.getFaction() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
 
                     if(i<4)
                         towers2.add(pane,1,i+1);
@@ -637,7 +637,7 @@ public class ViewGUI extends View {
                     }
                     for (Colour c : Colour.values()) {
                         for (int i = 0; i < board.getEntrance().get(c); i++) {
-                            students3.get(j).setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                            students3.get(j).setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                             j++;
                         }
                     }
@@ -650,7 +650,7 @@ public class ViewGUI extends View {
                         pane.setPrefWidth(13);
                         pane.setMaxHeight(13);
                         pane.setMaxWidth(13);
-                        pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                         for (int i = 0; i < board.getTables().get(c); i++) {
                             pane = new Pane();
                             pane.setMinHeight(13);
@@ -659,7 +659,7 @@ public class ViewGUI extends View {
                             pane.setPrefWidth(13);
                             pane.setMaxHeight(13);
                             pane.setMaxWidth(13);
-                            pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                            pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
 
                             tables3.add(pane, 1 + 2 * i, 1 + 2 * c.ordinal());
                         }
@@ -671,7 +671,7 @@ public class ViewGUI extends View {
                             pane.setPrefWidth(13);
                             pane.setMaxHeight(13);
                             pane.setMaxWidth(13);
-                            pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\professor_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                            pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/professor_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                             tables3.add(pane, 21, 1 + 2 * c.ordinal());
                         }
                     }
@@ -686,7 +686,7 @@ public class ViewGUI extends View {
                         pane.setPrefWidth(20);
                         pane.setMaxHeight(20);
                         pane.setMaxWidth(20);
-                        pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\tower_" + board.getFaction() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/tower_" + board.getFaction() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
 
                         if(i<4)
                             towers3.add(pane,1,i+1);
@@ -703,7 +703,7 @@ public class ViewGUI extends View {
                     }
                     for (Colour c : Colour.values()) {
                         for (int i = 0; i < board.getEntrance().get(c); i++) {
-                            students4.get(j).setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                            students4.get(j).setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                             j++;
                         }
                     }
@@ -717,7 +717,7 @@ public class ViewGUI extends View {
                             pane.setPrefWidth(13);
                             pane.setMaxHeight(13);
                             pane.setMaxWidth(13);
-                            pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                            pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
 
                             tables4.add(pane, 1 + 2 * i, 1 + 2 * c.ordinal());
                         }
@@ -729,7 +729,7 @@ public class ViewGUI extends View {
                             pane.setPrefWidth(13);
                             pane.setMaxHeight(13);
                             pane.setMaxWidth(13);
-                            pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\professor_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                            pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/professor_" + c.toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                             tables4.add(pane, 21, 1 + 2 * c.ordinal());
                         }
                     }
@@ -744,7 +744,7 @@ public class ViewGUI extends View {
                         pane.setPrefWidth(20);
                         pane.setMaxHeight(20);
                         pane.setMaxWidth(20);
-                        pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\tower_" + board.getFaction() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/tower_" + board.getFaction() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
 
                         if(i<4)
                             towers4.add(pane,1,i+1);
@@ -761,34 +761,34 @@ public class ViewGUI extends View {
             ()-> {
                 money1.setText(((Integer) getModelView().getPlayers()[myID].getCoins()).toString());
                 if (getModelView().getPlayers()[myID].getUsedAssistants().length > 0) {
-                    ChosenAssistant1.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\assistente"+(getModelView().getPlayers()[myID].getUsedAssistants()[getModelView().getPlayers()[myID].getUsedAssistants().length-1]+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                    ChosenAssistant1.setBackground(new Background(new BackgroundImage(new Image("images/assistenti/assistente"+(getModelView().getPlayers()[myID].getUsedAssistants()[getModelView().getPlayers()[myID].getUsedAssistants().length-1]+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                 } else {
-                    ChosenAssistant1.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\mago"+(myID+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                    ChosenAssistant1.setBackground(new Background(new BackgroundImage(new Image("images/assistenti/mago"+(myID+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                 }
 
                 money2.setText(((Integer) getModelView().getPlayers()[(myID + 1) % getModelView().getPlayers().length].getCoins()).toString());
                 if (getModelView().getPlayers()[(myID + 1) % getModelView().getPlayers().length].getUsedAssistants().length > 0) {
-                    ChosenAssistant2.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\assistente"+(getModelView().getPlayers()[(myID + 1) % getModelView().getPlayers().length].getUsedAssistants()[getModelView().getPlayers()[(myID + 1) % getModelView().getPlayers().length].getUsedAssistants().length-1]+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                    ChosenAssistant2.setBackground(new Background(new BackgroundImage(new Image("images/assistenti/assistente"+(getModelView().getPlayers()[(myID + 1) % getModelView().getPlayers().length].getUsedAssistants()[getModelView().getPlayers()[(myID + 1) % getModelView().getPlayers().length].getUsedAssistants().length-1]+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                 } else {
-                    ChosenAssistant2.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\mago"+((myID + 1)%getModelView().getPlayers().length+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                    ChosenAssistant2.setBackground(new Background(new BackgroundImage(new Image("images/assistenti/mago"+((myID + 1)%getModelView().getPlayers().length+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                 }
 
 
                 if (getModelView().getPlayers().length >= 3) {
                     money3.setText(((Integer) getModelView().getPlayers()[(myID + 2) % getModelView().getPlayers().length].getCoins()).toString());
                     if (getModelView().getPlayers()[(myID + 2) % getModelView().getPlayers().length].getUsedAssistants().length > 0) {
-                        ChosenAssistant3.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\assistente" + (getModelView().getPlayers()[(myID + 2) % getModelView().getPlayers().length].getUsedAssistants()[getModelView().getPlayers()[(myID + 2) % getModelView().getPlayers().length].getUsedAssistants().length - 1]+1)+ ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        ChosenAssistant3.setBackground(new Background(new BackgroundImage(new Image("images/assistenti/assistente" + (getModelView().getPlayers()[(myID + 2) % getModelView().getPlayers().length].getUsedAssistants()[getModelView().getPlayers()[(myID + 2) % getModelView().getPlayers().length].getUsedAssistants().length - 1]+1)+ ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                     } else {
-                        ChosenAssistant3.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\mago" + ((myID + 2) % getModelView().getPlayers().length+1) + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        ChosenAssistant3.setBackground(new Background(new BackgroundImage(new Image("images/assistenti/mago" + ((myID + 2) % getModelView().getPlayers().length+1) + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                     }
                 }
 
                 if (getModelView().getPlayers().length == 4) {
                     money4.setText(((Integer) getModelView().getPlayers()[(myID + 3) % getModelView().getPlayers().length].getCoins()).toString());
                     if (getModelView().getPlayers()[(myID + 3) % getModelView().getPlayers().length].getUsedAssistants().length > 0) {
-                        ChosenAssistant4.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\assistente"+(getModelView().getPlayers()[(myID + 3) % getModelView().getPlayers().length].getUsedAssistants()[getModelView().getPlayers()[(myID + 3) % getModelView().getPlayers().length].getUsedAssistants().length-1]+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        ChosenAssistant4.setBackground(new Background(new BackgroundImage(new Image("images/assistenti/assistente"+(getModelView().getPlayers()[(myID + 3) % getModelView().getPlayers().length].getUsedAssistants()[getModelView().getPlayers()[(myID + 3) % getModelView().getPlayers().length].getUsedAssistants().length-1]+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                     } else {
-                        ChosenAssistant4.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\mago"+((myID + 3) % getModelView().getPlayers().length+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                        ChosenAssistant4.setBackground(new Background(new BackgroundImage(new Image("images/assistenti/mago"+((myID + 3) % getModelView().getPlayers().length+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                     }
                 }
             }
@@ -831,7 +831,7 @@ public class ViewGUI extends View {
             pane.setVisible(true);
             pane.setOnMouseClicked(mouseEvent ->{chooseAssistant(mouseEvent);});
             pane.setUserData(getModelView().getPlayers()[myID].getDeck()[i]);
-            pane.setBackground(new Background(new BackgroundImage(new Image("/images\\assistenti\\assistente"+(getModelView().getPlayers()[myID].getDeck()[i]+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+            pane.setBackground(new Background(new BackgroundImage(new Image("images/assistenti/assistente"+(getModelView().getPlayers()[myID].getDeck()[i]+1)+".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
             box.getChildren().add(pane);
         }
         assistant.sizeToScene();
@@ -1069,7 +1069,7 @@ public class ViewGUI extends View {
                             pane.setMaxHeight(100);
                             pane.setPrefWidth(100);
                             pane.setPrefHeight(100);
-                            pane.setBackground(new Background(new BackgroundImage(new Image("/images\\pedine\\student_"+c +".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                            pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_"+c +".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                             pane.setUserData(c);
                             pane.setOnMouseClicked(mouseEvent -> selectColour(mouseEvent));
                             colors.getChildren().add(pane);
@@ -1104,10 +1104,10 @@ public class ViewGUI extends View {
         Stage connectionStage = new Stage();
         loader2.setLocation(getClass().getResource("/serverConnection.fxml"));
         Scene scene = new Scene(loader2.load());
-        ((VBox)scene.getRoot()).setBackground(new Background(new BackgroundImage(new Image("/images\\background1.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+        ((VBox)scene.getRoot()).setBackground(new Background(new BackgroundImage(new Image("images/background1.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
         connectionStage.setScene(scene);
         connectionStage.setTitle("connection to server");
-        connectionStage.getIcons().add(new Image(getClass().getResourceAsStream("/images\\logo.png")));
+        connectionStage.getIcons().add(new Image(getClass().getResourceAsStream("images/logo.png")));
         connectionStage.alwaysOnTopProperty();
         ((ConnectionController)loader2.getController()).setView(this);
         connectionStage.initModality(Modality.APPLICATION_MODAL);
@@ -1119,12 +1119,12 @@ public class ViewGUI extends View {
             () -> {
                 if (getModelView().getWin() != null&&!ended) {
                     Stage winStage = new Stage();
-                    winStage.getIcons().add(new Image(getClass().getResourceAsStream("/images\\logo.png")));
+                    winStage.getIcons().add(new Image(getClass().getResourceAsStream("images/logo.png")));
                     winStage.setTitle("game over");
                     StackPane pane = new StackPane();
                     pane.setPrefHeight(360);
                     pane.setPrefWidth(640);
-                    pane.setBackground(new Background(new BackgroundImage(new Image("/images\\background.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                    pane.setBackground(new Background(new BackgroundImage(new Image("images/background.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                     Label winner = new Label();
                     if (getModelView().getWin().isDraw()) {
                         winner.setText("Draw");
