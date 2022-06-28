@@ -9,7 +9,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Strategy used when playing in teams
+ */
 public class TeamCheckTowerStrategy implements CheckTowerStrategy {
+    /**
+     * Determines which team should place a tower on the isle
+     * @param gm The gamemodel
+     * @param island The island being checked
+     */
+    @Override
     public void checkTower(GameModel gm, int island){
         HashMap<Colour, Player> profs = gm.getProfessors();
         Faction oldfaction;

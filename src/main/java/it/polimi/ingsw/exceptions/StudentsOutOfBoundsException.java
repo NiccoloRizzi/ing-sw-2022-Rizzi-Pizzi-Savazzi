@@ -1,5 +1,8 @@
 package it.polimi.ingsw.exceptions;
 
+/**
+ * Exception given when adding students to a full tile or removing one from an empty one
+ */
 public class StudentsOutOfBoundsException extends Exception{
     @Override
     public void printStackTrace() {

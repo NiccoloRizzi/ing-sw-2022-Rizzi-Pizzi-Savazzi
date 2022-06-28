@@ -7,8 +7,17 @@ import it.polimi.ingsw.model.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Strategy used when no teams are playing
+ */
 
 public class PlayerCheckTowerStrategy implements CheckTowerStrategy {
+    /**
+     * Determines which player should place a tower on the isle
+     * @param gm The gamemodel
+     * @param island The island being checked
+     */
+    @Override
     public void checkTower(GameModel gm, int island){
         Faction oldfaction;
         HashMap<Colour, Player> profs = gm.getProfessors();

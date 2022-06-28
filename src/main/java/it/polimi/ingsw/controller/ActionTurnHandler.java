@@ -14,16 +14,37 @@ import it.polimi.ingsw.server.Observer;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Handles the actiorn turn of each player
+ */
 public class ActionTurnHandler extends Observable<ClientModel> {
     private int currentPlayer;
     private final GameModel gameModel;
+    /**
+     * How many students the player can and must move
+     */
     private int studentsToMove;
+    /**
+     * Current strategy for checking who owns a professor
+     */
     private CheckProfessorStrategy professorStrategy;
+    /**
+     * Current strategy for checking who owns an Isle
+     */
     private CheckTowerStrategy checkTowerStrategy;
+    /**
+     * Current phase of the action turn
+     */
     private Phase phase;
-
+    /**
+     * Boolean that saves if the player has used a character for this turn
+     */
     private boolean usedCharacter;
 
+    /**
+     * Creates the action turn handler with a given gameModel
+     * @param gameModel the gameModel of the match
+     */
     public ActionTurnHandler(GameModel gameModel){
         this.gameModel = gameModel;
 
@@ -44,8 +65,8 @@ public class ActionTurnHandler extends Observable<ClientModel> {
     }
 
     /**
-     * Moves mother nature and checks for changes in isles
-     * @param moves The amout of moves mother nature will be moved
+     * Moves mother nature and checks for changes in isles (towers and joined isles)
+     * @param moves The amount of moves mother nature will be moved
      */
     public void moveMn(int moves){
         Assistant a = gameModel.getPlayers().get(currentPlayer).getChosen();

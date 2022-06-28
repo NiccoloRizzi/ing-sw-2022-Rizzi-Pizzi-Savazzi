@@ -12,24 +12,52 @@ import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * UML CHANGES <br>
- * 1) Added function getWinner() <br>
- */
 
+/**
+ * Main Controller class that creates and handles the match
+ */
 public class Game extends Observable<ClientModel> {
 
     private final static int MAX_N_ISLES = 12;
 
-    private final GameModel gameModel; // WHEN TO INITIALIZE???
+    /**
+     * The gamemodel representing the current match
+     */
+    private final GameModel gameModel;
+    /**
+     * The handler that handles players' action turns
+     */
     private final ActionTurnHandler turn;
+    /**
+     * Boolean that tells if the game is currently in planning phase
+     */
     private boolean planningPhase;
+    /**
+     * Number of players in the current match
+     */
     private final int playersNumber;
+    /**
+     * The order of the players for the planning phase
+     */
     private ArrayList<Integer> planningOrder;
+    /**
+     * The order of the players for the action phase
+     */
     private ArrayList<Integer> actionOrder;
+    /**
+     * The current player
+     */
     private int currentPlayer;
+    /**
+     * Boolean that saves if the current match is in expert mode
+     */
     private final boolean expertMode;
 
+    /**
+     * Creates the current match based on the number of players and game mode
+     * @param playersNumber the number of players
+     * @param expertMode
+     */
     public Game(int playersNumber, boolean expertMode){
         this.playersNumber= playersNumber;
         gameModel = new GameModel(playersNumber,expertMode);
@@ -37,6 +65,10 @@ public class Game extends Observable<ClientModel> {
         turn = new ActionTurnHandler(gameModel);
     }
 
+    /**
+     * Returns the winner, if present
+     * @return the winner
+     */
     public Player getWinner(){
         Player winner = gameModel.getPlayers().stream()
                 .filter(p -> (
@@ -64,7 +96,10 @@ public class Game extends Observable<ClientModel> {
         return winner;
     }
 
-    // DOESN'T SAY WHO WINS
+    /**
+     * Checks whether end conditions for lack of towers or number of islands are met
+     * @return whether ending conditions are met
+     */
     public boolean checkEndTowerIsle() {
         // TOWER FINISHED
         for (Player p : gameModel.getPlayers()) {
@@ -80,6 +115,11 @@ public class Game extends Observable<ClientModel> {
         }
         return false;
     }
+
+    /**
+     * Checks whether end conditions for lack of students or assistants are met
+     * @return whether ending conditions are met
+     */
     public boolean checkEndStudentAssistant(){
         // NO STUDENTS IN BAG
         if(gameModel.checkEmptyBag()){
@@ -96,19 +136,35 @@ public class Game extends Observable<ClientModel> {
         return false;
     }
 
+    /**
+     * Ends the planning phase and starts the action turn for the first player
+     */
     public void startActionTurn(){
         planningPhase=false;
        turn.setupActionTurnHandler(currentPlayer, playersNumber);
     }
 
+    /**
+     *
+     * @return wheter the game is currently in planning phase
+     */
     public boolean isPlanning(){
         return planningPhase;
     }
 
+    /**
+     *
+     * @return players' order during planning phase
+     */
     public ArrayList<Integer> getPlanningOrder() {
         return planningOrder;
     }
 
+    /**
+     * Checks whether another player has used a given assistant during this round
+     * @param assistantId the assistant to check
+     * @return whether the assistant has been already used in this round
+     */
     public boolean alreadyUsed(int assistantId){
         ArrayList<Player> players = gameModel.getPlayers();
         for (int i = 0; i < planningOrder.indexOf(currentPlayer); i++) {
@@ -119,11 +175,17 @@ public class Game extends Observable<ClientModel> {
         return false;
     }
 
+    /**
+     *
+     * @return the players' order for the action phase
+     */
     public ArrayList<Integer> getActionOrder(){
         return actionOrder;
     }
 
-    // EXPECTED ALL PLAYERS CREATED
+    /**
+     * Sets up and starts the game by creating all main elements
+     */
     public void setupGame(){
         planningOrder = new ArrayList<>();
         actionOrder = new ArrayList<>();
@@ -186,22 +248,42 @@ public class Game extends Observable<ClientModel> {
         planningPhase = true;
     }
 
+    /**
+     *
+     * @return whether the game is in expert mode
+     */
     public boolean isExpertMode(){
         return expertMode;
     }
 
+    /**
+     *
+     * @return the game model of the current match
+     */
     public GameModel getGameModel(){
         return gameModel;
     }
 
+    /**
+     * Adds a player to the current match
+     * @param nickname the nickname of the player
+     * @throws PlayerOutOfBoundException when players' limit is reached
+     */
     public void createPlayer(String nickname) throws PlayerOutOfBoundException {
         gameModel.addPlayer(gameModel.getPlayers().size(),nickname);
     }
 
+    /**
+     *
+     * @return the current player
+     */
     public int getCurrentPlayer(){
         return currentPlayer;
     }
 
+    /**
+     * Determines the players' orders (planning and action) for the next round, based on chosen assistants
+     */
     public void checkNextOrder(){
         ArrayList<Player> tempPlayers = new ArrayList<>(gameModel.getPlayers());
         tempPlayers.sort(Comparator.comparingInt(p -> p.getChosen().getValue()));
@@ -216,6 +298,9 @@ public class Game extends Observable<ClientModel> {
         }
     }
 
+    /**
+     * Moves to the next player and sets up the turn accordingly
+     */
     public void nextPlayer(){
         if(planningPhase){
             if(planningOrder.indexOf(currentPlayer)==planningOrder.size()-1){
@@ -247,14 +332,27 @@ public class Game extends Observable<ClientModel> {
         }
     }
 
+    /**
+     *
+     * @return The number of players in the current match
+     */
     public int getPlayersNumber(){
         return playersNumber;
     }
 
+    /**
+     *
+     * @return The action turn handler
+     */
     public ActionTurnHandler getTurnHandler()
     {
         return turn;
     }
+
+    /**
+     * Sets a given player as current
+     * @param currentPlayer The player to be set
+     */
     public void setCurrentPlayer(int currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
@@ -266,6 +364,9 @@ public class Game extends Observable<ClientModel> {
         gameModel.addObserver(observer);
     }
 
+    /**
+     * Sends the initial state of the game as an update
+     */
     public void sendInitialGame(){
         gameModel.sendFullModel();
         notify(new TurnMessage(currentPlayer, TurnMessage.Turn.PLANNING));

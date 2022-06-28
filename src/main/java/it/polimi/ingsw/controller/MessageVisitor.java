@@ -13,13 +13,28 @@ import it.polimi.ingsw.server.Observable;
 
 import java.util.ArrayList;
 
+/**
+ * Visitor class to handle move messages sent by the players
+ */
 public class MessageVisitor extends Observable<ClientModel> {
 
+    /**
+     * Game class handling the match
+     */
     final Game game;
+
+    /**
+     * Creates the message visitor given the current Game
+     * @param game The current Game object handling the match
+     */
     public MessageVisitor(Game game){
         this.game = game;
     }
 
+    /**
+     * Handles a character being used by incrementing his price (if used for the first time) and removing coins from the player
+     * @param charId The used character
+     */
     private void useCharacter(int charId) {
         game.getGameModel().getPlayer(game.getCurrentPlayer()).removeCoins(game.getGameModel().getCharacter(charId).getPrice());
         if (game.getGameModel().getCharacter(charId).getUsed()){
@@ -39,6 +54,10 @@ public class MessageVisitor extends Observable<ClientModel> {
         game.getTurnHandler().setUsedCharacter(true);
     }
 
+    /**
+     * Handles messages for choosing assistants
+     * @param assistantChoiceMessage The message for choosing assistants
+     */
     public void visit(AssistantChoiceMessage assistantChoiceMessage){
         int playerID = game.getCurrentPlayer();
         if(assistantChoiceMessage.getPlayerID()==playerID && game.isPlanning()) {
@@ -63,11 +82,15 @@ public class MessageVisitor extends Observable<ClientModel> {
         }
 
     }
+
+    /**
+     * Handles messages for moving students from boards to isles and tables
+     * @param moveStudentMessage The message being handled
+     */
     public void visit(MoveStudentMessage moveStudentMessage){
             int playerID = moveStudentMessage.getPlayerID();
             Colour student = moveStudentMessage.getStudent();
             if (playerID == game.getCurrentPlayer() && game.getTurnHandler().getStudentsToMove()>0) {
-                Player current = game.getGameModel().getPlayer(playerID);
                 if (moveStudentMessage.isToTable()) {
                     game.getTurnHandler().moveStudentToTable(student);
                 } else {
@@ -78,6 +101,11 @@ public class MessageVisitor extends Observable<ClientModel> {
                 notify(new ErrorMessage(moveStudentMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
             }
     }
+
+    /**
+     * Handles messages for moving mother nature
+     * @param moveMotherNatureMessage The message being handled
+     */
     public void visit(MoveMotherNatureMessage moveMotherNatureMessage){
         if(moveMotherNatureMessage.getPlayerID()==game.getCurrentPlayer() && game.getTurnHandler().getPhase()==Phase.MOTHERNATURE){
             game.getTurnHandler().moveMn(moveMotherNatureMessage.getMoves());
@@ -87,6 +115,11 @@ public class MessageVisitor extends Observable<ClientModel> {
             notify(new ErrorMessage(moveMotherNatureMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
         }
     }
+
+    /**
+     * Handles messages for choosing clouds at turn end
+     * @param cloudChoiceMessage The message being handled
+     */
     public void visit(CloudChoiceMessage cloudChoiceMessage){
         if(game.getCurrentPlayer()==cloudChoiceMessage.getPlayerId() && game.getTurnHandler().getPhase()==Phase.CLOUD){
             if(game.getTurnHandler().moveFromCloud(cloudChoiceMessage.getCloudID()))
@@ -96,11 +129,14 @@ public class MessageVisitor extends Observable<ClientModel> {
             notify(new ErrorMessage(cloudChoiceMessage.getPlayerId(), ErrorMessage.ErrorType.NotYourTurnError));
         }
     }
+
+    /**
+     * Handles messages for using characters that modify the current strategy used to calculate the influence over an island
+     * @param isleInfluenceCharacterMessage The message being handled
+     */
     public void visit(IsleInfluenceCharacterMessage isleInfluenceCharacterMessage) {
-        String answer;
         int playerId = isleInfluenceCharacterMessage.getPlayerID();
         int charId = isleInfluenceCharacterMessage.getCharacterID();
-        Colour noColor = isleInfluenceCharacterMessage.getNoColour();
         if (game.isExpertMode())
         {
             if (game.getCurrentPlayer() == playerId && !game.isPlanning()) {
@@ -109,16 +145,13 @@ public class MessageVisitor extends Observable<ClientModel> {
                     Player player = game.getGameModel().getPlayer(playerId);
                     Character character = game.getGameModel().getCharacter(charId);
                     if(player.getCoins() >= character.getPrice()){
-                            switch (character.getCard()) {
-                                case NO_TOWER_INFLUENCE:
-                                    game.getTurnHandler().setInfStrategy(new noTowersStrategy());
-                                    break;
-                                case PLUS_2_INFLUENCE:
+                        switch (character.getCard()) {
+                            case NO_TOWER_INFLUENCE -> game.getTurnHandler().setInfStrategy(new noTowersStrategy());
+                            case PLUS_2_INFLUENCE ->
                                     game.getTurnHandler().setInfStrategy(new PlusInfStrategy(playerId));
-                                    break;
-                                case NO_COLOUR_INFLUENCE:
+                            case NO_COLOUR_INFLUENCE ->
                                     game.getTurnHandler().setInfStrategy(new NoColourStrategy(isleInfluenceCharacterMessage.getNoColour()));
-                            }
+                        }
                             useCharacter(charId);
                     }else{
                         notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotEnoughCoinError));
@@ -135,8 +168,12 @@ public class MessageVisitor extends Observable<ClientModel> {
             notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
         }
     }
+
+    /**
+     * Handles messages for using characters who can contain students
+     * @param moveStudentCharacterMessage The message being handled
+     */
     public void visit(MoveStudentCharacterMessage moveStudentCharacterMessage){
-        String answer;
         int playerId = moveStudentCharacterMessage.getPlayerID();
         int charId = moveStudentCharacterMessage.getCharacterID();
         Colour stud = moveStudentCharacterMessage.getStudent();
@@ -152,13 +189,14 @@ public class MessageVisitor extends Observable<ClientModel> {
                             character.removeStudent(stud);
                             character.addStudent(game.getGameModel().extractRandomStudent());
                             switch (character.getCard()) {
-                                case ONE_STUD_TO_ISLE:
+                                case ONE_STUD_TO_ISLE -> {
                                     Isle isle = game.getGameModel().getIsle(tileId);
                                     isle.addStudent(stud);
-                                    break;
-                                case ONE_STUD_TO_TABLES:
+                                }
+                                case ONE_STUD_TO_TABLES -> {
                                     board.addToTable(stud);
                                     game.getTurnHandler().checkProfessor(stud);
+                                }
                             }
                             useCharacter(charId);
                         } catch (TileOutOfBoundsException e) {
@@ -183,8 +221,12 @@ public class MessageVisitor extends Observable<ClientModel> {
             notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
         }
     }
+
+    /**
+     * Handles messages for using characters that modify the current strategy used for checking who owns a professor
+     * @param strategyProfessorMessage The message being handled
+     */
     public void visit(StrategyProfessorMessage strategyProfessorMessage){
-        String answer;
         int playerId = strategyProfessorMessage.getPlayerID();
         int charId = strategyProfessorMessage.getCharacterID();
         if(game.isExpertMode()) {
@@ -210,8 +252,12 @@ public class MessageVisitor extends Observable<ClientModel> {
             notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
         }
     }
+
+    /**
+     * Handles messages for using the character that behaves like mother nature visiting an island
+     * @param similMotherNatureMesage The message being handled
+     */
     public void visit(SimilMotherNatureMesage similMotherNatureMesage){
-        String answer;
         int playerId = similMotherNatureMesage.getPlayerID();
         int charId = similMotherNatureMesage.getCharacterID();
         int isleId = similMotherNatureMesage.getIsleID();
@@ -240,8 +286,12 @@ public class MessageVisitor extends Observable<ClientModel> {
             notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
         }
     }
+
+    /**
+     * Handles the message for using the character that increases mother nature maximum moves
+     * @param plus2MoveMnMessage The message being handled
+     */
     public void visit(Plus2MoveMnMessage plus2MoveMnMessage){
-        String answer;
         if (game.isExpertMode()) {
             if (plus2MoveMnMessage.getPlayerID() == game.getCurrentPlayer() && !game.isPlanning()) {
                 if(!game.getTurnHandler().isUsedCharacter()) {
@@ -262,8 +312,12 @@ public class MessageVisitor extends Observable<ClientModel> {
             notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
         }
     }
+
+    /**
+     * Handles the message for using the character which can prohibit an island
+     * @param prohibitedIsleCharacterMessage The message being handled
+     */
     public void visit(ProhibitedIsleCharacterMessage prohibitedIsleCharacterMessage){
-        String answer;
         if(game.isExpertMode()) {
             if (prohibitedIsleCharacterMessage.getPlayerID() == game.getCurrentPlayer() && !game.isPlanning()) {
                 if(!game.getTurnHandler().isUsedCharacter()) {
@@ -293,8 +347,12 @@ public class MessageVisitor extends Observable<ClientModel> {
             notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
         }
     }
+
+    /**
+     * Handles messages for moving students from the character that can contain 6 students
+     * @param move6StudCharacterMessage The message being handled
+     */
     public void visit(Move6StudCharacterMessage move6StudCharacterMessage){
-        String answer;
         if(game.isExpertMode()) {
             if (move6StudCharacterMessage.getPlayerID() == game.getCurrentPlayer() && !game.isPlanning()) {
                 if(!game.getTurnHandler().isUsedCharacter()){
@@ -341,8 +399,11 @@ public class MessageVisitor extends Observable<ClientModel> {
         }
     }
 
+    /**
+     * Handles messages for using the character that exchanges students between tables and board
+     * @param move2StudCharacterMessage The message being handled
+     */
     public void visit(Move2StudCharacterMessage move2StudCharacterMessage){
-        String answer;
         if(game.isExpertMode()) {
             if (move2StudCharacterMessage.getPlayerID() == game.getCurrentPlayer() && !game.isPlanning()) {
                 if(!game.getTurnHandler().isUsedCharacter()) {
@@ -398,8 +459,12 @@ public class MessageVisitor extends Observable<ClientModel> {
             notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NormalModeError));
         }
     }
+
+    /**
+     * Handles messages for using the character that removes three students of a given colour from tables
+     * @param remove3StudCharacterMessage The message being handled
+     */
     public void visit(Remove3StudCharacterMessage remove3StudCharacterMessage){
-        String answer;
         if(game.isExpertMode()) {
             if (remove3StudCharacterMessage.getPlayerID() == game.getCurrentPlayer() && !game.isPlanning()) {
                 if(!game.getTurnHandler().isUsedCharacter()) {
@@ -415,7 +480,6 @@ public class MessageVisitor extends Observable<ClientModel> {
                             }
                         }
                         useCharacter(remove3StudCharacterMessage.getCharacterID());
-                        answer = "Player" + game.getGameModel().getPlayer(game.getCurrentPlayer()).getNickname() + "used character to remove 3 student";
                     } else {
                         notify(new ErrorMessage(game.getCurrentPlayer(), ErrorMessage.ErrorType.NotEnoughCoinError));
                     }
