@@ -11,17 +11,34 @@ import it.polimi.ingsw.server.Observer;
 
 import java.util.ArrayList;
 import java.util.Objects;
-
+/**
+ * Class that represents players in the game
+ */
 public class Player extends Observable<ClientModel> {
 
-    private static final int N_ASSISTANT = 10;
 
+    private static final int N_ASSISTANT = 10;
+    /**
+     * Player's ID
+     */
     private final int ID;
     private String nickname;
+    /**
+     * Player's faction (towers colour)
+     */
     private Faction faction;
     private int coins;
+    /**
+     * The board of the player
+     */
     private Board school;
+    /**
+     * Assistant cards of the player
+     */
     private final ArrayList<Assistant> deck;
+    /**
+     * Used assistant cards of the player
+     */
     private final ArrayList<Assistant> usedCards;
 
     /**@param ID of the player
@@ -145,6 +162,11 @@ public class Player extends Observable<ClientModel> {
         school = new Board(this.faction, nTowers,ID);
     }
 
+    /**
+     * Checks whether a player has already used a particular assistant
+     * @param assistantId the id of the assistant
+     * @return whether the player has already used the assistant
+     */
     public boolean hasUsed(int assistantId){
         for(Assistant a: usedCards){
             if(a.getValue()==assistantId) {
@@ -156,12 +178,19 @@ public class Player extends Observable<ClientModel> {
         return false;
     }
 
+    /**
+     * Removes coins from the player
+     * @param coins the number of coins to remove
+     */
     public void removeCoins(int coins)
     {
         this.coins = this.coins-coins;
         notifyChange();
     }
 
+    /**
+     * Boosts the chosen assistant
+     */
     public void boost()
     {
         getChosen().Boost();

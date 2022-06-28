@@ -6,8 +6,12 @@ import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
+/**
+ * Class that represents usable characters that can hold students
+ */
 public class CharacterStudents extends Character {
+
+
     private final HashMap<Colour, Integer> students;
 
     /**

@@ -3,8 +3,12 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.clientModels.ClientCloud;
 
 import java.util.HashMap;
-
+/**
+ * Class that represents cloud tiles
+ */
 public class Cloud extends Tile {
+
+
 
     /**
      * @param ID is the position of the cloud in the array.

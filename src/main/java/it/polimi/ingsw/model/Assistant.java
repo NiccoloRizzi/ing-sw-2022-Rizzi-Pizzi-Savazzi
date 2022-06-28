@@ -1,13 +1,24 @@
 package it.polimi.ingsw.model;
-
+/**
+ * Class that represents assistants cards
+ */
 public class Assistant {
 
+    /**
+     * The value of the assistant
+     */
     private final int value;
+    /**
+     * The maximum number of steps it allows Mother Nature to be moved for
+     */
     private final int mn_moves;
+    /**
+     * Used when an assistant is boosted by a character
+     */
     private int boost;
 
     /**
-     * Constructs an assistant and set boost to 0.
+     * Constructs an assistant and sets boost to 0.
      * Boost represents the surplus value of moves after the usage of the CharacterEnum.PLUS_2_MN character.
      *
      * @param value is the card identification number.

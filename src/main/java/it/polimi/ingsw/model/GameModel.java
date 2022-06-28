@@ -12,7 +12,7 @@ import it.polimi.ingsw.server.Observable;
 import it.polimi.ingsw.server.Observer;
 
 /**
- * The class representing the main game board with its components
+ * The class represents the main game board with its components
  */
 public class GameModel extends Observable<ClientModel> {
     private int unusedCoins;
@@ -76,6 +76,11 @@ public class GameModel extends Observable<ClientModel> {
         }
     }
 
+    /**
+     * Returns the number of professors already assigned to a player
+     * @param p The player
+     * @return number of professors owned by the player
+     */
     public int numberOfProfessors(Player p) {
         int num = 0;
         for (Colour c : professors.keySet()) {
@@ -95,6 +100,9 @@ public class GameModel extends Observable<ClientModel> {
         }
     }
 
+    /**
+     * Creates the isles of the game
+     */
     private void generateIsle() {
         for (int i = 0; i < 12; i++)
             isles.add(new Isle(i));

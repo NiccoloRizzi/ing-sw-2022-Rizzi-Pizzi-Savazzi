@@ -1,19 +1,21 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.exceptions.TowerOutOfBoundException;
-
 import java.util.ArrayList;
 
-/*UML Changes
- * 1) Added addPlayer() */
 
-// ATTENTION: TEAM IMPLEMENTATION NEED TO BE DEFINED CLEARLY
+/**
+ * Class that represents teams in the game
+ */
 public class Team {
 
     private final static int MAX_N_PLAYERS = 2;
 
     private Faction faction;
     private int towers;
+    /**
+     * The players in the team
+     */
     private final ArrayList<Player> players;
 
     public Team(){
@@ -40,6 +42,11 @@ public class Team {
         return players.get(1); // ATTENTION
     }
 
+    /**
+     * Removes towers from all the players in the team
+     * @param t The team from which towers will be removed
+     * @throws TowerOutOfBoundException
+     */
     public void useTowers(int t) throws TowerOutOfBoundException{
         if(towers>=t) {
             towers-=t;
@@ -48,6 +55,11 @@ public class Team {
         }
     }
 
+    /**
+     * Add towers to all the players in the team
+     * @param t the team to which towers will be added
+     * @throws TowerOutOfBoundException
+     */
     public void addTowers(int t) throws TowerOutOfBoundException {
         if(towers+t<=8){
             towers+=t;

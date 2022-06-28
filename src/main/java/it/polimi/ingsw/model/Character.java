@@ -3,14 +3,31 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.clientModels.ClientCharacter;
 import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.server.Observable;
-
+/**
+ * Class that represents usable characters
+ */
 public class Character extends Observable<ClientModel> {
+
+
+    /**
+     * Unique ID of the character
+     */
     protected int ID;
+    /**
+     * The type of character
+     */
     protected final CharactersEnum card;
+    /**
+     * The price of the character
+     */
     protected int price;
+    /**
+     * Whether the character has been already used
+     */
     protected boolean used = false;
 
     /**
+     * Constructor of a character object
      * @param ID is the character position in the active characters array.
      * @param character is the character type from CharacterEnum.
      */
@@ -36,8 +53,8 @@ public class Character extends Observable<ClientModel> {
     }
 
     /**
-     * Increment the character price and set it used.
-     * This function also notify the changes to the observer of the model [See notifyChange()].
+     * Increments the character price and sets it as used.
+     * This function also notifies the changes to the observer of the model [See notifyChange()].
      */
     public void use(){
         if(!used){

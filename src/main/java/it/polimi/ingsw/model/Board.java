@@ -6,12 +6,31 @@ import it.polimi.ingsw.exceptions.TowerOutOfBoundException;
 
 import java.util.Arrays;
 import java.util.HashMap;
-
+/**
+ * Class that represents a player's board
+ */
 public class Board extends Tile{
+
+
+    /**
+     * The board's towers faction
+     */
     private Faction faction;
+    /**
+     * The number of towers available
+     */
     private int towers;
+    /**
+     *  The maximum number of towers the board can hold
+     */
     private final int towersLimit;
+    /**
+     * The tables of the board
+     */
     private final HashMap<Colour, Integer> tables;
+    /**
+     * The maximum number of students the board can hold
+     */
     private final int studLimit;
 
     /**

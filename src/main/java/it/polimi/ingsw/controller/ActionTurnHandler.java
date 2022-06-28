@@ -29,6 +29,11 @@ public class ActionTurnHandler extends Observable<ClientModel> {
 
     }
 
+    /**
+     * Sets up the ActionTurnHandler to handle the current player for the current match
+     * @param currentPlayer The current player
+     * @param numOfPlayers The number of players
+     */
     public void setupActionTurnHandler(int currentPlayer,int numOfPlayers){
         this.currentPlayer = currentPlayer;
         studentsToMove = (numOfPlayers == 3)?4:3;
@@ -38,6 +43,10 @@ public class ActionTurnHandler extends Observable<ClientModel> {
         usedCharacter = false;
     }
 
+    /**
+     * Moves mother nature and checks for changes in isles
+     * @param moves The amout of moves mother nature will be moved
+     */
     public void moveMn(int moves){
         Assistant a = gameModel.getPlayers().get(currentPlayer).getChosen();
 
@@ -54,12 +63,21 @@ public class ActionTurnHandler extends Observable<ClientModel> {
         setInfStrategy(new DefaultInfStrategy());
     }
 
+    /**
+     * Sets the current strategy for calculating influence
+     * @param strategy The strategy to apply
+     */
     public void setInfStrategy(influenceStrategy strategy){
         for(Isle isle : gameModel.getIsles()){
             isle.setInfStrategy(strategy);
         }
     }
 
+    /**
+     * Moves a student from the current player's board to an island
+     * @param student The colour of the student
+     * @param isle The isle where the student will be moved to
+     */
     public void moveStudentToIsle(Colour student, int isle){
         Player player = gameModel.getPlayer(currentPlayer);
         try{
@@ -87,6 +105,10 @@ public class ActionTurnHandler extends Observable<ClientModel> {
         }
     }
 
+    /**
+     * Moves a student from the current player's board to his table
+     * @param student
+     */
     public void moveStudentToTable(Colour student){
         try{
             Player player = gameModel.getPlayer(currentPlayer);
@@ -117,6 +139,11 @@ public class ActionTurnHandler extends Observable<ClientModel> {
 
     }
 
+    /**
+     * Empties a cloud and moves all its students to the current player's board
+     * @param cloudId The chosen cloud id
+     * @return Whether it was successful
+     */
     public boolean moveFromCloud(int cloudId){
 
         try{
@@ -143,6 +170,11 @@ public class ActionTurnHandler extends Observable<ClientModel> {
         return true;
     }
 
+
+    /**
+     * Checks if an isle can be joined
+     * @param index The id of the isle
+     */
     public void checkIsleJoin(int index)
     {
         try {
@@ -153,33 +185,69 @@ public class ActionTurnHandler extends Observable<ClientModel> {
         }
     }
 
+    /**
+     *
+     * @return The number of students the current player can still move
+     */
     public int getStudentsToMove() {
         return studentsToMove;
     }
+
+    /**
+     * Returns the current phase
+     * @return current phase
+     */
     public Phase getPhase(){
         return phase;
     }
 
+    /**
+     * Sets the current strategy when choosing who owns a professor
+     * @param strategy The strategy to apply
+     */
      public void setProfessorStrategy(CheckProfessorStrategy strategy)
     {
         professorStrategy = strategy;
     }
+
+    /**
+     * Checks who should own a professor of a given colour
+     * @param student The colour to check
+     */
     public void checkProfessor(Colour student)
     {
         professorStrategy.checkProfessor(gameModel,student,currentPlayer);
     }
 
+    /**
+     * Checks who controls an isle
+     * @param isle The isle to check
+     */
     public void checkTower(int isle){
         checkTowerStrategy.checkTower(gameModel,isle);
     }
+
+    /**
+     * Changes current player
+     * @param player The player to set as current
+     */
     public void setCurrentPlayer(Player player)
     {
         this.currentPlayer = player.getID();
     }
 
+    /**
+     * Checks if a character has been used in this round
+     * @return whether a character has been used
+     */
     public boolean isUsedCharacter() {
         return usedCharacter;
     }
+
+    /**
+     * Sets usedCharacter to the given value
+     * @param used Boolean value
+     */
     public void setUsedCharacter (boolean used)
     {
         usedCharacter = used;

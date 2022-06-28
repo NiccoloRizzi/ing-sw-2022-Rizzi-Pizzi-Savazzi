@@ -4,12 +4,26 @@ import it.polimi.ingsw.clientModels.ClientIsle;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 
 import java.util.HashMap;
-
+/**
+ * Class that represents Isle tiles
+ */
 public class Isle extends Tile {
 
+    /**
+     * The faction controlling the isle
+     */
     private Faction tower;
+    /**
+     * The amount of prohibitions on the isle
+     */
     private int prohibited;
+    /**
+     * The current strategy used to calculate influence over the isle
+     */
     private influenceStrategy infStrategy;
+    /**
+     * The size of the isle
+     */
     private int size;
 
 
@@ -125,6 +139,10 @@ public class Isle extends Tile {
         notify(new ClientIsle(ID,tower,new HashMap<Colour, Integer>(students),prohibited,size));
     }
 
+    /**
+     * Generates a version of the isle that can be sent to the players for updates
+     * @return a Client Isle
+     */
     public ClientIsle getClientIsle(){
         return new ClientIsle(ID,tower,new HashMap<Colour, Integer>(students),prohibited,size);
     }

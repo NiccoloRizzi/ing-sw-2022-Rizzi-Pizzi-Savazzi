@@ -5,11 +5,21 @@ import it.polimi.ingsw.server.Observable;
 
 import java.util.HashMap;
 
+/**
+ * Abstract class that represents a generic tile of the game
+ */
 public abstract class Tile extends Observable<ClientModel>
 {
     protected int ID;
+    /**
+     * The students the tile is holding
+     */
     protected HashMap<Colour, Integer> students;
 
+    /**
+     * Creates a tile
+     * @param ID the id of the tile
+     */
     public Tile (int ID)
     {
         this.ID = ID;
@@ -18,6 +28,11 @@ public abstract class Tile extends Observable<ClientModel>
             students.put(c,0);
         }
     }
+
+    /**
+     *
+     * @return whether the tile is empty and has no students
+     */
     public boolean isEmpty(){
         int sum=0;
         for(Colour c: Colour.values()){
@@ -26,12 +41,20 @@ public abstract class Tile extends Observable<ClientModel>
         return sum<=0;
     }
 
+    /**
+     * Adds a student to the tile
+     * @param col the colour of the student to add
+     */
     public void addStudent(Colour col)
     {
         students.replace(col, students.get(col)+1);
         notifyChange();
     }
 
+    /**
+     * Adds multiple students to the tile
+     * @param studentsToAdd The hashmap containing the students to add
+     */
     public void addStudents(HashMap<Colour, Integer> studentsToAdd){
         for(Colour c : Colour.values()){
             students.replace(c, students.get(c)+studentsToAdd.get(c));
@@ -44,6 +67,10 @@ public abstract class Tile extends Observable<ClientModel>
         return students.get(c);
     }
 
+    /**
+     *
+     * @return the id of the tile
+     */
     public int getID()
     {
         return ID;

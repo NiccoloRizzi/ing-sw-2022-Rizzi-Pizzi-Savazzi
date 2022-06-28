@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+/**
+ * Enum that defines the possible types of usable characters
+ */
 public enum CharactersEnum {
     ONE_STUD_TO_ISLE(1),
     PROFESSOR_CONTROL(2),
