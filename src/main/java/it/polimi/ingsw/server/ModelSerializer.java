@@ -9,6 +9,9 @@ import it.polimi.ingsw.clientModels.Answers.WinMessage;
 import it.polimi.ingsw.exceptions.EmptyMessageException;
 import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
 
+/**
+ * Class that serializes the type of updates the server can send to the clients
+ */
 public class ModelSerializer {
     private static final Gson gson = new Gson();
 

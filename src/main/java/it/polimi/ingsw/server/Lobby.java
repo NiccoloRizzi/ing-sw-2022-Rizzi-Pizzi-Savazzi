@@ -9,15 +9,45 @@ import it.polimi.ingsw.exceptions.PlayerOutOfBoundException;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * Class for handling server lobbies
+ */
 public class Lobby {
+    /**
+     * PlayerConnections of players in the lobby
+     */
     private final ArrayList<PlayerConnection> players;
+    /**
+     * The number of players for this lobby
+     */
     private final int numOfPlayer;
+    /**
+     * Whether the lobby is for an expert mode match
+     */
     private final boolean expertMode;
+    /**
+     * The server containing the lobby
+     */
     private final Server server;
+    /**
+     * The match of the lobby
+     */
     private Game game;
+    /**
+     * The messagevisitor for this lobby's game
+     */
     private MessageVisitor messageVisitor;
+    /**
+     * Whether the game has already started for this lobby
+     */
     private boolean started;
 
+    /**
+     * Creates a lobby with given setup parameters
+     * @param numOfPlayer Number of players for the match
+     * @param mode Whether the match will be in expert mode
+     * @param server The server the lobby is created in
+     */
     public Lobby (int numOfPlayer,boolean mode, Server server)
     {
         this.numOfPlayer=numOfPlayer;
@@ -27,18 +57,35 @@ public class Lobby {
         players=new ArrayList<>();
     }
 
+    /**
+     *
+     * @return Whether the game has started
+     */
     public synchronized boolean isStarted() {
         return started;
     }
 
+    /**
+     *
+     * @return The number of players
+     */
     public int getNumOfPlayer() {
         return numOfPlayer;
     }
 
+    /**
+     *
+     * @return Wheter it is an expert mode lobby
+     */
     public boolean isExpertMode() {
         return expertMode;
     }
 
+    /**
+     * Adds a player to the lobby
+     * @param player The playerConnection of the player being added
+     * @return Whether the addition was successful
+     */
     public synchronized boolean addPlayer(PlayerConnection player) {
 //        for(PlayerConnection p: players){
 //            if(!p.isActive())
@@ -57,6 +104,9 @@ public class Lobby {
         }
         return false;
     }
+    /**
+     * Starts the match for this lobby
+     */
 
     public synchronized void startGame()
     {
@@ -86,6 +136,9 @@ public class Lobby {
         }
     }
 
+    /**
+     * Kicks players and removes the lobby from the server
+     */
     public synchronized void closeLobby()
     {
         for(PlayerConnection player: players){
@@ -94,6 +147,10 @@ public class Lobby {
         server.removeLobby(this);
     }
 
+    /**
+     * Handles a player disconnecting by closing the lobby
+     * @param player The playerConnection of the disconnected player
+     */
     public void deregister(PlayerConnection player)
     {
         for(PlayerConnection p: players){
@@ -103,6 +160,9 @@ public class Lobby {
         closeLobby();
     }
 
+    /**
+     * Method for handling the end of a match
+     */
     public void gameEnd(){
         for(PlayerConnection p: players){
       //      if(!p.equals(player))
@@ -111,6 +171,10 @@ public class Lobby {
         closeLobby();
     }
 
+    /**
+     *
+     * @return The list of nicknames of players in the lobby
+     */
     public ArrayList<String> getNicknames()
     {
         ArrayList<String> temp = new ArrayList<>();

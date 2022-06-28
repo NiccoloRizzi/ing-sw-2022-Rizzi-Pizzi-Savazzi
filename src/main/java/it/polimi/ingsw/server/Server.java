@@ -10,12 +10,30 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Main class handling game server
+ */
 public class Server {
+    /**
+     * The port of the server
+     */
     private static final int PORT= 12345;
+    /**
+     * The socket of the server
+     */
     private ServerSocket serverSocket;
+    /**
+     * The list of active lobbies on the server
+     */
     private final ArrayList<Lobby> lobbies;
+    /**
+     * The executor for threads launcher by the server
+     */
     private final ExecutorService executor = Executors.newFixedThreadPool(128);
 
+    /**
+     * Creates a server and makes it available
+     */
     public Server(){
         lobbies = new ArrayList<>();
         try {
@@ -25,6 +43,9 @@ public class Server {
         }
     }
 
+    /**
+     * Main thread method that listens for connecting players
+     */
     public void run(){
         System.out.println("Server listening on port: " + PORT);
         while(true){
@@ -39,10 +60,18 @@ public class Server {
         }
     }
 
+    /**
+     *
+     * @return The list of active lobbies
+     */
     public ArrayList<Lobby> getLobbies() {
         return lobbies;
     }
 
+    /**
+     * Adds a playerConnection to a lobby
+     * @param connection The playerConnection
+     */
     public synchronized void addToLobby(PlayerConnection connection){
         boolean added = false;
         boolean uniqueNickname = true;
@@ -73,6 +102,10 @@ public class Server {
         }
     }
 
+    /**
+     * Removes a lobby from lobbies list
+     * @param lobby The lobby to be removed
+     */
     public void removeLobby(Lobby lobby)
     {
         synchronized (lobbies) {

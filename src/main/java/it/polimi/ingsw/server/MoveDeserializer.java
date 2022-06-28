@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import it.polimi.ingsw.messages.*;
 
+/**
+ * Class for deserializing players' moves into message objects
+ */
 public class MoveDeserializer {
 
     private static final Gson gson = new Gson();

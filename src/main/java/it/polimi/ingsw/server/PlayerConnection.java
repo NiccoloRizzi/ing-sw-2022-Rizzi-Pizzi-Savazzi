@@ -14,22 +14,63 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Class for handling a player's connection
+ */
 public class PlayerConnection implements Runnable, Observer<ClientModel> {
+    /**
+     * The server
+     */
     private final Server server;
+    /**
+     * The socket of the player
+     */
     private final Socket socket;
+    /**
+     * The nickname chosen by the player
+     */
     private String nickname;
+    /**
+     * The size of the game the player wants to be a part of
+     */
     private int numOfPlayers;
+    /**
+     * Whether the player wants to play in an expert mode match
+     */
     private boolean expertMode;
+    /**
+     * The PrintWriter for sending updates and answers to the player
+     */
     private PrintWriter out;
+    /**
+     * Whether the player is active and responding to pings
+     */
     private boolean active;
+    /**
+     * The message visitor that handles this player's moves
+     */
     private MessageVisitor mv;
+    /**
+     * The lobby the player's in
+     */
     private Lobby lobby;
+    /**
+     * Whether the player has answered last ping
+     */
     private boolean verified = true;
 
+    /**
+     *
+     * @return The size of the game the player wants to be a part of
+     */
     public int getNumOfPlayers() {
         return numOfPlayers;
     }
 
+    /**
+     *
+     * @return Whether the player wants to play in an expert mode match
+     */
     public boolean isExpertMode() {
         return expertMode;
     }
@@ -45,32 +86,59 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
         }
     }
 
+    /**
+     *
+     * @return The nickname chosen by the player
+     */
     public String getNickname(){
         return nickname;
     }
 
+    /**
+     * Sets the current lobby for the player
+     * @param lobby The lobby the player has been added to
+     */
     public void setLobby(Lobby lobby) {
         this.lobby = lobby;
     }
 
+    /**
+     * Sets a nikcname for the player
+     * @param nickname The chosen nickname
+     */
     public void setNickname(String nickname){
         this.nickname = nickname;
     }
+
+    /**
+     *
+     * @return Whether the player is active and answering pings
+     */
     public synchronized boolean isActive(){
         return active;
     }
 
+    /**
+     * Sets the message visitor that will handle player's moves
+     * @param mv The message visitor
+     */
     public synchronized void setMessageVisitor(MessageVisitor mv){
         this.mv = mv;
     }
 
+    /**
+     * Sends an answer to the player
+     * @param answer The answer
+     */
     public synchronized void send(Object answer){
         out.println(answer);
         out.flush();
     }
 
 
-
+    /**
+     * Closes connection with the player
+     */
     public void closeConnection(){
         JsonObject disconnected = new JsonObject();
         disconnected.addProperty("type","disconnect");
@@ -83,6 +151,9 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
         }
     }
 
+    /**
+     * Keeps sending ping packets to make sure the player is still connected
+     */
     public void connectionChecker(){
         Gson gson = new Gson();
         String json;
@@ -104,6 +175,9 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
         }
     }
 
+    /**
+     * Main thread that handles incoming player's messages
+     */
     public void run(){
         String read;
         Scanner in;
@@ -145,7 +219,6 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
         }
 
     }
-
 
     @Override
     public void update(ClientModel message) {
