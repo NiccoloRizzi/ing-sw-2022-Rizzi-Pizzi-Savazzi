@@ -19,7 +19,7 @@ public class ConnectionController{
     /**
      * The view
      */
-    View view;
+    ViewGUI view;
     Client client;
     @FXML
     TextField serverIP;
@@ -40,7 +40,7 @@ public class ConnectionController{
      * Setter for the view
      * @param view View to set
      */
-    public void setView(View view)
+    public void setView(ViewGUI view)
     {
         this.view = view;
     }
@@ -64,9 +64,10 @@ public class ConnectionController{
         System.out.println(ip);
         String port = serverPort.getText();
         System.out.println(port);
-
         view.notifyConnection(ip,Integer.parseInt(port));
         if(client.isActive()) {
+            view.setIP(ip);
+            view.setPort(Integer.parseInt(port));
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/playerInfo.fxml"));
             loader.setController(this);
             Parent root = loader.load();

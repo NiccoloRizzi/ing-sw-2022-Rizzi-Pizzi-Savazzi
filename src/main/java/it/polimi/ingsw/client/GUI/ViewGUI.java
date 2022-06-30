@@ -12,6 +12,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -31,6 +32,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
@@ -43,6 +45,8 @@ public class ViewGUI extends View {
      * Stage of the controlled scene
      */
     Stage stage;
+    String IP;
+    int port;
     @FXML
     Label nickname1,nickname2, nickname3,nickname4,money1,money2,money3,money4,waiting,turn,phase;
     @FXML
@@ -109,6 +113,24 @@ public class ViewGUI extends View {
      * Array of integer to show the different isles coherently when the isles merge
      */
     int[] image;
+
+    /**
+     * Setter for the IP
+     * @param IP String with the IP of the server
+     */
+    public void setIP(String IP)
+    {
+        this.IP = IP;
+    }
+
+    /**
+     * Setter for the port
+     * @param port number of the server port
+     */
+    public void setPort(int port)
+    {
+        this.port = port;
+    }
 
     /**
      * Setter for stage
@@ -505,9 +527,9 @@ public class ViewGUI extends View {
     {
         Platform.runLater(
             ()-> {
-                String turnmessage = (getModelView().getTurn().getPlayerId()==getModelView().getMyId())? "È il tuo turno" : getModelView().getPlayers()[getModelView().getTurn().getPlayerId()].getNickname();
-                turn.setText("Turno:\n " + turnmessage);
-                phase.setText("Fase:\n " + getModelView().getTurn().getTurn().getTurnMsg());
+                String turnmessage = (getModelView().getTurn().getPlayerId()==getModelView().getMyId())? "It's your turn" : getModelView().getPlayers()[getModelView().getTurn().getPlayerId()].getNickname();
+                turn.setText("Turn of:\n " + turnmessage);
+                phase.setText("Phase:\n " + getModelView().getTurn().getTurn().getTurnMsg());
                 turn.setVisible(true);
                 phase.setVisible(true);
             }
@@ -1103,21 +1125,20 @@ public class ViewGUI extends View {
             ()-> {
                 if (getModelView().getError() != null&&!error) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
-                    if(getModelView().getError() == ErrorMessage.ErrorType.NicknameTaken)
-                    {
-                        alert.setTitle(getModelView().getError().toString());
-                    }
                     alert.setTitle(getModelView().getError().toString());
-                    if(getModelView().getError() == ErrorMessage.ErrorType.NicknameTaken)
-                    {
-                        alert.setContentText(getModelView().getError().getErrorMsg()+"\n\nLa connessione col server è stata chiusa,è neccessario far ripartire il gioco");
-                    }else {
-                        alert.setContentText(getModelView().getError().getErrorMsg());
-                    }
+                    alert.setContentText(getModelView().getError().getErrorMsg());
                     alert.showAndWait();
-                    if(getModelView().getError() == ErrorMessage.ErrorType.PlayerDisconnected || getModelView().getError() == ErrorMessage.ErrorType.NicknameTaken)
+                    if(getModelView().getError() == ErrorMessage.ErrorType.PlayerDisconnected)
                     {
                         Event.fireEvent(stage,new WindowEvent(stage,WindowEvent.WINDOW_CLOSE_REQUEST));
+                    }
+                    if(getModelView().getError() == ErrorMessage.ErrorType.NicknameTaken)
+                    {
+                        try {
+                            restartConnection();
+                        }catch(IOException e){
+                            e.printStackTrace();
+                        }
                     }
                     if(getModelView().getError() == ErrorMessage.ErrorType.NotYourTurnError && getModelView().getError() == ErrorMessage.ErrorType.StudentError)
                     {
@@ -1266,6 +1287,30 @@ public class ViewGUI extends View {
             charIndex = Optional.empty();
         }
     }
+
+    /**
+     * Method to recreate the connection stage if the connection to the server failed
+     * @throws IOException exception can be thrown by the javFX loader when loading a scene
+     */
+    public void restartConnection() throws IOException
+    {
+        notifyConnection(IP,port);
+        ConnectionController controller= new ConnectionController();
+        controller.setView(this);
+        Stage connectionStage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/playerInfo.fxml"));
+        loader.setController(controller);
+        Parent root = loader.load();
+        ((VBox)root).setBackground(new Background(new BackgroundImage(new Image("images/background1.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+        connectionStage.setScene(new Scene(root));
+        connectionStage.setTitle("connection to server");
+        connectionStage.getIcons().add(new Image("images/logo.png"));
+        connectionStage.alwaysOnTopProperty();
+        connectionStage.initModality(Modality.APPLICATION_MODAL);
+        connectionStage.setOnCloseRequest(event-> {event.consume();connectionStage.close();});
+        connectionStage.show();
+    }
+
     /**
      * Method to create the stage to show the winner
      */
@@ -1282,12 +1327,12 @@ public class ViewGUI extends View {
                     pane.setBackground(new Background(new BackgroundImage(new Image("images/background.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                     Label winner = new Label();
                     if (getModelView().getWin().isDraw()) {
-                        winner.setText("Parità");
+                        winner.setText("Draw");
                     } else {
                         if (getModelView().getPlayers().length < 4) {
-                            winner.setText(getModelView().getPlayers()[getModelView().getWin().getId()].getNickname() + " ha vinto!");
+                            winner.setText(getModelView().getPlayers()[getModelView().getWin().getId()].getNickname() + " has won!");
                         } else {
-                            winner.setText(getModelView().getPlayers()[getModelView().getWin().getId()].getNickname() + " e " + getModelView().getPlayers()[(getModelView().getWin().getId() + 2) % 4].getNickname() + " hanno vinto!");
+                            winner.setText(getModelView().getPlayers()[getModelView().getWin().getId()].getNickname() + " and " + getModelView().getPlayers()[(getModelView().getWin().getId() + 2) % 4].getNickname() + " have won!");
                         }
                     }
                     winner.setFont(Font.font("System", FontWeight.BOLD, FontPosture.REGULAR,60.0));
