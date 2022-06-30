@@ -22,8 +22,6 @@ public class Team {
         this.faction = Faction.Empty;
         this.towers = 8;
         this.players = new ArrayList<>();
-        // this.players.add(new Player(0, null, 0)); // ATTENTION
-        // this.players.add(new Player(1, null, 0)); // ATTENTION
     }
 
     /**
@@ -45,7 +43,7 @@ public class Team {
     /**
      * Removes towers from all the players in the team
      * @param t The team from which towers will be removed
-     * @throws TowerOutOfBoundException
+     * @throws TowerOutOfBoundException When using more towers than the player has
      */
     public void useTowers(int t) throws TowerOutOfBoundException{
         if(towers>=t) {
@@ -58,7 +56,7 @@ public class Team {
     /**
      * Add towers to all the players in the team
      * @param t the team to which towers will be added
-     * @throws TowerOutOfBoundException
+     * @throws TowerOutOfBoundException When adding more towers than the players' boards can hold
      */
     public void addTowers(int t) throws TowerOutOfBoundException {
         if(towers+t<=8){

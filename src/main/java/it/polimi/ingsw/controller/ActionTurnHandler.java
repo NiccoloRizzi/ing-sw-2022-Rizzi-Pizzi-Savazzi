@@ -3,16 +3,11 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.clientModels.Answers.ErrorMessage;
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 import it.polimi.ingsw.clientModels.ClientModel;
-import it.polimi.ingsw.exceptions.NotEnoughCoinsException;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.server.Observable;
-import it.polimi.ingsw.server.Observer;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Handles the actiorn turn of each player
@@ -24,6 +19,7 @@ public class ActionTurnHandler extends Observable<ClientModel> {
      * How many students the player can and must move
      */
     private int studentsToMove;
+    private final int numOfPlayers;
     /**
      * Current strategy for checking who owns a professor
      */
@@ -44,18 +40,19 @@ public class ActionTurnHandler extends Observable<ClientModel> {
     /**
      * Creates the action turn handler with a given gameModel
      * @param gameModel the gameModel of the match
+     * @param numOfPlayers The number of players
      */
-    public ActionTurnHandler(GameModel gameModel){
+    public ActionTurnHandler(GameModel gameModel,int numOfPlayers){
         this.gameModel = gameModel;
-
+        this.numOfPlayers=numOfPlayers;
     }
 
     /**
      * Sets up the ActionTurnHandler to handle the current player for the current match
      * @param currentPlayer The current player
-     * @param numOfPlayers The number of players
+     *
      */
-    public void setupActionTurnHandler(int currentPlayer,int numOfPlayers){
+    public void setupActionTurnHandler(int currentPlayer){
         this.currentPlayer = currentPlayer;
         studentsToMove = (numOfPlayers == 3)?4:3;
         phase = Phase.STUDENTS;
@@ -128,7 +125,7 @@ public class ActionTurnHandler extends Observable<ClientModel> {
 
     /**
      * Moves a student from the current player's board to his table
-     * @param student
+     * @param student The student to be moved
      */
     public void moveStudentToTable(Colour student){
         try{

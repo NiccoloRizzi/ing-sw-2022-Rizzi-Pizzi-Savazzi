@@ -1,10 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.clientModels.ClientCharacter;
-import it.polimi.ingsw.clientModels.ClientIsle;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 /**
  * Class that represents usable characters that can hold students

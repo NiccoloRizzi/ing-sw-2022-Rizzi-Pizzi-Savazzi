@@ -7,8 +7,6 @@ import it.polimi.ingsw.exceptions.*;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.server.Observable;
 import it.polimi.ingsw.server.Observer;
-
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -56,13 +54,13 @@ public class Game extends Observable<ClientModel> {
     /**
      * Creates the current match based on the number of players and game mode
      * @param playersNumber the number of players
-     * @param expertMode
+     * @param expertMode Whether the game is in expert mode
      */
     public Game(int playersNumber, boolean expertMode){
         this.playersNumber= playersNumber;
         gameModel = new GameModel(playersNumber,expertMode);
         this.expertMode = expertMode;
-        turn = new ActionTurnHandler(gameModel);
+        turn = new ActionTurnHandler(gameModel, this.playersNumber);
     }
 
     /**
@@ -77,7 +75,7 @@ public class Game extends Observable<ClientModel> {
                                 .min(Integer::compareTo)
                                 .get()
                         ))
-                .max(Comparator.comparingInt(a -> gameModel.numberOfProfessors(a)))
+                .max(Comparator.comparingInt(gameModel::numberOfProfessors))
                 .get();
         Optional<Player> check = gameModel.getPlayers().stream()
                 .filter(p -> (
@@ -87,7 +85,7 @@ public class Game extends Observable<ClientModel> {
                                 .get()
                         && p.getID()!= winner.getID()
                 ))
-                .max(Comparator.comparingInt(a -> gameModel.numberOfProfessors(a)));
+                .max(Comparator.comparingInt(gameModel::numberOfProfessors));
         if(check.isPresent() && winner.getBoard().getTowers() == check.get().getBoard().getTowers() && gameModel.numberOfProfessors(winner) == gameModel.numberOfProfessors(check.get())){
             notify(new WinMessage(true));
         }else{
@@ -141,12 +139,12 @@ public class Game extends Observable<ClientModel> {
      */
     public void startActionTurn(){
         planningPhase=false;
-       turn.setupActionTurnHandler(currentPlayer, playersNumber);
+       turn.setupActionTurnHandler(currentPlayer);
     }
 
     /**
      *
-     * @return wheter the game is currently in planning phase
+     * @return whether the game is currently in planning phase
      */
     public boolean isPlanning(){
         return planningPhase;
@@ -184,7 +182,7 @@ public class Game extends Observable<ClientModel> {
     }
 
     /**
-     * Sets up and starts the game by creating all main elements
+     * Sets up and starts the game by creating all match elements
      */
     public void setupGame(){
         planningOrder = new ArrayList<>();
@@ -249,7 +247,7 @@ public class Game extends Observable<ClientModel> {
     }
 
     /**
-     *
+     * Getter for expertMode
      * @return whether the game is in expert mode
      */
     public boolean isExpertMode(){
@@ -257,7 +255,7 @@ public class Game extends Observable<ClientModel> {
     }
 
     /**
-     *
+     * Getter for GameModel
      * @return the game model of the current match
      */
     public GameModel getGameModel(){
@@ -288,7 +286,7 @@ public class Game extends Observable<ClientModel> {
         ArrayList<Player> tempPlayers = new ArrayList<>(gameModel.getPlayers());
         tempPlayers.sort(Comparator.comparingInt(p -> p.getChosen().getValue()));
         actionOrder = tempPlayers.stream()
-                .map(player -> player.getID())
+                .map(Player::getID)
                 .collect(Collectors.toCollection(ArrayList<Integer>::new));
 
         int first = actionOrder.get(0);

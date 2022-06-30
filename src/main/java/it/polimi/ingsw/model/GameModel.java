@@ -572,7 +572,6 @@ public class GameModel extends Observable<ClientModel> {
      * @param player The player to whom to give the coin
      */
     public void giveCoin(Player player){
-        String answer = null;
         try{
             removeCoin();
             getPlayer(player.getID()).addCoin();

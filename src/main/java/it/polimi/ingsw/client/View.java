@@ -23,11 +23,6 @@ public abstract class View extends Observable<JsonObject> {
         return modelView;
     }
 
-   /* public synchronized void sendMessage(String messageToSend) {
-        notify(messageToSend);
-    }*/
-
-
     public synchronized void visit(ClientBoard clientBoard){
         modelView.getBoards()[clientBoard.getPlayerID()] = clientBoard;
         refresh(2);
@@ -91,9 +86,6 @@ public abstract class View extends Observable<JsonObject> {
         System.out.println(winMessage.serialize());
         modelView.setWin(winMessage);
         refresh(6);
-        WinDisconnection winDisconnection = new WinDisconnection(modelView.getMyId());
-        notifyClient(MessageSerializer.serialize(winDisconnection));
-        notifyDisconnection();
     }
     public synchronized void visit(StartMessage startMessage){
         System.out.println(startMessage);
@@ -194,13 +186,6 @@ public abstract class View extends Observable<JsonObject> {
         jo.addProperty("command","connect");
         notify(jo);
     }
-    public void notifyDisconnection(){
-        JsonObject jo = new JsonObject();
-        jo.addProperty("command","disconnect");
-        notify(jo);
-    }
-
-
 
     public abstract void start();
     public abstract void startGame();

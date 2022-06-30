@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.clientModels.ClientIsle;
-import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
-
 import java.util.HashMap;
 /**
  * Class that represents Isle tiles
@@ -136,7 +134,7 @@ public class Isle extends Tile {
 
     public void notifyChange()
     {
-        notify(new ClientIsle(ID,tower,new HashMap<Colour, Integer>(students),prohibited,size));
+        notify(new ClientIsle(ID,tower, new HashMap<>(students),prohibited,size));
     }
 
     /**
@@ -144,6 +142,6 @@ public class Isle extends Tile {
      * @return a Client Isle
      */
     public ClientIsle getClientIsle(){
-        return new ClientIsle(ID,tower,new HashMap<Colour, Integer>(students),prohibited,size);
+        return new ClientIsle(ID,tower, new HashMap<>(students),prohibited,size);
     }
 }

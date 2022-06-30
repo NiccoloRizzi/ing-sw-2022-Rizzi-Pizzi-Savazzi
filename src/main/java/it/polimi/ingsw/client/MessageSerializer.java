@@ -106,10 +106,4 @@ public class MessageSerializer {
         return jsonObject.toString();
     }
 
-    public static String serialize(WinDisconnection message){
-        String json = gson.toJson(message);
-        JsonObject jsonObject = gson.fromJson(json,JsonObject.class);
-        jsonObject.addProperty("type","WinDisconnection");
-        return jsonObject.toString();
-    }
 }

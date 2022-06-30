@@ -1,6 +1,4 @@
 package it.polimi.ingsw.model;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -24,13 +22,6 @@ public class noTowersStrategy implements influenceStrategy{
             {
                 influence += (professors.get(c).equals(p))?students.get(c):0;
             }
-//        if(p.getBoard().getFaction() == tower){
-//            for(Student s : students){
-//                if(p.getBoard().getProfessors()[s.getType().ordinal()]){
-//                    influence++;
-//                }
-//            }
-//        }
         System.out.println(p.getNickname()+"  "+influence);
        return influence;
     }

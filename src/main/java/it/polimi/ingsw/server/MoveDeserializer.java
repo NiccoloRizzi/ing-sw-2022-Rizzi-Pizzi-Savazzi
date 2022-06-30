@@ -41,8 +41,4 @@ public class MoveDeserializer {
         }
     }
 
-    public static WinDisconnection deserializeWinDisconnection(String json){
-        JsonObject jsonObject = gson.fromJson(json,JsonObject.class);
-        return gson.fromJson(json, WinDisconnection.class);
-    }
 }

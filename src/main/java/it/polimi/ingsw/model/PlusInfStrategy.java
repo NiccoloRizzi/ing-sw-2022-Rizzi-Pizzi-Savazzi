@@ -1,6 +1,4 @@
 package it.polimi.ingsw.model;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -11,7 +9,7 @@ public class PlusInfStrategy implements influenceStrategy{
     /**
      * User ID of the player on whom the strategy will be applied
      */
-    private int userID;
+    private final int userID;
 
     public PlusInfStrategy(int userID)
     {

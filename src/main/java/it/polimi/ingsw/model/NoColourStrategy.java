@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -10,7 +9,7 @@ public class NoColourStrategy implements influenceStrategy{
     /**
      * The colour to ignore
      */
-    private Colour noColour;
+    private final Colour noColour;
 
     public NoColourStrategy(Colour noColour)
     {

@@ -163,7 +163,7 @@ public class Board extends Tile{
     public boolean isEntranceFull(){
        int students= (Arrays.stream(Colour.values()))
                 .map(C -> super.students.get(C))
-                .reduce(0, (e1,e2)-> e1+e2);
+                .reduce(0, Integer::sum);
 
        return students>=studLimit;
     }

@@ -24,10 +24,10 @@ public class Move6StudCharacterMessage implements Message{
 
     /**
      * Creates a message for taking students from the character
-     * @param charId
-     * @param playerId
-     * @param studFromBoard
-     * @param studFromChar
+     * @param charId The id of the character being used
+     * @param playerId The id of the player being used
+     * @param studFromBoard Students to be taken from the tables
+     * @param studFromChar Students to be taken from the board
      */
     public Move6StudCharacterMessage(int charId, int playerId, Colour[] studFromBoard, Colour[] studFromChar) {
         this.charId = charId;
