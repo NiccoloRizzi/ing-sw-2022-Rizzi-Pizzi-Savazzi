@@ -35,23 +35,23 @@ public class ProhibitedIsleCharacterMessage implements Message{
     }
 
     /**
-     *
-     * @return Used character's id
+     * Getter for used character's ID
+     * @return Used character's ID
      */
     public int getCharacterID() {
         return charId;
     }
 
     /**
-     *
-     * @return The player's id
+     * Getter for the player's ID
+     * @return The player's ID
      */
     public int getPlayerID() {
         return playerId;
     }
 
     /**
-     *
+     * Getter for the index of the isle the prohibition will be applied to
      * @return the index of the isle the prohibition will be applied to
      */
     public int getIsleID() {

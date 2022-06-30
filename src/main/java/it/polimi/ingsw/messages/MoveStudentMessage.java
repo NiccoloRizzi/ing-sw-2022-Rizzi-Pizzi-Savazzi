@@ -8,10 +8,21 @@ import it.polimi.ingsw.model.Colour;
  * Message for moving a student from the board to an isle or to the tables
  */
 public class MoveStudentMessage implements Message{
-
+    /**
+     * The ID of the current player
+     */
     private final int playerId;
+    /**
+     * The colour of the student to be moved
+     */
     private final Colour student;
+    /**
+     * The index of the tile the student will be moved to
+     */
     private final int tileIndex;
+    /**
+     * Whether the student will be moved to a table
+     */
     private final boolean toTable;
 
     /**
@@ -29,15 +40,15 @@ public class MoveStudentMessage implements Message{
     }
 
     /**
-     *
-     * @return The player's id
+     * Getter for the player's ID
+     * @return The player's ID
      */
     public int getPlayerID() {
         return playerId;
     }
 
     /**
-     *
+     * Getter for the colour of the student that will be moved
      * @return The colour of the student that will be moved
      */
     public Colour getStudent() {
@@ -45,7 +56,7 @@ public class MoveStudentMessage implements Message{
     }
 
     /**
-     *
+     * Getter for the id of the tile where the student will be moved to
      * @return The id of the tile where the student will be moved to
      */
     public int getTileID() {
@@ -53,8 +64,8 @@ public class MoveStudentMessage implements Message{
     }
 
     /**
-     *
-     * @return whether the student will be moved to tables
+     * Getter for whether the student will be moved to tables
+     * @return Whether the student will be moved to tables
      */
     public boolean isToTable() {
         return toTable;

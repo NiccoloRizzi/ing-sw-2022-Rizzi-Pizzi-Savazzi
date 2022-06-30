@@ -28,13 +28,17 @@ public class MoveMotherNatureMessage implements Message{
     }
 
     /**
-     *
-     * @return The player's id
+     * Getter for the player's ID
+     * @return The player's ID
      */
     public int getPlayerID() {
         return playerId;
     }
 
+    /**
+     * Getter for the amount of steps mother nature will be moved
+     * @return the amount of steps mother nature will be moved
+     */
     public int getMoves() {
         return moves;
     }

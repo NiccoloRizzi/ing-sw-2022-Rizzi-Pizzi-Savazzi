@@ -287,7 +287,6 @@ public class GameModel extends Observable<ClientModel> {
      * @return the team associated with that id
      */
     public Team getTeam(int teamID) {
-        // FOR EXCEPTION
         if (teamID >= 0 && teamID < teams.size()) {
             return teams.get(teamID);
         }

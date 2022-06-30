@@ -40,7 +40,13 @@ class PlayerTest {
         assertNotNull(p.getDeck());
         assertEquals(9, p.getDeck().size());
     }
-
+    @Test
+    void boost(){
+        Player player = new Player(0,"Giorgio");
+        player.setChoosenAssistant(0);
+        player.boost();
+        assertEquals(player.getChosen().getBoost(),2);
+    }
     @ParameterizedTest
     @ValueSource(ints = {0,1,2,3,4,5,6,7,8,9,10,11,-1,-2})
     void setChoosenAssistant(int param) {

@@ -41,7 +41,7 @@ public class Move2StudCharacterMessage implements Message{
     }
 
     /**
-     *
+     * Getter for the students that will be removed from the tables and added to the board
      * @return The students that will be removed from the tables and added to the board
      */
     public Colour[] getStudFromTables() {
@@ -49,7 +49,7 @@ public class Move2StudCharacterMessage implements Message{
     }
 
     /**
-     *
+     * Getter for used character's id
      * @return Used character's id
      */
     public int getCharacterID() {

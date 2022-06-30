@@ -34,23 +34,23 @@ public class Remove3StudCharacterMessage implements Message{
     }
 
     /**
-     *
-     * @return Used character's id
+     * Getter for used character's ID
+     * @return Used character's ID
      */
     public int getCharacterID() {
         return charId;
     }
 
     /**
-     *
-     * @return The player's id
+     * Getter for the player's ID
+     * @return The player's ID
      */
     public int getPlayerID() {
         return playerId;
     }
 
     /**
-     *
+     * Getter for the colour of the students that will be removed
      * @return The colour of the students that will be removed
      */
     public Colour getColour() {

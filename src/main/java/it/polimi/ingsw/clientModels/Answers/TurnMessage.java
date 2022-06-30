@@ -31,9 +31,21 @@ public class TurnMessage implements ClientModel {
      * Enum for the types of Turn
      */
     public enum Turn{
+        /**
+         * Planning turn
+         */
         PLANNING("Pianificazione, scelta assistente"),
+        /**
+         * Action turn, students phase
+         */
         ACTION_STUDENTS("Azione, spostamento studenti"),
+        /**
+         * Action turn, move mothernature phase
+         */
         ACTION_MN("Azione, spostamento madre natura"),
+        /**
+         * Action turn, choose cloud phase
+         */
         ACTION_CLOUDS("Azione, scelta della nuvola");
         /**
          * Message associated with a turn

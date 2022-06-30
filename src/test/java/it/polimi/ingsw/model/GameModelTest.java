@@ -1,10 +1,10 @@
 package it.polimi.ingsw.model;
 
 
-//import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.clientModels.ClientGameModel;
 import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.exceptions.NotEnoughCoinsException;
+import it.polimi.ingsw.exceptions.PlayerOutOfBoundException;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 import it.polimi.ingsw.server.Observer;
@@ -42,7 +42,14 @@ class GameModelTest{
         }
     }
 
-
+    @Test
+    void prohibitedTest(){
+        GameModel gm = new GameModel(2,true);
+        gm.useProhibited();
+        assertEquals(3,gm.getProhibited());
+        gm.addProhibited();
+        assertEquals(4,gm.getProhibited());
+    }
     @Test
     void getPlayer() {
     }
@@ -53,10 +60,6 @@ class GameModelTest{
 
     @Test
     void getCloud() {
-    }
-
-    @Test
-    void getTeam() {
     }
 
 
@@ -77,19 +80,62 @@ class GameModelTest{
     @ValueSource(ints={-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12})
     void setGetMoveMN(int param) {
         GameModel gm = new GameModel(2,true);
-//      TestObs obs = new TestObs();
-//      gm.addObserver(obs);
         if(param<12 && param>=0) {
             assertDoesNotThrow(() -> gm.setMotherNPos(param));
             gm.moveMN(param);
-//            ClientGameModel m = (ClientGameModel)obs.message;
             assertEquals(gm.getMotherNature(), (param + param) % 12);
-//          assertEquals(m.getMotherNature(), (param + param) % 12);
-//          assertEquals(m.getIsles().size(),gm.getIsles().size());
         }
         else{
             assertThrows(TileOutOfBoundsException.class,()->gm.setMotherNPos(param));
         }
+    }
+
+    @Test
+    void checkEmptyBag() throws StudentsOutOfBoundsException {
+        GameModel gm = new GameModel(2,true);
+        assertFalse(gm.checkEmptyBag());
+        gm.extractStudents(120);
+        assertTrue(gm.checkEmptyBag());
+    }
+    @Test
+    void setupCharacters(){
+        GameModel gm = new GameModel(2,true);
+        gm.setUpCharacters();
+        for(int i=0;i<3;i++)
+            assertNotNull(gm.getCharacter(i));
+    }
+    @Test
+    void getTeam() throws PlayerOutOfBoundException {
+        GameModel gm = new GameModel(4,true);
+        gm.addPlayer(0,"Giorgio");
+        gm.addPlayer(1,"Piero");
+        gm.addPlayer(2,"Giovanni");
+        gm.addPlayer(3,"Alberto");
+        Team team = gm.getTeam(0);
+        assertEquals(gm.getPlayer(0),gm.getTeam(0).getLeader());
+        assertEquals(gm.getPlayer(1),gm.getTeam(0).getMember());
+
+    }
+
+    @Test
+    void getNumberOfProfessors() throws PlayerOutOfBoundException {
+        GameModel gm = new GameModel(2,true);
+        gm.addPlayer(0,"Giorgio");
+        gm.addPlayer(1,"Piero");
+        assertEquals(gm.numberOfProfessors(gm.getPlayers().get(0)),0);
+        gm.getProfessors().put(Colour.Dragons,gm.getPlayer(0));
+        assertEquals(gm.numberOfProfessors(gm.getPlayer(0)),1);
+    }
+    @Test
+    void giveCoin() throws PlayerOutOfBoundException {
+        GameModel gm = new GameModel(2,true);
+        gm.addPlayer(0,"Giorgio");
+        gm.addPlayer(1,"Piero");
+        assertEquals(20,gm.getCoins());
+        gm.giveCoin(gm.getPlayer(0));
+        assertEquals(19,gm.getCoins());
+        assertEquals(1,gm.getPlayer(0).getCoins());
+
     }
 
     @Test
