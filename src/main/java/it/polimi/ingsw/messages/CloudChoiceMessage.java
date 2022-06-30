@@ -28,13 +28,17 @@ public class CloudChoiceMessage implements Message{
     }
 
     /**
-     *
-     * @return The player's id
+     * Getter for the player's ID
+     * @return The player's ID
      */
     public int getPlayerId() {
         return playerId;
     }
 
+    /**
+     * Getter for cloud's ID
+     * @return Cloud's ID
+     */
     public int getCloudID() {
         return cloudIndex;
     }

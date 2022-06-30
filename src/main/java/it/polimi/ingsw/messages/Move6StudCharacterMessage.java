@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.MessageSerializer;
 import it.polimi.ingsw.controller.MessageVisitor;
 import it.polimi.ingsw.model.Colour;
 
+/**
+ * Message for using the character that allows the player to exchange students between tables and entrance
+ */
 public class Move6StudCharacterMessage implements Message{
     /**
      * The id of the character being used

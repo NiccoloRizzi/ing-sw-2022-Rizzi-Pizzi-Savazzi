@@ -45,23 +45,23 @@ public class IsleInfluenceCharacterMessage implements Message{
     }
 
     /**
-     *
-     * @return Used character's id
+     * Getter for used character's ID
+     * @return Used character's ID
      */
     public int getCharacterID() {
         return characterId;
     }
 
     /**
-     *
-     * @return The player's id
+     * Getter for the player's ID
+     * @return The player's ID
      */
     public int getPlayerID() {
         return playerId;
     }
 
     /**
-     *
+     * Getter for the colour to ignore in the NoColour strategy
      * @return The colour to ignore in the NoColour strategy
      */
     public Colour getNoColour() {

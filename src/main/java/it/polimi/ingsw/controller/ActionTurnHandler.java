@@ -13,12 +13,21 @@ import it.polimi.ingsw.server.Observable;
  */
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class ActionTurnHandler extends Observable<ClientModel> {
+    /**
+     * The ID of the current player
+     */
     private int currentPlayer;
+    /**
+     * The gamemodel of the match
+     */
     private final GameModel gameModel;
     /**
      * How many students the player can and must move
      */
     private int studentsToMove;
+    /**
+     * The number of players in the match
+     */
     private final int numOfPlayers;
     /**
      * Current strategy for checking who owns a professor
@@ -204,7 +213,7 @@ public class ActionTurnHandler extends Observable<ClientModel> {
     }
 
     /**
-     *
+     * Getter for the number of students the current player can still move
      * @return The number of students the current player can still move
      */
     public int getStudentsToMove() {

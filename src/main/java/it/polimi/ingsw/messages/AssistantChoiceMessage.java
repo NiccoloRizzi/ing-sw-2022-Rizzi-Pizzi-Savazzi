@@ -29,16 +29,16 @@ public class AssistantChoiceMessage implements Message{
     }
 
     /**
-     *
-     * @return The assistant's id
+     * Getter for the assistant's ID
+     * @return The assistant's ID
      */
     public int getAssistantID() {
         return assistantId;
     }
 
     /**
-     *
-     * @return The player's id
+     * Getter for the player's ID
+     * @return The player's ID
      */
     public int getPlayerID() {
         return playerId;

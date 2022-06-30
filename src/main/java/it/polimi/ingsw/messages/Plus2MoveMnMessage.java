@@ -28,16 +28,16 @@ public class Plus2MoveMnMessage implements Message{
     }
 
     /**
-     *
-     * @return Used character's id
+     * Getter for used character's ID
+     * @return Used character's ID
      */
     public int getCharacterID() {
         return characterId;
     }
 
     /**
-     *
-     * @return The player's id
+     * Getter for the player's ID
+     * @return The player's ID
      */
     public int getPlayerID() {
         return playerId;

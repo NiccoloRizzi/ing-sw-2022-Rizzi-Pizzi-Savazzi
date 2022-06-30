@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
  * Main Controller class that creates and handles the match
  */
 public class Game extends Observable<ClientModel> {
-
+    /**
+     * The maximum number of isles in the game, 12
+     */
     private final static int MAX_N_ISLES = 12;
 
     /**
@@ -143,7 +145,7 @@ public class Game extends Observable<ClientModel> {
     }
 
     /**
-     *
+     * Getter for whether the game is currently in planning phase
      * @return whether the game is currently in planning phase
      */
     public boolean isPlanning(){
@@ -151,7 +153,7 @@ public class Game extends Observable<ClientModel> {
     }
 
     /**
-     *
+     * Getter for the order of the planning phase
      * @return players' order during planning phase
      */
     public ArrayList<Integer> getPlanningOrder() {
@@ -174,7 +176,7 @@ public class Game extends Observable<ClientModel> {
     }
 
     /**
-     *
+     * Getter for the player's order for the action phase
      * @return the players' order for the action phase
      */
     public ArrayList<Integer> getActionOrder(){
@@ -272,7 +274,7 @@ public class Game extends Observable<ClientModel> {
     }
 
     /**
-     *
+     * Getter for the ID of the current player
      * @return the current player
      */
     public int getCurrentPlayer(){
@@ -331,7 +333,7 @@ public class Game extends Observable<ClientModel> {
     }
 
     /**
-     *
+     * Getter for the number of players in the current match
      * @return The number of players in the current match
      */
     public int getPlayersNumber(){
@@ -339,7 +341,7 @@ public class Game extends Observable<ClientModel> {
     }
 
     /**
-     *
+     * Getter for the action turn handler
      * @return The action turn handler
      */
     public ActionTurnHandler getTurnHandler()
@@ -355,6 +357,10 @@ public class Game extends Observable<ClientModel> {
         this.currentPlayer = currentPlayer;
     }
 
+    /**
+     * Adds an observer to the class
+     * @param observer Observer
+     */
     @Override
     public void addObserver(Observer<ClientModel> observer){
         super.addObserver(observer);

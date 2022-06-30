@@ -43,23 +43,23 @@ public class MoveStudentCharacterMessage implements Message{
     }
 
     /**
-     *
-     * @return The player's id
+     * Getter for the player's ID
+     * @return The player's ID
      */
     public int getPlayerID() {
         return playerId;
     }
 
     /**
-     *
-     * @return Used character's id
+     * Getter for used character's ID
+     * @return Used character's ID
      */
     public int getCharacterID() {
         return characterId;
     }
 
     /**
-     *
+     * Getter for the colour of the student that will be moved
      * @return The colour of the student that will be moved
      */
     public Colour getStudent() {
@@ -67,8 +67,8 @@ public class MoveStudentCharacterMessage implements Message{
     }
 
     /**
-     *
-     * @return The id of the tile where the student will be moved to
+     * Getter for the ID of the tile where the student will be moved to
+     * @return The ID of the tile where the student will be moved to
      */
     public int getTileID() {
         return tileIndex;

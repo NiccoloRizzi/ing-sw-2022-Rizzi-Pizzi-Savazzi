@@ -41,6 +41,8 @@ public class CharacterTest extends TestCase {
         assertEquals(price+1,message.getPrice());
         assertEquals(0,message.getID());
         assertEquals(c,message.getCard());
+        assertEquals(character.getUsed(),true);
+        assertEquals(character.getCard(), c);
         character.use();
         message = (ClientCharacter)obs.message;
         assertEquals(price+1,character.getPrice());
