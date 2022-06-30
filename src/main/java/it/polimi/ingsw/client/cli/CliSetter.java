@@ -116,10 +116,10 @@ public class CliSetter implements CliBuilder{
 //                }
 //            }
 //        }
-        for(ClientPlayer player : modelView.getOtherPlayerAss().keySet()){
+        for(ClientPlayer player : modelView.getOtherPlayerAssistant().keySet()){
                     others = others.rightStick(
                             new CliEntities.CliString(player.getNickname())
-                                    .bottomStick(new CliEntities.CliAssistant(modelView, modelView.getOtherPlayerAss().get(player), false, player.getId()))
+                                    .bottomStick(new CliEntities.CliAssistant(modelView, modelView.getOtherPlayerAssistant().get(player), false, player.getId()))
                     );
         }
         cli.setOtherPlayerAss(otherString.bottomStick(others));

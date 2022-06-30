@@ -7,7 +7,6 @@ import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.controller.MessageVisitor;
 import it.polimi.ingsw.messages.Message;
 import it.polimi.ingsw.messages.PlayerMessage;
-import it.polimi.ingsw.messages.WinDisconnection;
 
 import java.io.*;
 import java.net.Socket;
@@ -103,7 +102,7 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
     }
 
     /**
-     * Sets a nikcname for the player
+     * Sets a nickname for the player
      * @param nickname The chosen nickname
      */
     public void setNickname(String nickname){
@@ -155,8 +154,6 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
      * Keeps sending ping packets to make sure the player is still connected
      */
     public void connectionChecker(){
-        Gson gson = new Gson();
-        String json;
         while(isActive()) {
             JsonObject jo = new JsonObject();
             jo.addProperty("type","ping");
@@ -181,7 +178,6 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
     public void run(){
         String read;
         Scanner in;
-        int i=0;
         Gson gson = new Gson();
         try{
             in = new Scanner(socket.getInputStream());
@@ -194,15 +190,6 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
                 server.addToLobby(this);
                 new Thread(this::connectionChecker).start();
             }catch (IllegalArgumentException ignored){}
-//            Gson gson = new Gson();
-//            JsonObject message = gson.fromJson(read, JsonObject.class);
-//            if(message.get("type").getAsString().equals("PlayerMessage")) {
-//                nickname = message.get("nickname").getAsString();
-//                numOfPlayers = message.get("playersNumber").getAsInt();
-//                expertMode = message.get("expertMode").getAsBoolean();
-//                server.addToLobby(this);
-//                new Thread(()->connectionChecker()).start();
-//            }
             while(isActive()){
                 read = in.nextLine();
                 System.out.println(nickname +": " +read);

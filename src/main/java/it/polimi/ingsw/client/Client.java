@@ -13,17 +13,45 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Client implements Observer<JsonObject>{
+    /**
+     * Socket to connect to the server
+     */
     private Socket socket;
+    /**
+     * Scanner to read message sent by the server
+     */
     private Scanner in;
+    /**
+     * PrintWriter to write message to the server
+     */
     private PrintWriter out;
+    /**
+     * Boolean to check if the server connection is still active
+     */
     private boolean isActive=false;
-    private int playersNumber;
+    /**
+     * View of the game
+     */
     private View view;
-    private boolean expert;
+    /**
+     * Nickname of the player
+     */
     private String nickname;
+    /**
+     * Id of the player assigned by the server
+     */
     private int id;
-    private static Gson gson = new Gson();
+    /**
+     * Gson used to deserialize the type of the message
+     */
+    private final static Gson gson = new Gson();
 
+    /**
+     * Method to start a connection with the server
+     * @param IP server IP
+     * @param port server Port
+     * @throws IOException can be thrown when creating the socket
+     */
     public void startConnection(String IP, int port) throws IOException{
         socket = new Socket(IP, port);
         in = new Scanner(socket.getInputStream());
@@ -33,45 +61,34 @@ public class Client implements Observer<JsonObject>{
         readFromSocket();
     }
 
-
+    /**
+     * Setter for the nickname
+     * @param nickname string with the nickname to set
+     */
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
+    /**
+     * Getter for the nickname
+     * @return nickname
+     */
     public String getNickname(){
         return nickname;
     }
 
-    public Client(boolean cli){
-        if(cli) {
-            startCli();
-        }
-    }
-
+    /**
+     * Setter fo the view
+     * @param view View to set
+     */
     public void setView(View view){
         this.view = view;
         view.addObserver(this);
     }
 
-    public void setPlayersNumber(int playersNumber) {
-        this.playersNumber = playersNumber;
-    }
-
-    public void setExpert(boolean expert) {
-        this.expert = expert;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-    public int getPlayersNumber(){
-        return playersNumber;
-    }
-
+    /**
+     * Method to read from the socket and handle the received messages
+     */
     public void readFromSocket(){
         Thread t = new Thread(() -> {
             while (isActive) {
@@ -97,10 +114,10 @@ public class Client implements Observer<JsonObject>{
         t.start();
     }
 
-    public boolean isExpert() {
-        return expert;
-    }
-
+    /**
+     * Method to write a message to the socket
+     * @param message message to write
+     */
     public void writeToSocket(String message) {
         Thread t = new Thread(() -> {
             out.println(message);
@@ -109,35 +126,36 @@ public class Client implements Observer<JsonObject>{
         t.start();
     }
 
+    /**
+     * Method to create a CLI view
+     */
     public void startCli(){
         this.view = new Cli();
         view.addObserver(this);
         view.start();
     }
 
-//    public void run() throws IOException {
-//        try {
-//            Thread readThread = readFromSocket();
-//            readThread.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }finally {
-//            if(!socket.isClosed()){
-//                socket.getInputStream().close();
-//                socket.getOutputStream().close();
-//                socket.close();
-//            }
-//        }
-//    }
-
+    /**
+     * Getter fot the ID
+     * @return id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Setter for the ID
+     * @param id ID to set
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * Method that handles the message received from the observed object
+     * @param command message received as JsonObject
+     */
+    @Override
     public void update(JsonObject command) {
         Gson gson = new Gson();
         JsonObject jo = gson.fromJson(command,JsonObject.class);
@@ -162,6 +180,9 @@ public class Client implements Observer<JsonObject>{
         }
     }
 
+    /**
+     * Method to close the socket and the scanner when the client has to be closed
+     */
     public void close()
     {
         if(isActive && !socket.isClosed()) {

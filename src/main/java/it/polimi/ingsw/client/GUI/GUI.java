@@ -13,16 +13,20 @@ import java.io.IOException;
 
 public class GUI extends Application{
 
+    /**
+     * The client
+     */
     private Client client;
-    public static void main(String[] args) {
-        //System.setProperty("prism.allowhidpi", "false");
-        launch(args);
-    }
 
+    /**
+     * Method to create the stage for the game and the stage for the connection to the server
+     * @param stage the default stage created by javaFX
+     * @throws IOException can be thrown by javaFX loader when loading a scene
+     */
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader loader1 = new FXMLLoader();
-        client = new Client(false);
+        client = new Client();
         loader1.setLocation(getClass().getResource("/gameView.fxml"));
         stage.setTitle("Eryantis");
         stage.setMaximized(true);
@@ -55,13 +59,22 @@ public class GUI extends Application{
         connectionStage.show();
     }
 
+    /**
+     * Method to close one stage and the client
+     * @param stage stage that ha sto be closed
+     */
     public void exit(Stage stage){
-        new Thread(()->{client.close();}).start();
+        new Thread(()-> client.close()).start();
         stage.close();
     }
 
+    /**
+     * Method to close the client and two stages
+     * @param stage1 the first stage that has to be closed
+     * @param stage2 the second stage that has to be closed
+     */
     public void exitConnection(Stage stage1,Stage stage2){
-        new Thread(()->{client.close();}).start();
+        new Thread(()-> client.close()).start();
         stage1.close();
         stage2.close();
     }

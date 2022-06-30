@@ -6,7 +6,6 @@ import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.MessageVisitor;
 import it.polimi.ingsw.exceptions.PlayerOutOfBoundException;
 
-import java.net.Socket;
 import java.util.ArrayList;
 
 /**
@@ -29,14 +28,6 @@ public class Lobby {
      * The server containing the lobby
      */
     private final Server server;
-    /**
-     * The match of the lobby
-     */
-    private Game game;
-    /**
-     * The messagevisitor for this lobby's game
-     */
-    private MessageVisitor messageVisitor;
     /**
      * Whether the game has already started for this lobby
      */
@@ -75,7 +66,7 @@ public class Lobby {
 
     /**
      *
-     * @return Wheter it is an expert mode lobby
+     * @return Whether it is an expert mode lobby
      */
     public boolean isExpertMode() {
         return expertMode;
@@ -87,13 +78,6 @@ public class Lobby {
      * @return Whether the addition was successful
      */
     public synchronized boolean addPlayer(PlayerConnection player) {
-//        for(PlayerConnection p: players){
-//            if(!p.isActive())
-//            {
-//                closeLobby();
-//                return false;
-//            }
-//        }
         if(players.size() < numOfPlayer) {
             players.add(player);
             player.setLobby(this);
@@ -107,14 +91,13 @@ public class Lobby {
     /**
      * Starts the match for this lobby
      */
-
     public synchronized void startGame()
     {
         System.out.println("Starting game of lobby "+server.getLobbies().indexOf(this));
         started = true;
         notifyAll();
-        game = new Game(numOfPlayer,expertMode);
-        messageVisitor = new MessageVisitor(game);
+        Game game = new Game(numOfPlayer, expertMode);
+        MessageVisitor messageVisitor = new MessageVisitor(game);
         for(PlayerConnection player: players){
             try {
                 game.createPlayer(player.getNickname());
@@ -160,16 +143,6 @@ public class Lobby {
         closeLobby();
     }
 
-    /**
-     * Method for handling the end of a match
-     */
-    public void gameEnd(){
-        for(PlayerConnection p: players){
-      //      if(!p.equals(player))
-//              player.send(); messaggio vittoria
-        }
-        closeLobby();
-    }
 
     /**
      *
