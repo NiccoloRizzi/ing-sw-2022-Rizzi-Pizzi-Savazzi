@@ -5,13 +5,13 @@ import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
-import it.polimi.ingsw.model.GameModel;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.server.Observable;
 
 /**
  * Handles the actiorn turn of each player
  */
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class ActionTurnHandler extends Observable<ClientModel> {
     private int currentPlayer;
     private final GameModel gameModel;

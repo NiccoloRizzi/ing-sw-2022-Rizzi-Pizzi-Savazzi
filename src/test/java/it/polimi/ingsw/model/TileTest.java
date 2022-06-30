@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TileTest extends TestCase {

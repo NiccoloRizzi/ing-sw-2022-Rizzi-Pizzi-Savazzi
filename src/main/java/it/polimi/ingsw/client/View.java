@@ -24,7 +24,7 @@ public abstract class View extends Observable<JsonObject> {
     /**
      * Gson needed to serialize the type of message
      */
-    static Gson gson = new Gson();
+    static final Gson gson = new Gson();
 
     /**
      * Getter of the ModelView

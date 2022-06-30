@@ -33,8 +33,6 @@ public class TeamCheckTowerStrategy implements CheckTowerStrategy {
                                 .get())
                         .collect(Collectors.toList());
                 if(maxTeams.size() == 1) owners = Optional.of(maxTeams.get(0));
-//                Optional<Team> owners = gm.getTeams().stream()
-//                        .reduce((t1,t2)->current.getInfluence(t1,profs)>current.getInfluence(t2,profs)?t1:t2);
                 if(owners.isPresent() && !(owners.get().getFaction()==current.getTower())){
                     int ownersIndex = gm.getTeams().indexOf(owners.get());
                     Team otherTeam = gm.getTeam((ownersIndex+1)%2);

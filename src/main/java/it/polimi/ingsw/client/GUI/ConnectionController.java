@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.GUI;
 
+import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.View;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +20,7 @@ public class ConnectionController{
      * The view
      */
     View view;
+    Client client;
     @FXML
     TextField serverIP;
     @FXML
@@ -31,6 +33,8 @@ public class ConnectionController{
     RadioButton players3,players4;
     @FXML
     CheckBox expert;
+    @FXML
+    Label error;
 
     /**
      * Setter for the view
@@ -39,6 +43,14 @@ public class ConnectionController{
     public void setView(View view)
     {
         this.view = view;
+    }
+
+    /**
+     * Setter for client
+     * @param client Client to set
+     */
+    public void setClient(Client client){
+        this.client = client;
     }
 
     /**
@@ -54,14 +66,19 @@ public class ConnectionController{
         System.out.println(port);
 
         view.notifyConnection(ip,Integer.parseInt(port));
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/playerInfo.fxml"));
-        loader.setController(this);
-        Parent root = loader.load();
-        ((VBox)root).setBackground(new Background(new BackgroundImage(new Image("images/background1.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
-        Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+        if(client.isActive()) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/playerInfo.fxml"));
+            loader.setController(this);
+            Parent root = loader.load();
+            ((VBox) root).setBackground(new Background(new BackgroundImage(new Image("images/background1.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        }else{
+            error.setVisible(true);
+        }
     }
+
 
     /**
      * Event Handler that sends the inserted information to connect to a lobby

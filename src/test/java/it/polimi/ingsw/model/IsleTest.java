@@ -6,13 +6,12 @@ import it.polimi.ingsw.server.Observer;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class IsleTest extends TestCase {
 
 
-    private class TestObs implements Observer<ClientModel> {
+    private static class TestObs implements Observer<ClientModel> {
         public ClientModel message;
 
         @Override
@@ -29,27 +28,18 @@ public class IsleTest extends TestCase {
         isle.setTower(Faction.Black);
         ClientIsle message = (ClientIsle)obs.message;
         assertEquals(Faction.Black,isle.getTower());
-//      assertEquals(message.getControlling(),isle.getTower());
-//      assertEquals(message.getSize(),isle.getSize());
-//      assertEquals(message.getId(),isle.getID());
-/*
-        for (Colour c: Colour.values()){
-            assertEquals((int)message.getStudents().get(c),isle.getStudents(c));
-        }
-*/
-//        assertEquals(message.getProhibited(),0);
     }
 
     @Test
     public void testGetInfluenceDefault() {
         Isle isle = new Isle(0);
         isle.setTower(Faction.Black);
-        HashMap<Colour,Integer> s = new HashMap<Colour,Integer>();
+        HashMap<Colour,Integer> s = new HashMap<>();
         int[] numStudent = {1,2,3,4,5};
         for(Colour c:Colour.values())
             s.put(c,numStudent[c.ordinal()]);
         isle.addStudents(s);
-        HashMap<Colour,Player> professors = new HashMap<Colour,Player>();
+        HashMap<Colour,Player> professors = new HashMap<>();
         Player p1 = new Player(1,"pippo");
         p1.createBoard(9);
         p1.assignFaction(Faction.Black);
@@ -78,12 +68,12 @@ public class IsleTest extends TestCase {
         Isle isle = new Isle(0);
         isle.setInfStrategy(new noTowersStrategy());
         isle.setTower(Faction.Black);
-        HashMap<Colour,Integer> s = new HashMap<Colour,Integer>();
+        HashMap<Colour,Integer> s = new HashMap<>();
         int[] numStudent = {1,2,3,4,5};
         for(Colour c:Colour.values())
             s.put(c,numStudent[c.ordinal()]);
         isle.addStudents(s);
-        HashMap<Colour,Player> professors = new HashMap<Colour,Player>();
+        HashMap<Colour,Player> professors = new HashMap<>();
         Player p1 = new Player(1,"pippo");
         p1.createBoard(9);
         p1.assignFaction(Faction.Black);
@@ -146,12 +136,12 @@ public class IsleTest extends TestCase {
         Isle isle = new Isle(0);
         isle.setTower(Faction.Black);
         isle.setInfStrategy(new NoColourStrategy(Colour.Dragons));
-        HashMap<Colour,Integer> s = new HashMap<Colour,Integer>();
+        HashMap<Colour,Integer> s = new HashMap<>();
         int[] numStudent = {1,2,3,4,5};
         for(Colour c:Colour.values())
             s.put(c,numStudent[c.ordinal()]);
         isle.addStudents(s);
-        HashMap<Colour,Player> professors = new HashMap<Colour,Player>();
+        HashMap<Colour,Player> professors = new HashMap<>();
         Player p1 = new Player(1,"pippo");
         p1.createBoard(9);
         p1.assignFaction(Faction.Black);

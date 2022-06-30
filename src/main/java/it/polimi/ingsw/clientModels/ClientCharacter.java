@@ -14,7 +14,7 @@ public class ClientCharacter implements ClientModel{
     /**
      * The ID (position on the board) of the character
      */
-    int ID;
+    final int ID;
     /**
      * The type of character
      */

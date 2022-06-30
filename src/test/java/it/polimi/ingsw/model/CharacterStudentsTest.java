@@ -7,11 +7,11 @@ import it.polimi.ingsw.server.Observer;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import java.util.ArrayList;
+
 import java.util.HashMap;
 
 public class CharacterStudentsTest extends TestCase {
-    private class TestObs implements Observer<ClientModel> {
+    private static class TestObs implements Observer<ClientModel> {
         public ClientModel message;
 
         @Override

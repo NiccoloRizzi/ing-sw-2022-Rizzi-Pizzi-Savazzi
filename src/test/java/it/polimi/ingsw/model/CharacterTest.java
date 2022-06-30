@@ -4,13 +4,12 @@ import it.polimi.ingsw.clientModels.ClientCharacter;
 import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.server.Observer;
 import junit.framework.TestCase;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 public class CharacterTest extends TestCase {
 
-    private class TestObs implements Observer<ClientModel> {
+    private static class TestObs implements Observer<ClientModel> {
         public ClientModel message;
 
         @Override

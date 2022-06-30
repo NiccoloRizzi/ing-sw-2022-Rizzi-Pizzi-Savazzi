@@ -12,7 +12,7 @@ public class Character extends Observable<ClientModel> {
     /**
      * Unique ID of the character
      */
-    protected int ID;
+    protected final int ID;
     /**
      * The type of character
      */

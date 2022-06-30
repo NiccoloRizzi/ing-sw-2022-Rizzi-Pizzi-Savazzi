@@ -32,6 +32,7 @@ import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
@@ -446,51 +447,55 @@ public class ViewGUI extends View {
      * Method to create the element of the GUI for the Characters
      */
     public void createCharacters() {
-        character = new ArrayList<>();
-        if(getModelView().isExpert()){
-            characters.setVisible(true);
-            characters.getChildren().clear();
-            for (int i = 0; i < 3; i++) {
-                character.add(new StackPane());
-                characters.getChildren().add(character.get(i));
-                character.get(i).setPrefHeight(150);
-                character.get(i).setPrefWidth(99);
-                character.get(i).setMinHeight(150);
-                character.get(i).setMinWidth(99);
-                character.get(i).setMaxHeight(150);
-                character.get(i).setMaxWidth(99);
-                character.get(i).setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-                character.get(i).setOnMouseClicked(this::selectCharacter);
-                ((StackPane) character.get(i)).setAlignment(Pos.CENTER);
-                character.get(i).setBackground(new Background(new BackgroundImage(new Image("images/personaggi/" + getModelView().getCharacters()[i].getCard().toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
-                character.get(i).getChildren().add(new GridPane());
-                ((GridPane) character.get(i).getChildren().get(0)).setAlignment(Pos.BOTTOM_CENTER);
-                ((GridPane) character.get(i).getChildren().get(0)).setMinWidth(character.get(i).getWidth());
-                ((GridPane) character.get(i).getChildren().get(0)).setMinHeight(character.get(i).getHeight() / 2);
-                ((GridPane) character.get(i).getChildren().get(0)).setPrefWidth(character.get(i).getWidth());
-                ((GridPane) character.get(i).getChildren().get(0)).setPrefHeight(character.get(i).getHeight() / 2);
-                ((GridPane) character.get(i).getChildren().get(0)).setMinWidth(character.get(i).getWidth());
-                ((GridPane) character.get(i).getChildren().get(0)).setMinHeight(character.get(i).getHeight() / 2);
-                ((GridPane) character.get(i).getChildren().get(0)).setHgap(20);
-                ((GridPane) character.get(i).getChildren().get(0)).setVgap(30);
-                //((GridPane) character.get(i).getChildren().get(0)).setGridLinesVisible(true);
-                for (int j = 0; j < 3; j++) {
-                    ((GridPane) character.get(i).getChildren().get(0)).addColumn(j);
-                    ((GridPane) character.get(i).getChildren().get(0)).addRow(j);
+        Platform.runLater(
+                ()-> {
+                    character = new ArrayList<>();
+                    if (getModelView().isExpert()) {
+                        characters.setVisible(true);
+                        characters.getChildren().clear();
+                        for (int i = 0; i < 3; i++) {
+                            character.add(new StackPane());
+                            characters.getChildren().add(character.get(i));
+                            character.get(i).setPrefHeight(150);
+                            character.get(i).setPrefWidth(99);
+                            character.get(i).setMinHeight(150);
+                            character.get(i).setMinWidth(99);
+                            character.get(i).setMaxHeight(150);
+                            character.get(i).setMaxWidth(99);
+                            character.get(i).setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                            character.get(i).setOnMouseClicked(this::selectCharacter);
+                            ((StackPane) character.get(i)).setAlignment(Pos.CENTER);
+                            character.get(i).setBackground(new Background(new BackgroundImage(new Image("images/personaggi/" + getModelView().getCharacters()[i].getCard().toString() + ".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+                            character.get(i).getChildren().add(new GridPane());
+                            ((GridPane) character.get(i).getChildren().get(0)).setAlignment(Pos.BOTTOM_CENTER);
+                            ((GridPane) character.get(i).getChildren().get(0)).setMinWidth(character.get(i).getWidth());
+                            ((GridPane) character.get(i).getChildren().get(0)).setMinHeight(character.get(i).getHeight() / 2);
+                            ((GridPane) character.get(i).getChildren().get(0)).setPrefWidth(character.get(i).getWidth());
+                            ((GridPane) character.get(i).getChildren().get(0)).setPrefHeight(character.get(i).getHeight() / 2);
+                            ((GridPane) character.get(i).getChildren().get(0)).setMinWidth(character.get(i).getWidth());
+                            ((GridPane) character.get(i).getChildren().get(0)).setMinHeight(character.get(i).getHeight() / 2);
+                            ((GridPane) character.get(i).getChildren().get(0)).setHgap(20);
+                            ((GridPane) character.get(i).getChildren().get(0)).setVgap(30);
+                            //((GridPane) character.get(i).getChildren().get(0)).setGridLinesVisible(true);
+                            for (int j = 0; j < 3; j++) {
+                                ((GridPane) character.get(i).getChildren().get(0)).addColumn(j);
+                                ((GridPane) character.get(i).getChildren().get(0)).addRow(j);
+                            }
+                        }
+                        exchange2 = new Button();
+                        exchange2.setText("Exchange");
+                        characters.getChildren().add(exchange2);
+                        exchange2.setVisible(false);
+                        exchange2.setMinWidth(100.0);
+                        exchange2.setMinHeight(20.0);
+                        exchange2.setOnAction(event -> {
+                            event.consume();
+                            checkExchange2();
+                        });
+                        player1.setTranslateX(40);
+                    }
                 }
-            }
-            exchange2 = new Button();
-            exchange2.setText("Exchange");
-            characters.getChildren().add(exchange2);
-            exchange2.setVisible(false);
-            exchange2.setMinWidth(100.0);
-            exchange2.setMinHeight(20.0);
-            exchange2.setOnAction(event -> {
-                event.consume();
-                checkExchange2();
-            });
-            player1.setTranslateX(40);
-        }
+        );
     }
 
     /**
@@ -500,9 +505,9 @@ public class ViewGUI extends View {
     {
         Platform.runLater(
             ()-> {
-                String turnmessage = (getModelView().getTurn().getPlayerId()==getModelView().getMyId())? "It's your turn" : getModelView().getPlayers()[getModelView().getTurn().getPlayerId()].getNickname();
-                turn.setText("Turn of:\n " + turnmessage);
-                phase.setText("Phase:\n " + getModelView().getTurn().getTurn().getTurnMsg());
+                String turnmessage = (getModelView().getTurn().getPlayerId()==getModelView().getMyId())? "È il tuo turno" : getModelView().getPlayers()[getModelView().getTurn().getPlayerId()].getNickname();
+                turn.setText("Turno:\n " + turnmessage);
+                phase.setText("Fase:\n " + getModelView().getTurn().getTurn().getTurnMsg());
                 turn.setVisible(true);
                 phase.setVisible(true);
             }
@@ -604,6 +609,7 @@ public class ViewGUI extends View {
                 }
                 for(Colour c: Colour.values())
                 {
+                    System.out.println("board");
                     for(int i = 0; i < board.getEntrance().get(c);i++){
                         System.out.println("i:"+i+" j:"+j+" c:"+c.toString());
                         students1.get(j).setUserData(c);
@@ -918,8 +924,6 @@ public class ViewGUI extends View {
                 assistant.setHeight(200);
                 assistant.setWidth(1000);
                 box.setAlignment(Pos.CENTER);
-//                assistant.setAnchorX(stage.getScene().getWidth()/ 2);
-//                assistant.setAnchorY(stage.getScene().getHeight()/ 2);
                 assistant.hide();
             }
         );
@@ -1099,20 +1103,26 @@ public class ViewGUI extends View {
             ()-> {
                 if (getModelView().getError() != null&&!error) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
+                    if(getModelView().getError() == ErrorMessage.ErrorType.NicknameTaken)
+                    {
+                        alert.setTitle(getModelView().getError().toString());
+                    }
                     alert.setTitle(getModelView().getError().toString());
-                    alert.setContentText(getModelView().getError().getErrorMsg());
+                    if(getModelView().getError() == ErrorMessage.ErrorType.NicknameTaken)
+                    {
+                        alert.setContentText(getModelView().getError().getErrorMsg()+"\n\nLa connessione col server è stata chiusa,è neccessario far ripartire il gioco");
+                    }else {
+                        alert.setContentText(getModelView().getError().getErrorMsg());
+                    }
                     alert.showAndWait();
-                    if(getModelView().getError() == ErrorMessage.ErrorType.PlayerDisconnected)
+                    if(getModelView().getError() == ErrorMessage.ErrorType.PlayerDisconnected || getModelView().getError() == ErrorMessage.ErrorType.NicknameTaken)
                     {
                         Event.fireEvent(stage,new WindowEvent(stage,WindowEvent.WINDOW_CLOSE_REQUEST));
                     }
-                    if(getModelView().getError() == ErrorMessage.ErrorType.NicknameTaken)
+                    if(getModelView().getError() == ErrorMessage.ErrorType.NotYourTurnError && getModelView().getError() == ErrorMessage.ErrorType.StudentError)
                     {
-                        try {
-                            restartConnection();
-                        }catch(IOException e){
-                            e.printStackTrace();
-                        }
+                        System.out.println("refresh");
+                        refreshBoard();
                     }
                     error = true;
                 }
@@ -1256,28 +1266,6 @@ public class ViewGUI extends View {
             charIndex = Optional.empty();
         }
     }
-
-    /**
-     * Method to recreate the connection stage if the connection to the server failed
-     * @throws IOException exception can be thrown by the javFX loader when loading a scene
-     */
-    public void restartConnection() throws IOException
-    {
-        FXMLLoader loader2 = new FXMLLoader();
-        Stage connectionStage = new Stage();
-        loader2.setLocation(getClass().getResource("/serverConnection.fxml"));
-        Scene scene = new Scene(loader2.load());
-        ((VBox)scene.getRoot()).setBackground(new Background(new BackgroundImage(new Image("images/background1.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
-        connectionStage.setScene(scene);
-        connectionStage.setTitle("connection to server");
-        connectionStage.getIcons().add(new Image(getClass().getResourceAsStream("images/logo.png")));
-        connectionStage.alwaysOnTopProperty();
-        ((ConnectionController)loader2.getController()).setView(this);
-        connectionStage.initModality(Modality.APPLICATION_MODAL);
-        connectionStage.setOnCloseRequest(event-> {event.consume();connectionStage.close();});
-        connectionStage.show();
-    }
-
     /**
      * Method to create the stage to show the winner
      */
@@ -1286,7 +1274,7 @@ public class ViewGUI extends View {
             () -> {
                 if (getModelView().getWin() != null&&!ended) {
                     Stage winStage = new Stage();
-                    winStage.getIcons().add(new Image(getClass().getResourceAsStream("images/logo.png")));
+                    winStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("images/logo.png"))));
                     winStage.setTitle("game over");
                     StackPane pane = new StackPane();
                     pane.setPrefHeight(360);
@@ -1294,12 +1282,12 @@ public class ViewGUI extends View {
                     pane.setBackground(new Background(new BackgroundImage(new Image("images/background.png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
                     Label winner = new Label();
                     if (getModelView().getWin().isDraw()) {
-                        winner.setText("Draw");
+                        winner.setText("Parità");
                     } else {
                         if (getModelView().getPlayers().length < 4) {
-                            winner.setText(getModelView().getPlayers()[getModelView().getWin().getId()].getNickname() + " has won!");
+                            winner.setText(getModelView().getPlayers()[getModelView().getWin().getId()].getNickname() + " ha vinto!");
                         } else {
-                            winner.setText(getModelView().getPlayers()[getModelView().getWin().getId()].getNickname() + " and " + getModelView().getPlayers()[(getModelView().getWin().getId() + 2) % 4].getNickname() + " have won!");
+                            winner.setText(getModelView().getPlayers()[getModelView().getWin().getId()].getNickname() + " e " + getModelView().getPlayers()[(getModelView().getWin().getId() + 2) % 4].getNickname() + " hanno vinto!");
                         }
                     }
                     winner.setFont(Font.font("System", FontWeight.BOLD, FontPosture.REGULAR,60.0));

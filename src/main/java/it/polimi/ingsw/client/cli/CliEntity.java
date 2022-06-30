@@ -13,7 +13,7 @@ public class CliEntity {
      * This class represents a single cell of the CliEntity matrix: every cell consists of a type that describes how it is printed,
      * a color and an attribute which is used only for CHAR types that are used to insert valid strings in the matrix
      */
-    class Cell{
+    static class Cell{
         private final CellType type;
         private final CliColors color;
         private final String attribute;

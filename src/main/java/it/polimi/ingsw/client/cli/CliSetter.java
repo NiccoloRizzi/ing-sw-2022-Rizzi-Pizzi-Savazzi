@@ -106,16 +106,6 @@ public class CliSetter implements CliBuilder{
     public void setOtherPlayersAss() {
         CliEntity otherString = new CliEntities.CliString("Assistenti degli altri giocatori");
         CliEntity others = new CliEntity();
-//        for(ClientPlayer p : modelView.getPlayers()){
-//            if(p.getId() != modelView.getMyId()){
-//                if(p.getUsedAssistants().length > 0){
-//                    others = others.rightStick(
-//                            new CliEntities.CliString(p.getNickname())
-//                                    .bottomStick(new CliEntities.CliAssistant(modelView, p.getUsedAssistants().length - 1, false, p.getId()))
-//                    );
-//                }
-//            }
-//        }
         for(ClientPlayer player : modelView.getOtherPlayerAssistant().keySet()){
                     others = others.rightStick(
                             new CliEntities.CliString(player.getNickname())

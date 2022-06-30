@@ -9,6 +9,7 @@ import it.polimi.ingsw.client.cli.Cli;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -47,18 +48,31 @@ public class Client implements Observer<JsonObject>{
     private final static Gson gson = new Gson();
 
     /**
+     * Getter of isActive
+     * @return isActive
+     */
+    public boolean isActive(){
+        return isActive;
+    }
+
+    /**
      * Method to start a connection with the server
      * @param IP server IP
      * @param port server Port
      * @throws IOException can be thrown when creating the socket
      */
     public void startConnection(String IP, int port) throws IOException{
-        socket = new Socket(IP, port);
-        in = new Scanner(socket.getInputStream());
-        out = new PrintWriter(socket.getOutputStream());
-        isActive = true;
+        try {
+            socket = new Socket(IP, port);
+            in = new Scanner(socket.getInputStream());
+            out = new PrintWriter(socket.getOutputStream());
+            isActive = true;
+            new Thread(() ->
+            {
+                readFromSocket();
+            }).start();
+        }catch(Exception ignored){}
         // Run();
-        readFromSocket();
     }
 
     /**
@@ -165,14 +179,11 @@ public class Client implements Observer<JsonObject>{
         }
         else {
             if (jo.get("command").getAsString().equals("connect")) {
-                    new Thread(() ->
-                    {
-                        try {
-                            startConnection(jo.get("ip").getAsString(), jo.get("port").getAsInt());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }).start();
+                try {
+                    startConnection(jo.get("ip").getAsString(), jo.get("port").getAsInt());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             if(jo.get("command").getAsString().equals("disconnect")){
                 close();

@@ -23,7 +23,7 @@ public interface CliBuilder {
 
     /**
      * Create a CliEntity that represents all the active characters
-     * @param usedCharacter
+     * @param usedCharacter ID of the usedcharacter if it exists
      */
     void setCharacter(Optional<Integer> usedCharacter);
 

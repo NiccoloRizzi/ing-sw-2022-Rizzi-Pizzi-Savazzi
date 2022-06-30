@@ -1,6 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 import it.polimi.ingsw.clientModels.Answers.WinMessage;
 import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.exceptions.PlayerOutOfBoundException;
@@ -8,20 +7,16 @@ import it.polimi.ingsw.exceptions.StudentsOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TileOutOfBoundsException;
 import it.polimi.ingsw.exceptions.TowerOutOfBoundException;
 import it.polimi.ingsw.messages.AssistantChoiceMessage;
-import it.polimi.ingsw.messages.MoveStudentMessage;
 import it.polimi.ingsw.model.Colour;
 import it.polimi.ingsw.model.Faction;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.server.Observer;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,7 +25,7 @@ class GameTest {
     Game game;
     TestObs obs;
 
-    private class TestObs implements Observer<ClientModel> {
+    private static class TestObs implements Observer<ClientModel> {
         public ClientModel message;
 
         @Override
@@ -47,7 +42,7 @@ class GameTest {
         if(players>2) {
             game.createPlayer("Gennaro");
             if(players>3)
-            game.createPlayer("Ciro");
+                game.createPlayer("Ciro");
         }
         game.setupGame();
     }
@@ -182,8 +177,6 @@ class GameTest {
             assertEquals(students.get(c),2);
         }
 
- //       assertEquals(TurnMessage.Turn.PLANNING,((TurnMessage)obs.message).getTurn());
- //       assertEquals(game.getCurrentPlayer(),((TurnMessage)obs.message).getPlayerId());
     }
 
 

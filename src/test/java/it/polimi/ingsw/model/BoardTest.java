@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
 
-    private class TestObs implements Observer<ClientModel> {
+    private static class TestObs implements Observer<ClientModel> {
         public ClientModel message;
 
         @Override

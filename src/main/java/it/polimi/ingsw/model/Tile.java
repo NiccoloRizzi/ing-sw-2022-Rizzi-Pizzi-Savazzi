@@ -10,11 +10,11 @@ import java.util.HashMap;
  */
 public abstract class Tile extends Observable<ClientModel>
 {
-    protected int ID;
+    protected final int ID;
     /**
      * The students the tile is holding
      */
-    protected HashMap<Colour, Integer> students;
+    protected final HashMap<Colour, Integer> students;
 
     /**
      * Creates a tile

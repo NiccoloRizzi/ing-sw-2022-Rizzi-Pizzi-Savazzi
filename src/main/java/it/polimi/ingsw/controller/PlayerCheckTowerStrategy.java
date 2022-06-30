@@ -32,8 +32,6 @@ public class PlayerCheckTowerStrategy implements CheckTowerStrategy {
                                 .get())
                         .collect(Collectors.toList());
                 if(maxPlayers.size() == 1) owner = Optional.of(maxPlayers.get(0));
-//                Optional<Player> owner = gm.getPlayers().stream()
-//                        .reduce((p1, p2) -> (current.getInfluence(p1, profs) > current.getInfluence(p2, profs) ? p1 : p2));
                 if (owner.isPresent() && !(owner.get().getBoard().getFaction() == current.getTower())) {
                     oldfaction=current.getTower();
                     owner.get().getBoard().useTowers(current.getSize());

@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
 
-    private class TestObs implements Observer<ClientModel> {
+    private static class TestObs implements Observer<ClientModel> {
         public ClientModel message;
 
         @Override
@@ -24,7 +24,7 @@ class PlayerTest {
     @ValueSource(ints = {0,1,2,3,4,5,6,7,8,9})
     void getChosen(int param) {
         Player p = new Player(0, "testName");
-        assertThrowsExactly(IndexOutOfBoundsException.class, ()->{p.getChosen();});
+        assertThrowsExactly(IndexOutOfBoundsException.class, p::getChosen);
         p.setChoosenAssistant(param);
         assertNotNull(p.getChosen());
         assertEquals(param, p.getChosen().getValue());
@@ -60,7 +60,7 @@ class PlayerTest {
                 assertEquals(message.getDeck()[i],p.getDeck().get(i).getValue());
             }
         }else{
-            assertThrowsExactly(IndexOutOfBoundsException.class, ()->{p.setChoosenAssistant(param);});
+            assertThrowsExactly(IndexOutOfBoundsException.class, ()-> p.setChoosenAssistant(param));
             assertEquals(10, p.getDeck().size());
             assertEquals(0, p.getUsedCards().size());
         }

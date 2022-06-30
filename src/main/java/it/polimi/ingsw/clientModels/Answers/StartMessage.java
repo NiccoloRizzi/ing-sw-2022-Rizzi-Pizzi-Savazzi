@@ -15,11 +15,11 @@ public class StartMessage implements ClientModel {
     /**
      * Number of players in the match
      */
-    int playerNumbers;
+    final int playerNumbers;
     /**
      * HashMap associating players Nicknames to IDs
      */
-    HashMap<String, Integer> players;
+    final HashMap<String, Integer> players;
 
     /**
      * StartMessage constructor

@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameModelTest{
 
-    private class TestObs implements Observer<ClientModel>{
+    private static class TestObs implements Observer<ClientModel>{
         public ClientModel message;
 
         @Override
@@ -77,15 +77,11 @@ class GameModelTest{
     @ValueSource(ints={-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12})
     void setGetMoveMN(int param) {
         GameModel gm = new GameModel(2,true);
-//      TestObs obs = new TestObs();
-//      gm.addObserver(obs);
         if(param<12 && param>=0) {
             assertDoesNotThrow(() -> gm.setMotherNPos(param));
             gm.moveMN(param);
 //            ClientGameModel m = (ClientGameModel)obs.message;
             assertEquals(gm.getMotherNature(), (param + param) % 12);
-//          assertEquals(m.getMotherNature(), (param + param) % 12);
-//          assertEquals(m.getIsles().size(),gm.getIsles().size());
         }
         else{
             assertThrows(TileOutOfBoundsException.class,()->gm.setMotherNPos(param));

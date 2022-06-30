@@ -23,7 +23,7 @@ public class GameModel extends Observable<ClientModel> {
     /**
      * An hashmap associating the colour of a professor and the player who owns it
      */
-    protected HashMap<Colour, Player> professors;
+    protected final HashMap<Colour, Player> professors;
     private final ArrayList<Isle> isles;
     private final ArrayList<Cloud> clouds;
     private ArrayList<Team> teams;
@@ -32,7 +32,7 @@ public class GameModel extends Observable<ClientModel> {
      * The number of isles that can still be prohibited.
      */
     int prohibited;
-    boolean expertMode;
+    final boolean expertMode;
 
     /**
      * Instantiates a new Game model, creating all the elements of the game board.
@@ -164,12 +164,13 @@ public class GameModel extends Observable<ClientModel> {
      */
     public void fillClouds(){
         int nToExtract = (numOfPlayers%2==0)?3:4;
-        if(getBagSize() >= nToExtract*numOfPlayers)
-        for(Cloud c: clouds){
-            try {
-                c.addStudents(extractStudents(nToExtract));
-            } catch (StudentsOutOfBoundsException e) {
-                e.printStackTrace();
+        if(getBagSize() >= nToExtract*numOfPlayers) {
+            for (Cloud c : clouds) {
+                try {
+                    c.addStudents(extractStudents(nToExtract));
+                } catch (StudentsOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

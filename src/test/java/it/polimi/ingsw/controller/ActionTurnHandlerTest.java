@@ -20,7 +20,7 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ActionTurnHandlerTest {
-    private class TestObs implements Observer<ClientModel> {
+    private static class TestObs implements Observer<ClientModel> {
         public ClientModel message;
 
         @Override
@@ -64,7 +64,6 @@ class ActionTurnHandlerTest {
             game.getGameModel().getIsle((initpos+7)%12).setProhibited();
             game.getGameModel().useProhibited();
             game.getTurnHandler().moveMn(1);
-            message = (TurnMessage)obs.message;
             assertEquals(4,game.getGameModel().getProhibited());
         }catch(TileOutOfBoundsException e)
         {

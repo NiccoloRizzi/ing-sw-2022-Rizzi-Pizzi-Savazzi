@@ -6,12 +6,11 @@ import it.polimi.ingsw.server.Observer;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CloudTest extends TestCase {
 
-    private class TestObs implements Observer<ClientModel> {
+    private static class TestObs implements Observer<ClientModel> {
         public ClientModel message;
 
         @Override
@@ -24,7 +23,7 @@ public class CloudTest extends TestCase {
         Cloud cloud = new Cloud (0);
         TestObs obs = new TestObs();
         cloud.addObserver(obs);
-        HashMap<Colour,Integer> s = new HashMap<Colour,Integer>();
+        HashMap<Colour,Integer> s = new HashMap<>();
         for(Colour c: Colour.values())
             s.put(c,1);
         assertTrue(cloud.isEmpty());

@@ -30,7 +30,7 @@ class MessageVisitorTest {
     private MessageVisitor mv;
     private TestObs obs;
 
-    private class TestObs implements Observer<ClientModel> {
+    private static class TestObs implements Observer<ClientModel> {
         public ClientModel message;
 
         @Override
@@ -116,6 +116,7 @@ class MessageVisitorTest {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void visitAssistantMessageTest() throws PlayerOutOfBoundException {
         Game game = new Game(4, true);
@@ -148,7 +149,7 @@ class MessageVisitorTest {
         Colour student = Colour.Dragons;
         for(int i=0; i<4;i++)
             game.getGameModel().getPlayer(playerId).getBoard().addStudent(student);
-        int students = 0;
+        int students;
         try {
             students = game.getGameModel().getIsle(0).getStudents(student);
             MoveStudentMessage msm = new MoveStudentMessage(playerId,student,0,false);
@@ -227,7 +228,7 @@ class MessageVisitorTest {
 
     @ParameterizedTest
     @MethodSource("argsA")
-    void testVisitIsleInfluenceCharacterMessage(CharactersEnum charType, int playerNum) throws TileOutOfBoundsException, NotEnoughCoinsException, PlayerOutOfBoundException {
+    void testVisitIsleInfluenceCharacterMessage(CharactersEnum charType, int playerNum) throws TileOutOfBoundsException, PlayerOutOfBoundException {
 
         // Test observes the influence based on this isle, character, player (or team), faction and colors
         final int CHAR_ID = 0;
@@ -321,7 +322,7 @@ class MessageVisitorTest {
 
     @ParameterizedTest
     @MethodSource("argsB")
-    void testVisitMoveStudentCharacterMessage(Colour colour, CharactersEnum charType) throws TileOutOfBoundsException, NotEnoughCoinsException, PlayerOutOfBoundException {
+    void testVisitMoveStudentCharacterMessage(Colour colour, CharactersEnum charType) throws TileOutOfBoundsException, PlayerOutOfBoundException {
 
         // Test observes the behaviour based on these variables
         final int CHAR_ID = 0;
@@ -413,7 +414,7 @@ class MessageVisitorTest {
 
     @ParameterizedTest
     @MethodSource("argsC")
-    void testVisitStrategyProfessorMessage(Colour colour) throws StudentsOutOfBoundsException, NotEnoughCoinsException, PlayerOutOfBoundException {
+    void testVisitStrategyProfessorMessage(Colour colour) throws StudentsOutOfBoundsException, PlayerOutOfBoundException {
 
         // Referent constants
         final int PLAYER_ID_A = 0;
@@ -650,7 +651,7 @@ class MessageVisitorTest {
     }
 
     @Test
-    void testVisitMove6StudCharacterMessage() throws TileOutOfBoundsException, PlayerOutOfBoundException {
+    void testVisitMove6StudCharacterMessage() throws PlayerOutOfBoundException {
             Game game = new Game(3, true);
             MessageVisitor messageVisitor = new MessageVisitor(game);
             game.createPlayer("A");
@@ -694,8 +695,8 @@ class MessageVisitorTest {
 
             game.getGameModel().getPlayer(player).removeCoins(2);
 
-            Colour studBoard[] = {Colour.Fairies, Colour.Frogs, Colour.Unicorns};
-            Colour studChar[] = {Colour.Gnomes, Colour.Dragons, Colour.Gnomes};
+            Colour[] studBoard = {Colour.Fairies, Colour.Frogs, Colour.Unicorns};
+            Colour[] studChar = {Colour.Gnomes, Colour.Dragons, Colour.Gnomes};
             messageVisitor.visit(new Move6StudCharacterMessage(0, player, studBoard, studChar));
             assertEquals(ErrorMessage.ErrorType.NotEnoughCoinError, ((ErrorMessage) obs.message).getError());
 
@@ -751,7 +752,7 @@ class MessageVisitorTest {
             try {
                 board.removeStudent(c);
                 board.removeStudent(c);
-            }catch(StudentsOutOfBoundsException e){}
+            }catch(StudentsOutOfBoundsException ignored){}
 
         }
 

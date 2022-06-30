@@ -18,6 +18,11 @@
             <Insets />
          </VBox.margin>
       </Label>
+      <Label fx:id="error" alignment="CENTER" prefHeight="18.0" prefWidth="294.0" text="Unable to connect to server" textAlignment="CENTER" textFill="RED" visible="false">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
       <HBox alignment="CENTER" prefWidth="200.0">
          <children>
             <Label text="IP:">
