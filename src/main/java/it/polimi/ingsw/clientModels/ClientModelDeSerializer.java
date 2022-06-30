@@ -7,10 +7,21 @@ import it.polimi.ingsw.clientModels.Answers.StartMessage;
 import it.polimi.ingsw.clientModels.Answers.TurnMessage;
 import it.polimi.ingsw.clientModels.Answers.WinMessage;
 
+/**
+ * Class for Deserializing messages from Json format to Java Classes
+ */
 public class ClientModelDeSerializer {
-
+    /**
+     * Gson instance used to serialize to json
+     */
     private static final Gson gson = new Gson();
 
+    /**
+     * Deserializing method which handles inheritance
+     * @param json The message in JSON format
+     * @return Deserialized ClientModel
+     * @throws NullPointerException When given a generic instance of an object with ClientModel interface
+     */
     public static ClientModel deserialize(String json) throws NullPointerException {
         JsonObject jsonObject = gson.fromJson(json,JsonObject.class);
         String type = jsonObject.get("type").getAsString();
