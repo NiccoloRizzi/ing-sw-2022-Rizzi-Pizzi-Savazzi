@@ -346,6 +346,12 @@ public abstract class View extends Observable<JsonObject> {
         notify(jo);
     }
 
+    public void notifyClose(){
+        JsonObject jo = new JsonObject();
+        jo.addProperty("command","close");
+        notify(jo);
+    }
+
     /**
      * Method to set up the view if needed
      */
