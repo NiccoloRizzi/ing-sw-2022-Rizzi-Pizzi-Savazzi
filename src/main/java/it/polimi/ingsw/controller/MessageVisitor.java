@@ -112,12 +112,15 @@ public class MessageVisitor extends Observable<ClientModel> {
         if(moveMotherNatureMessage.getPlayerID()==game.getCurrentPlayer() && game.getTurnHandler().getPhase()==Phase.MOTHERNATURE){
             game.getTurnHandler().moveMn(moveMotherNatureMessage.getMoves());
             game.checkEndTowerIsle();
+            if(game.getGameModel().getBagSize()<= 0)
+            {
+                game.nextPlayer();
+            }
         }
         else{
             notify(new ErrorMessage(moveMotherNatureMessage.getPlayerID(), ErrorMessage.ErrorType.NotYourTurnError));
         }
     }
-
     /**
      * Handles messages for choosing clouds at turn end
      * @param cloudChoiceMessage The message being handled

@@ -137,7 +137,7 @@ public class GameModel extends Observable<ClientModel> {
             }
             return extractedStud;
         }
-        return null;
+        throw new StudentsOutOfBoundsException();
     }
 
     /**
@@ -163,14 +163,14 @@ public class GameModel extends Observable<ClientModel> {
      * Randomly fills the clouds
      */
     public void fillClouds(){
-        int nToExtract = (numOfPlayers%2==0)?3:4;
-        if(getBagSize() >= nToExtract*numOfPlayers) {
-            for (Cloud c : clouds) {
-                try {
-                    c.addStudents(extractStudents(nToExtract));
-                } catch (StudentsOutOfBoundsException e) {
-                    e.printStackTrace();
+        for(Cloud c: clouds){
+            try {
+                int nToExtract = (numOfPlayers%2==0)?3:4;
+                for(int i = 0; i < nToExtract; i++){
+                    c.addStudents(extractStudents(1));
                 }
+            } catch (StudentsOutOfBoundsException e) {
+                e.printStackTrace();
             }
         }
     }
