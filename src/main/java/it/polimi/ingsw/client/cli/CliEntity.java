@@ -70,7 +70,7 @@ public class CliEntity {
         /**
          * Black cli colors.
          */
-        BLACK("\u001b[30m"),
+        BLACK("\u001b[34m"),
         /**
          * White cli colors.
          */
