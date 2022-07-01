@@ -170,13 +170,21 @@ public class CliSetter implements CliBuilder{
         WinMessage winMessage = modelView.getWin();
         CliEntity win;
         if(winMessage != null){
-            if(winMessage.isDraw()){
-                win = new CliEntities.CliString("E' un pareggio!!!");
-            }else{
-                if(winMessage.getId() == modelView.getMyId()){
-                    win = new CliEntities.CliString("Hai vinto!!!");
+            if(modelView.getPlayers().length == 4){
+                if(winMessage.getId() <= 2){
+                    win = new CliEntities.CliString("Ha vinto il team " + modelView.getBoards()[0].getFaction());
                 }else{
-                    win = new CliEntities.CliString(modelView.getPlayers()[winMessage.getId()].getNickname() + " ha vinto!!!");
+                    win = new CliEntities.CliString("Ha vinto il team " + modelView.getBoards()[3].getFaction());
+                }
+            }else{
+                if(winMessage.isDraw()){
+                    win = new CliEntities.CliString("E' un pareggio!!!");
+                }else{
+                    if(winMessage.getId() == modelView.getMyId()){
+                        win = new CliEntities.CliString("Hai vinto!!!");
+                    }else{
+                        win = new CliEntities.CliString(modelView.getPlayers()[winMessage.getId()].getNickname() + " ha vinto!!!");
+                    }
                 }
             }
             cli.setWin(win);
