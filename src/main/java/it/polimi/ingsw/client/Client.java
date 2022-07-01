@@ -180,7 +180,7 @@ public class Client implements Observer<JsonObject>{
                     e.printStackTrace();
                 }
             }
-            if(jo.get("command").getAsString().equals("disconnect")){
+            if(jo.get("command").getAsString().equals("close")){
                 close();
             }
         }

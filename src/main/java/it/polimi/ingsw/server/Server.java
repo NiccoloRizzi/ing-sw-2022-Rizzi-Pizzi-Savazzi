@@ -16,7 +16,7 @@ public class Server {
     /**
      * The port of the server
      */
-    private static final int PORT= 12345;
+    private final int PORT;
     /**
      * The socket of the server
      */
@@ -33,7 +33,8 @@ public class Server {
     /**
      * Creates a server and makes it available
      */
-    public Server(){
+    public Server(int PORT){
+        this.PORT = PORT;
         lobbies = new ArrayList<>();
         try {
             this.serverSocket = new ServerSocket(PORT);

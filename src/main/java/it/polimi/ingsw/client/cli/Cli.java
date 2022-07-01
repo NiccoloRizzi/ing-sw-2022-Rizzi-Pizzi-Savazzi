@@ -27,15 +27,24 @@ public class Cli extends View {
     public void start(){
         int playersNumber=0;
         String ip;
-        int port;
+        int port=12345;
         String players;
         String nickname;
         boolean expertMode=false;
         boolean check = true;
         System.out.println("A quale ip vuoi connetterti?");
         ip = scanner.nextLine();
+        if(!ip.matches("\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b") && !ip.equals("localhost")){
+            System.out.println("Illegal ip.");
+            return;
+        }
         System.out.println("A quale porta?");
-        port = Integer.parseInt(scanner.nextLine());
+        try {
+            port = Integer.parseInt(scanner.nextLine());
+        }catch(NumberFormatException e){
+            System.out.println("Illegal Port.");
+            return;
+        }
         notifyConnection(ip,port);
         do {
             System.out.println("Ciao! Come ti vuoi chiamare?");
@@ -100,9 +109,10 @@ public class Cli extends View {
             String command;
             while(true){
                 command = scanner.nextLine();
-                if(command.matches("help")) {
-                    System.out.println("Comandi:\n" +
-                            "moveStudent colour index: sposta lo studente del colore \"colour\" all'isola 'index'.");
+                if(command.matches("exit")) {
+                    System.out.println("Closing game...");
+                    notifyClose();
+                    return;
                 }
                 else if(command.matches("assistant "+"(1?0|[1-9])"))
                     super.ChooseAssistant(Integer.parseInt(command.split(" ")[1]));
