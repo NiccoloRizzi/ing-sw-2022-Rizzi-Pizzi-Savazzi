@@ -50,4 +50,7 @@ Project deployment consists of three jars:
 &#129001;: Tested
 &#128999;: Not completely tested
 
+### Requirements for CLI
+* Before running the jar on windows enter "chcp 65001" to show UTF-8 Encoding
+
 
