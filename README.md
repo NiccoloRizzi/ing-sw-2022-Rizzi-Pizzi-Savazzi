@@ -59,7 +59,7 @@ Server.jar can be runned from terminal. It should work out of the box for any op
 GUI.jar can be started from a terminal or by launching the jar as an application. It should also work out of the box.
 ## CLI
 CLI version requires UTF-8 Encoding to be displayed correctly. 
-* It should be automatically displayed correctly on Mac OS and Linux terminals.
+* It should be automatically displayed correctly or activated with "chcp 65001" command on Mac OS and Linux terminals.
 * If you are a Windows user:
   * To display everything correctly you have to enable UTF-8 Encoding by switching character encoding to codepage 65001.
   * All setup can be avoided by using another terminal (E.g. ConEmu, https://conemu.github.io/) and by executing "chcp 65001" command before running the jar.
