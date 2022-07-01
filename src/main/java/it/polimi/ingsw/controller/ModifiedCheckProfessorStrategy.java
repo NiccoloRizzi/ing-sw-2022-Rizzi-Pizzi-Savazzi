@@ -22,10 +22,8 @@ public class ModifiedCheckProfessorStrategy implements CheckProfessorStrategy {
             if (!player.equals(currentOwner.get()) && player.getBoard().getTable(type) >= currentOwner.get().getBoard().getTable(type)) {
                 gm.setProfessor(type, player);
             }
-            else{
-                gm.setProfessor(type,player);
-            }
+        }else{
+            gm.setProfessor(type,player);
         }
     }
-
 }

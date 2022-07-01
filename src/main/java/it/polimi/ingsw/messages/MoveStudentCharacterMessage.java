@@ -25,7 +25,6 @@ public class MoveStudentCharacterMessage implements Message{
      * Index of the tile where the student will be moved to
      */
     private final int tileIndex;
-    // private final int type;
 
     /**
      * Creates a message for moving a student from a character that can contain them

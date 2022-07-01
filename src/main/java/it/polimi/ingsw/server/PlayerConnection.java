@@ -207,6 +207,10 @@ public class PlayerConnection implements Runnable, Observer<ClientModel> {
 
     }
 
+    /**Send the message serialized
+     *
+     * @param message message to send
+     */
     @Override
     public void update(ClientModel message) {
             send(message.serialize());

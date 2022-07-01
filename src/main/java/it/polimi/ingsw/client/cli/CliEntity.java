@@ -14,8 +14,11 @@ public class CliEntity {
      * a color and an attribute which is used only for CHAR types that are used to insert valid strings in the matrix
      */
     static class Cell{
+        /**The type of the cell to print**/
         private final CellType type;
+        /**The command line color of the cell**/
         private final CliColors color;
+        /**A string value that will be printed in the command line. Used only if cellType is CHAR**/
         private final String attribute;
 
         /**
@@ -63,7 +66,7 @@ public class CliEntity {
         /**
          * Grey cli colors.
          */
-        GREY("\u001b[37m"),
+        GREY("\u001b[90m"),
         /**
          * Black cli colors.
          */

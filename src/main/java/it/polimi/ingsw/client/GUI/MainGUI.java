@@ -6,6 +6,6 @@ public class MainGUI {
      * @param args default arguments
      */
     public static void main(String[] args) {
-        GUI.launch(args);
+        GUI.main(args);
     }
 }

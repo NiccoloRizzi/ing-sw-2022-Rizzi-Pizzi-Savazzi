@@ -11,7 +11,9 @@ import java.util.Optional;
 
 public class CliNotExpertSetter implements CliBuilder{
 
+    /**The cli model to generate and set**/
     CliModel cli;
+    /**Referent of the model view**/
     private final ModelView modelView;
 
     /**
@@ -24,11 +26,17 @@ public class CliNotExpertSetter implements CliBuilder{
         this.reset();
     }
 
+    /**
+     * Regenerate the cli model
+     */
     @Override
     public void reset() {
         cli = new CliModel();
     }
 
+    /**
+     * Create a CliEntity that represents all the boards
+     */
     @Override
     public void setBoards(boolean isExpert) {
         CliEntity boards = new CliEntity();
@@ -38,6 +46,9 @@ public class CliNotExpertSetter implements CliBuilder{
         cli.setBoards(boards);
     }
 
+    /**
+     * Create a CliEntity that represents all the isles
+     */
     @Override
     public void setIsles(boolean isProhibitedPresent) {
         ArrayList<ClientIsle> isles = modelView.getGameModel().getIsles();
@@ -53,10 +64,17 @@ public class CliNotExpertSetter implements CliBuilder{
         cli.setIsles(cliIsles);
     }
 
+    /**
+     * Create a CliEntity that represents all the active characters
+     * @param usedCharacter ID of the used character if it exists
+     */
     @Override
     public void setCharacter(Optional<Integer> usedCharacter) {
     }
 
+    /**
+     * Create a CliEntity that represents all the clouds
+     */
     @Override
     public void setClouds() {
         CliEntity clouds = new CliEntity();
@@ -95,6 +113,9 @@ public class CliNotExpertSetter implements CliBuilder{
     public void setUsedAssistants() {
     }
 
+    /**
+     * Create a CliEntity that represents all the used assistants of other players
+     */
     @Override
     public void setOtherPlayersAss() {
         CliEntity otherString = new CliEntities.CliString("Assistenti degli altri giocatori");
@@ -112,6 +133,9 @@ public class CliNotExpertSetter implements CliBuilder{
         cli.setOtherPlayerAss(otherString.bottomStick(others));
     }
 
+    /**
+     * Create a CliEntity that show current turn
+     */
     @Override
     public void setTurn() {
         TurnMessage turn = modelView.getTurn();
@@ -125,6 +149,9 @@ public class CliNotExpertSetter implements CliBuilder{
         cli.setTurn(eTurn);
     }
 
+    /**
+     * Create a CliEntity that show current and errors if present
+     */
     @Override
     public void setErrors() {
         ErrorMessage.ErrorType error = modelView.getError();
@@ -134,6 +161,9 @@ public class CliNotExpertSetter implements CliBuilder{
         }
     }
 
+    /**
+     * Create a Cli entity that represents the win message
+     */
     @Override
     public void setWin() {
         WinMessage winMessage = modelView.getWin();
@@ -152,6 +182,9 @@ public class CliNotExpertSetter implements CliBuilder{
         }
     }
 
+    /**
+     * Comprensive function that calls the sets functions that the concrete builder want to use
+     */
     public void setAllCli(){
         setBoards(false);
         setAssistants();
@@ -163,6 +196,9 @@ public class CliNotExpertSetter implements CliBuilder{
         setWin();
     }
 
+    /**
+     * Link all the set Cli entities
+     */
     @Override
     public void composeCLi(){
         cli.setFullCli(cli.getBoards()
@@ -176,6 +212,11 @@ public class CliNotExpertSetter implements CliBuilder{
                 .bottomStick(cli.getWin()));
     }
 
+    /**
+     * Gets the cli model
+     *
+     * @return the cli
+     */
     public CliModel getCli(){
         CliModel cli = this.cli;
         this.reset();

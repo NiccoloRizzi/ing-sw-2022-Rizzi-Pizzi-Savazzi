@@ -15,23 +15,33 @@ import it.polimi.ingsw.server.Observer;
  * The class represents the main game board with its components
  */
 public class GameModel extends Observable<ClientModel> {
+    /**Unused coins**/
     private int unusedCoins;
+    /**Isle id position of mother nature**/
     private int motherNature;
+    /**Num of players**/
     private final int numOfPlayers;
+    /**Hash map that represents the bag with colors as key and quantity as value**/
     private final HashMap<Colour, Integer> bag;
+    /**ArrayList of the players**/
     private final ArrayList<Player> players;
     /**
      * An hashmap associating the colour of a professor and the player who owns it
      */
     protected final HashMap<Colour, Player> professors;
+    /**ArrayList of the isles**/
     private final ArrayList<Isle> isles;
+    /**ArrayList of the clouds**/
     private final ArrayList<Cloud> clouds;
+    /**ArrayList of the teams**/
     private ArrayList<Team> teams;
+    /**ArrayList of the active characters**/
     private final ArrayList<Character> activeCharacters;
     /**
      * The number of isles that can still be prohibited.
      */
     int prohibited;
+    /**True if the expert mode is active**/
     final boolean expertMode;
 
     /**
@@ -137,7 +147,7 @@ public class GameModel extends Observable<ClientModel> {
             }
             return extractedStud;
         }
-        return null;
+        throw new StudentsOutOfBoundsException();
     }
 
     /**
@@ -163,14 +173,14 @@ public class GameModel extends Observable<ClientModel> {
      * Randomly fills the clouds
      */
     public void fillClouds(){
-        int nToExtract = (numOfPlayers%2==0)?3:4;
-        if(getBagSize() >= nToExtract*numOfPlayers) {
-            for (Cloud c : clouds) {
-                try {
-                    c.addStudents(extractStudents(nToExtract));
-                } catch (StudentsOutOfBoundsException e) {
-                    e.printStackTrace();
+        for(Cloud c: clouds){
+            try {
+                int nToExtract = (numOfPlayers%2==0)?3:4;
+                for(int i = 0; i < nToExtract; i++){
+                    c.addStudents(extractStudents(1));
                 }
+            } catch (StudentsOutOfBoundsException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -580,6 +590,7 @@ public class GameModel extends Observable<ClientModel> {
         }
     }
 
+    /**Add observer**/
     @Override
     public void addObserver(Observer<ClientModel> observer) {
         super.addObserver(observer);

@@ -23,7 +23,7 @@ public interface CliBuilder {
 
     /**
      * Create a CliEntity that represents all the active characters
-     * @param usedCharacter ID of the usedcharacter if it exists
+     * @param usedCharacter ID of the used character if it exists
      */
     void setCharacter(Optional<Integer> usedCharacter);
 
@@ -57,6 +57,9 @@ public interface CliBuilder {
      */
     void setErrors();
 
+    /**
+     * Create a Cli entity that represents the win message
+     */
     void setWin();
 
     /**

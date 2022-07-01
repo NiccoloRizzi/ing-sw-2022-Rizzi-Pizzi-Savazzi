@@ -8,13 +8,22 @@ import java.util.Scanner;
 
 
 public class Cli extends View {
-
+    /**
+     * Scanner for user input
+     */
     private final static Scanner scanner = new Scanner(System.in);
+    /**
+     * Class for creating CliModel that can be printed
+     */
     private CliBuilder cliBuilder;
+    /**
+     * Whether the client can start printing
+     */
     private boolean printing = false;
 
-
-
+    /**
+     * Starting method for Cli which asks users for information such as Ip, Port, Nickname and match settings
+     */
     public void start(){
         int playersNumber=0;
         String ip;
@@ -68,15 +77,25 @@ public class Cli extends View {
         cliBuilder = (getModelView().isExpert())?new CliSetter(getModelView()):new CliNotExpertSetter(getModelView());
         handleInput();
     }
+
+    /**
+     * Override method shared between Cli and Gui for starting the game
+     */
     @Override
     public void startGame(){
         refresh(0);
     }
 
+    /**
+     * Method for enabling Cli printing
+     */
     public void startPrint(){
         printing = true;
     }
 
+    /**
+     * Method for handling user input during matches
+     */
     public void handleInput(){
             String command;
             while(true){
@@ -89,20 +108,20 @@ public class Cli extends View {
                     super.ChooseAssistant(Integer.parseInt(command.split(" ")[1]));
                 else if(command.matches("mvtotable "+"[0-4]"))
                     MoveToTable(Colour.values()[Integer.parseInt(command.split(" ")[1])]);
-                else if(command.matches("mvtoisle "+"[0-4] "+"(1?[0-2]|[0-9])")) {
+                else if(command.matches("mvtoisle "+"[0-4] "+"(1?[0-2]|[1-9])")) {
                     Colour colour = Colour.values()[Integer.parseInt(command.split(" ")[1])];
                     int isleid = Integer.parseInt(command.split(" ")[2])-1;
                     MoveToIsle(colour,isleid);
                 }
-                else if(command.matches("cloud "+"[0-4]")) {
+                else if(command.matches("cloud "+"[1-4]")) {
                     ChooseCloud(Integer.parseInt(command.split(" ")[1]) - 1);
                 }
-                else if(command.matches("movemn "+"[0-9]"))
+                else if(command.matches("movemn "+"[1-9]"))
                     MoveMotherNature(Integer.parseInt(command.split(" ")[1]));
                 else if(command.matches("colours"))
-                    System.out.println("0: Red (Dragons)\n1: Violet (Fairies)\n2: Green (Frogs)\n3: Yellow (Gnomes)\n4: Blue (Unicorns)");
-                else if(command.matches("usechracter "+"[1-3]"))
-                    handleCharacter(Integer.parseInt(command.split(" ")[1]));
+                    System.out.println("0: Green (Frogs)\n1: Rosso (Draghi)\n2: Giallo (Gnomi)\n3: Viola (Fate)\n4: Blu (Unicorni)");
+                else if(command.matches("usecharacter "+"[1-3]"))
+                    handleCharacter(Integer.parseInt(command.split(" ")[1])-1);
                 else
                     System.out.println("Comando errato");
             }
@@ -110,8 +129,10 @@ public class Cli extends View {
     }
 
 
-
-
+    /**
+     * Method for handling user input for using characters
+     * @param charpos The position of the activated character
+     */
     public void handleCharacter(int charpos){
         String []params;
         String read;
@@ -124,7 +145,7 @@ public class Cli extends View {
                         System.out.println("Inserisci su che isola vuoi effettuare il calcolo dell'influenza:");
                         read = scanner.nextLine();
                         if (read.matches("(1?[0-2]|[1-9])"))
-                            similMn(charpos, Integer.parseInt(read));
+                            similMn(charpos, Integer.parseInt(read)-1);
                         else
                             System.out.print("Valore non corretto.");
                         }
@@ -133,7 +154,7 @@ public class Cli extends View {
                         read = scanner.nextLine();
                         if (read.matches("[0-4] " + "(1?[0-2]|[1-9])")) {
                             params = read.split(" ");
-                            charStudToIsle(charpos, Colour.values()[Integer.parseInt(params[0])], Integer.parseInt(params[1]));
+                            charStudToIsle(charpos, Colour.values()[Integer.parseInt(params[0])], Integer.parseInt(params[1])-1);
                         }
                         else
                             System.out.print("Valori non corretti.");
@@ -161,7 +182,7 @@ public class Cli extends View {
                                 }
                                 else{
                                     System.out.print("Studenti scelti non validi.");
-                                    break;
+                                    return;
                                 }
                             }
                             exchange2Students(charpos, fromBoard, fromTables);
@@ -181,7 +202,7 @@ public class Cli extends View {
                                 }
                                 else{
                                     System.out.print("Studenti scelti non validi.");
-                                    break;
+                                    return;
                                 }
                             }
                             exchange3Students(charpos, fromBoard, fromChar);
@@ -198,7 +219,7 @@ public class Cli extends View {
                         System.out.println("Scegli l'isola su cui vuoi aggiungere un divieto:");
                         read = scanner.nextLine();
                         if(read.matches("(1?[0-2]|[1-9])"))
-                            prohibit(charpos, Integer.parseInt(read));
+                            prohibit(charpos, Integer.parseInt(read)-1);
                     }
                     case REMOVE_3_STUD -> {
                         System.out.println("Scegli il colore dei 3 studenti da far rimuovere:");
@@ -212,6 +233,11 @@ public class Cli extends View {
             }
         }
 
+    /**
+     * Method for refreshing Cli
+     * @param index indicate which part of the view need to be updated
+     */
+    @Override
     public void refresh(int index){
         System.out.print("\033[H\033[2J");
         System.out.flush();

@@ -9,15 +9,19 @@ import java.util.ArrayList;
  */
 public class Team {
 
+    /**Constant number of max players in a team**/
     private final static int MAX_N_PLAYERS = 2;
 
+    /**Faction of the team**/
     private Faction faction;
+    /**Number of towers possessed**/
     private int towers;
     /**
      * The players in the team
      */
     private final ArrayList<Player> players;
 
+    /**Initialize all variables**/
     public Team(){
         this.faction = Faction.Empty;
         this.towers = 8;
