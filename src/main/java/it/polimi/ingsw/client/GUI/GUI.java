@@ -19,6 +19,9 @@ public class GUI extends Application{
      */
     private static Client client;
 
+    public static void main(String[] args){
+        launch();
+    }
     /**
      * Method to create the stage for the game and the stage for the connection to the server
      * @param stage the default stage created by javaFX
