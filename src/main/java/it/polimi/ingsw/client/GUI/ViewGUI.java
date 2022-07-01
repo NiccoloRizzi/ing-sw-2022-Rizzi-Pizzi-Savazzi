@@ -33,7 +33,6 @@ import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
@@ -456,8 +455,8 @@ public class ViewGUI extends View {
                             num.setTextAlignment(TextAlignment.CENTER);
                             student.getChildren().add(num);
                             tile.getChildren().add(student);
-                            AnchorPane.setTopAnchor(student,40+25*cos(c.ordinal()*2*PI/5)-10);
-                            AnchorPane.setRightAnchor(student,40+25*sin(c.ordinal()*2*PI/5)-10);
+                            AnchorPane.setTopAnchor(student,40+22*cos(c.ordinal()*2*PI/5)-10);
+                            AnchorPane.setRightAnchor(student,40+22*sin(c.ordinal()*2*PI/5)-10);
                         }
                     }
                 }
@@ -1388,7 +1387,7 @@ public class ViewGUI extends View {
             () -> {
                 if (getModelView().getWin() != null&&!ended) {
                     Stage winStage = new Stage();
-                    winStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("images/logo.png"))));
+                    winStage.getIcons().add(new Image("images/logo.png"));
                     winStage.setTitle("game over");
                     StackPane pane = new StackPane();
                     pane.setPrefHeight(360);
