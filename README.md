@@ -41,13 +41,13 @@ Project deployment consists of three jars:
 * GUI Jar
 
 ### Jar Testing:
-|            | Windows | Linux  | Mac | Mac (M1 Architecture) |
-|------------|---------|--------|-----|-----------------------|
-| Server Jar | &#129001; | &#129001; | &#128999;       |    &#128999;                     |
-| CLI Jar    |  &#129001; |  &#129001;| &#128999;        |  &#128999;                       |
-| GUI Jar    |  &#129001; | &#129001;|  &#128999;        |  &#129001;               |
+|            | Windows | Linux  |  Mac (M1 Architecture) |
+|------------|---------|--------|-----------------------|
+| Server Jar | &#129001; | &#129001; |   &#129001;                    |
+| CLI Jar    |  &#129001; |  &#129001;|  &#129001;                    |
+| GUI Jar    |  &#129001; | &#129001;|   &#129001;               |
 
 &#129001;: Tested
-&#128999;: Not completely tested, but should work
+&#128999;: Not completely tested
 
 
