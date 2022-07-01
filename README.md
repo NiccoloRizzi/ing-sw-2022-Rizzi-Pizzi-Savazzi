@@ -48,7 +48,6 @@ Project deployment consists of three jars:
 | GUI Jar    |  &#129001; | &#129001;|   &#129001;               |
 
 &#129001;: Tested
-&#128999;: Not completely tested
 
 ### Requirements for running Jars
 All jars require at least Java 17.
@@ -62,6 +61,7 @@ The CLI version requires UTF-8 Encoding to be displayed correctly.
 * If you are a Windows user:
   * For windows 11 run the CLI jar on the powershell
   * For earlier versions you have to enable UTF-8 Encoding by switching character encoding to codepage 65001.
+  
 Program may require resizing terminal or changing colour palette to have a better experience. 
 
 
