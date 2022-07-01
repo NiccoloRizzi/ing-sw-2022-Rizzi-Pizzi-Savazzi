@@ -189,7 +189,7 @@ public class MessageVisitor extends Observable<ClientModel> {
                 Player player = game.getGameModel().getPlayer(playerId);
                 if(!game.getTurnHandler().isUsedCharacter()){
                     if(player.getCoins() >= character.getPrice()){
-                        if(character.getCard() == CharactersEnum.ONE_STUD_TO_ISLE||(tileId >= 0 && tileId < game.getGameModel().getIsles().size())) {
+                        if(character.getCard() == CharactersEnum.ONE_STUD_TO_ISLE && (tileId >= 0 && tileId < game.getGameModel().getIsles().size()) || character.getCard() == CharactersEnum.ONE_STUD_TO_TABLES) {
                             if(character.getStudents(stud)>0) {
                                 try {
                                     Board board = game.getGameModel().getPlayer(playerId).getBoard();
@@ -373,19 +373,21 @@ public class MessageVisitor extends Observable<ClientModel> {
                 if (game.getGameModel().getPlayer(game.getCurrentPlayer()).getCoins() >= game.getGameModel().getCharacter(move6StudCharacterMessage.getCharacterID()).getPrice()) {
                     CharacterStudents character = (CharacterStudents) game.getGameModel().getCharacter(move6StudCharacterMessage.getCharacterID());
                     Board board = game.getGameModel().getPlayer(game.getCurrentPlayer()).getBoard();
-                    if(move6StudCharacterMessage.getStudFromBoard().length == 3 && move6StudCharacterMessage.getStudsFromChar().length == 3) {
+                    if(move6StudCharacterMessage.getStudFromBoard().length <= 3 && move6StudCharacterMessage.getStudsFromChar().length <= 3 && move6StudCharacterMessage.getStudsFromChar().length > 0 && move6StudCharacterMessage.getStudFromBoard().length > 0) {
                         for (Colour c : move6StudCharacterMessage.getStudFromBoard())
                         {
                             check.put(c,(check.containsKey(c))?check.get(c)+1:1);
-                            if(board.getStudents(c)< check.get(c))
+                            if(board.getStudents(c)< check.get(c)) {
                                 valid = false;
+                            }
                         }
                         check = new HashMap<>();
                         for (Colour c : move6StudCharacterMessage.getStudsFromChar())
                         {
                             check.put(c,(check.containsKey(c))?check.get(c)+1:1);
-                            if(character.getStudents(c)< check.get(c))
+                            if(character.getStudents(c)< check.get(c)) {
                                 valid = false;
+                            }
                         }
                         if(valid) {
                             for (Colour c : move6StudCharacterMessage.getStudFromBoard()) {

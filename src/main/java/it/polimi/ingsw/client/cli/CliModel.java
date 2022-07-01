@@ -4,15 +4,25 @@ package it.polimi.ingsw.client.cli;
  * A class that represent the complete cli to be printed
  */
 public class CliModel {
+    /**Represents all the boards to print**/
     CliEntity boards;
+    /**Represents all the isles to print**/
     CliEntity isles;
+    /**Represents all the characters to print**/
     CliEntity characters;
+    /**Represents all the clouds to print**/
     CliEntity clouds;
+    /**Represents all the assistants to print**/
     CliEntity assistants;
+    /**Represents all the assistants of other players to print**/
     CliEntity otherPlayerAss;
+    /**Represents the turn message to print**/
     CliEntity turn;
+    /**Represents the error message to print**/
     CliEntity errors;
+    /**Represents the win message to print**/
     CliEntity win;
+    /**Represents the full cli to print**/
     CliEntity fullCli;
 
     /**
@@ -190,6 +200,11 @@ public class CliModel {
         return errors;
     }
 
+
+    /**
+     * Get win message entity
+     * @return the winn message entity
+     */
     public CliEntity getWin() {
         return win;
     }
