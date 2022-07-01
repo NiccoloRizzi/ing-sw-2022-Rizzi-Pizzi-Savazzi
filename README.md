@@ -22,7 +22,7 @@ Project goal was the recreation of the board game "Eriantys" in Java language.
   * &#9989; Socket
   * &#9989; CLI
   * &#9989; GUI
-* The following functionalities:
+* The following additional functionalities:
   * &#9989; Implementation of all twelve characters
   * &#9989; 4-players matches
   * &#9989; Multiple concurrent matches
