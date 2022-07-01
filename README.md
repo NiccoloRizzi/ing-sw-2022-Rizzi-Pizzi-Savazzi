@@ -50,4 +50,8 @@ Project deployment consists of three jars:
 &#129001;: Tested
 &#128999;: Not completely tested
 
+### Requirements for CLI
+* For windows 11 run the CLI jar on the powershell, for earlier versions the applications run with ConEmu without any problem. https://conemu.github.io/
+* Before running the jar on windows enter "chcp 65001" to show UTF-8 Encoding
+
 
