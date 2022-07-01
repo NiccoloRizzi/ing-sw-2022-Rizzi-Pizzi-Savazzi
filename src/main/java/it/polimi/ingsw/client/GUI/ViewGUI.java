@@ -551,7 +551,6 @@ public class ViewGUI extends View {
         Platform.runLater(
             ()-> {
                 for (int i = 0; i < 3; i++) {
-                    System.out.println();
                     if(getModelView().getCharacters()[i].getPrice()>getModelView().getCharacters()[i].getCard().getPrice()&&character.get(i).getChildren().size()<2)
                     {
                         Pane pane = new Pane();
@@ -639,9 +638,7 @@ public class ViewGUI extends View {
                 }
                 for(Colour c: Colour.values())
                 {
-                    System.out.println("board");
                     for(int i = 0; i < board.getEntrance().get(c);i++){
-                        System.out.println("i:"+i+" j:"+j+" c:"+c.toString());
                         students1.get(j).setUserData(c);
                         students1.get(j).setOnMouseClicked(this::selectEntranceStudent);
                         students1.get(j).setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_"+ c +".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
@@ -996,7 +993,6 @@ public class ViewGUI extends View {
      */
     public void chooseAssistant(MouseEvent e){
         int chosen = (int)((Pane)e.getSource()).getUserData();
-        System.out.println(chosen);
         ChooseAssistant(chosen+1);
         error= false;
         assistant.hide();
@@ -1007,7 +1003,6 @@ public class ViewGUI extends View {
      * @param e MouseEvent that triggered the event handler
      */
     public void selectEntranceStudent(MouseEvent e){
-        System.out.println("student");
         if(charIndex.isPresent()&&getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.EXCHANGE_3_STUD) {
             to.add((Colour) ((Pane) e.getSource()).getUserData());
             if(to.size() >= 3 && from.size()>= 3) {
@@ -1059,7 +1054,6 @@ public class ViewGUI extends View {
      */
     public void selectIsle(MouseEvent e)
     {
-        System.out.println("isle");
         if(selectedStudent.isPresent()){
             if(charIndex.isPresent()&&getModelView().getCharacters()[charIndex.get()].getCard()==CharactersEnum.ONE_STUD_TO_ISLE)
             {
@@ -1082,15 +1076,13 @@ public class ViewGUI extends View {
             charIndex = Optional.empty();
             reset.setVisible(false);
         } else if (charIndex.isPresent()&&getModelView().getCharacters()[charIndex.get()].getCard()==CharactersEnum.SIMIL_MN) {
-            System.out.println("simil");
             similMn(charIndex.get(), isles.indexOf((Pane) e.getSource()));
             charIndex = Optional.empty();
             reset.setVisible(false);
         } else if(getModelView().getTurn().getTurn() == TurnMessage.Turn.ACTION_MN&&charIndex.isEmpty())
         {
             int moves = isles.indexOf((Pane)e.getSource())-getModelView().getGameModel().getMotherNature();
-            System.out.println(moves);
-            System.out.println((moves<0)?getModelView().getGameModel().getIsles().size()+moves:moves);
+
             MoveMotherNature((moves<0)?getModelView().getGameModel().getIsles().size()+moves:moves);
             error= false;
         }
@@ -1101,7 +1093,7 @@ public class ViewGUI extends View {
      */
     public void selectTable()
     {
-        System.out.println("table");
+
         if(selectedStudent.isPresent()){
             if(charIndex.isPresent()&&getModelView().getCharacters()[charIndex.get()].getCard()==CharactersEnum.ONE_STUD_TO_TABLES)
             {
@@ -1139,10 +1131,10 @@ public class ViewGUI extends View {
     {
         Platform.runLater(
             ()-> {
-                System.out.println("error");
-                System.out.println(error);
+
+
                 if (getModelView().getError() != null&&!error) {
-                    System.out.println("error");
+
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle(getModelView().getError().toString());
                     alert.setContentText(getModelView().getError().getErrorMsg());
@@ -1161,7 +1153,7 @@ public class ViewGUI extends View {
                     }
                     if(getModelView().getError() == ErrorMessage.ErrorType.NotYourTurnError || getModelView().getError() == ErrorMessage.ErrorType.StudentError)
                     {
-                        System.out.println("refresh");
+
                         refreshBoard();
                         refreshCharacters();
                     }
@@ -1180,12 +1172,12 @@ public class ViewGUI extends View {
         error= false;
         if(getModelView().getCurrentCharacter().isEmpty()) {
             charIndex = Optional.of(character.indexOf((Pane) e.getSource()));
-            System.out.println("character: "+charIndex.get());
+
             if (getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.PLUS_2_INFLUENCE || getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.NO_TOWER_INFLUENCE) {
                 exchange.setVisible(false);
                 reset.setVisible(false);
                 useInfluenceCharacter(charIndex.get());
-                System.out.println(getModelView().getCharacters()[charIndex.get()].getCard());
+
                 charIndex = Optional.empty();
             }
             else if (getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.PLUS_2_MN) {
@@ -1318,7 +1310,7 @@ public class ViewGUI extends View {
             pane.setMaxHeight(100);
             pane.setPrefWidth(100);
             pane.setPrefHeight(100);
-            pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_"+c +".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+            pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/colour_"+c +".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
             pane.setUserData(c);
             pane.setOnMouseClicked(this::selectColour);
             colors.getChildren().add(pane);
@@ -1349,11 +1341,11 @@ public class ViewGUI extends View {
         if(charIndex.isPresent()) {
             if(getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.REMOVE_3_STUD) {
                 remove3Stud(charIndex.get(), (Colour) ((Pane) e.getSource()).getUserData());
-                System.out.println(1);
+
             }
             if(getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.NO_COLOUR_INFLUENCE) {
                 noColourInfluence(charIndex.get(), (Colour) ((Pane) e.getSource()).getUserData());
-                System.out.println(2);
+
             }
             colourPopup.hide();
             reset.setVisible(false);

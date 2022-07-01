@@ -61,9 +61,7 @@ public class ConnectionController{
     public void connect(ActionEvent e) throws IOException
     {
         String ip = serverIP.getText();
-        System.out.println(ip);
         String port = serverPort.getText();
-        System.out.println(port);
         view.notifyConnection(ip,Integer.parseInt(port));
         if(client.isActive()) {
             view.setIP(ip);
@@ -94,9 +92,6 @@ public class ConnectionController{
         if(players4.isSelected())
             numOfPlayers = 4;
         boolean mode = expert.isSelected();
-        System.out.println(nick);
-        System.out.println(numOfPlayers);
-        System.out.println(mode);
         view.sendPlayerInfo(nick,numOfPlayers,mode);
         ((Stage)((Node)e.getSource()).getScene().getWindow()).close();
     }

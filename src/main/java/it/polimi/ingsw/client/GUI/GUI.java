@@ -38,8 +38,6 @@ public class GUI extends Application{
         AnchorPane root = loader1.load();
         root.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("images/background.png"))), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
         stage.setScene(new Scene(root));
-        System.out.println(stage.getHeight());
-        System.out.println(stage.getWidth());
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("images/logo.png"))));
         ViewGUI view = loader1.getController();
         view.setStage(stage);
