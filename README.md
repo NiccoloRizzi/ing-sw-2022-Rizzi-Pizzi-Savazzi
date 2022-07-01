@@ -59,9 +59,9 @@ GUI.jar can be started from a terminal or by launching the jar as an application
 The CLI version requires UTF-8 Encoding to be displayed correctly. 
 * It should be automatically displayed correctly on Mac OS and Linux terminals.
 * If you are a Windows user:
-  * For windows 11 run the CLI jar on the powershell
-  * For earlier versions you have to enable UTF-8 Encoding by switching character encoding to codepage 65001.
+  * To display everything correctly you have to enable UTF-8 Encoding by switching character encoding to codepage 65001.
+  * All setup can be avoided by using another terminal (E.g. ConEmu, https://conemu.github.io/) and by executing "chcp 65001" command before running the jar.
   
-Program may require resizing terminal or changing colour palette to have a better experience. 
+Application may require resizing terminal or changing colour palette to have a better experience. 
 
 
