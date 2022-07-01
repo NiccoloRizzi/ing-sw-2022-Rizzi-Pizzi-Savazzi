@@ -1,24 +1,29 @@
 # Eriantys
-La repository consiste nel progetto del corso di "Ingegneria del software", progetto finale del corso di Ingegneria Informatica tenuto al Politecnico Di Milano.
+Eriantys is the final project of the "Software Engineering" course part of the "Computer Engineering" degree program held at the Polytechnic University of Milan.
 
-Anno: **2021-2022**
+Academic Year: **2021-2022**
 
-Docente: **Gianpaolo Cugola** 
+Teacher: **Gianpaolo Cugola** 
 
-## Specifiche di progetto
-Il progetto consiste nella trasposizione del gioco da tavolo Eriantys in videogioco scritto in linguaggio Java.
-## Funzionalità realizzate
-Le funzionalità realizzate sono:
-* Tutte le funzionalità di base:
-  * &#9989; Regole Semplificate
-  * &#9989; Regole Complete
+Students: 
+* **Federico Pizzi**
+* **Niccolò Maria Rizzi**
+* **Giacomo Savazzi**
+          
+
+## Project Specifications
+Project goal was the recreation of the board game "Eriantys" in Java language.
+## Implemented Features
+* All basic functionalities:
+  * &#9989; Simplified Rules
+  * &#9989; Complete Rules
   * &#9989; Socket
   * &#9989; CLI
   * &#9989; GUI
-* Le seguenti funzionalità aggiuntive:
-  * &#9989; Implementazione di tutti e 12 i personaggi
-  * &#9989; Partite a 4 giocatori
-  * &#9989; Partite multiple
+* The following functionalities:
+  * &#9989; Implementation of all twelve characters
+  * &#9989; 4-players matches
+  * &#9989; Multiple concurrent matches
   
 ## Test Coverage:
 
@@ -27,4 +32,22 @@ Le funzionalità realizzate sono:
 |------------|-------|--------|-------|
 | Model      | 100%  | 92%    | 86%   |
 | Controller | 100%  | 100%   | 82%   |
+
+## Executables
+
+Project deployment consists of three jars:
+* Server Jar
+* CLI Jar
+* GUI Jar
+
+### Jar Testing:
+|            | Windows | Linux  | Mac | Mac (M1 Architecture) |
+|------------|---------|--------|-----|-----------------------|
+| Server Jar | &#129001; | &#129001; | &#128999;       |    &#128999;                     |
+| CLI Jar    |  &#129001; |  &#129001;| &#128999;        |  &#128999;                       |
+| GUI Jar    |  &#129001; | &#129001;|  &#128999;        |  &#129001;               |
+
+&#129001;: Tested
+&#128999;: Not completely tested, but should work
+
 
