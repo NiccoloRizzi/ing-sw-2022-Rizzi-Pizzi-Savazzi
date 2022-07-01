@@ -9,7 +9,6 @@ import it.polimi.ingsw.client.cli.Cli;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -109,7 +108,6 @@ public class Client implements Observer<JsonObject>{
                 if(in.hasNext()){
                     String read = in.nextLine();
                     JsonObject jo = gson.fromJson(read,JsonObject.class);
-                    System.out.println(read);
                     if(jo.get("type").getAsString().equals("ping")){
                         JsonObject answer = new JsonObject();
                         answer.addProperty("type","pong");
@@ -117,13 +115,11 @@ public class Client implements Observer<JsonObject>{
                     } else if (jo.get("type").getAsString().equals("disconnect")) {
                         isActive = false;
                     } else {
-                        System.out.println(read);
                         ClientModel model = ClientModelDeSerializer.deserialize(read);
                         model.accept(view);
                     }
                 }
             }
-            System.out.println("closed");
         });
         t.start();
     }
@@ -173,7 +169,6 @@ public class Client implements Observer<JsonObject>{
     public void update(JsonObject command) {
         Gson gson = new Gson();
         JsonObject jo = gson.fromJson(command,JsonObject.class);
-        System.out.println("connecting...");
         if(jo.get("command").getAsString().equals("message")){
             writeToSocket(command.toString());
         }

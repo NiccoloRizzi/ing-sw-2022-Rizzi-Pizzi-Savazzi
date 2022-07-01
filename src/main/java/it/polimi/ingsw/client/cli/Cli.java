@@ -175,7 +175,7 @@ public class Cli extends View {
                             fromBoard = new Colour[number];
                             Colour[] fromTables = new Colour[number];
                             for (int i = 0; i < number; i++) {
-                                System.out.println("Scegli gli studenti da scambiare fra sala e ingresso: (\"coloreDaSala coloreDaIngresso)");
+                                System.out.println("Scegli gli studenti da scambiare fra sala e ingresso: (\"coloreDaIngresso coloreDaSala)");
                                 if((read=scanner.nextLine()).matches("[0-4] "+"[0-4]")){
                                     fromBoard[i] = Colour.values()[Integer.parseInt(read.split(" ")[0])];
                                     fromTables[i] = Colour.values()[Integer.parseInt(read.split(" ")[1])];
@@ -195,7 +195,7 @@ public class Cli extends View {
                             fromBoard = new Colour[number];
                             Colour[] fromChar = new Colour[number];
                             for (int i = 0; i < number; i++) {
-                                System.out.println("Scegli gli studenti da scambiare fra sala e personaggio: (\"coloreDaSala coloreDaPersonaggio)");
+                                System.out.println("Scegli gli studenti da scambiare fra sala e personaggio: (\"coloreDaIngresso coloreDaPersonaggio)");
                                 if((read=scanner.nextLine()).matches("[0-4] "+"[0-4]")){
                                     fromBoard[i] = Colour.values()[Integer.parseInt(read.split(" ")[0])];
                                     fromChar[i] = Colour.values()[Integer.parseInt(read.split(" ")[1])];

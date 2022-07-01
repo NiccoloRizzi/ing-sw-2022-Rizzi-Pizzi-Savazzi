@@ -137,7 +137,6 @@ public abstract class View extends Observable<JsonObject> {
      * @param winMessage WinMessage that need to be saved in the modelView
      */
     public synchronized void visit(WinMessage winMessage) {
-        System.out.println(winMessage.serialize());
         modelView.setWin(winMessage);
         refresh(6);
     }
@@ -147,7 +146,6 @@ public abstract class View extends Observable<JsonObject> {
      * @param startMessage StartMessage containing the nickname assigned to the player
      */
     public synchronized void visit(StartMessage startMessage){
-        System.out.println(startMessage);
         modelView.setMyId(startMessage.getId(modelView.getNickname()));
         startPrint();
         getModelView().setCurrentCharacter(Optional.empty());
@@ -322,9 +320,6 @@ public abstract class View extends Observable<JsonObject> {
         modelView = new ModelView(nickname,nplayers,expertMode);
         PlayerMessage pm = new PlayerMessage(nickname,nplayers,expertMode);
         notifyClient(MessageSerializer.serialize(pm));
-        System.out.println("sending...");
-        System.out.println(modelView);
-        System.out.println(this);
     }
 
     /**
@@ -344,7 +339,6 @@ public abstract class View extends Observable<JsonObject> {
      * @param port port of the server
      */
     public void notifyConnection(String ip, int port){
-        System.out.println("sending...");
         JsonObject jo = new JsonObject();
         jo.addProperty("ip",ip);
         jo.addProperty("port",port);
