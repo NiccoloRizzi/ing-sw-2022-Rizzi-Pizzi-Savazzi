@@ -182,7 +182,7 @@ public class Cli extends View {
                                 }
                                 else{
                                     System.out.print("Studenti scelti non validi.");
-                                    break;
+                                    return;
                                 }
                             }
                             exchange2Students(charpos, fromBoard, fromTables);
@@ -202,7 +202,7 @@ public class Cli extends View {
                                 }
                                 else{
                                     System.out.print("Studenti scelti non validi.");
-                                    break;
+                                    return;
                                 }
                             }
                             exchange3Students(charpos, fromBoard, fromChar);
