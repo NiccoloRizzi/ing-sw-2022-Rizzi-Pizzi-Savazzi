@@ -50,9 +50,18 @@ Project deployment consists of three jars:
 &#129001;: Tested
 &#128999;: Not completely tested
 
-### Requirements for CLI
-* For windows 11 run the CLI jar on the powershell, for earlier versions the applications run with ConEmu without any problem. https://conemu.github.io/
-* Before running the jar on windows enter "chcp 65001" to show UTF-8 Encoding.
-* Some screens may be too small to render the CLI correctly. To solve the problem just reduce the font size.
+### Requirements for running Jars
+All jars require at least Java 17.
+## Server
+Server.jar can be started from a terminal. It should start out of the box for any operating system.
+## GUI
+GUI.jar can be started from a terminal or by launching the jar as an application. As for the server, it should start out of the box.
+## CLI
+The CLI version requires UTF-8 Encoding to be displayed correctly. 
+* It should be automatically displayed correctly on Mac OS and Linux terminals.
+* If you are a Windows user:
+  * For windows 11 run the CLI jar on the powershell
+  * For earlier versions you have to enable UTF-8 Encoding by switching character encoding to codepage 65001.
+Program may require resizing terminal or changing colour palette to have a better experience. 
 
 
