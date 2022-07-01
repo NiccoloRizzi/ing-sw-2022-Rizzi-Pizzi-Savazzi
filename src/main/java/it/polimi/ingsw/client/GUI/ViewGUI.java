@@ -32,7 +32,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
@@ -76,7 +75,7 @@ public class ViewGUI extends View {
     /**
      * Button to use the exchange 2 student Character
      */
-    Button exchange2;
+    Button exchange;
     /**
      * Booleant to control when the game starte
      */
@@ -504,16 +503,12 @@ public class ViewGUI extends View {
                                 ((GridPane) character.get(i).getChildren().get(0)).addRow(j);
                             }
                         }
-                        exchange2 = new Button();
-                        exchange2.setText("Exchange");
-                        characters.getChildren().add(exchange2);
-                        exchange2.setVisible(false);
-                        exchange2.setMinWidth(100.0);
-                        exchange2.setMinHeight(20.0);
-                        exchange2.setOnAction(event -> {
-                            event.consume();
-                            checkExchange2();
-                        });
+                        exchange = new Button();
+                        exchange.setText("Exchange");
+                        characters.getChildren().add(exchange);
+                        exchange.setVisible(false);
+                        exchange.setMinWidth(100.0);
+                        exchange.setMinHeight(20.0);
                         player1.setTranslateX(40);
                     }
                 }
@@ -1178,10 +1173,19 @@ public class ViewGUI extends View {
             } else if (getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.EXCHANGE_2_STUD) {
                 from = new ArrayList<>();
                 to = new ArrayList<>();
-                exchange2.setVisible(true);
+                exchange.setVisible(true);
+                exchange.setOnAction(event -> {
+                    event.consume();
+                    checkExchange2();
+                });
             } else if (getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.EXCHANGE_3_STUD && from== null && to == null) {
                 from = new ArrayList<>();
                 to = new ArrayList<>();
+                exchange.setVisible(true);
+                exchange.setOnAction(event -> {
+                    event.consume();
+                    checkExchange3();
+                });
             }
         }
     }
@@ -1191,12 +1195,23 @@ public class ViewGUI extends View {
      */
     public void checkExchange3()
     {
-        if(to.size() == 3 && from.size() ==3 && charIndex.isPresent())
+        if(to.size() <= 3 && from.size()==to.size() && charIndex.isPresent())
         {
             exchange3Students(charIndex.get(),to.toArray(Colour[]::new),from.toArray(Colour[]::new));
             charIndex = Optional.empty();
             from = null;
             to = null;
+        }else {
+            Platform.runLater(
+                    () -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("ExchangeStudentError");
+                        alert.setContentText("the number of student to exchange is not the same or the number of selected student is 0");
+                        to = new ArrayList<>();
+                        from = new ArrayList<>();
+                        alert.showAndWait();
+                    }
+            );
         }
     }
     /**
@@ -1208,7 +1223,7 @@ public class ViewGUI extends View {
         {
             exchange2Students(charIndex.get(),to.toArray(Colour[]::new),from.toArray(Colour[]::new));
             charIndex = Optional.empty();
-            exchange2.setVisible(false);
+            exchange.setVisible(false);
             from = null;
             to = null;
         }
@@ -1263,6 +1278,7 @@ public class ViewGUI extends View {
                         }
                     colourPopup.setX(stage.getScene().getWidth()/2 -(float)(120*5)/2);
                     colourPopup.setY(stage.getScene().getHeight()/2-300);
+                    colourPopup.setAutoHide(true);
                     colourPopup.show(stage);
                 }
         );
