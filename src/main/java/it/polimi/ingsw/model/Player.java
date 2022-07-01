@@ -1,9 +1,5 @@
 package it.polimi.ingsw.model;
 
-/*UML Changes
-* 3) setChoosenAssistant to add out_of_range_exception
-*/
-
 import it.polimi.ingsw.clientModels.ClientModel;
 import it.polimi.ingsw.clientModels.ClientPlayer;
 import it.polimi.ingsw.server.Observable;
@@ -196,6 +192,10 @@ public class Player extends Observable<ClientModel> {
         getChosen().Boost();
         notifyChange();
     }
+
+    /**
+     * Notify changes of the class creating a ClientPlayer as a contest
+     */
     public void notifyChange()
     {
         Integer[] used = usedCards.stream().map(Assistant::getValue).toArray(Integer[]::new);
@@ -203,6 +203,7 @@ public class Player extends Observable<ClientModel> {
         notify(new ClientPlayer(used,intDeck,coins,nickname,ID, usedCards.size() > 0 && getChosen().getBoost() == 2));
     }
 
+    /**Add observer**/
     @Override
     public void addObserver(Observer<ClientModel> observer) {
         super.addObserver(observer);

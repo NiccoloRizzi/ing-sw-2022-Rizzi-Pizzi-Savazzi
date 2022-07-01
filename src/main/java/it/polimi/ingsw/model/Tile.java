@@ -62,7 +62,10 @@ public abstract class Tile extends Observable<ClientModel>
         notifyChange();
     }
 
+    /**Notify changes**/
     public abstract void notifyChange ();
+
+    /**Get the number of students in the tile**/
     public int getStudents(Colour c){
         return students.get(c);
     }

@@ -9,8 +9,15 @@ import it.polimi.ingsw.messages.*;
  */
 public class MoveDeserializer {
 
+    /**Gson needed to serialize the message**/
     private static final Gson gson = new Gson();
 
+
+    /** Deserialize the string and return the instance of the specific class of the serialized message
+     *
+     * @param json serialized message
+     * @return the instance of the Message interface
+     */
     public static Message deserialize(String json){
         JsonObject jsonObject = gson.fromJson(json,JsonObject.class);
         String type = jsonObject.get("type").getAsString();
@@ -32,6 +39,12 @@ public class MoveDeserializer {
         };
     }
 
+
+    /** Deserialize a player message
+     *
+     * @param json serialized message
+     * @return instance of PLayerMessage
+     */
     public static PlayerMessage deserializePlayerMessage(String json){
         JsonObject message = gson.fromJson(json, JsonObject.class);
         if (message.get("type").getAsString().equals("PlayerMessage")) {
