@@ -75,7 +75,7 @@ public class ViewGUI extends View {
     /**
      * Button to use the exchange 2 student Character
      */
-    Button exchange;
+    Button exchange,reset;
     /**
      * Booleant to control when the game starte
      */
@@ -503,12 +503,25 @@ public class ViewGUI extends View {
                                 ((GridPane) character.get(i).getChildren().get(0)).addRow(j);
                             }
                         }
+                        VBox temp = new VBox();
+                        temp.setAlignment(Pos.CENTER);
                         exchange = new Button();
                         exchange.setText("Exchange");
-                        characters.getChildren().add(exchange);
+                        temp.getChildren().add(exchange);
                         exchange.setVisible(false);
-                        exchange.setMinWidth(100.0);
+                        exchange.setMinWidth(200.0);
                         exchange.setMinHeight(20.0);
+                        reset = new Button();
+                        reset.setText("Annulla Personaggio");
+                        temp.getChildren().add(reset);
+                        reset.setVisible(false);
+                        reset.setMinWidth(200.0);
+                        reset.setMinHeight(20.0);
+                        reset.setOnAction(event -> {
+                            event.consume();
+                            resetExchange();
+                        });
+                        characters.getChildren().add(temp);
                         player1.setTranslateX(40);
                     }
                 }
@@ -997,7 +1010,9 @@ public class ViewGUI extends View {
         System.out.println("student");
         if(charIndex.isPresent()&&getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.EXCHANGE_3_STUD) {
             to.add((Colour) ((Pane) e.getSource()).getUserData());
-            checkExchange3();
+            if(to.size() >= 3 && from.size()>= 3) {
+                checkExchange3();
+            }
         } else if (charIndex.isPresent()&&getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.EXCHANGE_2_STUD) {
             to.add((Colour) ((Pane) e.getSource()).getUserData());
             if(to.size() == 2 && from.size() == 2)
@@ -1032,7 +1047,9 @@ public class ViewGUI extends View {
                 selectedStudent = Optional.of(((Pane)e.getSource()));
             if(getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.EXCHANGE_3_STUD) {
                 from.add((Colour) ((Pane) e.getSource()).getUserData());
-                checkExchange3();
+                if(to.size() >= 3 && from.size()>= 3) {
+                    checkExchange3();
+                }
             }
         }
     }
@@ -1051,6 +1068,7 @@ public class ViewGUI extends View {
                 selectedStudent.get().setOnMouseClicked(null);
                 selectedStudent = Optional.empty();
                 charIndex = Optional.empty();
+                reset.setVisible(false);
                 error= false;
             }else {
                 MoveToIsle(((Colour) selectedStudent.get().getUserData()), isles.indexOf((Pane) e.getSource()));
@@ -1062,10 +1080,12 @@ public class ViewGUI extends View {
         } else if (charIndex.isPresent()&&getModelView().getCharacters()[charIndex.get()].getCard()==CharactersEnum.PROHIBITED) {
             prohibit(charIndex.get(),isles.indexOf((Pane) e.getSource()));
             charIndex = Optional.empty();
+            reset.setVisible(false);
         } else if (charIndex.isPresent()&&getModelView().getCharacters()[charIndex.get()].getCard()==CharactersEnum.SIMIL_MN) {
             System.out.println("simil");
             similMn(charIndex.get(), isles.indexOf((Pane) e.getSource()));
             charIndex = Optional.empty();
+            reset.setVisible(false);
         } else if(getModelView().getTurn().getTurn() == TurnMessage.Turn.ACTION_MN&&charIndex.isEmpty())
         {
             int moves = isles.indexOf((Pane)e.getSource())-getModelView().getGameModel().getMotherNature();
@@ -1090,6 +1110,7 @@ public class ViewGUI extends View {
                 selectedStudent.get().setOnMouseClicked(null);
                 selectedStudent = Optional.empty();
                 charIndex = Optional.empty();
+                reset.setVisible(false);
                 error= false;
             }
             else {
@@ -1118,7 +1139,10 @@ public class ViewGUI extends View {
     {
         Platform.runLater(
             ()-> {
+                System.out.println("error");
+                System.out.println(error);
                 if (getModelView().getError() != null&&!error) {
+                    System.out.println("error");
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle(getModelView().getError().toString());
                     alert.setContentText(getModelView().getError().getErrorMsg());
@@ -1135,10 +1159,11 @@ public class ViewGUI extends View {
                             e.printStackTrace();
                         }
                     }
-                    if(getModelView().getError() == ErrorMessage.ErrorType.NotYourTurnError && getModelView().getError() == ErrorMessage.ErrorType.StudentError)
+                    if(getModelView().getError() == ErrorMessage.ErrorType.NotYourTurnError || getModelView().getError() == ErrorMessage.ErrorType.StudentError)
                     {
                         System.out.println("refresh");
                         refreshBoard();
+                        refreshCharacters();
                     }
                     error = true;
                 }
@@ -1152,40 +1177,54 @@ public class ViewGUI extends View {
 
     public void selectCharacter(MouseEvent e)
     {
+        error= false;
         if(getModelView().getCurrentCharacter().isEmpty()) {
             charIndex = Optional.of(character.indexOf((Pane) e.getSource()));
             System.out.println("character: "+charIndex.get());
             if (getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.PLUS_2_INFLUENCE || getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.NO_TOWER_INFLUENCE) {
+                exchange.setVisible(false);
+                reset.setVisible(false);
                 useInfluenceCharacter(charIndex.get());
                 System.out.println(getModelView().getCharacters()[charIndex.get()].getCard());
                 charIndex = Optional.empty();
             }
             else if (getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.PLUS_2_MN) {
+                exchange.setVisible(false);
+                reset.setVisible(false);
                 motherNBoost(charIndex.get());
                 charIndex = Optional.empty();
             }
             else if (getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.REMOVE_3_STUD || getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.NO_COLOUR_INFLUENCE)
             {
+                exchange.setVisible(false);
+                reset.setVisible(true);
                 showColourChoice();
             } else if (getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.PROFESSOR_CONTROL) {
+                exchange.setVisible(false);
+                reset.setVisible(false);
                 professorControl(charIndex.get());
                 charIndex = Optional.empty();
             } else if (getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.EXCHANGE_2_STUD) {
                 from = new ArrayList<>();
                 to = new ArrayList<>();
                 exchange.setVisible(true);
+                reset.setVisible(true);
                 exchange.setOnAction(event -> {
                     event.consume();
                     checkExchange2();
                 });
-            } else if (getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.EXCHANGE_3_STUD && from== null && to == null) {
+            } else if (getModelView().getCharacters()[charIndex.get()].getCard() == CharactersEnum.EXCHANGE_3_STUD && from==null && to == null) {
                 from = new ArrayList<>();
                 to = new ArrayList<>();
                 exchange.setVisible(true);
+                reset.setVisible(true);
                 exchange.setOnAction(event -> {
                     event.consume();
                     checkExchange3();
                 });
+
+            }else{
+                reset.setVisible(true);
             }
         }
     }
@@ -1199,6 +1238,8 @@ public class ViewGUI extends View {
         {
             exchange3Students(charIndex.get(),to.toArray(Colour[]::new),from.toArray(Colour[]::new));
             charIndex = Optional.empty();
+            reset.setVisible(false);
+            exchange.setVisible(false);
             from = null;
             to = null;
         }else {
@@ -1224,6 +1265,7 @@ public class ViewGUI extends View {
             exchange2Students(charIndex.get(),to.toArray(Colour[]::new),from.toArray(Colour[]::new));
             charIndex = Optional.empty();
             exchange.setVisible(false);
+            reset.setVisible(false);
             from = null;
             to = null;
         }
@@ -1239,6 +1281,16 @@ public class ViewGUI extends View {
                 }
             );
         }
+    }
+
+    public void resetExchange()
+    {
+        charIndex = Optional.empty();
+        reset.setVisible(false);
+        exchange.setVisible(false);
+        to = null;
+        from = null;
+        colourPopup.hide();
     }
 
     /**
@@ -1300,6 +1352,7 @@ public class ViewGUI extends View {
                 System.out.println(2);
             }
             colourPopup.hide();
+            reset.setVisible(false);
             charIndex = Optional.empty();
         }
     }
