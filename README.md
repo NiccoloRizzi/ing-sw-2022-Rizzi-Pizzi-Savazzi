@@ -5,11 +5,13 @@ Academic Year: **2021-2022**
 
 Teacher: **Gianpaolo Cugola** 
 
+Group 53.
+
 Students: 
 * **Federico Pizzi**
 * **Niccolò Maria Rizzi**
 * **Giacomo Savazzi**
-          
+
 
 ## Project Specifications
 Project goal was the recreation of the board game "Eriantys" in Java language.
@@ -35,7 +37,7 @@ Project goal was the recreation of the board game "Eriantys" in Java language.
 
 ## Executables
 
-Project deployment consists of three jars:
+Project runnables consist of three Jars:
 * Server Jar
 * CLI Jar
 * GUI Jar
@@ -50,13 +52,13 @@ Project deployment consists of three jars:
 &#129001;: Tested
 
 ### Requirements for running Jars
-All jars require at least Java 17.
+All jars require at least Java JDK 17.
 ## Server
-Server.jar can be started from a terminal. It should start out of the box for any operating system.
+Server.jar can be runned from terminal. It should work out of the box for any operating system.
 ## GUI
-GUI.jar can be started from a terminal or by launching the jar as an application. As for the server, it should start out of the box.
+GUI.jar can be started from a terminal or by launching the jar as an application. It should also work out of the box.
 ## CLI
-The CLI version requires UTF-8 Encoding to be displayed correctly. 
+CLI version requires UTF-8 Encoding to be displayed correctly. 
 * It should be automatically displayed correctly on Mac OS and Linux terminals.
 * If you are a Windows user:
   * To display everything correctly you have to enable UTF-8 Encoding by switching character encoding to codepage 65001.
