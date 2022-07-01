@@ -502,19 +502,20 @@ public class ViewGUI extends View {
                                 ((GridPane) character.get(i).getChildren().get(0)).addRow(j);
                             }
                         }
+                        createColourPopup();
                         VBox temp = new VBox();
                         temp.setAlignment(Pos.CENTER);
                         exchange = new Button();
                         exchange.setText("Exchange");
                         temp.getChildren().add(exchange);
                         exchange.setVisible(false);
-                        exchange.setMinWidth(200.0);
+                        exchange.setMinWidth(150.0);
                         exchange.setMinHeight(20.0);
                         reset = new Button();
                         reset.setText("Annulla Personaggio");
                         temp.getChildren().add(reset);
                         reset.setVisible(false);
-                        reset.setMinWidth(200.0);
+                        reset.setMinWidth(150.0);
                         reset.setMinHeight(20.0);
                         reset.setOnAction(event -> {
                             event.consume();
@@ -953,6 +954,7 @@ public class ViewGUI extends View {
                 assistant.setHeight(200);
                 assistant.setWidth(1000);
                 box.setAlignment(Pos.CENTER);
+                assistant.setY(stage.getScene().getHeight()/2 - assistant.getHeight()/2);
                 assistant.hide();
             }
         );
@@ -984,7 +986,6 @@ public class ViewGUI extends View {
         }
         assistant.sizeToScene();
         assistant.setX(stage.getScene().getWidth()/2 -(float)(137+10)*getModelView().getPlayers()[myID].getDeck().length/2);
-        assistant.setY(stage.getScene().getHeight()/2 - assistant.getHeight());
         assistant.setAutoHide(true);
         assistant.show(stage);
     }
@@ -1292,6 +1293,41 @@ public class ViewGUI extends View {
         colourPopup.hide();
     }
 
+    public void createColourPopup()
+    {
+        colourPopup = new Popup();
+        VBox box = new VBox();
+        box.setPrefHeight(400);
+        box.setPrefWidth(600);
+        box.setSpacing(20);
+        colourPopup.getContent().add(box);
+        Label instruction = new Label("Select the colour to remove");
+        instruction.setFont(Font.font("System", FontWeight.BOLD, FontPosture.REGULAR,40.0));
+        box.getChildren().add(instruction);
+        box.setAlignment(Pos.CENTER);
+        HBox colors = new HBox();
+        colors.setSpacing(20);
+        box.getChildren().add(colors);
+        Pane pane;
+        for(Colour c: Colour.values())
+        {
+            pane = new Pane();
+            pane.setMinWidth(100);
+            pane.setMinHeight(100);
+            pane.setMaxWidth(100);
+            pane.setMaxHeight(100);
+            pane.setPrefWidth(100);
+            pane.setPrefHeight(100);
+            pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_"+c +".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
+            pane.setUserData(c);
+            pane.setOnMouseClicked(this::selectColour);
+            colors.getChildren().add(pane);
+        }
+        colourPopup.setX(stage.getScene().getWidth()/2 -(float)(100*5)/2);
+        colourPopup.setY(stage.getScene().getHeight()/2-200);
+        colourPopup.setAutoHide(true);
+    }
+
     /**
      * Method that create a popup to show the colours
      */
@@ -1299,37 +1335,6 @@ public class ViewGUI extends View {
     {
         Platform.runLater(
                 ()->{
-                        colourPopup = new Popup();
-                        VBox box = new VBox();
-                        box.setPrefHeight(300);
-                        box.setPrefWidth(600);
-                        box.setSpacing(20);
-                        colourPopup.getContent().add(box);
-                        Label instruction = new Label("Select the colour to remove");
-                        instruction.setFont(Font.font("System", FontWeight.BOLD, FontPosture.REGULAR,40.0));
-                        box.getChildren().add(instruction);
-                        box.setAlignment(Pos.CENTER);
-                        HBox colors = new HBox();
-                        colors.setSpacing(20);
-                        box.getChildren().add(colors);
-                        Pane pane;
-                        for(Colour c: Colour.values())
-                        {
-                            pane = new Pane();
-                            pane.setMinWidth(100);
-                            pane.setMinHeight(100);
-                            pane.setMaxWidth(100);
-                            pane.setMaxHeight(100);
-                            pane.setPrefWidth(100);
-                            pane.setPrefHeight(100);
-                            pane.setBackground(new Background(new BackgroundImage(new Image("images/pedine/student_"+c +".png"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(0.1, 0.1, true, true, false, true))));
-                            pane.setUserData(c);
-                            pane.setOnMouseClicked(this::selectColour);
-                            colors.getChildren().add(pane);
-                        }
-                    colourPopup.setX(stage.getScene().getWidth()/2 -(float)(120*5)/2);
-                    colourPopup.setY(stage.getScene().getHeight()/2-300);
-                    colourPopup.setAutoHide(true);
                     colourPopup.show(stage);
                 }
         );
